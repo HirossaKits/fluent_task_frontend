@@ -39,13 +39,13 @@ export const authSlice = createSlice({
     builder.addCase(
       fetchAsyncLogin.fulfilled,
       (state, action: PayloadAction<JWT>) => {
-
+        // state.
       }
     );
   }
 });;
 
-// export default authSlice.reducer;
+export default authSlice.reducer;
 
 
 
