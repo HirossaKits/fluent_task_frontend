@@ -1,4 +1,5 @@
-import React from 'react';
+import React,{useState} from 'react';
+import axios from "axios";
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,6 +13,10 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {
+  CRED,
+  JWT,
+} from '../types';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -25,21 +30,48 @@ const useStyles = makeStyles((theme) => ({
     fontFamily:'Oleo Script',
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%',
     marginTop: theme.spacing(4),
   },
   input: {
     marginBottom:theme.spacing(1),
   },
   submit: {
-    margin: theme.spacing(6, 0, 4),
+    margin: theme.spacing(6, 0, 1),
     padding:theme.spacing(1,6)
   },
 
 }));
 
+
+
 const SignIn:React.FC = () => {
   const classes = useStyles();
+
+  const [cred,setCred] = useState<CRED>({
+    email:'',
+    password: '',
+  })
+
+  const login = async (e: React.MouseEvent<HTMLInputElement>) => {
+    e.preventDefault()
+    const res = await axios.post<JWT>(`${process.env.API_URL}/auth/jwt/create`,
+      cred,
+      {
+        headers: {
+          "Content-type": "application/json",
+        },
+      });
+    return res.data;
+  };
+
+  const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    
+    setCred({...cred,[e.target.id]:e.target.value})
+    console.log(cred)
+  }
+
+  console.log('reload!')
 
   return (
     <Container component="main" maxWidth="xs">
@@ -48,12 +80,12 @@ const SignIn:React.FC = () => {
         <Typography className={classes.title} component="h1" variant="h2">
           Fluent Task
         </Typography>
-        <form className={classes.form} noValidate>
+        <div className={classes.form}>
           <TextField
             className = {classes.input}
             variant="outlined"
             margin="normal"
-            required = {true}
+            // required = {true}
             fullWidth
             id="email"
             label="Email Address"
@@ -61,12 +93,14 @@ const SignIn:React.FC = () => {
             autoComplete="email"
             autoFocus
             size="small"
+            value = {cred.email}
+            onChange = {handleInputChange}
           />
           <TextField
             className = {classes.input}
             variant="outlined"
             margin="normal"
-            required
+            // required
             fullWidth
             name="password"
             label="Password"
@@ -74,33 +108,36 @@ const SignIn:React.FC = () => {
             id="password"
             autoComplete="current-password"
             size="small"
+            value = {cred.password}
+            onChange = {handleInputChange}
           />
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           /> */}
           <Button
-            type="submit"
+            // type="submit"
             // fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick = {login}
           >
             ログイン
           </Button>
-          {/* <Grid container>
-            <Grid item xs>
+          <Grid container>
+            {/* <Grid item xs>
               <Link href="#" variant="body2">
                 Forgot password?
               </Link>
-            </Grid>
-            <Grid item>
+            </Grid> */}
+            <Grid item xs={12}>
               <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
+                {"アカウント作成"}
               </Link>
             </Grid>
-          </Grid> */}
-        </form>
+          </Grid>
+        </div>
       </div>
       <Box mt={8}>
       <Typography variant="body2" color="textSecondary" align="center">
