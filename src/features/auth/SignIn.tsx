@@ -53,7 +53,7 @@ const SignIn:React.FC = () => {
     password: '',
   })
 
-  const login = async (e: React.MouseEvent<HTMLInputElement>) => {
+  const login = async (e: any) => {
     e.preventDefault()
     const res = await axios.post<JWT>(`${process.env.API_URL}/auth/jwt/create`,
       cred,
@@ -65,7 +65,7 @@ const SignIn:React.FC = () => {
     return res.data;
   };
 
-  const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e:React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     
     setCred({...cred,[e.target.id]:e.target.value})
     console.log(cred)
@@ -80,7 +80,7 @@ const SignIn:React.FC = () => {
         <Typography className={classes.title} component="h1" variant="h2">
           Fluent Task
         </Typography>
-        <div className={classes.form}>
+        <form className={classes.form}>
           <TextField
             className = {classes.input}
             variant="outlined"
@@ -137,7 +137,7 @@ const SignIn:React.FC = () => {
               </Link>
             </Grid>
           </Grid>
-        </div>
+        </form>
       </div>
       <Box mt={8}>
       <Typography variant="body2" color="textSecondary" align="center">
