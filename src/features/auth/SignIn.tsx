@@ -65,10 +65,8 @@ const SignIn:React.FC = () => {
     return res.data;
   };
 
-  const handleInputChange = (e:React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    
+  const handleInputChange = (e:React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {   
     setCred({...cred,[e.target.id]:e.target.value})
-    console.log(cred)
   }
 
   console.log('reload!')
