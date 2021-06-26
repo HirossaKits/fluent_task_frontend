@@ -1,15 +1,24 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
+import { store } from './app/store';
+import { Provider } from 'react-redux';
+import {Route,BrowserRouter} from 'react-router-dom'
+import {CookiesProvider} from 'react-cookie'
+import Auth from './features/auth/Auth'
 import './App.css';
-import SignIn from './features/auth/SignIn';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
 
-        <SignIn />
+      <Provider store={store}>
+      <CookiesProvider>
+        <BrowserRouter>
+          <Route exact path='/' component={Auth}/>
+          {/* <Route exact path='/app' component={App}/> */}
+        </BrowserRouter>
+      </CookiesProvider>
+    </Provider>
 
       </header>
     </div>
