@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from '../../app/store';
 import axios from "axios";
+
 import {
   CRED,
   REG_INFO,
   JWT,
 } from '../types';
-
 
 export const fetchAsyncLogin = createAsyncThunk(
   'auth/login',
