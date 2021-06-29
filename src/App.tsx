@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Navbar from './Navbar';
-import Main from './features/main/Main';
+
 
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
       <header className="App-header">
 
         <Navbar />
-        <Main />
+
 
       </header>
     </div>
