@@ -6,46 +6,21 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Main from './features/main/Main';
+import { RSA_NO_PADDING } from 'constants';
 // import { FiLogOut } from "react-icons/fi";
 
-const drawerWidth = 10;
+const drawerWidth = 180;
 
 const useSytle = makeStyles((theme) => ({
   toolbar: {
     minHeight: '0px',
     paddingLeft: '0px'
   },
-  appBar: {
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
+  menuButton: {
+    marginRight: 36,
   },
-  appBarShift: {
-    width: `${100 - drawerWidth}vw`,
-    marginLeft: `${drawerWidth}vw`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  content: {
-    // flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: `${drawerWidth}vw`,
-  },
-  contentShift: {
-    // flexGrow: 1,
-    padding: theme.spacing(3),
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    marginLeft: 0,
+  hide: {
+    display: 'none',
   },
   title: {
     flexGrow: 1,
@@ -57,26 +32,74 @@ const useSytle = makeStyles((theme) => ({
   sectionDesktop: {
     display: 'flex',
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
   },
-  hide: {
-    display: 'none',
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
-  drawer: {
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
+
+  drawerOpen: {
+    width: drawerWidth,
+    // flexShrink: 0,
+    // whiteSpace: 'nowrap',
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    background: theme.palette.primary.main
   },
-  drawerPaper: {
-    width: `${drawerWidth}vw`,
+  drawerClose: {
+    // flexShrink: 0,
+    // whiteSpace: 'nowrap',
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width: theme.spacing(6) + 1,
+    background: theme.palette.primary.main
   },
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(0, 1),
     justifyContent: 'flex-end',
-    background: theme.palette.divider,
+    background: theme.palette.primary.dark,
   },
+  content: {
+    // flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: drawerWidth,
+  },
+  contentShift: {
+    // flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: theme.spacing(6) + 1,
+  },
+  drawerIcon: {
+    paddingLeft: 12
+  },
+  drawerText: {
+    color: 'rgba(255, 255, 255, 0.9)',
+  }
 }));
 
 const signOut = () => { };
@@ -127,12 +150,12 @@ const Navbar = () => {
         </Toolbar>
       </AppBar >
       <Drawer
-        className={classes.drawer}
-        variant="persistent"
+        className={open ? classes.drawerOpen : classes.drawerClose}
+        variant="permanent"
         anchor="left"
         open={open}
         classes={{
-          paper: classes.drawerPaper,
+          paper: open ? classes.drawerOpen : classes.drawerClose,
         }}>
         <div className={classes.drawerHeader}>
           <IconButton onClick={handleDrawerClose}>
@@ -140,21 +163,21 @@ const Navbar = () => {
           </IconButton>
         </div>
         <List>
-          <ListItem button>
+          <ListItem button className={classes.drawerIcon}>
             <ListItemIcon>
               <AccountCircle />
             </ListItemIcon>
-            <ListItemText primary={"DEMO"} />
+            <ListItemText className={classes.drawerText} primary={"DEMO"} />
           </ListItem>
-          <ListItem button>
+          <ListItem button className={classes.drawerIcon}>
             <ListItemIcon>
               <AccountCircle />
             </ListItemIcon>
-            <ListItemText primary={"Calendar"} />
+            <ListItemText className={classes.drawerText} primary={"Calendar"} />
           </ListItem>
           {Array(1).map(() => (
             <ListItem button>
-              < ListItemIcon >
+              <ListItemIcon>
                 <AccountCircle />
               </ListItemIcon>
               <ListItemText primary={"DEMO"} />
