@@ -6,15 +6,13 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import Main from './features/main/Main';
-import { RSA_NO_PADDING } from 'constants';
-// import { FiLogOut } from "react-icons/fi";
 
 const drawerWidth = 180;
 
 const useSytle = makeStyles((theme) => ({
   toolbar: {
     minHeight: '0px',
-    paddingLeft: '0px'
+    paddingLeft: '0px',
   },
   menuButton: {
     marginRight: 36,
@@ -56,7 +54,8 @@ const useSytle = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    background: theme.palette.primary.main
+    border: 0,
+    background: theme.palette.grey[700],
   },
   drawerClose: {
     // flexShrink: 0,
@@ -67,14 +66,16 @@ const useSytle = makeStyles((theme) => ({
     }),
     overflowX: 'hidden',
     width: theme.spacing(6) + 1,
-    background: theme.palette.primary.main
+    border: 0,
+    background: theme.palette.grey[700],
   },
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
     padding: theme.spacing(0, 1),
     justifyContent: 'flex-end',
-    background: theme.palette.primary.dark,
+    border: 0,
+    background: theme.palette.divider,
   },
   content: {
     // flexGrow: 1,
