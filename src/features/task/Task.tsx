@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.text.primary
   },
   root: {
-    width: "90%",
+    width: "100%",
   },
   table: {
     tableLayout: "fixed",
@@ -34,15 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-interface Data {
-  name: string;
-  category: string;
-  startdate: string;
-  enddate: string;
-  manhour: number;
-  assigned: string;
-  comment: string;
-}
+
 
 interface Column {
   label: string;
@@ -53,23 +45,27 @@ interface Column {
 
 const columns: Column[] = [
   {
-    label: "タスク名",
-    minWidth: 120,
-  },
-  {
     label: "カテゴリー",
     minWidth: 40,
   },
   {
-    label: "開始日",
+    label: "タスク名",
     minWidth: 120,
   },
   {
-    label: "終了日",
+    label: "ステータス",
     minWidth: 120,
   },
   {
-    label: "予定工数 (H)",
+    label: "開始予定日",
+    minWidth: 120,
+  },
+  {
+    label: "終了予定日",
+    minWidth: 120,
+  },
+  {
+    label: "予定工数 (日)",
     minWidth: 120,
   },
   {
@@ -85,26 +81,38 @@ const columns: Column[] = [
 
 let rowCount = 10;
 
+interface Data {
+  name: string;
+  status: string,
+  category: string;
+  startdate: string;
+  enddate: string;
+  manhour: number;
+  assigned: string;
+  comment: string;
+}
+
 function createData(
-  name: string,
   category: string,
+  name: string,
+  status: string,
   startdate: string,
   enddate: string,
   manhour: number,
   assigned: string,
   comment: string,
 ): Data {
-  return { name, category, startdate, enddate, manhour, assigned, comment };
+  return { category, name, status, startdate, enddate, manhour, assigned, comment };
 }
 
 const rows = [
-  createData('A機能製造', '製造', '2021-07-04', '2021-07-04', 1, '製造担当A', 'テストデータA使用'),
-  createData('B機能製造', '製造', '2021-07-05', '2021-07-05', 1, '製造担当A', 'テストデータA使用'),
-  createData('C機能製造', '製造', '2021-07-06', '2021-07-06', 1, '製造担当A', 'テストデータA使用'),
-  createData('D機能製造', '製造', '2021-07-07', '2021-07-07', 1, '製造担当A', 'テストデータA使用'),
-  createData('E機能製造', '製造', '2021-07-08', '2021-07-08', 1, '製造担当A', 'テストデータA使用'),
-  createData('F機能製造', '製造', '2021-07-09', '2021-07-09', 1, '製造担当A', 'テストデータA使用'),
-  createData('G機能製造', '製造', '2021-07-10', '2021-07-10', 1, '製造担当A', 'テストデータA使用'),
+  createData('製造', 'A機能製造', '進行中', '2021-07-04', '2021-07-04', 1, '製造担当A', 'テストデータA使用'),
+  createData('製造', 'B機能製造', '開始前', '2021-07-05', '2021-07-05', 1, '製造担当A', 'テストデータA使用'),
+  createData('製造', 'C機能製造', '開始前', '2021-07-06', '2021-07-06', 1, '製造担当A', 'テストデータA使用'),
+  createData('製造', 'D機能製造', '開始前', '2021-07-07', '2021-07-07', 1, '製造担当A', 'テストデータA使用'),
+  createData('製造', 'E機能製造', '開始前', '2021-07-08', '2021-07-08', 1, '製造担当A', 'テストデータA使用'),
+  createData('製造', 'F機能製造', '開始前', '2021-07-09', '2021-07-09', 1, '製造担当A', 'テストデータA使用'),
+  createData('製造', 'G機能製造', '開始前', '2021-07-10', '2021-07-10', 1, '製造担当A', 'テストデータA使用'),
 ];
 
 const Task = () => {
@@ -170,7 +178,9 @@ const Task = () => {
           </TableHead>
           <TableBody>
             {rows.map((row, rowIndex) => (
-              <TableRow>
+              <TableRow
+                hover
+              >
                 <TableCell padding="checkbox">
                   <Checkbox color="primary" />
                 </TableCell>
