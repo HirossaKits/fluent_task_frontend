@@ -55,7 +55,7 @@ const useSytle = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
     border: 0,
-    background: theme.palette.grey[700],
+    background: theme.palette.background.default,
   },
   drawerClose: {
     // flexShrink: 0,
@@ -67,7 +67,7 @@ const useSytle = makeStyles((theme) => ({
     overflowX: 'hidden',
     width: theme.spacing(6) + 1,
     border: 0,
-    background: theme.palette.grey[700],
+    background: theme.palette.background.default,
   },
   drawerHeader: {
     display: 'flex',
