@@ -82,9 +82,10 @@ const columns: Column[] = [
 let rowCount = 10;
 
 interface Data {
+  id: string;
+  category: string;
   name: string;
   status: string,
-  category: string;
   startdate: string;
   enddate: string;
   manhour: number;
@@ -93,6 +94,7 @@ interface Data {
 }
 
 function createData(
+  id: string,
   category: string,
   name: string,
   status: string,
@@ -102,22 +104,34 @@ function createData(
   assigned: string,
   comment: string,
 ): Data {
-  return { category, name, status, startdate, enddate, manhour, assigned, comment };
+  return { id, category, name, status, startdate, enddate, manhour, assigned, comment };
 }
 
 const rows = [
-  createData('製造', 'A機能製造', '進行中', '2021-07-04', '2021-07-04', 1, '製造担当A', 'テストデータA使用'),
-  createData('製造', 'B機能製造', '開始前', '2021-07-05', '2021-07-05', 1, '製造担当A', 'テストデータA使用'),
-  createData('製造', 'C機能製造', '開始前', '2021-07-06', '2021-07-06', 1, '製造担当A', 'テストデータA使用'),
-  createData('製造', 'D機能製造', '開始前', '2021-07-07', '2021-07-07', 1, '製造担当A', 'テストデータA使用'),
-  createData('製造', 'E機能製造', '開始前', '2021-07-08', '2021-07-08', 1, '製造担当A', 'テストデータA使用'),
-  createData('製造', 'F機能製造', '開始前', '2021-07-09', '2021-07-09', 1, '製造担当A', 'テストデータA使用'),
-  createData('製造', 'G機能製造', '開始前', '2021-07-10', '2021-07-10', 1, '製造担当A', 'テストデータA使用'),
+  createData('1', '製造', 'A機能製造', '進行中', '2021-07-04', '2021-07-04', 1, '製造担当A', 'テストデータA使用'),
+  createData('2', '製造', 'B機能製造', '開始前', '2021-07-05', '2021-07-05', 1, '製造担当A', 'テストデータA使用'),
+  createData('3', '製造', 'C機能製造', '開始前', '2021-07-06', '2021-07-06', 1, '製造担当A', 'テストデータA使用'),
+  createData('4', '製造', 'D機能製造', '開始前', '2021-07-07', '2021-07-07', 1, '製造担当A', 'テストデータA使用'),
+  createData('5', '製造', 'E機能製造', '開始前', '2021-07-08', '2021-07-08', 1, '製造担当A', 'テストデータA使用'),
+  createData('6', '製造', 'F機能製造', '開始前', '2021-07-09', '2021-07-09', 1, '製造担当A', 'テストデータA使用'),
+  createData('7', '製造', 'G機能製造', '開始前', '2021-07-10', '2021-07-10', 1, '製造担当A', 'テストデータA使用'),
 ];
 
 const Task = () => {
   const classes = useStyles();
   const [selected, setSelected] = React.useState<string[]>([]);
+
+  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
+    let newSelected = Array.from(selected);
+    const index = newSelected.indexOf(id);
+    if (index === -1) {
+      newSelected.push(id);
+    } else {
+      newSelected.splice(index, 1);
+    }
+    setSelected(newSelected);
+  };
+
   return (
     <div className={classes.root}>
       <Typography className={classes.title} variant="h5" component="h2">
@@ -179,12 +193,14 @@ const Task = () => {
           <TableBody>
             {rows.map((row, rowIndex) => (
               <TableRow
+                onClick={(event) => handleClick(event, row.id)}
                 hover
+                selected={selected.indexOf(row.id) !== -1}
               >
                 <TableCell padding="checkbox">
                   <Checkbox color="primary" />
                 </TableCell>
-                {(Object.keys(row)).map((key: string, colIndex: number) => (
+                {(Object.keys(row)).map((key: string, colIndex: number) => (key !== 'id') && (
                   <TableCell>
                     <span>{row[key as keyof Data]}</span>
                   </TableCell>
