@@ -1,6 +1,7 @@
 import React from 'react';
-import { Typography, Toolbar, Tooltip, IconButton, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Checkbox } from "@material-ui/core";
-import { makeStyles, Theme } from "@material-ui/core/styles";
+import { Typography, Toolbar, Tooltip, IconButton, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Checkbox } from "@material-ui/core";
+import { makeStyles, Theme, lighten } from "@material-ui/core/styles";
+import { fade } from "@material-ui/core/styles/colorManipulator";
 import AddIcon from '@material-ui/icons/Add';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
@@ -31,6 +32,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   checkbox: {
     color: "primary"
+  },
+  tablerow: {
+    "&.Mui-selected, &.Mui-selected:hover": {
+      backgroundColor: fade(theme.palette.primary.main, theme.palette.action.selectedOpacity),
+    },
   }
 }));
 
@@ -186,19 +192,26 @@ const Task = () => {
                 <TableCell
                   align={col.align}
                   style={{ minWidth: col.minWidth }}>
-                  {col.label}
-                </TableCell>))}
+                  <TableSortLabel
+                  // active={state.activeKey === column}
+                  // onClick={() => handleClickSortColumn(column)}
+                  >
+                    {col.label}
+                  </TableSortLabel>
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row, rowIndex) => (
               <TableRow
+                className={classes.tablerow}
                 onClick={(event) => handleClick(event, row.id)}
                 hover
                 selected={selected.indexOf(row.id) !== -1}
               >
                 <TableCell padding="checkbox">
-                  <Checkbox color="primary" />
+                  <Checkbox checked={selected.indexOf(row.id) !== -1} color="primary" />
                 </TableCell>
                 {(Object.keys(row)).map((key: string, colIndex: number) => (key !== 'id') && (
                   <TableCell>
