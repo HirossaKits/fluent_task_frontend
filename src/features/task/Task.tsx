@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Typography, Toolbar, Tooltip, IconButton, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Checkbox } from "@material-ui/core";
 import { makeStyles, Theme, lighten } from "@material-ui/core/styles";
 import { fade } from "@material-ui/core/styles/colorManipulator";
@@ -125,7 +125,11 @@ const rows = [
 
 const Task = () => {
   const classes = useStyles();
-  const [selected, setSelected] = React.useState<string[]>([]);
+  const [selected, setSelected] = useState<string[]>([]);
+  const [sort, setSort] = useState({
+    order: "desc",
+    column: ""
+  });
 
   const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
     let newSelected = Array.from(selected);
@@ -136,6 +140,28 @@ const Task = () => {
       newSelected.splice(index, 1);
     }
     setSelected(newSelected);
+  };
+
+  const handleSelectAllClic = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.checked) {
+      setSelected(rows.map((row) => (row.id)));
+    } else {
+      setSelected([]);
+    }
+  };
+
+  const sortRows = (rs: typeof rows): typeof rows => {
+    if (!sort.column) { return rows; }
+    const sortedRows = Array.from(rs).sort((a, b) => {
+      if (a[sort.column as keyof Data] > b[sort.column as keyof Data]) {
+        return sort.order === "asc" ? 1 : -1;
+      }
+      if (a[sort.column as keyof Data] < b[sort.column as keyof Data]) {
+        return sort.order === "desc" ? -1 : 1;
+      }
+      return 0;
+    });
+    return sortedRows;
   };
 
   return (
@@ -180,11 +206,10 @@ const Task = () => {
               <TableCell padding="checkbox">
                 <Checkbox
                   className={classes.checkbox}
-                  indeterminate
-                  // indeterminate={selected.length > 0 && selected.length < rows.length}
-                  // checked={rowCount > 0 && selected.length === rowCount}
-                  // onChange={onSelectAllClick}
-                  // inputProps={{ 'aria-label': 'select all desserts' }}
+
+                  indeterminate={selected.length > 0 && selected.length < rows.length}
+                  checked={rowCount > 0 && selected.length === rows.length}
+                  onChange={handleSelectAllClic}
                   color="primary"
                 />
               </TableCell>
@@ -193,8 +218,9 @@ const Task = () => {
                   align={col.align}
                   style={{ minWidth: col.minWidth }}>
                   <TableSortLabel
-                  // active={state.activeKey === column}
-                  // onClick={() => handleClickSortColumn(column)}
+                    active={orderBy === headCell.id}
+                    direction={orderBy === headCell.id ? order : 'asc'}
+                    onClick={() => handleClickSortColumn(column)}
                   >
                     {col.label}
                   </TableSortLabel>
@@ -203,7 +229,7 @@ const Task = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, rowIndex) => (
+            {sortRows(rows).map((row, rowIndex) => (
               <TableRow
                 className={classes.tablerow}
                 onClick={(event) => handleClick(event, row.id)}
