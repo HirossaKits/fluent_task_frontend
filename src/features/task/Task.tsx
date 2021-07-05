@@ -44,42 +44,58 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface Column {
   label: string;
+  name: keyof Data;
+  isNumeric: boolean;
   minWidth?: number;
-  align?: 'right';
-  format?: (value: number) => string;
 }
 
 const columns: Column[] = [
   {
     label: "カテゴリー",
+    name: "category",
+    isNumeric: false,
     minWidth: 40,
   },
   {
     label: "タスク名",
+    name: "name",
+    isNumeric: false,
     minWidth: 120,
   },
   {
     label: "ステータス",
+    name: "status",
+    isNumeric: false,
     minWidth: 120,
   },
   {
     label: "開始予定日",
+    name: "startdate",
+    isNumeric: false,
     minWidth: 120,
   },
   {
     label: "終了予定日",
+    name: "enddate",
+    isNumeric: false,
     minWidth: 120,
   },
   {
     label: "予定工数 (日)",
+    name: "manhour",
+    isNumeric: true,
     minWidth: 120,
   },
   {
     label: "担当",
+    name: "assigned",
+    isNumeric: false,
     minWidth: 120,
   },
   {
     label: "コメント",
+    name: "comment",
+    isNumeric: false,
     minWidth: 120,
   }
 
@@ -123,11 +139,16 @@ const rows = [
   createData('7', '製造', 'G機能製造', '開始前', '2021-07-10', '2021-07-10', 1, '製造担当A', 'テストデータA使用'),
 ];
 
+interface SORT_STATE {
+  order: "asc" | "desc",
+  column: "" | keyof Data;
+}
+
 const Task = () => {
   const classes = useStyles();
   const [selected, setSelected] = useState<string[]>([]);
-  const [sort, setSort] = useState({
-    order: "desc",
+  const [sort, setSort] = useState<SORT_STATE>({
+    order: "asc",
     column: ""
   });
 
@@ -148,6 +169,13 @@ const Task = () => {
     } else {
       setSelected([]);
     }
+  };
+
+  const handleClickSortColumn = (colName: keyof Data) => {
+    setSort({
+      order: sort.column !== colName || sort.order === "desc" ? "asc" : "desc",
+      column: colName
+    });
   };
 
   const sortRows = (rs: typeof rows): typeof rows => {
@@ -215,12 +243,11 @@ const Task = () => {
               </TableCell>
               {columns.map((col) => (
                 <TableCell
-                  align={col.align}
                   style={{ minWidth: col.minWidth }}>
                   <TableSortLabel
-                    active={orderBy === headCell.id}
-                    direction={orderBy === headCell.id ? order : 'asc'}
-                    onClick={() => handleClickSortColumn(column)}
+                    active={sort.column === col.name}
+                    direction={sort.column === col.name ? sort.order : "asc"}
+                    onClick={() => handleClickSortColumn(col.name)}
                   >
                     {col.label}
                   </TableSortLabel>
@@ -240,7 +267,7 @@ const Task = () => {
                   <Checkbox checked={selected.indexOf(row.id) !== -1} color="primary" />
                 </TableCell>
                 {(Object.keys(row)).map((key: string, colIndex: number) => (key !== 'id') && (
-                  <TableCell>
+                  <TableCell align={(columns[colIndex] as Column).isNumeric ? "right" : "left"}>
                     <span>{row[key as keyof Data]}</span>
                   </TableCell>
                 ))}
