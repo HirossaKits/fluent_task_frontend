@@ -40,65 +40,24 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-
+type COLUMN_ID = "category" | "name" | "status" | "startdate" | "enddate" | "manhour" | "assigned" | "comment"
 
 interface Column {
+  name: COLUMN_ID;
   label: string;
-  name: keyof Data;
   isNumeric: boolean;
   minWidth?: number;
 }
 
 const columns: Column[] = [
-  {
-    label: "カテゴリー",
-    name: "category",
-    isNumeric: false,
-    minWidth: 40,
-  },
-  {
-    label: "タスク名",
-    name: "name",
-    isNumeric: false,
-    minWidth: 120,
-  },
-  {
-    label: "ステータス",
-    name: "status",
-    isNumeric: false,
-    minWidth: 120,
-  },
-  {
-    label: "開始予定日",
-    name: "startdate",
-    isNumeric: false,
-    minWidth: 120,
-  },
-  {
-    label: "終了予定日",
-    name: "enddate",
-    isNumeric: false,
-    minWidth: 120,
-  },
-  {
-    label: "予定工数 (日)",
-    name: "manhour",
-    isNumeric: true,
-    minWidth: 120,
-  },
-  {
-    label: "担当",
-    name: "assigned",
-    isNumeric: false,
-    minWidth: 120,
-  },
-  {
-    label: "コメント",
-    name: "comment",
-    isNumeric: false,
-    minWidth: 120,
-  }
-
+  {name: "category",label: "カテゴリー",isNumeric: false,minWidth: 40},
+  {name: "name",label: "タスク名",isNumeric: false,minWidth: 120},
+  {name: "status",label: "ステータス",isNumeric: false,minWidth: 120},
+  {name: "startdate",label: "開始予定日",isNumeric: false,minWidth: 120},
+  {name: "enddate",label: "終了予定日",isNumeric: false,minWidth: 120},
+  {name: "manhour",label: "予定工数 (日)",isNumeric: true,minWidth: 120},
+  {name: "assigned",label: "担当",isNumeric: false,minWidth: 120},
+  {name: "comment",label: "コメント",isNumeric: false,minWidth: 120}
 ];
 
 let rowCount = 10;
@@ -130,7 +89,7 @@ function createData(
 }
 
 const rows = [
-  createData('1', '製造', 'A機能製造', '進行中', '2021-07-04', '2021-07-04', 1, '製造担当A', 'テストデータA使用'),
+  createData('1', '製造', 'A機能製造', '進行中', '2021-07-04', '2021-07-04', 1, '製造担当A', 'テストデータABCDEFGHIJKLMN使用'),
   createData('2', '製造', 'B機能製造', '開始前', '2021-07-05', '2021-07-05', 1, '製造担当A', 'テストデータA使用'),
   createData('3', '製造', 'C機能製造', '開始前', '2021-07-06', '2021-07-06', 1, '製造担当A', 'テストデータA使用'),
   createData('4', '製造', 'D機能製造', '開始前', '2021-07-07', '2021-07-07', 1, '製造担当A', 'テストデータA使用'),
@@ -141,7 +100,7 @@ const rows = [
 
 interface SORT_STATE {
   order: "asc" | "desc",
-  column: "" | keyof Data;
+  column: "" | COLUMN_ID;
 }
 
 const Task = () => {
@@ -171,10 +130,10 @@ const Task = () => {
     }
   };
 
-  const handleClickSortColumn = (colName: keyof Data) => {
+  const handleClickSortColumn = (colId: COLUMN_ID) => {
     setSort({
-      order: sort.column !== colName || sort.order === "desc" ? "asc" : "desc",
-      column: colName
+      order: sort.column !== colId || sort.order === "desc" ? "asc" : "desc",
+      column: colId
     });
   };
 
@@ -242,8 +201,7 @@ const Task = () => {
                 />
               </TableCell>
               {columns.map((col) => (
-                <TableCell
-                  style={{ minWidth: col.minWidth }}>
+                <TableCell key = {col.name}>
                   <TableSortLabel
                     active={sort.column === col.name}
                     direction={sort.column === col.name ? sort.order : "asc"}
@@ -267,8 +225,8 @@ const Task = () => {
                   <Checkbox checked={selected.indexOf(row.id) !== -1} color="primary" />
                 </TableCell>
                 {(Object.keys(row)).map((key: string, colIndex: number) => (key !== 'id') && (
-                  <TableCell align={(columns[colIndex] as Column).isNumeric ? "right" : "left"}>
-                    <span>{row[key as keyof Data]}</span>
+                  <TableCell style={columns.find(element => element.name === key)?.isNumeric ? {textAlign:"right",paddingRight:'7%'}: {}}>
+                    <span>{row[key as keyof Data]} </span>
                   </TableCell>
                 ))}
               </TableRow>
