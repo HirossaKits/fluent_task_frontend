@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, Toolbar, Tooltip, IconButton, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Checkbox } from "@material-ui/core";
+import { Button,Typography, Toolbar, Tooltip, IconButton, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, TableSortLabel, Checkbox } from "@material-ui/core";
 import { makeStyles, Theme, lighten } from "@material-ui/core/styles";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import AddIcon from '@material-ui/icons/Add';
@@ -7,27 +7,34 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import TaskDialog from './TaskDialog';
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
     color: theme.palette.text.primary
   },
   root: {
-    width: "100%",
+    marginLeft: theme.spacing(3),
+    marginRight: theme.spacing(3),
   },
   table: {
-    tableLayout: "fixed",
+    // fixedHeader:false,
+    // width: "100%",
+    // tableLayout: "auto",
   },
-  button: {
-    margin: theme.spacing(3),
+  buttonRight: {
+    margin: "0 0 0 auto"
   },
-  small: {
-    margin: "auto",
-    width: theme.spacing(3),
-    height: theme.spacing(3),
+  // small: {
+  //   margin: "auto",
+  //   width: theme.spacing(3),
+  //   height: theme.spacing(3),
+  // },
+  toolbar:{
+    // background:'green',
+    // disableGutters:true
   },
   container: {
-    marginTop: 20,
     maxHeight: 440,
   },
   checkbox: {
@@ -37,7 +44,21 @@ const useStyles = makeStyles((theme: Theme) => ({
     "&.Mui-selected, &.Mui-selected:hover": {
       backgroundColor: fade(theme.palette.primary.main, theme.palette.action.selectedOpacity),
     },
+  },
+  tableCheckCell: {
+    width:"4%"
+    // paddingLeft:0,
+    // paddingRight: "20%",
+  },
+  tableCell: {
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
+  tableNumericCell: {
+    paddingLeft: 0,
+    paddingRight: "5%",
   }
+
 }));
 
 type COLUMN_ID = "category" | "name" | "status" | "startdate" | "enddate" | "manhour" | "assigned" | "comment"
@@ -46,18 +67,18 @@ interface Column {
   name: COLUMN_ID;
   label: string;
   isNumeric: boolean;
-  minWidth?: number;
+  width: string;
 }
 
 const columns: Column[] = [
-  {name: "category",label: "カテゴリー",isNumeric: false,minWidth: 40},
-  {name: "name",label: "タスク名",isNumeric: false,minWidth: 120},
-  {name: "status",label: "ステータス",isNumeric: false,minWidth: 120},
-  {name: "startdate",label: "開始予定日",isNumeric: false,minWidth: 120},
-  {name: "enddate",label: "終了予定日",isNumeric: false,minWidth: 120},
-  {name: "manhour",label: "予定工数 (日)",isNumeric: true,minWidth: 120},
-  {name: "assigned",label: "担当",isNumeric: false,minWidth: 120},
-  {name: "comment",label: "コメント",isNumeric: false,minWidth: 120}
+  {name: "category",label: "カテゴリー",isNumeric: false,width: "10%"},
+  {name: "name",label: "タスク名",isNumeric: false,width: "15%"},
+  {name: "status",label: "ステータス",isNumeric: false,width: "12%"},
+  {name: "startdate",label: "開始予定日",isNumeric: false,width: "12%"},
+  {name: "enddate",label: "終了予定日",isNumeric: false,width: "12%"},
+  {name: "manhour",label: "予定工数 (日)",isNumeric: true,width: "10%"},
+  {name: "assigned",label: "担当",isNumeric: false,width: "10%"},
+  {name: "comment",label: "コメント",isNumeric: false,width: "15%"},
 ];
 
 let rowCount = 10;
@@ -89,7 +110,7 @@ function createData(
 }
 
 const rows = [
-  createData('1', '製造', 'A機能製造', '進行中', '2021-07-04', '2021-07-04', 1, '製造担当A', 'テストデータABCDEFGHIJKLMN使用'),
+  createData('1', '製造', 'A機能製造', '進行中', '2021-07-04', '2021-07-04', 1, '製造担当A', 'テストデータA使用'),
   createData('2', '製造', 'B機能製造', '開始前', '2021-07-05', '2021-07-05', 1, '製造担当A', 'テストデータA使用'),
   createData('3', '製造', 'C機能製造', '開始前', '2021-07-06', '2021-07-06', 1, '製造担当A', 'テストデータA使用'),
   createData('4', '製造', 'D機能製造', '開始前', '2021-07-07', '2021-07-07', 1, '製造担当A', 'テストデータA使用'),
@@ -110,8 +131,13 @@ const Task = () => {
     order: "asc",
     column: ""
   });
+  const [open,setOpen] = useState(false)
 
-  const handleClick = (event: React.MouseEvent<unknown>, id: string) => {
+  const handleEditClick = () => {
+    setOpen(!open)
+  }
+
+  const handleRowClick = (event: React.MouseEvent<unknown>, id: string) => {
     let newSelected = Array.from(selected);
     const index = newSelected.indexOf(id);
     if (index === -1) {
@@ -156,27 +182,15 @@ const Task = () => {
       <Typography className={classes.title} variant="h5" component="h2">
         タスク一覧
       </Typography>
-      <Toolbar>
-        {selected.length > 0 ? (
-          <Tooltip title="Delete">
-            <IconButton aria-label="delete">
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="フィルター">
-            <IconButton aria-label="filter list">
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        )}
+      <Toolbar className={classes.toolbar} disableGutters>
+
         <Tooltip title="登録">
           <IconButton aria-label="filter list">
             <PlaylistAddIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="編集">
-          <IconButton aria-label="filter list">
+          <IconButton onClick={handleEditClick} aria-label="filter list">
             <EditIcon />
           </IconButton>
         </Tooltip>
@@ -185,15 +199,20 @@ const Task = () => {
             <DeleteIcon />
           </IconButton>
         </Tooltip>
+
+        <Tooltip title="フィルター">
+            <IconButton className={classes.buttonRight} aria-label="filter list" >
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
       </Toolbar>
       <TableContainer className={classes.container}>
         <Table size="medium" className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
+              <TableCell className={classes.tableCheckCell} padding="checkbox">
                 <Checkbox
                   className={classes.checkbox}
-
                   indeterminate={selected.length > 0 && selected.length < rows.length}
                   checked={rowCount > 0 && selected.length === rows.length}
                   onChange={handleSelectAllClic}
@@ -201,7 +220,7 @@ const Task = () => {
                 />
               </TableCell>
               {columns.map((col) => (
-                <TableCell key = {col.name}>
+                <TableCell className={classes.tableCell} key = {col.name}>
                   <TableSortLabel
                     active={sort.column === col.name}
                     direction={sort.column === col.name ? sort.order : "asc"}
@@ -217,23 +236,29 @@ const Task = () => {
             {sortRows(rows).map((row, rowIndex) => (
               <TableRow
                 className={classes.tablerow}
-                onClick={(event) => handleClick(event, row.id)}
+                onClick={(event) => handleRowClick(event, row.id)}
                 hover
                 selected={selected.indexOf(row.id) !== -1}
               >
-                <TableCell padding="checkbox">
+                <TableCell className={classes.tableCheckCell} padding="checkbox">
                   <Checkbox checked={selected.indexOf(row.id) !== -1} color="primary" />
                 </TableCell>
-                {(Object.keys(row)).map((key: string, colIndex: number) => (key !== 'id') && (
-                  <TableCell style={columns.find(element => element.name === key)?.isNumeric ? {textAlign:"right",paddingRight:'7%'}: {}}>
-                    <span>{row[key as keyof Data]} </span>
-                  </TableCell>
-                ))}
+                {columns.map((col) => (
+                <TableCell
+                  className={col.isNumeric ? classes.tableNumericCell: classes.tableCell}
+                  width={col.width}
+                  align={col.isNumeric ? "right":"inherit"}
+                >
+                  <Typography variant='body2'>
+                    {row[col.name] as keyof Data}
+                  </Typography>
+                </TableCell>))}
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+      <TaskDialog open={open} setOpen={setOpen}/>
     </div>
   );
 };

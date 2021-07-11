@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Toolbar, Drawer, Typography, IconButton, Badge, List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+import { AppBar, Toolbar, Drawer, Typography, IconButton, Badge, List, ListItem, ListItemIcon, ListItemText,Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AppsIcon from '@material-ui/icons/Apps';
 import NotificationsIcon from "@material-ui/icons/Notifications";
@@ -79,7 +79,8 @@ const useSytle = makeStyles((theme) => ({
   },
   content: {
     // flexGrow: 1,
-    padding: theme.spacing(3),
+    width:`calc(96%  - ${drawerWidth}px)`,
+    paddingTop: theme.spacing(3),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -88,7 +89,8 @@ const useSytle = makeStyles((theme) => ({
   },
   contentShift: {
     // flexGrow: 1,
-    padding: theme.spacing(3),
+    width:`calc(96%  - ${theme.spacing(6) + 1}px)`,
+    paddingTop: theme.spacing(3),
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
@@ -186,9 +188,9 @@ const Navbar = () => {
           ))}
         </List>
       </Drawer>
-      <main className={open ? classes.content : classes.contentShift}>
+      <div className={open ? classes.content : classes.contentShift}>
         <Main />
-      </main>
+      </div>
     </>
   );
 };

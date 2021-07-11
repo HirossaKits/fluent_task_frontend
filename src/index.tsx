@@ -13,7 +13,7 @@ import Auth from './features/auth/Auth';
 const theme = createMuiTheme({
   typography: {
     fontFamily: ['Noto Sans JP', 'M PLUS Rounded 1c'].join(','),
-    fontSize: 14
+    fontSize: 12
   },
   palette: {
     text: {
