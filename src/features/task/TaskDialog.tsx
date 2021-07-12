@@ -14,12 +14,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     flexGrow: 1,
   },
-  grid: {
-    textAlign: "center",
+  title: {
+    textAlign: "left",
   },
-  gridtest: {
+  gridcol: {
     textAlign: "center",
-    // background: "green",
+    // background: "blue",
+    // flexGrow: 1,
   },
   input: {
     // width: "80%",
@@ -39,100 +40,103 @@ const TaskDialog: React.FC<Props> = (props) => {
   };
 
   return (
-    <div>
+    <>
       <Dialog
         open={props.open}
         onClose={handleClose}
         aria-labelledby='form-dialog-title'
+        maxWidth='sm'
+        fullWidth
       >
+        <DialogTitle id='form-dialog-title'>タスクを登録</DialogTitle>
         <form className={classes.root} noValidate autoComplete='off'>
-          <DialogTitle id='form-dialog-title'>タスクを登録</DialogTitle>
-          <Grid
-            className={classes.root}
-            container
-            direction='column'
-            alignContent='space-between'
-            alignItems='center'
-          >
-            <Grid className={classes.grid} item xs={4}>
-              <TextField
-                className={classes.input}
-                autoFocus
-                fullWidth
-                // margin='dense'
-                id='category'
-                label='カテゴリー'
-                type='email'
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
+          <Grid container direction='row' justifyContent='center'>
+            <Grid
+              className={classes.gridcol}
+              container
+              justifyContent='flex-start'
+              alignItems='center'
+              xs={11}
+            >
+              <Grid item xs={12}>
+                <Grid item xs={4}>
+                  <TextField
+                    className={classes.input}
+                    autoFocus
+                    variant='outlined'
+                    fullWidth
+                    margin='dense'
+                    size='small'
+                    id='category'
+                    label='カテゴリー'
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <Grid item xs={10}>
+                  <TextField
+                    className={classes.input}
+                    variant='outlined'
+                    fullWidth
+                    margin='dense'
+                    size='small'
+                    id='name'
+                    label='タスク名'
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <Grid item xs={3}>
+                  <TextField
+                    className={classes.input}
+                    variant='outlined'
+                    fullWidth
+                    margin='dense'
+                    size='small'
+                    id='status'
+                    label='ステータス'
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <Grid item xs={4}>
+                  <TextField
+                    className={classes.input}
+                    variant='outlined'
+                    fullWidth
+                    margin='dense'
+                    size='small'
+                    id='name'
+                    label='担当者'
+                    type='email'
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
-            <Grid className={classes.gridtest} item xs={4}>
-              <TextField
-                className={classes.input}
-                fullWidth
-                // margin='dense'
-                id='name'
-                label='タスク名'
-                type='email'
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </Grid>
-            {/* <Grid className={classes.grid} item xs={6}>
-              <TextField
-                className={classes.input}
-                fullWidth
-                variant='standard'
-                margin='dense'
-                id='assigned'
-                label='Email Address'
-                type='email'
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </Grid>
-            <Grid className={classes.grid} item xs={6}>
-              <TextField
-                autoFocus
-                variant='outlined'
-                margin='dense'
-                id='name'
-                label='タスク名'
-                type='email'
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </Grid>
-            <Grid className={classes.grid} item xs={6}>
-              <TextField
-                autoFocus
-                variant='outlined'
-                margin='dense'
-                id='name'
-                label='Email Address'
-                type='email'
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            </Grid> */}
           </Grid>
-          <DialogActions>
-            <Button onClick={handleClose} color='primary'>
-              Cancel
-            </Button>
-            <Button onClick={handleClose} color='primary'>
-              Subscribe
-            </Button>
-          </DialogActions>
+          {/* <DialogActions>
+              <Button onClick={handleClose} color='primary'>
+                Cancel
+              </Button>
+              <Button onClick={handleClose} color='primary'>
+                Subscribe
+              </Button>
+            </DialogActions> */}
         </form>
       </Dialog>
-    </div>
+    </>
   );
 };
 
