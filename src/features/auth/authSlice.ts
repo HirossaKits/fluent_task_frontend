@@ -12,7 +12,7 @@ export const fetchAsyncLogin = createAsyncThunk(
   'auth/login',
   async (auth: CRED) => {
     const res = await axios.post<JWT>(
-      `${process.env.API_URL}/auth/jwt/create`,
+      `${process.env.REACT_APP_API_URL}/auth/jwt/create`,
       auth,
       {
         headers: {
@@ -26,7 +26,7 @@ export const fetchAsyncRegister = createAsyncThunk(
   'auth/register',
   async (auth: REG_INFO) => {
     const res = await axios.post<JWT>(
-      `${process.env.API_URL}/auth/jwt/create`,
+      `${process.env.REACT_APP_API_URL}/api/user/create/`,
       auth,
       {
         headers: {
@@ -50,14 +50,14 @@ export const authSlice = createSlice({
   reducers: {
 
   },
-  extraReducers: (builder) => {
-    builder.addCase(
-      fetchAsyncLogin.fulfilled,
-      (state, action: PayloadAction<JWT>) => {
-        // state.
-      }
-    );
-  }
+  // extraReducers: (builder) => {
+  //   builder.addCase(
+  //     fetchAsyncLogin.fulfilled,
+  //     (state, action: PayloadAction<JWT>) => {
+  //       // state.
+  //     }
+  //   );
+  // }
 });;
 
 export default authSlice.reducer;

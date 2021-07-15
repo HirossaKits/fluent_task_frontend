@@ -74,6 +74,8 @@ const SignIn: React.FC = () => {
   const register = async (e: any) => {
     e.preventDefault();
     const res = await dispatch(fetchAsyncRegister(regInfo));
+
+    console.log(regInfo);
     console.log(res);
   };
 
@@ -133,10 +135,10 @@ const SignIn: React.FC = () => {
                   <TextField
                     autoComplete='fname'
                     margin='normal'
-                    name='firstName'
                     variant='outlined'
                     fullWidth
                     id='firstName'
+                    name='first_name'
                     label='First Name'
                     autoFocus
                     size='small'
@@ -149,8 +151,8 @@ const SignIn: React.FC = () => {
                     margin='normal'
                     fullWidth
                     id='lastName'
+                    name='last_name'
                     label='Last Name'
-                    name='lastName'
                     autoComplete='lname'
                     size='small'
                     onChange={handleInputChange}
