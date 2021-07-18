@@ -15,6 +15,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import styles from "./Auth.module.css";
 import { CRED, REG_INFO } from "../types";
+import { AppDispatch } from "../../app/store";
 import { fetchAsyncLogin, fetchAsyncRegister } from "./authSlice";
 
 enum MODE {
@@ -44,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
 
 const SignIn: React.FC = () => {
   const classes = useStyles();
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const [mode, setMode] = useState(MODE.Login);
   const [regInfo, setRegInfo] = useState<REG_INFO>(initRegInfo);
@@ -66,17 +67,18 @@ const SignIn: React.FC = () => {
   const login = async (e: any) => {
     e.preventDefault();
     let cred: CRED = regInfo;
-    const res = await dispatch(fetchAsyncLogin(cred));
-    console.log(res);
-    window.location.href = "/app";
+    console.log("login...");
+
+    await dispatch(fetchAsyncLogin(cred));
   };
 
   const register = async (e: any) => {
     e.preventDefault();
     const res = await dispatch(fetchAsyncRegister(regInfo));
-
-    console.log(regInfo);
-    console.log(res);
+    if (fetchAsyncRegister.fulfilled.match(res)) {
+      let cred: CRED = regInfo;
+      await dispatch(fetchAsyncLogin(cred));
+    }
   };
 
   return (

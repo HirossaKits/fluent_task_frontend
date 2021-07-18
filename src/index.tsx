@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 import { Route, BrowserRouter } from "react-router-dom";
-import { CookiesProvider } from "react-cookie";
 import { createTheme, MuiThemeProvider } from "@material-ui/core";
 import "./index.css";
 import App from "./App";
@@ -28,14 +27,12 @@ const theme = createTheme({
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <CookiesProvider>
-        <MuiThemeProvider theme={theme}>
-          <BrowserRouter>
-            <Route exact path='/' component={Auth} />
-            <Route exact path='/app' component={App} />
-          </BrowserRouter>
-        </MuiThemeProvider>
-      </CookiesProvider>
+      <MuiThemeProvider theme={theme}>
+        <BrowserRouter>
+          <Route exact path='/' component={Auth} />
+          <Route exact path='/app' component={App} />
+        </BrowserRouter>
+      </MuiThemeProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")
