@@ -10,10 +10,8 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Menu,
-  ClickAwayListener,
-  Grid,
-  Popper,
+  Avatar,
+  Popover,
   Fade,
   Grow,
   Paper,
@@ -23,8 +21,8 @@ import AppsIcon from "@material-ui/icons/Apps";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import Main from "./features/main/Main";
-import { NonNullChain } from "typescript";
 
 const drawerWidth = 180;
 
@@ -122,6 +120,17 @@ const useSytle = makeStyles((theme) => ({
   drawerText: {
     color: "rgba(255, 255, 255, 0.9)",
   },
+  profilePaper: {
+    padding: theme.spacing(2),
+  },
+  avatorLarge: {
+    width: theme.spacing(10),
+    height: theme.spacing(10),
+  },
+  camera: {
+    color: theme.palette.text.hint,
+    background: "white",
+  },
 }));
 
 const signOut = () => {};
@@ -152,22 +161,6 @@ const Navbar = () => {
 
   return (
     <>
-      <Popper
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        placement='bottom-end'
-        disablePortal
-        // keepMounted
-      >
-        <ClickAwayListener onClickAway={handleProfileColse}>
-          <Paper>
-            <Typography>The content of the Popper.</Typography>
-            <Typography>The content of the Popper.</Typography>
-            <Typography>The content of the Popper.</Typography>
-            <Typography>The content of the Popper.</Typography>
-          </Paper>
-        </ClickAwayListener>
-      </Popper>
       <AppBar
         className={drawerOpen ? classes.appBarShift : classes.appBar}
         position='static'
@@ -239,6 +232,39 @@ const Navbar = () => {
       <div className={drawerOpen ? classes.content : classes.contentShift}>
         <Main />
       </div>
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        onClose={handleProfileColse}
+        keepMounted
+      >
+        <Paper className={classes.profilePaper}>
+          <Badge
+            // className={classes.camera}
+            overlap='circular'
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+            badgeContent={
+              <div style={{ marginLeft: 12, marginTop: 6 }}>
+                <AddAPhotoIcon />
+              </div>
+            }
+          >
+            <Avatar className={classes.avatorLarge} />
+          </Badge>
+
+          <Typography>The content of the Popper.</Typography>
+          <Typography>The content of the Popper.</Typography>
+          <Typography>The content of the Popper.</Typography>
+          <Typography>The content of the Popper.</Typography>
+        </Paper>
+      </Popover>
     </>
   );
 };
