@@ -1,6 +1,7 @@
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Task from '../task/Task';
+import React from "react";
+import Typography from "@material-ui/core/Typography";
+import Task from "../task/Task";
+import CommonSwitch from "../../CommonSwitch";
 
 const Main = () => {
   return (
@@ -18,6 +19,7 @@ const Main = () => {
         arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
         donec massa sapien faucibus et molestie ac.
       </Typography> */}
+      <CommonSwitch />
     </>
   );
 };

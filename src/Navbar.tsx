@@ -23,6 +23,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import Main from "./features/main/Main";
+import CommonSwitch from "./CommonSwitch";
 
 const drawerWidth = 180;
 
@@ -121,15 +122,16 @@ const useSytle = makeStyles((theme) => ({
     color: "rgba(255, 255, 255, 0.9)",
   },
   profilePaper: {
-    padding: theme.spacing(2),
+    width: 140,
+    padding: theme.spacing(1),
   },
   avatorLarge: {
-    width: theme.spacing(10),
-    height: theme.spacing(10),
+    width: theme.spacing(9),
+    height: theme.spacing(9),
   },
-  camera: {
-    color: theme.palette.text.hint,
-    background: "white",
+  avatorSmall: {
+    width: theme.spacing(4),
+    height: theme.spacing(4),
   },
 }));
 
@@ -244,25 +246,25 @@ const Navbar = () => {
       >
         <Paper className={classes.profilePaper}>
           <Badge
-            // className={classes.camera}
             overlap='circular'
             anchorOrigin={{
               vertical: "bottom",
               horizontal: "right",
             }}
             badgeContent={
-              <div style={{ marginLeft: 12, marginTop: 6 }}>
-                <AddAPhotoIcon />
+              <div style={{ marginLeft: 0, marginTop: 0 }}>
+                <Avatar className={classes.avatorSmall}>
+                  <AddAPhotoIcon fontSize='small' />
+                </Avatar>
               </div>
             }
           >
             <Avatar className={classes.avatorLarge} />
           </Badge>
-
-          <Typography>The content of the Popper.</Typography>
-          <Typography>The content of the Popper.</Typography>
-          <Typography>The content of the Popper.</Typography>
-          <Typography>The content of the Popper.</Typography>
+          <br />
+          <CommonSwitch label={"ダークモード"} labelWidth={10} />
+          <CommonSwitch label={"test"} labelWidth={10} />
+          <CommonSwitch label={"test"} labelWidth={10} />
         </Paper>
       </Popover>
     </>
