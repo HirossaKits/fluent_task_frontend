@@ -125,13 +125,24 @@ const useSytle = makeStyles((theme) => ({
     width: 140,
     padding: theme.spacing(1),
   },
+  switchWrapper: {
+    marginTop: theme.spacing(1),
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(3),
+  },
   avatorLarge: {
-    width: theme.spacing(9),
-    height: theme.spacing(9),
+    background: theme.palette.grey[600],
+    width: theme.spacing(10),
+    height: theme.spacing(10),
   },
   avatorSmall: {
-    width: theme.spacing(4),
-    height: theme.spacing(4),
+    background: theme.palette.grey[600],
+    border: `4px solid ${theme.palette.background.paper}`,
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+    marginLeft: 10,
+    marginTop: 10,
+    hover: "pointer",
   },
 }));
 
@@ -252,19 +263,27 @@ const Navbar = () => {
               horizontal: "right",
             }}
             badgeContent={
-              <div style={{ marginLeft: 0, marginTop: 0 }}>
-                <Avatar className={classes.avatorSmall}>
-                  <AddAPhotoIcon fontSize='small' />
-                </Avatar>
-              </div>
+              <Avatar className={classes.avatorSmall}>
+                <AddAPhotoIcon fontSize='small' />
+              </Avatar>
             }
           >
             <Avatar className={classes.avatorLarge} />
           </Badge>
-          <br />
-          <CommonSwitch label={"ダークモード"} labelWidth={10} />
-          <CommonSwitch label={"test"} labelWidth={10} />
-          <CommonSwitch label={"test"} labelWidth={10} />
+          <input
+            type='file'
+            id='imageInput'
+            hidden={true}
+            // onChange={(event) => {
+            //   setCover(event.target.files[0]);
+            //   event.target.value = "";
+            // }}
+          />
+          <div className={classes.switchWrapper}>
+            <CommonSwitch label={"ダークモード"} labelWidth={10} />
+            <CommonSwitch label={"test"} labelWidth={10} />
+            <CommonSwitch label={"test"} labelWidth={10} />
+          </div>
         </Paper>
       </Popover>
     </>
