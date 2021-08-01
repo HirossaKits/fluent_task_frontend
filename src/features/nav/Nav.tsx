@@ -22,8 +22,9 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
-import Main from "./features/main/Main";
-import CommonSwitch from "./CommonSwitch";
+import SettingsIcon from "@material-ui/icons/Settings";
+import Main from "../main/Main";
+import CommonSwitch from "../../common/CommonSwitch";
 
 const drawerWidth = 180;
 
@@ -121,15 +122,7 @@ const useSytle = makeStyles((theme) => ({
   drawerText: {
     color: "rgba(255, 255, 255, 0.9)",
   },
-  profilePaper: {
-    width: 140,
-    padding: theme.spacing(1),
-  },
-  switchWrapper: {
-    marginTop: theme.spacing(1),
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(3),
-  },
+
   avatorLarge: {
     background: theme.palette.grey[600],
     width: theme.spacing(10),
@@ -148,7 +141,7 @@ const useSytle = makeStyles((theme) => ({
 
 const signOut = () => {};
 
-const Navbar = () => {
+const Nav = () => {
   const classes = useSytle();
   const [drawerOpen, setDrawerOpen] = useState(false);
   // const [profileOpen, setProfileOpen] = useState(false);
@@ -193,6 +186,9 @@ const Navbar = () => {
               <Badge badgeContent={1} color='secondary'>
                 <NotificationsIcon />
               </Badge>
+            </IconButton>
+            <IconButton>
+              <SettingsIcon />
             </IconButton>
             <IconButton
               edge='end'

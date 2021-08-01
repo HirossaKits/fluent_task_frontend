@@ -1,17 +1,12 @@
-import React from 'react';
-import './App.css';
-import Navbar from './Navbar';
-
-
+import React from "react";
+import "./App.css";
+import Navbar from "./navigation/Navbar";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-
+    <div className='App'>
+      <header className='App-header'>
         <Navbar />
-
-
       </header>
     </div>
   );
