@@ -25,6 +25,13 @@ import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Main from "../main/Main";
 import CommonSwitch from "../../common/CommonSwitch";
+import { selectSettingsOpen, selectProfileOpen } from "./navSlice";
+import {
+  setSettingsOpen,
+  setSettingsAnchorEl,
+  setProfileOpenm,
+  setProfileAnchorEl,
+} from "./navSlice";
 
 const drawerWidth = 180;
 
@@ -161,10 +168,6 @@ const Nav = () => {
     // setProfileOpen(!profileOpen);
   };
 
-  const handleProfileColse = () => {
-    setAnchorEl(null);
-  };
-
   return (
     <>
       <AppBar
@@ -241,49 +244,8 @@ const Nav = () => {
       <div className={drawerOpen ? classes.content : classes.contentShift}>
         <Main />
       </div>
-      <Popover
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        onClose={handleProfileColse}
-        keepMounted
-      >
-        <Paper className={classes.profilePaper}>
-          <Badge
-            overlap='circular'
-            anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
-            }}
-            badgeContent={
-              <Avatar className={classes.avatorSmall}>
-                <AddAPhotoIcon fontSize='small' />
-              </Avatar>
-            }
-          >
-            <Avatar className={classes.avatorLarge} />
-          </Badge>
-          <input
-            type='file'
-            id='imageInput'
-            hidden={true}
-            // onChange={(event) => {
-            //   setCover(event.target.files[0]);
-            //   event.target.value = "";
-            // }}
-          />
-          <div className={classes.switchWrapper}>
-            <CommonSwitch label={"ダークモード"} labelWidth={10} />
-            <CommonSwitch label={"test"} labelWidth={10} />
-            <CommonSwitch label={"test"} labelWidth={10} />
-          </div>
-        </Paper>
-      </Popover>
     </>
   );
 };
 
-export default Navbar;
+export default Nav;

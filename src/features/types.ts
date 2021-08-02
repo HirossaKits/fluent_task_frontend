@@ -26,3 +26,10 @@ export interface LOGIN_USER {
   last_name: string;
 }
 
+export interface NAV_STATE {
+  settingsOpen: boolean,
+  settingsAnchorEl: Element | ((element: Element) => Element) | null | undefined,
+  profileOpen: boolean,
+  profileAnchorEl: Element | ((element: Element) => Element) | null | undefined,
+}
+

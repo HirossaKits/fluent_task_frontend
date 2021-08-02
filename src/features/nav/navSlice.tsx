@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
+import { NAV_STATE } from "../types";
 
-const initialState = {
+const initialState: NAV_STATE = {
   settingsOpen: false,
   settingsAnchorEl: null,
   profileOpen: false,
@@ -12,14 +13,14 @@ export const navSlice = createSlice({
   name: "nav",
   initialState,
   reducers: {
-    setSettingsOpen(state) {
-      state.settingsOpen = true;
+    setSettingsOpen(state, action) {
+      state.settingsOpen = action.payload;
     },
     setSettingsAnchorEl(state, action) {
       state.settingsAnchorEl = action.payload;
     },
-    setProfileOpenm(state) {
-      state.profileOpen = true;
+    setProfileOpenm(state, action) {
+      state.profileOpen = action.payload;
     },
     setProfileAnchorEl(state, action) {
       state.settingsAnchorEl = action.payload;
@@ -27,12 +28,17 @@ export const navSlice = createSlice({
   },
 });
 
-export const setSettingsOpen = navSlice.actions.setSettingsOpen;
-export const setSettingsAnchorEl = navSlice.actions.setSettingsAnchorEl;
-export const setProfileOpenm = navSlice.actions.setProfileOpenm;
-export const setProfileAnchorEl = navSlice.actions.setProfileAnchorEl;
-
-export const selectOpen = (state: RootState) => state.nav.settingsOpen;
+export const {
+  setSettingsOpen,
+  setSettingsAnchorEl,
+  setProfileOpenm,
+  setProfileAnchorEl,
+} = navSlice.actions;
+export const selectSettingsOpen = (state: RootState) => state.nav.settingsOpen;
+export const selectSettingsAnchorEl = (state: RootState) =>
+  state.nav.settingsAnchorEl;
 export const selectProfileOpen = (state: RootState) => state.nav.profileOpen;
+export const selectpPofileAnchorEl = (state: RootState) =>
+  state.nav.profileAnchorEl;
 
 export default navSlice.reducer;
