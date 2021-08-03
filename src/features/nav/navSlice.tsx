@@ -19,7 +19,7 @@ export const navSlice = createSlice({
     setSettingsAnchorEl(state, action) {
       state.settingsAnchorEl = action.payload;
     },
-    setProfileOpenm(state, action) {
+    setProfileOpen(state, action) {
       state.profileOpen = action.payload;
     },
     setProfileAnchorEl(state, action) {
@@ -31,14 +31,14 @@ export const navSlice = createSlice({
 export const {
   setSettingsOpen,
   setSettingsAnchorEl,
-  setProfileOpenm,
+  setProfileOpen,
   setProfileAnchorEl,
 } = navSlice.actions;
 export const selectSettingsOpen = (state: RootState) => state.nav.settingsOpen;
 export const selectSettingsAnchorEl = (state: RootState) =>
   state.nav.settingsAnchorEl;
 export const selectProfileOpen = (state: RootState) => state.nav.profileOpen;
-export const selectpPofileAnchorEl = (state: RootState) =>
+export const selectProfileAnchorEl = (state: RootState) =>
   state.nav.profileAnchorEl;
 
 export default navSlice.reducer;

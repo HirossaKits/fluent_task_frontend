@@ -32,6 +32,8 @@ import {
   setProfileOpenm,
   setProfileAnchorEl,
 } from "./navSlice";
+import SettingsMenu from "./SettingsMenu";
+import ProfileMenu from "./ProfileMenu";
 
 const drawerWidth = 180;
 
@@ -128,21 +130,6 @@ const useSytle = makeStyles((theme) => ({
   },
   drawerText: {
     color: "rgba(255, 255, 255, 0.9)",
-  },
-
-  avatorLarge: {
-    background: theme.palette.grey[600],
-    width: theme.spacing(10),
-    height: theme.spacing(10),
-  },
-  avatorSmall: {
-    background: theme.palette.grey[600],
-    border: `4px solid ${theme.palette.background.paper}`,
-    width: theme.spacing(3),
-    height: theme.spacing(3),
-    marginLeft: 10,
-    marginTop: 10,
-    hover: "pointer",
   },
 }));
 
@@ -244,6 +231,8 @@ const Nav = () => {
       <div className={drawerOpen ? classes.content : classes.contentShift}>
         <Main />
       </div>
+      <SettingsMenu />
+      <ProfileMenu />
     </>
   );
 };
