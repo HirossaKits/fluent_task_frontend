@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   AppBar,
   Toolbar,
@@ -10,28 +11,15 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Avatar,
-  Popover,
-  Fade,
-  Grow,
-  Paper,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AppsIcon from "@material-ui/icons/Apps";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import SettingsIcon from "@material-ui/icons/Settings";
 import Main from "../main/Main";
-import CommonSwitch from "../../common/CommonSwitch";
-import { selectSettingsOpen, selectProfileOpen } from "./navSlice";
-import {
-  setSettingsOpen,
-  setSettingsAnchorEl,
-  setProfileOpenm,
-  setProfileAnchorEl,
-} from "./navSlice";
+import { setSettingsMenuOpen, setProfileMenuOpen } from "./navSlice";
 import SettingsMenu from "./SettingsMenu";
 import ProfileMenu from "./ProfileMenu";
 
@@ -137,10 +125,8 @@ const signOut = () => {};
 
 const Nav = () => {
   const classes = useSytle();
+  const dispatch = useDispatch();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  // const [profileOpen, setProfileOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  // const ref = createRef();
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -150,9 +136,18 @@ const Nav = () => {
     setDrawerOpen(false);
   };
 
+  const settingsAnchorEl = useRef(null);
+  const profileAnchorEl = useRef(null);
+
+  // const settingsAnchorEl = useSelector(selectSettingsAnchorEl);
+  // const profileAnchorEl = useSelector(selectProfileAnchorEl);
+
+  const handleSettingsOpen = (event: React.MouseEvent<HTMLElement>) => {
+    dispatch(setSettingsMenuOpen(true));
+  };
+
   const handleProfileOpen = (event: React.MouseEvent<HTMLElement>) => {
-    anchorEl ?? setAnchorEl(event.currentTarget);
-    // setProfileOpen(!profileOpen);
+    dispatch(setProfileMenuOpen(true));
   };
 
   return (
@@ -177,15 +172,10 @@ const Nav = () => {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <IconButton>
+            <IconButton ref={settingsAnchorEl} onClick={handleSettingsOpen}>
               <SettingsIcon />
             </IconButton>
-            <IconButton
-              edge='end'
-              // aria-controls={menuId}
-              aria-haspopup='true'
-              onClick={handleProfileOpen}
-            >
+            <IconButton ref={profileAnchorEl} onClick={handleProfileOpen}>
               <AccountCircle />
             </IconButton>
           </div>
@@ -231,8 +221,8 @@ const Nav = () => {
       <div className={drawerOpen ? classes.content : classes.contentShift}>
         <Main />
       </div>
-      <SettingsMenu />
-      <ProfileMenu />
+      <SettingsMenu anchorEl={settingsAnchorEl} />
+      <ProfileMenu anchorEl={profileAnchorEl} />
     </>
   );
 };

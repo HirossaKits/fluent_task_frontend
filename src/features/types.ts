@@ -27,9 +27,7 @@ export interface LOGIN_USER {
 }
 
 export interface NAV_STATE {
-  settingsOpen: boolean,
-  settingsAnchorEl: Element | ((element: Element) => Element) | null | undefined,
-  profileOpen: boolean,
-  profileAnchorEl: Element | ((element: Element) => Element) | null | undefined,
+  settingsMenuOpen: boolean,
+  profileMenuOpen: boolean,
 }
 

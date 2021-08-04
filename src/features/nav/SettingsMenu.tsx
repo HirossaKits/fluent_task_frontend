@@ -4,8 +4,12 @@ import Paper from "@material-ui/core/Paper";
 import CommonSwitch from "../../common/CommonSwitch";
 import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSettingsOpen, selectSettingsAnchorEl } from "./navSlice";
-import { setSettingsOpen, setSettingsAnchorEl } from "./navSlice";
+import { selectSettingsMenuOpen } from "./navSlice";
+import { setSettingsMenuOpen } from "./navSlice";
+
+type Props = {
+  anchorEl: React.MutableRefObject<null>;
+};
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -19,24 +23,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SettingsMenu: React.FC = () => {
+const SettingsMenu: React.FC<Props> = (props) => {
   const classes = useStyles();
-  const settingsOpen = useSelector(selectSettingsOpen);
-  const settingsAnchorEl = useSelector(selectSettingsAnchorEl);
+  const settingsMenuOpen = useSelector(selectSettingsMenuOpen);
   const dispatch = useDispatch();
 
   const handleProfileColse = () => {
-    dispatch(setSettingsOpen(false));
-    dispatch(setSettingsAnchorEl(null));
+    dispatch(setSettingsMenuOpen(false));
   };
+
+  console.log(props.anchorEl.current);
 
   return (
     <Popover
-      open={settingsOpen}
-      anchorEl={settingsAnchorEl}
+      open={settingsMenuOpen}
+      anchorEl={props.anchorEl.current}
       anchorOrigin={{
         vertical: "bottom",
-        horizontal: "center",
+        horizontal: "right",
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
       }}
       onClose={handleProfileColse}
       keepMounted

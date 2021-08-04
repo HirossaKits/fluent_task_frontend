@@ -10,8 +10,8 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import Close from "@material-ui/icons/Close";
-import CommonTextField from "../../CommonTextField";
-import CommonDatePicker from "../../CommonDatePicker";
+import CommonTextField from "../../common/CommonTextField";
+import CommonDatePicker from "../../common/CommonDatePicker";
 import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) => ({

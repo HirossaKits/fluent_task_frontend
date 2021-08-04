@@ -7,8 +7,13 @@ import Badge from "@material-ui/core/Badge";
 import Avatar from "@material-ui/core/Avatar";
 import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
 import CommonSwitch from "../../common/CommonSwitch";
-import { selectProfileOpen, selectProfileAnchorEl } from "./navSlice";
-import { setProfileOpen, setProfileAnchorEl } from "./navSlice";
+import { selectProfileMenuOpen } from "./navSlice";
+import { setProfileMenuOpen } from "./navSlice";
+import { profile } from "console";
+
+type Props = {
+  anchorEl: React.MutableRefObject<null>;
+};
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -36,24 +41,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileMenu = () => {
+const ProfileMenu: React.FC<Props> = (props) => {
   const classes = useStyles();
-  const ProfileOpen = useSelector(selectProfileOpen);
-  const ProfileAnchorEl = useSelector(selectProfileAnchorEl);
+  const profileMenuOpen = useSelector(selectProfileMenuOpen);
   const dispatch = useDispatch();
 
   const handleProfileColse = () => {
-    dispatch(setProfileOpen(false));
-    dispatch(setProfileAnchorEl(null));
+    dispatch(setProfileMenuOpen(false));
   };
 
   return (
     <Popover
-      open={Boolean(ProfileAnchorEl)}
-      anchorEl={ProfileAnchorEl}
+      open={profileMenuOpen}
+      anchorEl={props.anchorEl.current}
       anchorOrigin={{
         vertical: "bottom",
-        horizontal: "center",
+        horizontal: "right",
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
       }}
       onClose={handleProfileColse}
       keepMounted

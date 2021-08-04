@@ -3,42 +3,27 @@ import { RootState } from "../../app/store";
 import { NAV_STATE } from "../types";
 
 const initialState: NAV_STATE = {
-  settingsOpen: false,
-  settingsAnchorEl: null,
-  profileOpen: false,
-  profileAnchorEl: null,
+  settingsMenuOpen: false,
+  profileMenuOpen: false,
 };
 
 export const navSlice = createSlice({
   name: "nav",
   initialState,
   reducers: {
-    setSettingsOpen(state, action) {
-      state.settingsOpen = action.payload;
+    setSettingsMenuOpen(state, action) {
+      state.settingsMenuOpen = action.payload;
     },
-    setSettingsAnchorEl(state, action) {
-      state.settingsAnchorEl = action.payload;
-    },
-    setProfileOpen(state, action) {
-      state.profileOpen = action.payload;
-    },
-    setProfileAnchorEl(state, action) {
-      state.settingsAnchorEl = action.payload;
+    setProfileMenuOpen(state, action) {
+      state.profileMenuOpen = action.payload;
     },
   },
 });
 
-export const {
-  setSettingsOpen,
-  setSettingsAnchorEl,
-  setProfileOpen,
-  setProfileAnchorEl,
-} = navSlice.actions;
-export const selectSettingsOpen = (state: RootState) => state.nav.settingsOpen;
-export const selectSettingsAnchorEl = (state: RootState) =>
-  state.nav.settingsAnchorEl;
-export const selectProfileOpen = (state: RootState) => state.nav.profileOpen;
-export const selectProfileAnchorEl = (state: RootState) =>
-  state.nav.profileAnchorEl;
+export const { setSettingsMenuOpen, setProfileMenuOpen } = navSlice.actions;
+export const selectSettingsMenuOpen = (state: RootState) =>
+  state.nav.settingsMenuOpen;
+export const selectProfileMenuOpen = (state: RootState) =>
+  state.nav.profileMenuOpen;
 
 export default navSlice.reducer;
