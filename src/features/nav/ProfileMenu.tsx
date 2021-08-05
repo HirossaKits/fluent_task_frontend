@@ -3,10 +3,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Popover from "@material-ui/core/Popover";
 import Paper from "@material-ui/core/Paper";
-import Badge from "@material-ui/core/Badge";
 import Avatar from "@material-ui/core/Avatar";
-import AddAPhotoIcon from "@material-ui/icons/AddAPhoto";
-import CommonSwitch from "../../common/CommonSwitch";
+import MenuList from "@material-ui/core/MenuList";
+import MenuItem from "@material-ui/core/MenuItem";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+import EditIcon from "@material-ui/icons/Edit";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { selectProfileMenuOpen } from "./navSlice";
 import { setProfileMenuOpen } from "./navSlice";
 import { profile } from "console";
@@ -16,28 +19,26 @@ type Props = {
 };
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    width: 140,
+  avatorWrapper: {
     padding: theme.spacing(1),
-  },
-  wrapper: {
-    marginTop: theme.spacing(1),
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(3),
   },
   avatorLarge: {
     background: theme.palette.grey[600],
     width: theme.spacing(10),
     height: theme.spacing(10),
   },
-  avatorSmall: {
-    background: theme.palette.grey[600],
-    border: `4px solid ${theme.palette.background.paper}`,
-    width: theme.spacing(3),
-    height: theme.spacing(3),
-    marginLeft: 10,
-    marginTop: 10,
-    hover: "pointer",
+  nameWrapper: {
+    margin: 3,
+    marginLeft: 3,
+    marginRight: theme.spacing(2),
+  },
+  menuItem: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+  },
+  iconWrapper: {
+    paddingTop: 6,
+    paddingRight: 12,
   },
 }));
 
@@ -65,35 +66,46 @@ const ProfileMenu: React.FC<Props> = (props) => {
       onClose={handleProfileColse}
       keepMounted
     >
-      <Paper className={classes.paper}>
-        <Badge
-          overlap='circular'
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right",
-          }}
-          badgeContent={
-            <Avatar className={classes.avatorSmall}>
-              <AddAPhotoIcon fontSize='small' />
-            </Avatar>
-          }
+      <Paper>
+        <Grid
+          container
+          direction='row'
+          justifyContent='flex-start'
+          alignItems='center'
         >
-          <Avatar className={classes.avatorLarge} />
-        </Badge>
-        <input
-          type='file'
-          id='imageInput'
-          hidden={true}
-          // onChange={(event) => {
-          //   setCover(event.target.files[0]);
-          //   event.target.value = "";
-          // }}
-        />
-        <div className={classes.wrapper}>
-          <CommonSwitch label={"ダークモード"} labelWidth={10} />
-          <CommonSwitch label={"test"} labelWidth={10} />
-          <CommonSwitch label={"test"} labelWidth={10} />
-        </div>
+          <Grid className={classes.avatorWrapper} item xs={6}>
+            <Avatar className={classes.avatorLarge} />
+          </Grid>
+          <Grid
+            item
+            container
+            direction='column'
+            justifyContent='center'
+            alignItems='stretch'
+            xs={6}
+          >
+            <Grid className={classes.nameWrapper} item>
+              <Typography>Kitsuka</Typography>
+            </Grid>
+            <Grid className={classes.nameWrapper} item>
+              <Typography>Hirohisaaaa</Typography>
+            </Grid>
+          </Grid>
+        </Grid>
+        <MenuList>
+          <MenuItem className={classes.menuItem}>
+            <div className={classes.iconWrapper}>
+              <EditIcon fontSize='small' />
+            </div>
+            <Typography variant='inherit'>プロフィール編集</Typography>
+          </MenuItem>
+          <MenuItem className={classes.menuItem}>
+            <div className={classes.iconWrapper}>
+              <ExitToAppIcon fontSize='small' />
+            </div>
+            <Typography variant='inherit'>ログアウト</Typography>
+          </MenuItem>
+        </MenuList>
       </Paper>
     </Popover>
   );
