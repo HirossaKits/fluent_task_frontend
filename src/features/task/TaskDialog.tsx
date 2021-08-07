@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -13,6 +14,10 @@ import Close from "@material-ui/icons/Close";
 import CommonTextField from "../../common/CommonTextField";
 import CommonDatePicker from "../../common/CommonDatePicker";
 import { Typography } from "@material-ui/core";
+import { AnyCnameRecord } from "dns";
+import { selectEditedTask } from "../task/taskSlice";
+import { setEditedTask } from "../task/taskSlice";
+import { TARGET } from "../../types";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -41,8 +46,14 @@ type Props = {
 
 const TaskDialog: React.FC<Props> = (props) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const editedTask = useSelector(selectEditedTask);
   const [value, setValue] = useState({});
   const [date, setDate] = useState("");
+
+  const handleInputChange = (target: TARGET) => {
+    dispatch(setEditedTask({ ...editedTask, [target.name]: target.value }));
+  };
 
   const handleClose = () => {
     props.setOpen(false);
@@ -87,17 +98,11 @@ const TaskDialog: React.FC<Props> = (props) => {
             >
               <Grid item xs={12}>
                 <Grid item xs={10}>
-                  <TextField
-                    className={classes.input}
-                    variant='standard'
-                    fullWidth
-                    margin='dense'
-                    size='small'
-                    id='name'
+                  <CommonTextField
                     label='タスク名'
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
+                    name='title'
+                    value={editedTask.title}
+                    onChange={handleInputChange}
                   />
                 </Grid>
               </Grid>
@@ -118,20 +123,13 @@ const TaskDialog: React.FC<Props> = (props) => {
                   />
                 </Grid>
               </Grid>
-
               <Grid item xs={12}>
                 <Grid item xs={3}>
-                  <TextField
-                    className={classes.input}
-                    variant='standard'
-                    fullWidth
-                    margin='dense'
-                    size='small'
-                    id='status'
+                  <CommonTextField
                     label='ステータス'
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
+                    name='title'
+                    value={editedTask.status}
+                    onChange={handleInputChange}
                   />
                 </Grid>
               </Grid>
@@ -154,50 +152,40 @@ const TaskDialog: React.FC<Props> = (props) => {
               </Grid>
               <Grid container xs={12}>
                 <Grid item xs={2}>
-                  <TextField
-                    className={classes.input}
-                    variant='standard'
-                    fullWidth
-                    margin='dense'
-                    size='small'
-                    id='estimate_manhour'
+                  <CommonTextField
                     label='見積工数'
-                    type='email'
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
+                    name='estimate_manhour'
+                    type='number'
+                    value={editedTask.estimate_manhour}
+                    onChange={handleInputChange}
                   />
                 </Grid>
                 <Grid item xs={1}></Grid>
                 <Grid item xs={2}>
-                  <TextField
-                    className={classes.input}
-                    variant='standard'
-                    fullWidth
-                    margin='dense'
-                    size='small'
-                    id='manhour'
+                  <CommonTextField
                     label='実工数'
-                    type='email'
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
+                    name='actual_manhour'
+                    type='number'
+                    value={editedTask.actual_manhour}
+                    onChange={handleInputChange}
                   />
                 </Grid>
               </Grid>
               <Grid item xs={12}>
                 <Grid item xs={2}>
-                  <CommonTextField
+                  {/* <CommonTextField
                     label='開始日'
                     handleOnChange={handleOnChange}
-                  />
+                  /> */}
                 </Grid>
               </Grid>
               <Grid item xs={12}>
                 <Grid item xs={2}>
                   <CommonDatePicker
-                    date={date}
-                    setDate={setDate}
+                    label='開始予定日'
+                    name='scheduled_startdate'
+                    value={editedTask.scheduled_startdate}
+                    onChange={handleInputChange}
                     // label='開始日'
                     // handleOnChange={handleOnChange}
                   />

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { NAV_STATE } from "../types";
+import { NAV_STATE } from "../../types";
 
 const initialState: NAV_STATE = {
   settingsMenuOpen: false,

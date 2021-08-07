@@ -12,7 +12,6 @@ import EditIcon from "@material-ui/icons/Edit";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { selectProfileMenuOpen } from "./navSlice";
 import { setProfileMenuOpen } from "./navSlice";
-import { profile } from "console";
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;
@@ -44,8 +43,13 @@ const useStyles = makeStyles((theme) => ({
 
 const ProfileMenu: React.FC<Props> = (props) => {
   const classes = useStyles();
-  const profileMenuOpen = useSelector(selectProfileMenuOpen);
   const dispatch = useDispatch();
+  const profileMenuOpen = useSelector(selectProfileMenuOpen);
+
+  const logout = () => {
+    localStorage.removeItem("localJWT");
+    window.location.href = "/";
+  };
 
   const handleProfileColse = () => {
     dispatch(setProfileMenuOpen(false));
@@ -99,7 +103,7 @@ const ProfileMenu: React.FC<Props> = (props) => {
             </div>
             <Typography variant='inherit'>プロフィール編集</Typography>
           </MenuItem>
-          <MenuItem className={classes.menuItem}>
+          <MenuItem className={classes.menuItem} onClick={logout}>
             <div className={classes.iconWrapper}>
               <ExitToAppIcon fontSize='small' />
             </div>
