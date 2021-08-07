@@ -10,7 +10,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
-import Close from "@material-ui/icons/Close";
+import CloseIcon from "@material-ui/icons/Close";
+import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
 import CommonTextField from "../../common/CommonTextField";
 import CommonDatePicker from "../../common/CommonDatePicker";
 import { Typography } from "@material-ui/core";
@@ -31,11 +32,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   gridcol: {
     textAlign: "center",
-    // background: "blue",
-    // flexGrow: 1,
   },
-  input: {
-    // width: "80%",
+  arrowIcon: {
+    marginTop: 20,
   },
 }));
 
@@ -48,8 +47,6 @@ const TaskDialog: React.FC<Props> = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const editedTask = useSelector(selectEditedTask);
-  const [value, setValue] = useState({});
-  const [date, setDate] = useState("");
 
   const handleInputChange = (target: TARGET) => {
     dispatch(setEditedTask({ ...editedTask, [target.name]: target.value }));
@@ -59,9 +56,9 @@ const TaskDialog: React.FC<Props> = (props) => {
     props.setOpen(false);
   };
 
-  const handleOnChange = (input: string) => {
-    setValue(input);
-  };
+  // const handleOnChange = (input: string) => {
+  //   setValue(input);
+  // };
 
   return (
     <>
@@ -83,7 +80,7 @@ const TaskDialog: React.FC<Props> = (props) => {
           </Grid>
           <Grid className={classes.close} item>
             <IconButton size='small'>
-              <Close />
+              <CloseIcon />
             </IconButton>
           </Grid>
         </Grid>
@@ -109,7 +106,7 @@ const TaskDialog: React.FC<Props> = (props) => {
               <Grid item xs={12}>
                 <Grid item xs={4}>
                   <TextField
-                    className={classes.input}
+                    // className={classes.input}
                     autoFocus
                     variant='standard'
                     fullWidth
@@ -136,7 +133,7 @@ const TaskDialog: React.FC<Props> = (props) => {
               <Grid item xs={12}>
                 <Grid item xs={4}>
                   <TextField
-                    className={classes.input}
+                    // className={classes.input}
                     variant='standard'
                     fullWidth
                     margin='dense'
@@ -150,7 +147,13 @@ const TaskDialog: React.FC<Props> = (props) => {
                   />
                 </Grid>
               </Grid>
-              <Grid container xs={12}>
+              <Grid
+                container
+                direction='row'
+                justifyContent='flex-start'
+                alignItems='center'
+                xs={12}
+              >
                 <Grid item xs={2}>
                   <CommonTextField
                     label='見積工数'
@@ -160,7 +163,9 @@ const TaskDialog: React.FC<Props> = (props) => {
                     onChange={handleInputChange}
                   />
                 </Grid>
-                <Grid item xs={1}></Grid>
+                <Grid item xs={2}>
+                  <SwapHorizIcon className={classes.arrowIcon} />
+                </Grid>
                 <Grid item xs={2}>
                   <CommonTextField
                     label='実工数'
@@ -171,36 +176,60 @@ const TaskDialog: React.FC<Props> = (props) => {
                   />
                 </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <Grid item xs={2}>
-                  {/* <CommonTextField
-                    label='開始日'
-                    handleOnChange={handleOnChange}
-                  /> */}
-                </Grid>
-              </Grid>
-              <Grid item xs={12}>
-                <Grid item xs={2}>
+              <Grid container xs={12}>
+                <Grid item xs={4}>
                   <CommonDatePicker
                     label='開始予定日'
                     name='scheduled_startdate'
                     value={editedTask.scheduled_startdate}
                     onChange={handleInputChange}
-                    // label='開始日'
-                    // handleOnChange={handleOnChange}
+                  />
+                </Grid>
+                <Grid item xs={2}>
+                  <SwapHorizIcon className={classes.arrowIcon} />
+                </Grid>
+                <Grid item xs={4}>
+                  <CommonDatePicker
+                    label='実開始日'
+                    name='scheduled_startdate'
+                    value={editedTask.scheduled_startdate}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+              </Grid>
+
+              <Grid container xs={12}>
+                <Grid item xs={4}>
+                  <CommonDatePicker
+                    label='終了予定日'
+                    name='scheduled_enddate'
+                    value={editedTask.scheduled_startdate}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+
+                <Grid item xs={2}>
+                  <SwapHorizIcon className={classes.arrowIcon} />
+                </Grid>
+                <Grid item xs={4}>
+                  <CommonDatePicker
+                    label='実終了日'
+                    name='scheduled_enddate'
+                    value={editedTask.scheduled_startdate}
+                    onChange={handleInputChange}
                   />
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
-          {/* <DialogActions>
-              <Button onClick={handleClose} color='primary'>
-                Cancel
-              </Button>
-              <Button onClick={handleClose} color='primary'>
-                Subscribe
-              </Button>
-            </DialogActions> */}
+          <DialogActions>
+            <Button onClick={handleClose} color='primary'>
+              キャンセル
+            </Button>
+            <Button onClick={handleClose} color='primary'>
+              登録
+            </Button>
+          </DialogActions>
         </form>
       </Dialog>
     </>

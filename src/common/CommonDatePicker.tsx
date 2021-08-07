@@ -18,12 +18,6 @@ class ExtendedUtils extends DateFnsUtils {
   }
 }
 
-const useStyles = makeStyles((theme) => ({
-  standard: {
-    width: "30ch",
-  },
-}));
-
 type Props = {
   id?: string;
   label?: string;
@@ -33,8 +27,6 @@ type Props = {
 };
 
 const DatePickerDialog: React.FC<Props> = (props) => {
-  const classes = useStyles();
-
   const handleDateChange = (date: any) => {
     let target: TARGET = {
       name: props.name,
@@ -47,28 +39,26 @@ const DatePickerDialog: React.FC<Props> = (props) => {
     <>
       <MuiPickersUtilsProvider utils={ExtendedUtils} locale={jaLocale}>
         <KeyboardDatePicker
-          className={classes.standard}
           // autoOk
-          // variant='inline'
           margin='dense'
           label={"label" in props ? props.label : "日付"}
           format='yyyy-MM-dd'
-          // clearable
+          clearable
           value={props.value}
           onChange={(date) => handleDateChange(date)}
-          // KeyboardButtonProps={{
-          //   "aria-label": "change date",
-          // }}
+          KeyboardButtonProps={{
+            "aria-label": "change date",
+          }}
           disablePast
           maxDateMessage='2100-01-01より前の日付を入力してください。'
           minDateMessage='1900-01-01より後の日付を入力してください。'
           invalidDateMessage='日付の入力値が不正です。'
-          // clearLabel='クリア'
-          // okLabel='決定'
-          // cancelLabel='キャンセル'
-          // InputLabelProps={{
-          //   shrink: true,
-          // }}
+          clearLabel='クリア'
+          okLabel='決定'
+          cancelLabel='キャンセル'
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       </MuiPickersUtilsProvider>
     </>
