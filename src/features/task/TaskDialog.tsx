@@ -19,6 +19,8 @@ import { AnyCnameRecord } from "dns";
 import { selectEditedTask } from "../task/taskSlice";
 import { setEditedTask } from "../task/taskSlice";
 import { TARGET } from "../../types";
+import CommonSelect from "../../common/CommonSelect";
+import { Status } from "../../selectionOptions";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -34,7 +36,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     textAlign: "center",
   },
   arrowIcon: {
-    marginTop: 20,
+    marginTop: 22,
   },
 }));
 
@@ -122,9 +124,10 @@ const TaskDialog: React.FC<Props> = (props) => {
               </Grid>
               <Grid item xs={12}>
                 <Grid item xs={3}>
-                  <CommonTextField
+                  <CommonSelect
                     label='ステータス'
-                    name='title'
+                    name='status'
+                    options={Status}
                     value={editedTask.status}
                     onChange={handleInputChange}
                   />

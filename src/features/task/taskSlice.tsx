@@ -11,7 +11,7 @@ const initialState: TASK_STATE = {
     title: "",
     category: "",
     description: "",
-    status: "",
+    status: "Not started",
     estimate_manhour: 0,
     actual_manhour: 0,
     scheduled_startdate: null,

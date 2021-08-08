@@ -1,6 +1,5 @@
 import React from "react";
 import DateFnsUtils from "@date-io/date-fns";
-import { makeStyles } from "@material-ui/core";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -40,7 +39,11 @@ const DatePickerDialog: React.FC<Props> = (props) => {
       <MuiPickersUtilsProvider utils={ExtendedUtils} locale={jaLocale}>
         <KeyboardDatePicker
           // autoOk
-          margin='dense'
+          // disableToolbar
+          // variant='inline'
+          // inputVariant='outlined'
+          size='small'
+          margin='normal'
           label={"label" in props ? props.label : "日付"}
           format='yyyy-MM-dd'
           clearable
