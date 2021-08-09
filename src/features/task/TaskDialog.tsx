@@ -20,7 +20,7 @@ import { selectEditedTask } from "../task/taskSlice";
 import { setEditedTask } from "../task/taskSlice";
 import { TARGET } from "../../types";
 import CommonSelect from "../../common/CommonSelect";
-import { Status } from "../../selectionOptions";
+import { Status, DemoMember } from "../../selectionOptions";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -57,10 +57,6 @@ const TaskDialog: React.FC<Props> = (props) => {
   const handleClose = () => {
     props.setOpen(false);
   };
-
-  // const handleOnChange = (input: string) => {
-  //   setValue(input);
-  // };
 
   return (
     <>
@@ -135,18 +131,12 @@ const TaskDialog: React.FC<Props> = (props) => {
               </Grid>
               <Grid item xs={12}>
                 <Grid item xs={4}>
-                  <TextField
-                    // className={classes.input}
-                    variant='standard'
-                    fullWidth
-                    margin='dense'
-                    size='small'
-                    id='assigned'
+                  <CommonSelect
                     label='担当者'
-                    type='email'
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
+                    name='assigned'
+                    options={DemoMember}
+                    value={editedTask.assigned}
+                    onChange={handleInputChange}
                   />
                 </Grid>
               </Grid>
@@ -183,8 +173,8 @@ const TaskDialog: React.FC<Props> = (props) => {
                 <Grid item xs={4}>
                   <CommonDatePicker
                     label='開始予定日'
-                    name='scheduled_startdate'
-                    value={editedTask.scheduled_startdate}
+                    name='scheduled_start_date'
+                    value={editedTask.scheduled_start_date}
                     onChange={handleInputChange}
                   />
                 </Grid>
@@ -194,8 +184,8 @@ const TaskDialog: React.FC<Props> = (props) => {
                 <Grid item xs={4}>
                   <CommonDatePicker
                     label='実開始日'
-                    name='scheduled_startdate'
-                    value={editedTask.scheduled_startdate}
+                    name='actual_start_date'
+                    value={editedTask.actual_start_date}
                     onChange={handleInputChange}
                   />
                 </Grid>
@@ -205,8 +195,8 @@ const TaskDialog: React.FC<Props> = (props) => {
                 <Grid item xs={4}>
                   <CommonDatePicker
                     label='終了予定日'
-                    name='scheduled_enddate'
-                    value={editedTask.scheduled_startdate}
+                    name='scheduled_start_date'
+                    value={editedTask.scheduled_start_date}
                     onChange={handleInputChange}
                   />
                 </Grid>
@@ -217,8 +207,8 @@ const TaskDialog: React.FC<Props> = (props) => {
                 <Grid item xs={4}>
                   <CommonDatePicker
                     label='実終了日'
-                    name='scheduled_enddate'
-                    value={editedTask.scheduled_startdate}
+                    name='actual_end_date'
+                    value={editedTask.actual_end_date}
                     onChange={handleInputChange}
                   />
                 </Grid>

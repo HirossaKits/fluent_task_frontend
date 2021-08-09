@@ -42,10 +42,10 @@ export interface EDITED_TASK {
   status: string,
   estimate_manhour: number,
   actual_manhour: number,
-  scheduled_startdate: Date | null,
-  scheduled_enddate: Date | null,
-  actual_startdate: Date | null,
-  actual_enddate: Date | null,
+  scheduled_start_date: Date | null,
+  scheduled_end_date: Date | null,
+  actual_start_date: Date | null,
+  actual_end_date: Date | null,
 }
 
 export interface SELECTED_TASK {
@@ -59,10 +59,10 @@ export interface SELECTED_TASK {
   status: string,
   estimate_manhour: number,
   actual_manhour: number,
-  scheduled_startdate: Date | null,
-  scheduled_enddate: Date | null,
-  actual_startdate: Date | null,
-  actual_enddate: Date | null,
+  scheduled_start_date: Date | null,
+  scheduled_end_date: Date | null,
+  actual_start_date: Date | null,
+  actual_end_date: Date | null,
   created_at: string,
   update_at: string,
 }

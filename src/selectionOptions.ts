@@ -14,3 +14,17 @@ export const Status = [
 ];
 
 
+export const DemoMember = [
+  {
+    value: 'aaaaaa',
+    label: "デモ太郎"
+  },
+  {
+    value: 'bbb',
+    label: "デモ子"
+  },
+  {
+    value: 'Done',
+    label: "デーモン小暮"
+  },
+];

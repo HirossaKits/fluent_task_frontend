@@ -14,6 +14,9 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import AppsIcon from "@material-ui/icons/Apps";
+import ListAltIcon from "@material-ui/icons/ListAlt";
+import EventNoteIcon from "@material-ui/icons/EventNote";
+import ViewWeekIcon from "@material-ui/icons/ViewWeek";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -64,8 +67,8 @@ const useSytle = makeStyles((theme) => ({
 
   drawerOpen: {
     width: drawerWidth,
-    // flexShrink: 0,
-    // whiteSpace: 'nowrap',
+    flexShrink: 0,
+    whiteSpace: "nowrap",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -74,8 +77,8 @@ const useSytle = makeStyles((theme) => ({
     background: theme.palette.background.default,
   },
   drawerClose: {
-    // flexShrink: 0,
-    // whiteSpace: 'nowrap',
+    flexShrink: 0,
+    whiteSpace: "nowrap",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -117,7 +120,8 @@ const useSytle = makeStyles((theme) => ({
     paddingLeft: 12,
   },
   drawerText: {
-    color: "rgba(255, 255, 255, 0.9)",
+    color: theme.palette.text.secondary,
+    paddingBottom: 4,
   },
 }));
 
@@ -138,9 +142,6 @@ const Nav = () => {
 
   const settingsAnchorEl = useRef(null);
   const profileAnchorEl = useRef(null);
-
-  // const settingsAnchorEl = useSelector(selectSettingsAnchorEl);
-  // const profileAnchorEl = useSelector(selectProfileAnchorEl);
 
   const handleSettingsOpen = (event: React.MouseEvent<HTMLElement>) => {
     dispatch(setSettingsMenuOpen(true));
@@ -198,16 +199,26 @@ const Nav = () => {
         <List>
           <ListItem button className={classes.drawerIcon}>
             <ListItemIcon>
-              <AccountCircle />
+              <ListAltIcon />
             </ListItemIcon>
-            <ListItemText className={classes.drawerText} primary={"DEMO"} />
+            <ListItemText className={classes.drawerText} primary={"一覧"} />
           </ListItem>
           <ListItem button className={classes.drawerIcon}>
             <ListItemIcon>
-              <AccountCircle />
+              <ViewWeekIcon />
             </ListItemIcon>
-            <ListItemText className={classes.drawerText} primary={"Calendar"} />
+            <ListItemText className={classes.drawerText} primary={"カード"} />
           </ListItem>
+          <ListItem button className={classes.drawerIcon}>
+            <ListItemIcon>
+              <EventNoteIcon />
+            </ListItemIcon>
+            <ListItemText
+              className={classes.drawerText}
+              primary={"カレンダー"}
+            />
+          </ListItem>
+
           {Array(1).map(() => (
             <ListItem button>
               <ListItemIcon>

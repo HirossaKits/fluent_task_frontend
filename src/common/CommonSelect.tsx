@@ -24,9 +24,10 @@ const useStyles = makeStyles(() => ({
 const CommonSelect: React.FC<Props> = (props) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let target: TARGET = {
-      name: event.target.name,
+      name: props.name,
       value: event.target.value,
     };
+    console.log(target);
     props.onChange(target);
   };
 

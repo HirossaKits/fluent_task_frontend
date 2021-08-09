@@ -16,7 +16,7 @@ const CommonTextField: React.FC<Props> = (props) => {
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     let target: TARGET = {
-      name: event.target.name,
+      name: props.name,
       value: event.target.value,
     };
     props.onChange(target);
