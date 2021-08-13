@@ -104,7 +104,7 @@ const columns: Column[] = [
   { name: "status", label: "ステータス", isNumeric: false, width: "10%" },
   { name: "startdate", label: "開始予定日", isNumeric: false, width: "12%" },
   { name: "enddate", label: "終了予定日", isNumeric: false, width: "12%" },
-  { name: "manhour", label: "予定工数 (日)", isNumeric: true, width: "10%" },
+  { name: "manhour", label: "見積工数", isNumeric: true, width: "10%" },
   { name: "assigned", label: "担当", isNumeric: false, width: "10%" },
   { name: "comment", label: "コメント", isNumeric: false, width: "15%" },
 ];

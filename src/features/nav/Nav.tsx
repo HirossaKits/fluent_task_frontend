@@ -64,7 +64,6 @@ const useSytle = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
   },
-
   drawerOpen: {
     width: drawerWidth,
     flexShrink: 0,

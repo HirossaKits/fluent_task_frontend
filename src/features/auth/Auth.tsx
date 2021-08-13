@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignIn: React.FC = () => {
+const Auth: React.FC = () => {
   const classes = useStyles();
   const dispatch: AppDispatch = useDispatch();
 
@@ -67,8 +67,6 @@ const SignIn: React.FC = () => {
   const login = async (e: any) => {
     e.preventDefault();
     let cred: CRED = regInfo;
-    console.log("login...");
-
     await dispatch(fetchAsyncLogin(cred));
   };
 
@@ -225,4 +223,4 @@ const SignIn: React.FC = () => {
   );
 };
 
-export default SignIn;
+export default Auth;

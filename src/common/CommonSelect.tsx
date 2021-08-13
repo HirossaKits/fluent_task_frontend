@@ -27,7 +27,6 @@ const CommonSelect: React.FC<Props> = (props) => {
       name: props.name,
       value: event.target.value,
     };
-    console.log(target);
     props.onChange(target);
   };
 
