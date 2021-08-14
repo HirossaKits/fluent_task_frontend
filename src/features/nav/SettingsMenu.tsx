@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useSelector, useDispatch } from "react-redux";
 import { selectSettingsMenuOpen, selectSettings } from "./navSlice";
 import { setSettingsMenuOpen, setSettings } from "./navSlice";
-import { TARGET } from "../../types";
+import { TARGET } from "../types";
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;

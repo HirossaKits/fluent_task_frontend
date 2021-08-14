@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -19,10 +19,14 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import SettingsIcon from "@material-ui/icons/Settings";
-import Main from "../main/Main";
-import { setSettingsMenuOpen, setProfileMenuOpen } from "./navSlice";
+import {
+  setSettingsMenuOpen,
+  setProfileMenuOpen,
+  fetchAsyncGetLoginUserProfile,
+} from "./navSlice";
 import SettingsMenu from "./SettingsMenu";
 import ProfileMenu from "./ProfileMenu";
+import Task from "../task/Task";
 
 const drawerWidth = 180;
 
@@ -120,8 +124,6 @@ const useSytle = makeStyles((theme) => ({
   },
 }));
 
-const signOut = () => {};
-
 const Nav = () => {
   const classes = useSytle();
   const dispatch = useDispatch();
@@ -145,6 +147,10 @@ const Nav = () => {
   const handleProfileOpen = (event: React.MouseEvent<HTMLElement>) => {
     dispatch(setProfileMenuOpen(true));
   };
+
+  useEffect(() => {
+    dispatch(fetchAsyncGetLoginUserProfile());
+  }, [dispatch]);
 
   return (
     <>
@@ -218,7 +224,7 @@ const Nav = () => {
         </List>
       </Drawer>
       <div className={drawerOpen ? classes.content : classes.contentShift}>
-        <Main />
+        <Task />
       </div>
       <SettingsMenu anchorEl={settingsAnchorEl} />
       <ProfileMenu anchorEl={profileAnchorEl} />

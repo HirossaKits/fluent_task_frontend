@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { EDITED_TASK, TASK_STATE } from "../../types";
+import { EDITED_TASK, TASK_STATE } from "../types";
 
 const initialState: TASK_STATE = {
   editedTask: {

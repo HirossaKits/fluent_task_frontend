@@ -6,7 +6,7 @@ import {
   CRED,
   REG_INFO,
   JWT,
-} from '../../types';
+} from '../types';
 
 // ログイン
 export const fetchAsyncLogin = createAsyncThunk(

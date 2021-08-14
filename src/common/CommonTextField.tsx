@@ -1,6 +1,6 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
-import { TARGET } from "../types";
+import { TARGET } from "../features/types";
 
 type Props = {
   id?: string;

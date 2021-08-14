@@ -2,7 +2,7 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Switch, { SwitchClassKey, SwitchProps } from "@material-ui/core/Switch";
 import { makeStyles, Typography } from "@material-ui/core";
-import { TARGET } from "../types";
+import { TARGET } from "../features/types";
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 import { RootState } from "../../app/store";
-import { NAV_STATE } from "../../types";
+import { NAV_STATE } from "../types";
 
 const initialState: NAV_STATE = {
   settingsMenuOpen: false,
@@ -16,6 +17,21 @@ const initialState: NAV_STATE = {
   },
 };
 
+export const fetchAsyncGetLoginUserProfile = createAsyncThunk(
+  "nav/getetLoginUserProfile",
+  async () => {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/user/profile/`,
+      {
+        headers: {
+          Authorization: `JWT ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
 export const navSlice = createSlice({
   name: "nav",
   initialState,
@@ -29,11 +45,26 @@ export const navSlice = createSlice({
     setSettings(state, action) {
       state.settings = action.payload;
     },
+    setProfile(state, action) {
+      state.settings = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      fetchAsyncGetLoginUserProfile.fulfilled,
+      (state, action) => {
+        state.profile = action.payload;
+      }
+    );
   },
 });
 
-export const { setSettingsMenuOpen, setProfileMenuOpen, setSettings } =
-  navSlice.actions;
+export const {
+  setSettingsMenuOpen,
+  setProfileMenuOpen,
+  setSettings,
+  setProfile,
+} = navSlice.actions;
 export const selectSettingsMenuOpen = (state: RootState) =>
   state.nav.settingsMenuOpen;
 export const selectProfileMenuOpen = (state: RootState) =>

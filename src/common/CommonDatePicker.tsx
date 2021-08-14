@@ -6,7 +6,7 @@ import {
 } from "@material-ui/pickers";
 import jaLocale from "date-fns/locale/ja";
 import format from "date-fns/format";
-import { TARGET } from "../types";
+import { TARGET } from "../features/types";
 
 class ExtendedUtils extends DateFnsUtils {
   getCalendarHeaderText(date: any) {
