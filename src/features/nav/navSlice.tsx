@@ -26,10 +26,14 @@ export const navSlice = createSlice({
     setProfileMenuOpen(state, action) {
       state.profileMenuOpen = action.payload;
     },
+    setSettings(state, action) {
+      state.settings = action.payload;
+    },
   },
 });
 
-export const { setSettingsMenuOpen, setProfileMenuOpen } = navSlice.actions;
+export const { setSettingsMenuOpen, setProfileMenuOpen, setSettings } =
+  navSlice.actions;
 export const selectSettingsMenuOpen = (state: RootState) =>
   state.nav.settingsMenuOpen;
 export const selectProfileMenuOpen = (state: RootState) =>

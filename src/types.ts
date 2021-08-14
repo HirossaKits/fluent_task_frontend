@@ -91,5 +91,5 @@ export interface TASK_STATE {
 
 export interface TARGET {
   name: string,
-  value: string | number | Date,
+  value: string | number | Date | boolean,
 }

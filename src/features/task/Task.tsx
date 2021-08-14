@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import Paper from "@material-ui/core/Paper";
 import {
-  Button,
   Typography,
   Toolbar,
   Tooltip,
@@ -17,7 +17,6 @@ import {
 } from "@material-ui/core";
 import { makeStyles, Theme, lighten } from "@material-ui/core/styles";
 import { fade } from "@material-ui/core/styles/colorManipulator";
-import AddIcon from "@material-ui/icons/Add";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import EditIcon from "@material-ui/icons/Edit";
@@ -25,12 +24,12 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import TaskDialog from "./TaskDialog";
 
 const useStyles = makeStyles((theme: Theme) => ({
-  title: {
-    color: theme.palette.text.primary,
-  },
-  root: {
+  paper: {
     marginLeft: theme.spacing(3),
     marginRight: theme.spacing(3),
+  },
+  title: {
+    color: theme.palette.text.primary,
   },
   table: {
     // fixedHeader:false,
@@ -53,15 +52,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxHeight: 440,
   },
   checkbox: {
-    color: "primary",
+    // color: "primary",
   },
   tablerow: {
-    "&.Mui-selected, &.Mui-selected:hover": {
-      backgroundColor: fade(
-        theme.palette.primary.main,
-        theme.palette.action.selectedOpacity
-      ),
-    },
+    // "&.Mui-selected, &.Mui-selected:hover": {
+    //   backgroundColor: fade(
+    //     theme.palette.primary.main,
+    //     theme.palette.action.selectedOpacity
+    //   ),
+    // },
   },
   tableCheckCell: {
     width: "4%",
@@ -288,7 +287,7 @@ const Task = () => {
   };
 
   return (
-    <div className={classes.root}>
+    <>
       <Typography className={classes.title} variant='h5' component='h2'>
         タスク一覧
       </Typography>
@@ -327,7 +326,7 @@ const Task = () => {
                   }
                   checked={rowCount > 0 && selected.length === rows.length}
                   onChange={handleSelectAllClic}
-                  color='primary'
+                  // color='primary'
                 />
               </TableCell>
               {columns.map((col) => (
@@ -357,7 +356,7 @@ const Task = () => {
                 >
                   <Checkbox
                     checked={selected.indexOf(row.id) !== -1}
-                    color='primary'
+                    // color='primary'
                   />
                 </TableCell>
                 {columns.map((col) => (
@@ -395,7 +394,7 @@ const Task = () => {
         </Table>
       </TableContainer>
       <TaskDialog open={open} setOpen={setOpen} />
-    </div>
+    </>
   );
 };
 
