@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import Paper from "@material-ui/core/Paper";
 import {
-  Button,
   Typography,
   Toolbar,
   Tooltip,
@@ -15,9 +15,7 @@ import {
   Checkbox,
   Link,
 } from "@material-ui/core";
-import { makeStyles, Theme, lighten } from "@material-ui/core/styles";
-import { fade } from "@material-ui/core/styles/colorManipulator";
-import AddIcon from "@material-ui/icons/Add";
+import { makeStyles, Theme, alpha } from "@material-ui/core/styles";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import EditIcon from "@material-ui/icons/Edit";
@@ -28,36 +26,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   title: {
     color: theme.palette.text.primary,
   },
-  root: {
-    marginLeft: theme.spacing(3),
-    marginRight: theme.spacing(3),
-  },
-  table: {
-    // fixedHeader:false,
-    // width: "100%",
-    // tableLayout: "auto",
-  },
   buttonRight: {
     margin: "0 0 0 auto",
-  },
-  // small: {
-  //   margin: "auto",
-  //   width: theme.spacing(3),
-  //   height: theme.spacing(3),
-  // },
-  toolbar: {
-    // background:'green',
-    // disableGutters:true
   },
   container: {
     maxHeight: 440,
   },
-  checkbox: {
-    color: "primary",
-  },
   tablerow: {
     "&.Mui-selected, &.Mui-selected:hover": {
-      backgroundColor: fade(
+      backgroundColor: alpha(
         theme.palette.primary.main,
         theme.palette.action.selectedOpacity
       ),
@@ -65,8 +42,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   tableCheckCell: {
     width: "4%",
-    // paddingLeft:0,
-    // paddingRight: "20%",
   },
   tableCell: {
     paddingLeft: 0,
@@ -104,7 +79,7 @@ const columns: Column[] = [
   { name: "status", label: "ステータス", isNumeric: false, width: "10%" },
   { name: "startdate", label: "開始予定日", isNumeric: false, width: "12%" },
   { name: "enddate", label: "終了予定日", isNumeric: false, width: "12%" },
-  { name: "manhour", label: "予定工数 (日)", isNumeric: true, width: "10%" },
+  { name: "manhour", label: "見積工数", isNumeric: true, width: "10%" },
   { name: "assigned", label: "担当", isNumeric: false, width: "10%" },
   { name: "comment", label: "コメント", isNumeric: false, width: "15%" },
 ];
@@ -288,11 +263,11 @@ const Task = () => {
   };
 
   return (
-    <div className={classes.root}>
+    <>
       <Typography className={classes.title} variant='h5' component='h2'>
         タスク一覧
       </Typography>
-      <Toolbar className={classes.toolbar} disableGutters>
+      <Toolbar disableGutters>
         <Tooltip title='登録'>
           <IconButton aria-label='filter list'>
             <PlaylistAddIcon />
@@ -316,12 +291,11 @@ const Task = () => {
         </Tooltip>
       </Toolbar>
       <TableContainer className={classes.container}>
-        <Table size='medium' className={classes.table}>
+        <Table size='medium'>
           <TableHead>
             <TableRow>
               <TableCell className={classes.tableCheckCell} padding='checkbox'>
                 <Checkbox
-                  className={classes.checkbox}
                   indeterminate={
                     selected.length > 0 && selected.length < rows.length
                   }
@@ -395,7 +369,7 @@ const Task = () => {
         </Table>
       </TableContainer>
       <TaskDialog open={open} setOpen={setOpen} />
-    </div>
+    </>
   );
 };
 

@@ -26,10 +26,27 @@ export interface LOGIN_USER {
   last_name: string;
 }
 
+/*navSlice*/
+
+export interface PERSONAL_SETTINGS {
+  dark_mode: boolean,
+  view_only_owned: boolean,
+  selected_project: string,
+}
+
+export interface PROFILE {
+  avatar_img: string,
+  description: string,
+}
+
 export interface NAV_STATE {
   settingsMenuOpen: boolean,
   profileMenuOpen: boolean,
+  settings: PERSONAL_SETTINGS,
+  profile: PROFILE,
 }
+
+/*taskSlice*/
 
 export interface EDITED_TASK {
   id: string,
@@ -74,5 +91,5 @@ export interface TASK_STATE {
 
 export interface TARGET {
   name: string,
-  value: string | number | Date,
+  value: string | number | Date | boolean,
 }

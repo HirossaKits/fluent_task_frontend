@@ -14,7 +14,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import styles from "./Auth.module.css";
-import { CRED, REG_INFO } from "../../types";
+import { CRED, REG_INFO } from "../types";
 import { AppDispatch } from "../../app/store";
 import { fetchAsyncLogin, fetchAsyncRegister } from "./authSlice";
 
@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignIn: React.FC = () => {
+const Auth: React.FC = () => {
   const classes = useStyles();
   const dispatch: AppDispatch = useDispatch();
 
@@ -67,8 +67,6 @@ const SignIn: React.FC = () => {
   const login = async (e: any) => {
     e.preventDefault();
     let cred: CRED = regInfo;
-    console.log("login...");
-
     await dispatch(fetchAsyncLogin(cred));
   };
 
@@ -225,4 +223,4 @@ const SignIn: React.FC = () => {
   );
 };
 
-export default SignIn;
+export default Auth;

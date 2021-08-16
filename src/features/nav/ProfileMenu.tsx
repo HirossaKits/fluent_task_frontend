@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import EditIcon from "@material-ui/icons/Edit";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import { selectProfileMenuOpen } from "./navSlice";
+import { selectProfileMenuOpen, selectProfile } from "./navSlice";
 import { setProfileMenuOpen } from "./navSlice";
 
 type Props = {
@@ -45,6 +45,9 @@ const ProfileMenu: React.FC<Props> = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const profileMenuOpen = useSelector(selectProfileMenuOpen);
+  const profile = useSelector(selectProfile);
+
+  console.log(profile.avatar_img);
 
   const logout = () => {
     localStorage.removeItem("localJWT");
@@ -78,7 +81,7 @@ const ProfileMenu: React.FC<Props> = (props) => {
           alignItems='center'
         >
           <Grid className={classes.avatorWrapper} item xs={6}>
-            <Avatar className={classes.avatorLarge} />
+            <Avatar className={classes.avatorLarge} src={profile.avatar_img} />
           </Grid>
           <Grid
             item

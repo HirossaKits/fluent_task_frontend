@@ -1,14 +1,29 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import "./App.css";
+import { createTheme, ThemeProvider } from "@material-ui/core";
+import CssBaseline from "@material-ui/core/CssBaseline";
 import Nav from "./features/nav/Nav";
+import { selectSettings } from "./features/nav/navSlice";
 
 function App() {
+  const settings = useSelector(selectSettings);
+
+  const theme = createTheme({
+    palette: {
+      type: settings.dark_mode ? "dark" : "light",
+    },
+  });
+
   return (
-    <div className='App'>
-      <header className='App-header'>
-        <Nav />
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <div className='App'>
+        <header className='App-header'>
+          <Nav />
+        </header>
+      </div>
+    </ThemeProvider>
   );
 }
 

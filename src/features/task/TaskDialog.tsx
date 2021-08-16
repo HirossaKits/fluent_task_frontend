@@ -18,7 +18,7 @@ import { Typography } from "@material-ui/core";
 import { AnyCnameRecord } from "dns";
 import { selectEditedTask } from "../task/taskSlice";
 import { setEditedTask } from "../task/taskSlice";
-import { TARGET } from "../../types";
+import { TARGET } from "../types";
 import CommonSelect from "../../common/CommonSelect";
 import { Status, DemoMember } from "../../selectionOptions";
 

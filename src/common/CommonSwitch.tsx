@@ -2,8 +2,13 @@ import React from "react";
 import Grid from "@material-ui/core/Grid";
 import Switch, { SwitchClassKey, SwitchProps } from "@material-ui/core/Switch";
 import { makeStyles, Typography } from "@material-ui/core";
+import { TARGET } from "../features/types";
 
 const useStyles = makeStyles((theme) => ({
+  wrapper: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+  },
   switch: {
     color: theme.palette.primary.main,
     "&$checked": {
@@ -21,15 +26,26 @@ type Props = {
   label?: string;
   labelWidth?: WidthNumber;
   type?: string;
+  name: string;
+  value: boolean;
+  onChange: Function;
 };
 
 const CommonSwitch: React.FC<Props> = (props) => {
   const classes = useStyles();
 
+  const handleToggleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    let target: TARGET = {
+      name: props.name,
+      value: !props.value,
+    };
+    props.onChange(target);
+  };
+
   return (
-    <Grid container alignItems='center' xs={12}>
+    <Grid className={classes.wrapper} container alignItems='center' xs={12}>
       {"label" in props && (
-        <Grid item xs={"labelWidth" in props ? props.labelWidth : 6}>
+        <Grid item xs={"labelWidth" in props ? props.labelWidth : 8}>
           <Typography variant='body2'>{props.label}</Typography>
         </Grid>
       )}
@@ -40,7 +56,13 @@ const CommonSwitch: React.FC<Props> = (props) => {
           ((12 - (props.labelWidth ?? 0)) as WidthNumber)
         }
       >
-        <Switch className={classes.switch} color='primary' size='small' />
+        <Switch
+          checked={props.value}
+          className={classes.switch}
+          color='primary'
+          size='small'
+          onChange={handleToggleChange}
+        />
       </Grid>
     </Grid>
   );

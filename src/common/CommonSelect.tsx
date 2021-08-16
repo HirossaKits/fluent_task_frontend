@@ -2,7 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
-import { TARGET } from "../types";
+import { TARGET } from "../features/types";
 
 type Props = {
   options: {
@@ -22,12 +22,11 @@ const useStyles = makeStyles(() => ({
 }));
 
 const CommonSelect: React.FC<Props> = (props) => {
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSelectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let target: TARGET = {
       name: props.name,
       value: event.target.value,
     };
-    console.log(target);
     props.onChange(target);
   };
 
@@ -42,7 +41,7 @@ const CommonSelect: React.FC<Props> = (props) => {
       size='small'
       label={"label" in props ? props.label : undefined}
       value={props.value}
-      onChange={handleChange}
+      onChange={handleSelectChange}
       InputLabelProps={{
         shrink: true,
       }}
