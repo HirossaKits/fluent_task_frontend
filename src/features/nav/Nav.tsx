@@ -19,6 +19,7 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import SettingsIcon from "@material-ui/icons/Settings";
+import { selectDisplaiedComponent } from "./navSlice";
 import {
   setSettingsMenuOpen,
   setProfileMenuOpen,
@@ -27,6 +28,7 @@ import {
 import SettingsMenu from "./SettingsMenu";
 import ProfileMenu from "./ProfileMenu";
 import Task from "../task/Task";
+import Calendar from "../calendar/Calendar";
 
 const drawerWidth = 180;
 
@@ -128,6 +130,7 @@ const Nav = () => {
   const classes = useSytle();
   const dispatch = useDispatch();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const displaideComponent = useSelector(selectDisplaiedComponent);
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -156,7 +159,7 @@ const Nav = () => {
     <>
       <AppBar
         className={drawerOpen ? classes.appBarShift : classes.appBar}
-        position='static'
+        position="static"
       >
         <Toolbar className={classes.toolbar}>
           <IconButton
@@ -167,12 +170,12 @@ const Nav = () => {
           >
             <AppsIcon />
           </IconButton>
-          <Typography className={classes.title} variant='h5' noWrap>
+          <Typography className={classes.title} variant="h5" noWrap>
             Fluent Task
           </Typography>
           <div className={classes.iconSection}>
             <IconButton>
-              <Badge badgeContent={1} color='secondary'>
+              <Badge badgeContent={1} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -187,8 +190,8 @@ const Nav = () => {
       </AppBar>
       <Drawer
         className={drawerOpen ? classes.drawerOpen : classes.drawerClose}
-        variant='permanent'
-        anchor='left'
+        variant="permanent"
+        anchor="left"
         open={drawerOpen}
         classes={{
           paper: drawerOpen ? classes.drawerOpen : classes.drawerClose,
@@ -224,7 +227,13 @@ const Nav = () => {
         </List>
       </Drawer>
       <div className={drawerOpen ? classes.content : classes.contentShift}>
-        <Task />
+        {displaideComponent === "Task" ? (
+          <Task />
+        ) : displaideComponent === "Calendar" ? (
+          <Calendar />
+        ) : (
+          <div></div>
+        )}
       </div>
       <SettingsMenu anchorEl={settingsAnchorEl} />
       <ProfileMenu anchorEl={profileAnchorEl} />
