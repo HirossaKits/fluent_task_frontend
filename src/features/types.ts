@@ -18,7 +18,6 @@ export interface USER_INFO {
   email: string;
 }
 
-
 export interface LOGIN_USER {
   id: number;
   email: string;
@@ -29,67 +28,68 @@ export interface LOGIN_USER {
 /*navSlice*/
 
 export interface PERSONAL_SETTINGS {
-  dark_mode: boolean,
-  view_only_owned: boolean,
-  selected_project: string,
+  dark_mode: boolean;
+  view_only_owned: boolean;
+  selected_project: string;
 }
 
 export interface PROFILE {
-  avatar_img: string,
-  description: string,
+  avatar_img: string;
+  description: string;
 }
 
 export interface NAV_STATE {
-  settingsMenuOpen: boolean,
-  profileMenuOpen: boolean,
-  settings: PERSONAL_SETTINGS,
-  profile: PROFILE,
+  displaiedComponent: "Task" | "Calendar";
+  settingsMenuOpen: boolean;
+  profileMenuOpen: boolean;
+  settings: PERSONAL_SETTINGS;
+  profile: PROFILE;
 }
 
 /*taskSlice*/
 
 export interface EDITED_TASK {
-  id: string,
-  projectId: string,
-  assigned: string,
-  author: string,
-  title: string,
-  category: string,
-  description: string,
-  status: string,
-  estimate_manhour: number,
-  actual_manhour: number,
-  scheduled_start_date: Date | null,
-  scheduled_end_date: Date | null,
-  actual_start_date: Date | null,
-  actual_end_date: Date | null,
+  id: string;
+  projectId: string;
+  assigned: string;
+  author: string;
+  title: string;
+  category: string;
+  description: string;
+  status: string;
+  estimate_manhour: number;
+  actual_manhour: number;
+  scheduled_start_date: Date | null;
+  scheduled_end_date: Date | null;
+  actual_start_date: Date | null;
+  actual_end_date: Date | null;
 }
 
 export interface SELECTED_TASK {
-  id: string,
-  projectId: string,
-  assigned: string,
-  author: string,
-  title: string,
-  category: string,
-  description: string,
-  status: string,
-  estimate_manhour: number,
-  actual_manhour: number,
-  scheduled_start_date: Date | null,
-  scheduled_end_date: Date | null,
-  actual_start_date: Date | null,
-  actual_end_date: Date | null,
-  created_at: string,
-  update_at: string,
+  id: string;
+  projectId: string;
+  assigned: string;
+  author: string;
+  title: string;
+  category: string;
+  description: string;
+  status: string;
+  estimate_manhour: number;
+  actual_manhour: number;
+  scheduled_start_date: Date | null;
+  scheduled_end_date: Date | null;
+  actual_start_date: Date | null;
+  actual_end_date: Date | null;
+  created_at: string;
+  update_at: string;
 }
 
 export interface TASK_STATE {
-  editedTask: EDITED_TASK,
-  selectedTask: SELECTED_TASK,
+  editedTask: EDITED_TASK;
+  selectedTask: SELECTED_TASK;
 }
 
 export interface TARGET {
-  name: string,
-  value: string | number | Date | boolean,
+  name: string;
+  value: string | number | Date | boolean;
 }
