@@ -4,7 +4,7 @@ import { RootState } from "../../app/store";
 import { NAV_STATE } from "../types";
 
 const initialState: NAV_STATE = {
-  displaiedComponent: "Calendar",
+  mainComponent: "Calendar",
   settingsMenuOpen: false,
   profileMenuOpen: false,
   settings: {
@@ -37,6 +37,9 @@ export const navSlice = createSlice({
   name: "nav",
   initialState,
   reducers: {
+    setMainComponent(state, action) {
+      state.mainComponent = action.payload;
+    },
     setSettingsMenuOpen(state, action) {
       state.settingsMenuOpen = action.payload;
     },
@@ -61,13 +64,14 @@ export const navSlice = createSlice({
 });
 
 export const {
+  setMainComponent,
   setSettingsMenuOpen,
   setProfileMenuOpen,
   setSettings,
   setProfile,
 } = navSlice.actions;
-export const selectDisplaiedComponent = (state: RootState) =>
-  state.nav.displaiedComponent;
+export const selectMainComponent = (state: RootState) =>
+  state.nav.mainComponent;
 export const selectSettingsMenuOpen = (state: RootState) =>
   state.nav.settingsMenuOpen;
 export const selectProfileMenuOpen = (state: RootState) =>

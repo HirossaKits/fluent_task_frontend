@@ -77,9 +77,9 @@ const ProfileMenu: React.FC<Props> = (props) => {
       <Paper>
         <Grid
           container
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="center"
+          direction='row'
+          justifyContent='flex-start'
+          alignItems='center'
         >
           <Grid className={classes.avatorWrapper} item xs={6}>
             <Avatar className={classes.avatorLarge} src={profile.avatar_img} />
@@ -87,9 +87,9 @@ const ProfileMenu: React.FC<Props> = (props) => {
           <Grid
             item
             container
-            direction="column"
-            justifyContent="center"
-            alignItems="stretch"
+            direction='column'
+            justifyContent='center'
+            alignItems='stretch'
             xs={6}
           >
             <Grid className={classes.nameWrapper} item>
@@ -100,21 +100,21 @@ const ProfileMenu: React.FC<Props> = (props) => {
             </Grid>
           </Grid>
         </Grid>
-        <Paper className="talk">
+        <Paper className='talk'>
           <Typography>sample</Typography>
         </Paper>
         <MenuList>
           <MenuItem className={classes.menuItem}>
             <div className={classes.iconWrapper}>
-              <EditIcon fontSize="small" />
+              <EditIcon fontSize='small' />
             </div>
-            <Typography variant="inherit">プロフィール編集</Typography>
+            <Typography>プロフィール編集</Typography>
           </MenuItem>
           <MenuItem className={classes.menuItem} onClick={logout}>
             <div className={classes.iconWrapper}>
-              <ExitToAppIcon fontSize="small" />
+              <ExitToAppIcon fontSize='small' />
             </div>
-            <Typography variant="inherit">ログアウト</Typography>
+            <Typography>ログアウト</Typography>
           </MenuItem>
         </MenuList>
       </Paper>

@@ -38,8 +38,10 @@ export interface PROFILE {
   description: string;
 }
 
+export type MAIN_COMPONENT = "List" | "Card" | "Calendar";
+
 export interface NAV_STATE {
-  displaiedComponent: "Task" | "Calendar";
+  mainComponent: MAIN_COMPONENT;
   settingsMenuOpen: boolean;
   profileMenuOpen: boolean;
   settings: PERSONAL_SETTINGS;

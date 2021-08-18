@@ -19,16 +19,18 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import SettingsIcon from "@material-ui/icons/Settings";
-import { selectDisplaiedComponent } from "./navSlice";
 import {
   setSettingsMenuOpen,
   setProfileMenuOpen,
+  setMainComponent,
+  selectMainComponent,
   fetchAsyncGetLoginUserProfile,
 } from "./navSlice";
 import SettingsMenu from "./SettingsMenu";
 import ProfileMenu from "./ProfileMenu";
 import Task from "../task/Task";
 import Calendar from "../calendar/Calendar";
+import { MAIN_COMPONENT } from "../types";
 
 const drawerWidth = 180;
 
@@ -130,7 +132,7 @@ const Nav = () => {
   const classes = useSytle();
   const dispatch = useDispatch();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const displaideComponent = useSelector(selectDisplaiedComponent);
+  const mainComponent = useSelector(selectMainComponent);
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -151,13 +153,8 @@ const Nav = () => {
     dispatch(setProfileMenuOpen(true));
   };
 
-  const handleVirticalMenuClick = (event: any) => {
-    console.log(
-      "0000000000000000000000",
-      event.target,
-      event.target.value,
-      event.target.name
-    );
+  const handleVirticalMenuClick = (component: MAIN_COMPONENT) => {
+    dispatch(setMainComponent(component));
   };
 
   useEffect(() => {
@@ -168,7 +165,7 @@ const Nav = () => {
     <>
       <AppBar
         className={drawerOpen ? classes.appBarShift : classes.appBar}
-        position="static"
+        position='static'
       >
         <Toolbar className={classes.toolbar}>
           <IconButton
@@ -179,12 +176,12 @@ const Nav = () => {
           >
             <AppsIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h5" noWrap>
+          <Typography className={classes.title} variant='h5' noWrap>
             Fluent Task
           </Typography>
           <div className={classes.iconSection}>
             <IconButton>
-              <Badge badgeContent={1} color="secondary">
+              <Badge badgeContent={1} color='secondary'>
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -199,8 +196,8 @@ const Nav = () => {
       </AppBar>
       <Drawer
         className={drawerOpen ? classes.drawerOpen : classes.drawerClose}
-        variant="permanent"
-        anchor="left"
+        variant='permanent'
+        anchor='left'
         open={drawerOpen}
         classes={{
           paper: drawerOpen ? classes.drawerOpen : classes.drawerClose,
@@ -215,7 +212,7 @@ const Nav = () => {
           <ListItem
             button
             className={classes.drawerIcon}
-            onClick={handleVirticalMenuClick}
+            onClick={() => handleVirticalMenuClick("List")}
           >
             <ListItemIcon>
               <ListAltIcon />
@@ -225,7 +222,7 @@ const Nav = () => {
           <ListItem
             button
             className={classes.drawerIcon}
-            onClick={handleVirticalMenuClick}
+            onClick={() => handleVirticalMenuClick("Card")}
           >
             <ListItemIcon>
               <ViewWeekIcon />
@@ -235,7 +232,7 @@ const Nav = () => {
           <ListItem
             button
             className={classes.drawerIcon}
-            onClick={handleVirticalMenuClick}
+            onClick={() => handleVirticalMenuClick("Calendar")}
           >
             <ListItemIcon>
               <EventNoteIcon />
@@ -248,9 +245,9 @@ const Nav = () => {
         </List>
       </Drawer>
       <div className={drawerOpen ? classes.content : classes.contentShift}>
-        {displaideComponent === "Task" ? (
+        {mainComponent === "List" ? (
           <Task />
-        ) : displaideComponent === "Calendar" ? (
+        ) : mainComponent === "Calendar" ? (
           <Calendar />
         ) : (
           <div></div>
