@@ -609,17 +609,6 @@ const Calendar = () => {
     <div className={classes.root} onLoad={onLoad} ref={objectRef}>
       <ThemeProvider theme={theme}>
         <header className="root">
-          <CssBaseline />
-
-          <AppBar position="absolute">
-            <Toolbar>
-              <Typography variant="h5" className={classes.title}>
-                Calendar
-              </Typography>
-              <Switch onChange={handleSwitchChanged} />
-            </Toolbar>
-          </AppBar>
-
           <div className="bar">
             <div className="input">
               <TextField

@@ -151,6 +151,15 @@ const Nav = () => {
     dispatch(setProfileMenuOpen(true));
   };
 
+  const handleVirticalMenuClick = (event: any) => {
+    console.log(
+      "0000000000000000000000",
+      event.target,
+      event.target.value,
+      event.target.name
+    );
+  };
+
   useEffect(() => {
     dispatch(fetchAsyncGetLoginUserProfile());
   }, [dispatch]);
@@ -203,19 +212,31 @@ const Nav = () => {
           </IconButton>
         </div>
         <List>
-          <ListItem button className={classes.drawerIcon}>
+          <ListItem
+            button
+            className={classes.drawerIcon}
+            onClick={handleVirticalMenuClick}
+          >
             <ListItemIcon>
               <ListAltIcon />
             </ListItemIcon>
             <ListItemText className={classes.drawerText} primary={"一覧"} />
           </ListItem>
-          <ListItem button className={classes.drawerIcon}>
+          <ListItem
+            button
+            className={classes.drawerIcon}
+            onClick={handleVirticalMenuClick}
+          >
             <ListItemIcon>
               <ViewWeekIcon />
             </ListItemIcon>
             <ListItemText className={classes.drawerText} primary={"カード"} />
           </ListItem>
-          <ListItem button className={classes.drawerIcon}>
+          <ListItem
+            button
+            className={classes.drawerIcon}
+            onClick={handleVirticalMenuClick}
+          >
             <ListItemIcon>
               <EventNoteIcon />
             </ListItemIcon>
