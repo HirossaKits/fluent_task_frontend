@@ -87,6 +87,8 @@ export interface SELECTED_TASK {
 }
 
 export interface TASK_STATE {
+  editTaskOpen: boolean;
+  filterTaskOpen: boolean;
   editedTask: EDITED_TASK;
   selectedTask: SELECTED_TASK;
 }

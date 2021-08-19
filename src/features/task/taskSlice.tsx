@@ -3,6 +3,8 @@ import { RootState } from "../../app/store";
 import { EDITED_TASK, TASK_STATE } from "../types";
 
 const initialState: TASK_STATE = {
+  editTaskOpen: false,
+  filterTaskOpen: false,
   editedTask: {
     id: "",
     projectId: "",
@@ -50,6 +52,12 @@ export const taskSlice = createSlice({
         // };
       }
     },
+    setEditTaskOpen(state, action) {
+      state.editTaskOpen = action.payload;
+    },
+    setFilterTaskOpen(state, action) {
+      state.editTaskOpen = action.payload;
+    },
     setEditedTask(state, action) {
       state.editedTask = action.payload;
     },
@@ -58,6 +66,9 @@ export const taskSlice = createSlice({
 
 export const { setEditedTask } = taskSlice.actions;
 
+export const selectEditTaskOpen = (state: RootState) => state.task.editTaskOpen;
+export const selectFilterTaskOpen = (state: RootState) =>
+  state.task.filterTaskOpen;
 export const selectEditedTask = (state: RootState) => state.task.editedTask;
 
 export default taskSlice.reducer;

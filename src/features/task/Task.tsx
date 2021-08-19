@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Paper from "@material-ui/core/Paper";
 import {
   Typography,
@@ -14,6 +15,9 @@ import {
   TableSortLabel,
   Checkbox,
   Link,
+  Menu,
+  MenuItem,
+  TextField,
 } from "@material-ui/core";
 import { makeStyles, Theme, alpha } from "@material-ui/core/styles";
 import FilterListIcon from "@material-ui/icons/FilterList";
@@ -21,6 +25,12 @@ import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TaskDialog from "./TaskDialog";
+import {
+  selectEditTaskOpen,
+  selectFilterTaskOpen,
+  setEditTaskOpen,
+  setFilterTaskOpen,
+} from "./taskSlice";
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -209,15 +219,22 @@ interface SORT_STATE {
 
 const Task = () => {
   const classes = useStyles();
+  const editTaskOpen = useSelector(selectEditTaskOpen);
+  const filterTaskOpen = useSelector(selectFilterTaskOpen);
+  const dispatch = useDispatch();
+
   const [selected, setSelected] = useState<string[]>([]);
   const [sort, setSort] = useState<SORT_STATE>({
     order: "asc",
     column: "",
   });
-  const [open, setOpen] = useState(false);
+
+  const [editOpen, setEditOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [filterOpen, setFilterOpen] = useState(false);
 
   const handleEditClick = () => {
-    setOpen(!open);
+    setEditOpen(!editOpen);
   };
 
   const handleRowClick = (event: React.MouseEvent<unknown>, id: string) => {
@@ -264,44 +281,44 @@ const Task = () => {
 
   return (
     <>
-      <Typography className={classes.title} variant='h5' component='h2'>
+      <Typography className={classes.title} variant="h5" component="h2">
         タスク一覧
       </Typography>
       <Toolbar disableGutters>
-        <Tooltip title='登録'>
-          <IconButton aria-label='filter list'>
+        <Tooltip title="登録">
+          <IconButton aria-label="filter list">
             <PlaylistAddIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title='編集'>
-          <IconButton onClick={handleEditClick} aria-label='filter list'>
+        <Tooltip title="編集">
+          <IconButton onClick={handleEditClick} aria-label="edit task">
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title='削除'>
-          <IconButton aria-label='delete'>
+        <Tooltip title="削除">
+          <IconButton aria-label="delete">
             <DeleteIcon />
           </IconButton>
         </Tooltip>
 
-        <Tooltip title='フィルター'>
-          <IconButton className={classes.buttonRight} aria-label='filter list'>
+        <Tooltip title="フィルター">
+          <IconButton className={classes.buttonRight} aria-label="filter list">
             <FilterListIcon />
           </IconButton>
         </Tooltip>
       </Toolbar>
       <TableContainer className={classes.container}>
-        <Table size='medium'>
+        <Table size="medium">
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableCheckCell} padding='checkbox'>
+              <TableCell className={classes.tableCheckCell} padding="checkbox">
                 <Checkbox
                   indeterminate={
                     selected.length > 0 && selected.length < rows.length
                   }
                   checked={rowCount > 0 && selected.length === rows.length}
                   onChange={handleSelectAllClic}
-                  color='primary'
+                  color="primary"
                 />
               </TableCell>
               {columns.map((col) => (
@@ -327,11 +344,11 @@ const Task = () => {
               >
                 <TableCell
                   className={classes.tableCheckCell}
-                  padding='checkbox'
+                  padding="checkbox"
                 >
                   <Checkbox
                     checked={selected.indexOf(row.id) !== -1}
-                    color='primary'
+                    color="primary"
                   />
                 </TableCell>
                 {columns.map((col) => (
@@ -344,15 +361,15 @@ const Task = () => {
                     width={col.width}
                     align={col.isNumeric ? "right" : "inherit"}
                   >
-                    <Typography variant='body2'>
+                    <Typography variant="body2">
                       {col.name === "name" ? (
                         <Link
                           className={classes.link}
-                          underline='always'
-                          color='textPrimary'
+                          underline="always"
+                          color="textPrimary"
                           onClick={(event: any) => {
                             event.stopPropagation();
-                            setOpen(true);
+                            setEditOpen(true);
                           }}
                         >
                           {row[col.name] as keyof Data}
@@ -368,7 +385,7 @@ const Task = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <TaskDialog open={open} setOpen={setOpen} />
+      <TaskDialog open={editOpen} setOpen={setEditOpen} />
     </>
   );
 };
