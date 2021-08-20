@@ -45,13 +45,13 @@ export const taskSlice = createSlice({
   name: "task",
   initialState: initialState,
   reducers: {
-    initEditedTask(state, action) {
-      if (state.selectedTask.id !== "") {
-        // state.editedTask = {
-        //   ...initialState.selectedTask,
-        // };
-      }
-    },
+    // initEditedTask(state, action) {
+    //   if (state.selectedTask.id !== "") {
+    //     state.editedTask = {
+    //       ...initialState.selectedTask,
+    //     };
+    //   }
+    // },
     setEditTaskOpen(state, action) {
       state.editTaskOpen = action.payload;
     },

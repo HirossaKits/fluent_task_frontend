@@ -25,12 +25,7 @@ import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TaskDialog from "./TaskDialog";
-import {
-  selectEditTaskOpen,
-  selectFilterTaskOpen,
-  setEditTaskOpen,
-  setFilterTaskOpen,
-} from "./taskSlice";
+import { selectEditTaskOpen, selectFilterTaskOpen } from "./taskSlice";
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -234,7 +229,11 @@ const Task = () => {
   const [filterOpen, setFilterOpen] = useState(false);
 
   const handleEditClick = () => {
-    setEditOpen(!editOpen);
+    dispatch(setEditOpen(true));
+  };
+
+  const handleFilterClick = () => {
+    dispatch(setFilterOpen(true));
   };
 
   const handleRowClick = (event: React.MouseEvent<unknown>, id: string) => {
@@ -291,7 +290,7 @@ const Task = () => {
           </IconButton>
         </Tooltip>
         <Tooltip title="編集">
-          <IconButton onClick={handleEditClick} aria-label="edit task">
+          <IconButton aria-label="edit task" onClick={handleEditClick}>
             <EditIcon />
           </IconButton>
         </Tooltip>
@@ -302,7 +301,11 @@ const Task = () => {
         </Tooltip>
 
         <Tooltip title="フィルター">
-          <IconButton className={classes.buttonRight} aria-label="filter list">
+          <IconButton
+            className={classes.buttonRight}
+            aria-label="filter list"
+            onClick={handleFilterClick}
+          >
             <FilterListIcon />
           </IconButton>
         </Tooltip>
