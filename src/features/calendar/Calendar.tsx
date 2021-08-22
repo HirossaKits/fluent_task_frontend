@@ -15,22 +15,13 @@ import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Switch from "@material-ui/core/Switch";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 
-import {
-  makeStyles,
-  createTheme,
-  ThemeProvider,
-} from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import { makeStyles, createTheme } from "@material-ui/core/styles";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import AddIcon from "@material-ui/icons/Add";
 
 // カレンダーのヘッダー用
 const week = ["日", "月", "火", "水", "木", "金", "土"];
@@ -89,18 +80,6 @@ const initialYearMonth = (): YearMonth => {
 const useStyles = (darkMode: boolean) =>
   makeStyles((theme) => {
     return {
-      root: {
-        textAlign: "center",
-      },
-      title: {
-        fontFamily: "Comfortaa",
-      },
-      textyear: {
-        fontSize: "10px",
-      },
-      Button: {
-        marginTop: 0,
-      },
       grid: {
         width: "80%",
         borderTop: `1px solid`,
@@ -109,13 +88,11 @@ const useStyles = (darkMode: boolean) =>
       },
       tile: {
         width: "1/7",
-        // textAlign: "center",
         borderBottom: `1px solid`,
         borderRight: `1px solid`,
       },
       tilegray: {
         width: "1/7",
-        // textAlign: "center",
         borderBottom: `1px solid`,
         borderRight: `1px solid`,
         background: darkMode
@@ -130,31 +107,21 @@ const useStyles = (darkMode: boolean) =>
         },
         cursor: "pointer",
       },
-      // plus: {
-      //   color: "transparent",
-      // },
       textdate: {
         display: "inline",
         marginLeft: 10,
-        variantMapping: "subtitle2",
       },
       texttoday: {
         display: "inline",
         marginLeft: 10,
         padding: "5px 10px",
         color: "white",
-        variant: "subtitle2",
         background: theme.palette.primary.main,
         borderRadius: "15px",
-        // background: darkMode
-        //   ? theme.palette.primary.dark
-        //   : theme.palette.primary.light,
       },
-
       texttask: {
         display: "block",
         color: "white",
-        variant: "subtitle2",
         background: theme.palette.primary.main,
         position: "absolute",
       },
@@ -275,30 +242,6 @@ const Calendar = () => {
       setYearMonth({ year: yearMonth.year - 1, month: 12 });
     } else {
       setYearMonth({ year: yearMonth.year, month: yearMonth.month - 1 });
-    }
-  };
-
-  // TextField入力時
-  const handleInputChange = (e: any): void => {
-    let val = e.target.value;
-    setYmText(val);
-
-    let year = Number(val.slice(0, 4));
-    let month = Number(val.slice(4));
-    if (isNaN(year) || isNaN(month)) {
-      setymError("適切な日付を入力");
-      return;
-    }
-    if (val.length !== 6) {
-      setymError("YYYYMM形式で入力");
-      return;
-    }
-    if (year < 2000 || 2100 < year || month < 1 || 12 < month) {
-      setymError("適切な日付を入力");
-      return;
-    } else {
-      setymError(" ");
-      setYearMonth({ year: year, month: month });
     }
   };
 
@@ -606,139 +549,121 @@ const Calendar = () => {
   //   };
   // }, []);
   return (
-    <div className={classes.root} onLoad={onLoad} ref={objectRef}>
-      <ThemeProvider theme={theme}>
-        <header className="root">
-          <div className="bar">
-            <div className="input">
-              <TextField
-                className={classes.textyear}
-                label="年月"
-                value={ymText}
-                onChange={(event) => handleInputChange(event)}
-                variant="outlined"
-                size="small"
-                error={Boolean(ymError.trim())}
-                helperText={ymError}
-              />
-            </div>
-            <div className="button">
-              <IconButton onClick={decrementMonth}>
-                <ArrowBackIosIcon />
-              </IconButton>
-              <IconButton onClick={incrementMonth}>
-                <ArrowForwardIosIcon />
-              </IconButton>
-            </div>
-          </div>
-
-          <GridList className={classes.grid} cols={7} spacing={0}>
-            {calendarObject().map((dateCon, i) => (
-              <GridListTile
-                key={dateCon.dateStr}
-                className={
-                  dateCon.month === yearMonth.month
-                    ? classes.tile
-                    : classes.tilegray
-                }
-              >
-                <Grid
-                  className={classes.headerdate}
-                  id={dateCon.dateStr}
-                  container
-                  direction="row"
-                  onClick={handleDateHeaderClick}
-                >
-                  <Grid item>
-                    <Typography
-                      className={
-                        dateCon.isToday ? classes.texttoday : classes.textdate
-                      }
-                    >
-                      {dateCon.date === 1
-                        ? `${dateCon.month}月${dateCon.date}日`
-                        : dateCon.date}
-                    </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Typography className="plus">+</Typography>
-                  </Grid>
-                </Grid>
-              </GridListTile>
-            ))}
-            {tasks.map((task) => (
-              <Typography
-                className={classes.texttask}
-                style={{
-                  top: task.top,
-                  left: task.left,
-                  width: task.width,
-                  height: 24,
-                  paddingLeft: 10,
-                  borderRadius:
-                    !task.startEdge && !task.endEdge
-                      ? "0px"
-                      : task.startEdge && !task.endEdge
-                      ? "4px 0px 0px 4px"
-                      : !task.startEdge && task.endEdge
-                      ? "0px 4px 4px 0px"
-                      : "4px",
-                  background: task.color,
-                }}
-              >
-                {task.title}
-              </Typography>
-            ))}
-          </GridList>
-        </header>
-        <Dialog open={openDialog} onClose={handleDialogClose}>
-          <DialogContent>
-            <Grid
-              container
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              spacing={2}
-              xs={10}
+    <>
+      <IconButton onClick={decrementMonth}>
+        <ArrowBackIosIcon />
+      </IconButton>
+      <IconButton onClick={incrementMonth}>
+        <ArrowForwardIosIcon />
+      </IconButton>
+      <Grid container xs={12}>
+        <GridList className={classes.grid} cols={7} spacing={0}>
+          {calendarObject().map((dateCon, i) => (
+            <GridListTile
+              key={dateCon.dateStr}
+              className={
+                dateCon.month === yearMonth.month
+                  ? classes.tile
+                  : classes.tilegray
+              }
             >
-              <Grid item xs={12}>
-                <TextField
-                  name="title"
-                  label="タスク名"
-                  size="small"
-                  fullWidth
-                  onChange={handleDialogInputChange}
-                />
+              <Grid
+                className={classes.headerdate}
+                id={dateCon.dateStr}
+                container
+                direction='row'
+                onClick={handleDateHeaderClick}
+              >
+                <Grid item>
+                  <Typography
+                    className={
+                      dateCon.isToday ? classes.texttoday : classes.textdate
+                    }
+                  >
+                    {dateCon.date === 1
+                      ? `${dateCon.month}月${dateCon.date}日`
+                      : dateCon.date}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography className='plus'>+</Typography>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="startDate"
-                  label="開始日"
-                  size="small"
-                  onChange={handleDialogInputChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="endDate"
-                  label="終了日"
-                  size="small"
-                  onChange={handleDialogInputChange}
-                />
-              </Grid>
+            </GridListTile>
+          ))}
+          {tasks.map((task) => (
+            <Typography
+              className={classes.texttask}
+              style={{
+                top: task.top,
+                left: task.left,
+                width: task.width,
+                height: 24,
+                paddingLeft: 10,
+                borderRadius:
+                  !task.startEdge && !task.endEdge
+                    ? "0px"
+                    : task.startEdge && !task.endEdge
+                    ? "4px 0px 0px 4px"
+                    : !task.startEdge && task.endEdge
+                    ? "0px 4px 4px 0px"
+                    : "4px",
+                background: task.color,
+              }}
+            >
+              {task.title}
+            </Typography>
+          ))}
+        </GridList>
+      </Grid>
+
+      <Dialog open={openDialog} onClose={handleDialogClose}>
+        <DialogContent>
+          <Grid
+            container
+            direction='row'
+            justifyContent='center'
+            alignItems='center'
+            spacing={2}
+            xs={10}
+          >
+            <Grid item xs={12}>
+              <TextField
+                name='title'
+                label='タスク名'
+                size='small'
+                fullWidth
+                onChange={handleDialogInputChange}
+              />
             </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleRegisterClick} color="primary">
-              登録
-            </Button>
-            <Button onClick={handleDialogClose} color="primary">
-              閉じる
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </ThemeProvider>
-    </div>
+            <Grid item xs={12}>
+              <TextField
+                name='startDate'
+                label='開始日'
+                size='small'
+                onChange={handleDialogInputChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                name='endDate'
+                label='終了日'
+                size='small'
+                onChange={handleDialogInputChange}
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleRegisterClick} color='primary'>
+            登録
+          </Button>
+          <Button onClick={handleDialogClose} color='primary'>
+            閉じる
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 

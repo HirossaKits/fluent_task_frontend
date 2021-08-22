@@ -21,11 +21,7 @@ import { setEditedTask } from "../task/taskSlice";
 import { TARGET } from "../types";
 import CommonSelect from "../../common/CommonSelect";
 import { Status, DemoMember } from "../../selectionOptions";
-
-type Props = {
-  open: boolean;
-  setOpen: Function;
-};
+import { selectEditTaskOpen, setEditTaskOpen } from "./taskSlice";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -45,9 +41,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const TaskDialog: React.FC<Props> = (props) => {
+const TaskDialog: React.FC = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const editTaskOpen = useSelector(selectEditTaskOpen);
   const editedTask = useSelector(selectEditedTask);
 
   const handleInputChange = (target: TARGET) => {
@@ -55,47 +52,47 @@ const TaskDialog: React.FC<Props> = (props) => {
   };
 
   const handleClose = () => {
-    props.setOpen(false);
+    dispatch(setEditTaskOpen(false));
   };
 
   return (
     <>
       <Dialog
-        open={props.open}
+        open={editTaskOpen}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-        maxWidth="sm"
+        aria-labelledby='form-dialog-title'
+        maxWidth='sm'
         fullWidth
       >
         <Grid
           container
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
+          direction='row'
+          justifyContent='space-between'
+          alignItems='center'
         >
           <Grid className={classes.title} item>
             <DialogTitle>タスクを登録</DialogTitle>
           </Grid>
           <Grid className={classes.close} item>
-            <IconButton size="small">
+            <IconButton size='small'>
               <CloseIcon />
             </IconButton>
           </Grid>
         </Grid>
-        <form className={classes.root} noValidate autoComplete="off">
-          <Grid container direction="row" justifyContent="center">
+        <form className={classes.root} noValidate autoComplete='off'>
+          <Grid container direction='row' justifyContent='center'>
             <Grid
               className={classes.gridcol}
               container
-              justifyContent="flex-start"
-              alignItems="center"
+              justifyContent='flex-start'
+              alignItems='center'
               xs={10}
             >
               <Grid item xs={12}>
                 <Grid item xs={10}>
                   <CommonTextField
-                    label="タスク名"
-                    name="title"
+                    label='タスク名'
+                    name='title'
                     value={editedTask.title}
                     onChange={handleInputChange}
                   />
@@ -104,14 +101,13 @@ const TaskDialog: React.FC<Props> = (props) => {
               <Grid item xs={12}>
                 <Grid item xs={4}>
                   <TextField
-                    // className={classes.input}
                     autoFocus
-                    variant="standard"
+                    variant='standard'
                     fullWidth
-                    margin="dense"
-                    size="small"
-                    id="category"
-                    label="カテゴリー"
+                    margin='dense'
+                    size='small'
+                    id='category'
+                    label='カテゴリー'
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -121,8 +117,8 @@ const TaskDialog: React.FC<Props> = (props) => {
               <Grid item xs={12}>
                 <Grid item xs={3}>
                   <CommonSelect
-                    label="ステータス"
-                    name="status"
+                    label='ステータス'
+                    name='status'
                     options={Status}
                     value={editedTask.status}
                     onChange={handleInputChange}
@@ -132,8 +128,8 @@ const TaskDialog: React.FC<Props> = (props) => {
               <Grid item xs={12}>
                 <Grid item xs={4}>
                   <CommonSelect
-                    label="担当者"
-                    name="assigned"
+                    label='担当者'
+                    name='assigned'
                     options={DemoMember}
                     value={editedTask.assigned}
                     onChange={handleInputChange}
@@ -142,16 +138,16 @@ const TaskDialog: React.FC<Props> = (props) => {
               </Grid>
               <Grid
                 container
-                direction="row"
-                justifyContent="flex-start"
-                alignItems="center"
+                direction='row'
+                justifyContent='flex-start'
+                alignItems='center'
                 xs={12}
               >
                 <Grid item xs={2}>
                   <CommonTextField
-                    label="見積工数"
-                    name="estimate_manhour"
-                    type="number"
+                    label='見積工数'
+                    name='estimate_manhour'
+                    type='number'
                     value={editedTask.estimate_manhour}
                     onChange={handleInputChange}
                   />
@@ -161,9 +157,9 @@ const TaskDialog: React.FC<Props> = (props) => {
                 </Grid>
                 <Grid item xs={2}>
                   <CommonTextField
-                    label="実工数"
-                    name="actual_manhour"
-                    type="number"
+                    label='実工数'
+                    name='actual_manhour'
+                    type='number'
                     value={editedTask.actual_manhour}
                     onChange={handleInputChange}
                   />
@@ -172,8 +168,8 @@ const TaskDialog: React.FC<Props> = (props) => {
               <Grid container xs={12}>
                 <Grid item xs={4}>
                   <CommonDatePicker
-                    label="開始予定日"
-                    name="scheduled_start_date"
+                    label='開始予定日'
+                    name='scheduled_start_date'
                     value={editedTask.scheduled_start_date}
                     onChange={handleInputChange}
                   />
@@ -183,8 +179,8 @@ const TaskDialog: React.FC<Props> = (props) => {
                 </Grid>
                 <Grid item xs={4}>
                   <CommonDatePicker
-                    label="実開始日"
-                    name="actual_start_date"
+                    label='実開始日'
+                    name='actual_start_date'
                     value={editedTask.actual_start_date}
                     onChange={handleInputChange}
                   />
@@ -194,8 +190,8 @@ const TaskDialog: React.FC<Props> = (props) => {
               <Grid container xs={12}>
                 <Grid item xs={4}>
                   <CommonDatePicker
-                    label="終了予定日"
-                    name="scheduled_start_date"
+                    label='終了予定日'
+                    name='scheduled_start_date'
                     value={editedTask.scheduled_start_date}
                     onChange={handleInputChange}
                   />
@@ -206,8 +202,8 @@ const TaskDialog: React.FC<Props> = (props) => {
                 </Grid>
                 <Grid item xs={4}>
                   <CommonDatePicker
-                    label="実終了日"
-                    name="actual_end_date"
+                    label='実終了日'
+                    name='actual_end_date'
                     value={editedTask.actual_end_date}
                     onChange={handleInputChange}
                   />
@@ -216,10 +212,10 @@ const TaskDialog: React.FC<Props> = (props) => {
             </Grid>
           </Grid>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={handleClose} color='primary'>
               キャンセル
             </Button>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={handleClose} color='primary'>
               登録
             </Button>
           </DialogActions>

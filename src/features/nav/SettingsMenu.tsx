@@ -32,7 +32,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
     dispatch(setSettings({ ...settings, [target.name]: target.value }));
   };
 
-  const handleProfileColse = () => {
+  const handleColse = () => {
     dispatch(setSettingsMenuOpen(false));
   };
 
@@ -48,7 +48,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
         vertical: "top",
         horizontal: "right",
       }}
-      onClose={handleProfileColse}
+      onClose={handleColse}
       keepMounted
     >
       <Paper className={classes.paper}>

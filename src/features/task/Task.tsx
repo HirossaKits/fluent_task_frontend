@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Paper from "@material-ui/core/Paper";
 import {
@@ -25,7 +25,13 @@ import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TaskDialog from "./TaskDialog";
-import { selectEditTaskOpen, selectFilterTaskOpen } from "./taskSlice";
+import {
+  setEditTaskOpen,
+  setFilterTaskOpen,
+  selectEditTaskOpen,
+  selectFilterTaskOpen,
+} from "./taskSlice";
+import TaskFilter from "./TaskFilter";
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -69,7 +75,7 @@ type COLUMN_ID =
   | "enddate"
   | "manhour"
   | "assigned"
-  | "comment";
+  | "note";
 
 interface Column {
   name: COLUMN_ID;
@@ -86,7 +92,7 @@ const columns: Column[] = [
   { name: "enddate", label: "終了予定日", isNumeric: false, width: "12%" },
   { name: "manhour", label: "見積工数", isNumeric: true, width: "10%" },
   { name: "assigned", label: "担当", isNumeric: false, width: "10%" },
-  { name: "comment", label: "コメント", isNumeric: false, width: "15%" },
+  { name: "note", label: "備考", isNumeric: false, width: "15%" },
 ];
 
 let rowCount = 10;
@@ -100,8 +106,10 @@ interface Data {
   enddate: string;
   manhour: number;
   assigned: string;
-  comment: string;
+  note: string;
 }
+
+// デモ用
 
 function createData(
   id: string,
@@ -112,18 +120,18 @@ function createData(
   enddate: string,
   manhour: number,
   assigned: string,
-  comment: string
+  note: string
 ): Data {
   return {
-    id,
-    category,
-    name,
-    status,
-    startdate,
-    enddate,
-    manhour,
-    assigned,
-    comment,
+    id: id,
+    category: category,
+    name: name,
+    status: status,
+    startdate: startdate,
+    enddate: enddate,
+    manhour: manhour,
+    assigned: assigned,
+    note: note,
   };
 }
 
@@ -214,8 +222,6 @@ interface SORT_STATE {
 
 const Task = () => {
   const classes = useStyles();
-  const editTaskOpen = useSelector(selectEditTaskOpen);
-  const filterTaskOpen = useSelector(selectFilterTaskOpen);
   const dispatch = useDispatch();
 
   const [selected, setSelected] = useState<string[]>([]);
@@ -224,16 +230,14 @@ const Task = () => {
     column: "",
   });
 
-  const [editOpen, setEditOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [filterOpen, setFilterOpen] = useState(false);
+  const filterAnchorEl = useRef(null);
 
   const handleEditClick = () => {
-    dispatch(setEditOpen(true));
+    dispatch(setEditTaskOpen(true));
   };
 
   const handleFilterClick = () => {
-    dispatch(setFilterOpen(true));
+    dispatch(setFilterTaskOpen(true));
   };
 
   const handleRowClick = (event: React.MouseEvent<unknown>, id: string) => {
@@ -280,30 +284,31 @@ const Task = () => {
 
   return (
     <>
-      <Typography className={classes.title} variant="h5" component="h2">
+      <Typography className={classes.title} variant='h5' component='h2'>
         タスク一覧
       </Typography>
       <Toolbar disableGutters>
-        <Tooltip title="登録">
-          <IconButton aria-label="filter list">
+        <Tooltip title='登録'>
+          <IconButton aria-label='filter list'>
             <PlaylistAddIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="編集">
-          <IconButton aria-label="edit task" onClick={handleEditClick}>
+        <Tooltip title='編集'>
+          <IconButton aria-label='edit task' onClick={handleEditClick}>
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="削除">
-          <IconButton aria-label="delete">
+        <Tooltip title='削除'>
+          <IconButton aria-label='delete'>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
 
-        <Tooltip title="フィルター">
+        <Tooltip title='フィルター'>
           <IconButton
+            ref={filterAnchorEl}
             className={classes.buttonRight}
-            aria-label="filter list"
+            aria-label='filter list'
             onClick={handleFilterClick}
           >
             <FilterListIcon />
@@ -311,17 +316,17 @@ const Task = () => {
         </Tooltip>
       </Toolbar>
       <TableContainer className={classes.container}>
-        <Table size="medium">
+        <Table size='medium'>
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableCheckCell} padding="checkbox">
+              <TableCell className={classes.tableCheckCell} padding='checkbox'>
                 <Checkbox
                   indeterminate={
                     selected.length > 0 && selected.length < rows.length
                   }
                   checked={rowCount > 0 && selected.length === rows.length}
                   onChange={handleSelectAllClic}
-                  color="primary"
+                  color='primary'
                 />
               </TableCell>
               {columns.map((col) => (
@@ -347,11 +352,11 @@ const Task = () => {
               >
                 <TableCell
                   className={classes.tableCheckCell}
-                  padding="checkbox"
+                  padding='checkbox'
                 >
                   <Checkbox
                     checked={selected.indexOf(row.id) !== -1}
-                    color="primary"
+                    color='primary'
                   />
                 </TableCell>
                 {columns.map((col) => (
@@ -364,15 +369,15 @@ const Task = () => {
                     width={col.width}
                     align={col.isNumeric ? "right" : "inherit"}
                   >
-                    <Typography variant="body2">
+                    <Typography>
                       {col.name === "name" ? (
                         <Link
                           className={classes.link}
-                          underline="always"
-                          color="textPrimary"
+                          underline='always'
+                          color='textPrimary'
                           onClick={(event: any) => {
                             event.stopPropagation();
-                            setEditOpen(true);
+                            setEditTaskOpen(true);
                           }}
                         >
                           {row[col.name] as keyof Data}
@@ -388,7 +393,8 @@ const Task = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <TaskDialog open={editOpen} setOpen={setEditOpen} />
+      <TaskDialog />
+      <TaskFilter anchorEl={filterAnchorEl} />
     </>
   );
 };

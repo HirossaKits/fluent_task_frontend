@@ -86,9 +86,18 @@ export interface SELECTED_TASK {
   update_at: string;
 }
 
+export interface FILTER_TASK {
+  column: string,
+  operator: string,
+  value: string,
+  startDate: Date | null,
+  endDate: Date | null,
+}
+
 export interface TASK_STATE {
   editTaskOpen: boolean;
   filterTaskOpen: boolean;
+  filterTask: FILTER_TASK[];
   editedTask: EDITED_TASK;
   selectedTask: SELECTED_TASK;
 }

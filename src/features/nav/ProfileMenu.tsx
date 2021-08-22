@@ -12,7 +12,6 @@ import EditIcon from "@material-ui/icons/Edit";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { selectProfileMenuOpen, selectProfile } from "./navSlice";
 import { setProfileMenuOpen } from "./navSlice";
-import styles from "./Nav.module.css";
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;

@@ -5,6 +5,15 @@ import { EDITED_TASK, TASK_STATE } from "../types";
 const initialState: TASK_STATE = {
   editTaskOpen: false,
   filterTaskOpen: false,
+  filterTask: [
+    {
+      column: "name",
+      operator: "",
+      value: "",
+      startDate: null,
+      endDate: null,
+    },
+  ],
   editedTask: {
     id: "",
     projectId: "",
@@ -45,6 +54,18 @@ export const taskSlice = createSlice({
   name: "task",
   initialState: initialState,
   reducers: {
+    setEditTaskOpen(state, action) {
+      state.editTaskOpen = action.payload;
+    },
+    setFilterTaskOpen(state, action) {
+      state.filterTaskOpen = action.payload;
+    },
+    setFilterTask(state, action) {
+      state.filterTask = action.payload;
+    },
+    setEditedTask(state, action) {
+      state.editedTask = action.payload;
+    },
     // initEditedTask(state, action) {
     //   if (state.selectedTask.id !== "") {
     //     state.editedTask = {
@@ -52,23 +73,20 @@ export const taskSlice = createSlice({
     //     };
     //   }
     // },
-    setEditTaskOpen(state, action) {
-      state.editTaskOpen = action.payload;
-    },
-    setFilterTaskOpen(state, action) {
-      state.editTaskOpen = action.payload;
-    },
-    setEditedTask(state, action) {
-      state.editedTask = action.payload;
-    },
   },
 });
 
-export const { setEditedTask } = taskSlice.actions;
+export const {
+  setEditTaskOpen,
+  setFilterTaskOpen,
+  setFilterTask,
+  setEditedTask,
+} = taskSlice.actions;
 
 export const selectEditTaskOpen = (state: RootState) => state.task.editTaskOpen;
 export const selectFilterTaskOpen = (state: RootState) =>
   state.task.filterTaskOpen;
+export const selectFilterTask = (state: RootState) => state.task.filterTask;
 export const selectEditedTask = (state: RootState) => state.task.editedTask;
 
 export default taskSlice.reducer;
