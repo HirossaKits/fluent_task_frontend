@@ -20,7 +20,7 @@ import CommonTextField from "../../common/CommonTextField";
 import CommonDatePicker from "../../common/CommonDatePicker";
 import { Typography } from "@material-ui/core";
 import { AnyCnameRecord } from "dns";
-import { setEditedTask } from "../task/taskSlice";
+import { setEditedTask, setFilterTask } from "../task/taskSlice";
 import { TARGET } from "../types";
 import CommonSelect from "../../common/CommonSelect";
 import { Status, DemoMember } from "../../selectionOptions";
@@ -44,7 +44,8 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(2),
   },
   gridItem: {
-    margin: theme.spacing(1),
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
   },
 }));
 
@@ -54,8 +55,31 @@ const TaskFilter: React.FC<Props> = (props) => {
   const filterTaskOpen = useSelector(selectFilterTaskOpen);
   const filterTask = useSelector(selectFilterTask);
 
-  const handleSelectChange = () => {
-    // dispatch();
+  const handleSelectChange = (target: TARGET) => {
+    const index = parseInt(target.name.slice(-1));
+    const name = target.name.slice(0, -1);
+    dispatch(
+      setFilterTask([
+        ...filterTask.slice(0, index),
+        { ...filterTask[index], [name]: target.value },
+        ...filterTask.slice(index + 1),
+      ])
+    );
+  };
+
+  const handleAddClick = () => {
+    dispatch(
+      setFilterTask([
+        ...filterTask,
+        {
+          column: "name",
+          operator: "",
+          value: "",
+          startDate: null,
+          endDate: null,
+        },
+      ])
+    );
   };
 
   const handleClose = () => {
@@ -80,27 +104,27 @@ const TaskFilter: React.FC<Props> = (props) => {
       <Paper className={classes.paper}>
         <Grid
           container
-          direction='column'
-          justifyContent='center'
-          alignItems='center'
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
         >
-          {filterTask.map((filter) => (
+          {filterTask.map((filter, index) => (
             <Grid
               item
               container
-              direction='row'
-              justifyContent='center'
-              alignItems='center'
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
             >
               <Grid className={classes.gridIcon} item xs={1}>
-                <IconButton onClick={handleClose}>
+                <IconButton onClick={handleAddClick}>
                   <AddIcon />
                 </IconButton>
               </Grid>
               <Grid className={classes.gridItem} item xs={3}>
                 <CommonSelect
-                  label='フィルター対象'
-                  name='filter'
+                  label="フィルター対象"
+                  name={`column${index}`}
                   options={ListColumns}
                   value={filter.column}
                   onChange={handleSelectChange}
@@ -108,8 +132,8 @@ const TaskFilter: React.FC<Props> = (props) => {
               </Grid>
               <Grid className={classes.gridItem} item xs={3}>
                 <CommonSelect
-                  label='フィルター対象'
-                  name='filter'
+                  label="フィルター対象"
+                  name="filter"
                   options={ListColumns}
                   value={filter.column}
                   onChange={handleSelectChange}
@@ -117,8 +141,8 @@ const TaskFilter: React.FC<Props> = (props) => {
               </Grid>
               <Grid className={classes.gridItem} item xs={4}>
                 <CommonSelect
-                  label='フィルター対象'
-                  name='filter'
+                  label="フィルター対象"
+                  name="filter"
                   options={ListColumns}
                   value={filter.column}
                   onChange={handleSelectChange}
