@@ -50,6 +50,26 @@ export interface NAV_STATE {
 
 /*taskSlice*/
 
+export interface TASK {
+  task_id: string,
+  task_name: string,
+  project_id: string,
+  project_name: string,
+  category: string,
+  status: string,
+  estimate_manhour: string,
+  actual_manhour: string,
+  scheduled_start_date: string,
+  scheduled_end_date: string,
+  actual_start_date: string,
+  actual_end_date: string,
+  assigned: string,
+  author: string,
+  description: string,
+  created_at: string,
+  update_at: string,
+}
+
 export interface EDITED_TASK {
   id: string;
   projectId: string;

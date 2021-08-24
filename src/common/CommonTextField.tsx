@@ -8,6 +8,7 @@ type Props = {
   type?: string;
   name: string;
   value: string | number;
+  index?: number;
   onChange: Function;
 };
 
@@ -19,6 +20,9 @@ const CommonTextField: React.FC<Props> = (props) => {
       name: props.name,
       value: event.target.value,
     };
+    if ("index" in props) {
+      target.index = props.index;
+    }
     props.onChange(target);
   };
 

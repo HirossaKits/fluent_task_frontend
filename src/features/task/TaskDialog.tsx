@@ -24,8 +24,8 @@ import { Status, DemoMember } from "../../selectionOptions";
 import { selectEditTaskOpen, setEditTaskOpen } from "./taskSlice";
 
 const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    flexGrow: 1,
+  form: {
+    width: "100%",
   },
   title: {
     marginLeft: theme.spacing(3),
@@ -79,7 +79,7 @@ const TaskDialog: React.FC = (props) => {
             </IconButton>
           </Grid>
         </Grid>
-        <form className={classes.root} noValidate autoComplete='off'>
+        <form className={classes.form} noValidate autoComplete='off'>
           <Grid container direction='row' justifyContent='center'>
             <Grid
               className={classes.gridcol}

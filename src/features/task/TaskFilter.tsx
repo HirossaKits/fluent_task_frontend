@@ -45,6 +45,9 @@ const useStyles = makeStyles((theme) => ({
     width: 600,
     paddingRight: theme.spacing(1),
   },
+  form: {
+    width: "100%",
+  },
   gridIcon: {
     paddingTop: theme.spacing(2),
   },
@@ -60,8 +63,26 @@ const TaskFilter: React.FC<Props> = (props) => {
   const filterTaskOpen = useSelector(selectFilterTaskOpen);
   const filterTask = useSelector(selectFilterTask);
 
-  const handleSelectChange = (target: TARGET) => {
+  const handleAddClick = (index: number) => {
+    if (filterTask[index].value) {
+      dispatch(
+        setFilterTask([
+          ...filterTask,
+          {
+            column: "name",
+            operator: "",
+            value: "",
+            startDate: null,
+            endDate: null,
+          },
+        ])
+      );
+    }
+  };
+
+  const handleInputChange = (target: TARGET) => {
     if (target.index != null) {
+      console.log(target);
       dispatch(
         setFilterTask([
           ...filterTask.slice(0, target.index),
@@ -70,21 +91,6 @@ const TaskFilter: React.FC<Props> = (props) => {
         ])
       );
     }
-  };
-
-  const handleAddClick = () => {
-    dispatch(
-      setFilterTask([
-        ...filterTask,
-        {
-          column: "name",
-          operator: "",
-          value: "",
-          startDate: null,
-          endDate: null,
-        },
-      ])
-    );
   };
 
   const handleClose = () => {
@@ -109,56 +115,58 @@ const TaskFilter: React.FC<Props> = (props) => {
       <Paper className={classes.paper}>
         <Grid
           container
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
+          direction='column'
+          justifyContent='center'
+          alignItems='center'
         >
-          {filterTask.map((filter, index) => (
-            <Grid
-              item
-              container
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Grid className={classes.gridIcon} item xs={1}>
-                {index === filterTask.length - 1 && (
-                  <IconButton onClick={handleAddClick}>
-                    <AddIcon />
-                  </IconButton>
-                )}
+          <form className={classes.form} noValidate autoComplete='off'>
+            {filterTask.map((filter, index) => (
+              <Grid
+                item
+                container
+                direction='row'
+                justifyContent='center'
+                alignItems='center'
+              >
+                <Grid className={classes.gridIcon} item xs={1}>
+                  {index === filterTask.length - 1 && (
+                    <IconButton onClick={() => handleAddClick(index)}>
+                      <AddIcon />
+                    </IconButton>
+                  )}
+                </Grid>
+                <Grid className={classes.gridItem} item xs={3}>
+                  <CommonSelect
+                    label='対象'
+                    name='column'
+                    options={ListColumns}
+                    value={filter.column}
+                    index={index}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid className={classes.gridItem} item xs={3}>
+                  <CommonSelect
+                    label='演算子'
+                    name='operator'
+                    options={FilterOperatorOfString}
+                    value={filter.operator}
+                    index={index}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid className={classes.gridItem} item xs={4}>
+                  <CommonTextField
+                    label='値'
+                    name='value'
+                    value={filter.value}
+                    index={index}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
               </Grid>
-              <Grid className={classes.gridItem} item xs={3}>
-                <CommonSelect
-                  label="対象"
-                  name="column"
-                  options={ListColumns}
-                  value={filter.column}
-                  index={index}
-                  onChange={handleSelectChange}
-                />
-              </Grid>
-              <Grid className={classes.gridItem} item xs={3}>
-                <CommonSelect
-                  label="条件"
-                  name="operator"
-                  options={FilterOperatorOfString}
-                  value={filter.operator}
-                  index={index}
-                  onChange={handleSelectChange}
-                />
-              </Grid>
-              <Grid className={classes.gridItem} item xs={4}>
-                <CommonSelect
-                  label="フィルター対象"
-                  name="filter"
-                  options={ListColumns}
-                  value={filter.column}
-                  onChange={handleSelectChange}
-                />
-              </Grid>
-            </Grid>
-          ))}
+            ))}
+          </form>
         </Grid>
       </Paper>
     </Popover>
