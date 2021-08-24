@@ -8,7 +8,7 @@ const initialState: NAV_STATE = {
   settingsMenuOpen: false,
   profileMenuOpen: false,
   settings: {
-    dark_mode: true,
+    dark_mode: false,
     view_only_owned: false,
     selected_project: "",
   },

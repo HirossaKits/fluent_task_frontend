@@ -29,7 +29,12 @@ import {
   selectFilterTask,
   setFilterTaskOpen,
 } from "./taskSlice";
-import { ListColumns } from "../../selectionOptions";
+import {
+  ListColumns,
+  FilterOperatorOfString,
+  FilterOperatorOfNumber,
+  FilterOperatorOfDate,
+} from "../../selectionOptions";
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;
@@ -56,15 +61,15 @@ const TaskFilter: React.FC<Props> = (props) => {
   const filterTask = useSelector(selectFilterTask);
 
   const handleSelectChange = (target: TARGET) => {
-    const index = parseInt(target.name.slice(-1));
-    const name = target.name.slice(0, -1);
-    dispatch(
-      setFilterTask([
-        ...filterTask.slice(0, index),
-        { ...filterTask[index], [name]: target.value },
-        ...filterTask.slice(index + 1),
-      ])
-    );
+    if (target.index != null) {
+      dispatch(
+        setFilterTask([
+          ...filterTask.slice(0, target.index),
+          { ...filterTask[target.index], [target.name]: target.value },
+          ...filterTask.slice(target.index + 1),
+        ])
+      );
+    }
   };
 
   const handleAddClick = () => {
@@ -117,25 +122,29 @@ const TaskFilter: React.FC<Props> = (props) => {
               alignItems="center"
             >
               <Grid className={classes.gridIcon} item xs={1}>
-                <IconButton onClick={handleAddClick}>
-                  <AddIcon />
-                </IconButton>
+                {index === filterTask.length - 1 && (
+                  <IconButton onClick={handleAddClick}>
+                    <AddIcon />
+                  </IconButton>
+                )}
               </Grid>
               <Grid className={classes.gridItem} item xs={3}>
                 <CommonSelect
-                  label="フィルター対象"
-                  name={`column${index}`}
+                  label="対象"
+                  name="column"
                   options={ListColumns}
                   value={filter.column}
+                  index={index}
                   onChange={handleSelectChange}
                 />
               </Grid>
               <Grid className={classes.gridItem} item xs={3}>
                 <CommonSelect
-                  label="フィルター対象"
-                  name="filter"
-                  options={ListColumns}
-                  value={filter.column}
+                  label="条件"
+                  name="operator"
+                  options={FilterOperatorOfString}
+                  value={filter.operator}
+                  index={index}
                   onChange={handleSelectChange}
                 />
               </Grid>

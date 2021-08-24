@@ -23,6 +23,7 @@ type Props = {
   name: string;
   value: Date | null;
   onChange: Function;
+  index?: number;
 };
 
 const DatePickerDialog: React.FC<Props> = (props) => {
@@ -31,6 +32,9 @@ const DatePickerDialog: React.FC<Props> = (props) => {
       name: props.name,
       value: date,
     };
+    if ("index" in props) {
+      target.index = props.index;
+    }
     props.onChange(target);
   };
 
@@ -42,10 +46,10 @@ const DatePickerDialog: React.FC<Props> = (props) => {
           // disableToolbar
           // variant='inline'
           // inputVariant='outlined'
-          size='small'
-          margin='normal'
+          size="small"
+          margin="normal"
           label={"label" in props ? props.label : "日付"}
-          format='yyyy-MM-dd'
+          format="yyyy-MM-dd"
           clearable
           value={props.value}
           onChange={(date) => handleDateChange(date)}
@@ -53,12 +57,12 @@ const DatePickerDialog: React.FC<Props> = (props) => {
             "aria-label": "change date",
           }}
           disablePast
-          maxDateMessage='2100-01-01より前の日付を入力してください。'
-          minDateMessage='1900-01-01より後の日付を入力してください。'
-          invalidDateMessage='日付の入力値が不正です。'
-          clearLabel='クリア'
-          okLabel='決定'
-          cancelLabel='キャンセル'
+          maxDateMessage="2100-01-01より前の日付を入力してください。"
+          minDateMessage="1900-01-01より後の日付を入力してください。"
+          invalidDateMessage="日付の入力値が不正です。"
+          clearLabel="クリア"
+          okLabel="決定"
+          cancelLabel="キャンセル"
           InputLabelProps={{
             shrink: true,
           }}

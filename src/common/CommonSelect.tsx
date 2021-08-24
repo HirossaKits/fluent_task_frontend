@@ -12,6 +12,7 @@ type Props = {
   label?: string;
   name: string;
   value: string | number;
+  index?: number;
   onChange: Function;
 };
 
@@ -27,6 +28,9 @@ const CommonSelect: React.FC<Props> = (props) => {
       name: props.name,
       value: event.target.value,
     };
+    if ("index" in props) {
+      target.index = props.index;
+    }
     props.onChange(target);
   };
 
@@ -37,8 +41,8 @@ const CommonSelect: React.FC<Props> = (props) => {
       className={classes.select}
       select
       fullWidth
-      margin='normal'
-      size='small'
+      margin="normal"
+      size="small"
       label={"label" in props ? props.label : undefined}
       value={props.value}
       onChange={handleSelectChange}

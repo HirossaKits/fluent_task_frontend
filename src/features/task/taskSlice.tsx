@@ -8,7 +8,7 @@ const initialState: TASK_STATE = {
   filterTask: [
     {
       column: "name",
-      operator: "",
+      operator: "=",
       value: "",
       startDate: null,
       endDate: null,
