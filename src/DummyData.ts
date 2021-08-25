@@ -1,6 +1,6 @@
-import { TASK } from './features/task';
+import { TASK } from './features/types';
 
-export const rows = [
+export const demoData = [
 
   createData(
     "task_dnafsdhnfailsudhfasuid",
@@ -21,7 +21,7 @@ export const rows = [
     "2021-07-10 12:00",
     "2021-07-10 12:00",
   ),
-], ;
+];
 
 function createData(
   task_id: string,
@@ -32,10 +32,10 @@ function createData(
   status: string,
   estimate_manhour: string,
   actual_manhour: string,
-  scheduled_start_date: string,
-  scheduled_end_date: string,
-  actual_start_date: string,
-  actual_end_date: string,
+  scheduled_startdate: string,
+  scheduled_enddate: string,
+  actual_startdate: string,
+  actual_enddate: string,
   assigned: string,
   author: string,
   description: string,
@@ -51,10 +51,10 @@ function createData(
     status: status,
     estimate_manhour: estimate_manhour,
     actual_manhour: actual_manhour,
-    scheduled_start_date: scheduled_start_date,
-    scheduled_end_date: scheduled_end_date,
-    actual_start_date: actual_start_date,
-    actual_end_date: actual_end_date,
+    scheduled_startdate: scheduled_startdate,
+    scheduled_enddate: scheduled_enddate,
+    actual_startdate: actual_startdate,
+    actual_enddate: actual_enddate,
     assigned: assigned,
     author: author,
     description: description,

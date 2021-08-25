@@ -25,13 +25,9 @@ import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TaskDialog from "./TaskDialog";
-import {
-  setEditTaskOpen,
-  setFilterTaskOpen,
-  selectEditTaskOpen,
-  selectFilterTaskOpen,
-} from "./taskSlice";
 import TaskFilter from "./TaskFilter";
+import { selectTasks, setEditTaskOpen, setFilterTaskOpen } from "./taskSlice";
+import { TASK } from "../types";
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -67,162 +63,51 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-type COLUMN_ID =
-  | "category"
-  | "name"
-  | "status"
-  | "startdate"
-  | "enddate"
-  | "manhour"
-  | "assigned"
-  | "note";
-
 interface Column {
-  name: COLUMN_ID;
+  name: keyof TASK;
   label: string;
-  isNumeric: boolean;
+  type: "string" | "number" | "Date";
   width: string;
 }
 
 const columns: Column[] = [
-  { name: "name", label: "タスク名", isNumeric: false, width: "13%" },
-  { name: "category", label: "カテゴリー", isNumeric: false, width: "10%" },
-  { name: "status", label: "ステータス", isNumeric: false, width: "10%" },
-  { name: "startdate", label: "開始予定日", isNumeric: false, width: "12%" },
-  { name: "enddate", label: "終了予定日", isNumeric: false, width: "12%" },
-  { name: "manhour", label: "見積工数", isNumeric: true, width: "10%" },
-  { name: "assigned", label: "担当", isNumeric: false, width: "10%" },
-  { name: "note", label: "備考", isNumeric: false, width: "15%" },
+  { name: "task_name", label: "タスク名", type: "string", width: "13%" },
+  { name: "category", label: "カテゴリー", type: "string", width: "10%" },
+  { name: "status", label: "ステータス", type: "string", width: "10%" },
+  {
+    name: "scheduled_startdate",
+    label: "開始予定日",
+    type: "Date",
+    width: "12%",
+  },
+  {
+    name: "scheduled_enddate",
+    label: "終了予定日",
+    type: "Date",
+    width: "12%",
+  },
+  {
+    name: "estimate_manhour",
+    label: "見積工数",
+    type: "number",
+    width: "10%",
+  },
+  { name: "assigned", label: "担当", type: "string", width: "10%" },
+  { name: "description", label: "備考", type: "string", width: "15%" },
 ];
 
 let rowCount = 10;
 
-interface Data {
-  id: string;
-  category: string;
-  name: string;
-  status: string;
-  startdate: string;
-  enddate: string;
-  manhour: number;
-  assigned: string;
-  note: string;
-}
-
-// デモ用
-
-function createData(
-  id: string,
-  category: string,
-  name: string,
-  status: string,
-  startdate: string,
-  enddate: string,
-  manhour: number,
-  assigned: string,
-  note: string
-): Data {
-  return {
-    id: id,
-    category: category,
-    name: name,
-    status: status,
-    startdate: startdate,
-    enddate: enddate,
-    manhour: manhour,
-    assigned: assigned,
-    note: note,
-  };
-}
-
-const rows = [
-  createData(
-    "1",
-    "製造",
-    "A機能製造",
-    "進行中",
-    "2021-07-04",
-    "2021-07-04",
-    1,
-    "製造担当A",
-    "テストデータA使用"
-  ),
-  createData(
-    "2",
-    "製造",
-    "B機能製造",
-    "開始前",
-    "2021-07-05",
-    "2021-07-05",
-    1,
-    "製造担当A",
-    "テストデータA使用"
-  ),
-  createData(
-    "3",
-    "製造",
-    "C機能製造",
-    "開始前",
-    "2021-07-06",
-    "2021-07-06",
-    1,
-    "製造担当A",
-    "テストデータA使用"
-  ),
-  createData(
-    "4",
-    "製造",
-    "D機能製造",
-    "開始前",
-    "2021-07-07",
-    "2021-07-07",
-    1,
-    "製造担当A",
-    "テストデータA使用"
-  ),
-  createData(
-    "5",
-    "製造",
-    "E機能製造",
-    "開始前",
-    "2021-07-08",
-    "2021-07-08",
-    1,
-    "製造担当A",
-    "テストデータA使用"
-  ),
-  createData(
-    "6",
-    "製造",
-    "F機能製造",
-    "開始前",
-    "2021-07-09",
-    "2021-07-09",
-    1,
-    "製造担当A",
-    "テストデータA使用"
-  ),
-  createData(
-    "7",
-    "製造",
-    "G機能製造",
-    "開始前",
-    "2021-07-10",
-    "2021-07-10",
-    1,
-    "製造担当A",
-    "テストデータA使用"
-  ),
-];
-
 interface SORT_STATE {
   order: "asc" | "desc";
-  column: "" | COLUMN_ID;
+  column: "" | keyof TASK;
 }
 
 const Task = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const tasks = useSelector(selectTasks);
 
   const [selected, setSelected] = useState<string[]>([]);
   const [sort, setSort] = useState<SORT_STATE>({
@@ -253,13 +138,13 @@ const Task = () => {
 
   const handleSelectAllClic = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      setSelected(rows.map((row) => row.id));
+      setSelected(tasks.map((row) => row.task_id));
     } else {
       setSelected([]);
     }
   };
 
-  const handleClickSortColumn = (colId: COLUMN_ID) => {
+  const handleClickSortColumn = (colId) => {
     setSort({
       order: sort.column !== colId || sort.order === "desc" ? "asc" : "desc",
       column: colId,
@@ -322,9 +207,9 @@ const Task = () => {
               <TableCell className={classes.tableCheckCell} padding='checkbox'>
                 <Checkbox
                   indeterminate={
-                    selected.length > 0 && selected.length < rows.length
+                    selected.length > 0 && selected.length < tasks.length
                   }
-                  checked={rowCount > 0 && selected.length === rows.length}
+                  checked={rowCount > 0 && selected.length === tasks.length}
                   onChange={handleSelectAllClic}
                   color='primary'
                 />
@@ -343,7 +228,7 @@ const Task = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortRows(rows).map((row, rowIndex) => (
+            {sortRows(tasks).map((row, rowIndex) => (
               <TableRow
                 className={classes.tablerow}
                 onClick={(event) => handleRowClick(event, row.id)}

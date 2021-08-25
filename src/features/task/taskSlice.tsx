@@ -2,7 +2,11 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { EDITED_TASK, TASK_STATE } from "../types";
 
+// Demo
+import { demoData } from "../../DummyData";
+
 const initialState: TASK_STATE = {
+  tasks: demoData,
   editTaskOpen: false,
   filterTaskOpen: false,
   filterTask: [
@@ -83,6 +87,7 @@ export const {
   setEditedTask,
 } = taskSlice.actions;
 
+export const selectTasks = (state: RootState) => state.task.tasks;
 export const selectEditTaskOpen = (state: RootState) => state.task.editTaskOpen;
 export const selectFilterTaskOpen = (state: RootState) =>
   state.task.filterTaskOpen;
