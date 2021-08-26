@@ -1,24 +1,18 @@
 import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Paper from "@material-ui/core/Paper";
-import {
-  Typography,
-  Toolbar,
-  Tooltip,
-  IconButton,
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  TableSortLabel,
-  Checkbox,
-  Link,
-  Menu,
-  MenuItem,
-  TextField,
-} from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
+import Toolbar from "@material-ui/core/Toolbar";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
+import TableContainer from "@material-ui/core/TableContainer";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableBody from "@material-ui/core/TableBody";
+import TableRow from "@material-ui/core/TableRow";
+import TableCell from "@material-ui/core/TableCell";
+import TableSortLabel from "@material-ui/core/TableSortLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import Link from "@material-ui/core";
 import { makeStyles, Theme, alpha } from "@material-ui/core/styles";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
@@ -63,14 +57,24 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-interface Column {
-  name: keyof TASK;
+type ColumnNames =
+  | "task_name"
+  | "category"
+  | "status"
+  | "scheduled_startdate"
+  | "scheduled_enddate"
+  | "estimate_manhour"
+  | "assigned"
+  | "description";
+
+interface ColumnInfo {
+  name: ColumnNames;
   label: string;
   type: "string" | "number" | "Date";
   width: string;
 }
 
-const columns: Column[] = [
+const columns: ColumnInfo[] = [
   { name: "task_name", label: "タスク名", type: "string", width: "13%" },
   { name: "category", label: "カテゴリー", type: "string", width: "10%" },
   { name: "status", label: "ステータス", type: "string", width: "10%" },
@@ -151,15 +155,15 @@ const Task = () => {
     });
   };
 
-  const sortRows = (rs: typeof rows): typeof rows => {
+  const sortRows = (rs: typeof tasks): typeof tasks => {
     if (!sort.column) {
-      return rows;
+      return tasks;
     }
     const sortedRows = Array.from(rs).sort((a, b) => {
-      if (a[sort.column as keyof Data] > b[sort.column as keyof Data]) {
+      if (a[sort.column as ColumnNames] > b[sort.column as ColumnNames]) {
         return sort.order === "asc" ? 1 : -1;
       }
-      if (a[sort.column as keyof Data] < b[sort.column as keyof Data]) {
+      if (a[sort.column as ColumnNames] < b[sort.column as ColumnNames]) {
         return sort.order === "desc" ? -1 : 1;
       }
       return 0;
@@ -169,31 +173,31 @@ const Task = () => {
 
   return (
     <>
-      <Typography className={classes.title} variant='h5' component='h2'>
+      <Typography className={classes.title} variant="h5" component="h2">
         タスク一覧
       </Typography>
       <Toolbar disableGutters>
-        <Tooltip title='登録'>
-          <IconButton aria-label='filter list'>
+        <Tooltip title="登録">
+          <IconButton aria-label="filter list">
             <PlaylistAddIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title='編集'>
-          <IconButton aria-label='edit task' onClick={handleEditClick}>
+        <Tooltip title="編集">
+          <IconButton aria-label="edit task" onClick={handleEditClick}>
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title='削除'>
-          <IconButton aria-label='delete'>
+        <Tooltip title="削除">
+          <IconButton aria-label="delete">
             <DeleteIcon />
           </IconButton>
         </Tooltip>
 
-        <Tooltip title='フィルター'>
+        <Tooltip title="フィルター">
           <IconButton
             ref={filterAnchorEl}
             className={classes.buttonRight}
-            aria-label='filter list'
+            aria-label="filter list"
             onClick={handleFilterClick}
           >
             <FilterListIcon />
@@ -201,17 +205,17 @@ const Task = () => {
         </Tooltip>
       </Toolbar>
       <TableContainer className={classes.container}>
-        <Table size='medium'>
+        <Table size="medium">
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableCheckCell} padding='checkbox'>
+              <TableCell className={classes.tableCheckCell} padding="checkbox">
                 <Checkbox
                   indeterminate={
                     selected.length > 0 && selected.length < tasks.length
                   }
                   checked={rowCount > 0 && selected.length === tasks.length}
                   onChange={handleSelectAllClic}
-                  color='primary'
+                  color="primary"
                 />
               </TableCell>
               {columns.map((col) => (
@@ -237,11 +241,11 @@ const Task = () => {
               >
                 <TableCell
                   className={classes.tableCheckCell}
-                  padding='checkbox'
+                  padding="checkbox"
                 >
                   <Checkbox
                     checked={selected.indexOf(row.id) !== -1}
-                    color='primary'
+                    color="primary"
                   />
                 </TableCell>
                 {columns.map((col) => (
@@ -258,8 +262,8 @@ const Task = () => {
                       {col.name === "name" ? (
                         <Link
                           className={classes.link}
-                          underline='always'
-                          color='textPrimary'
+                          underline="always"
+                          color="textPrimary"
                           onClick={(event: any) => {
                             event.stopPropagation();
                             setEditTaskOpen(true);
