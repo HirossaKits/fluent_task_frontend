@@ -13,6 +13,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Grid from "@material-ui/core/Grid";
 import AddIcon from "@material-ui/icons/Add";
+import ClearIcon from "@material-ui/icons/Clear";
 
 import CloseIcon from "@material-ui/icons/Close";
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
@@ -49,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
   },
   gridIcon: {
-    paddingTop: theme.spacing(2),
+    paddingTop: 20,
   },
   gridItem: {
     marginLeft: theme.spacing(1),
@@ -70,7 +71,7 @@ const TaskFilter: React.FC<Props> = (props) => {
           ...filterTask,
           {
             column: "name",
-            operator: "",
+            operator: "=",
             value: "",
             startDate: null,
             endDate: null,
@@ -80,9 +81,16 @@ const TaskFilter: React.FC<Props> = (props) => {
     }
   };
 
+  const handleClearClick = (index: number) => {
+    const target = [...filterTask];
+    target.splice(index, 1);
+    if (filterTask[index].value) {
+      dispatch(setFilterTask(target));
+    }
+  };
+
   const handleInputChange = (target: TARGET) => {
     if (target.index != null) {
-      console.log(target);
       dispatch(
         setFilterTask([
           ...filterTask.slice(0, target.index),
@@ -155,7 +163,7 @@ const TaskFilter: React.FC<Props> = (props) => {
                     onChange={handleInputChange}
                   />
                 </Grid>
-                <Grid className={classes.gridItem} item xs={4}>
+                <Grid className={classes.gridItem} item xs={3}>
                   <CommonTextField
                     label='値'
                     name='value'
@@ -163,6 +171,11 @@ const TaskFilter: React.FC<Props> = (props) => {
                     index={index}
                     onChange={handleInputChange}
                   />
+                </Grid>
+                <Grid className={classes.gridIcon} item xs={1}>
+                  <IconButton onClick={() => handleClearClick(index)}>
+                    <ClearIcon color='action' />
+                  </IconButton>
                 </Grid>
               </Grid>
             ))}

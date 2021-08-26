@@ -170,7 +170,7 @@ const TaskDialog: React.FC = (props) => {
                   <CommonDatePicker
                     label='開始予定日'
                     name='scheduled_start_date'
-                    value={editedTask.scheduled_start_date}
+                    value={editedTask.scheduled_startdate}
                     onChange={handleInputChange}
                   />
                 </Grid>
@@ -181,7 +181,7 @@ const TaskDialog: React.FC = (props) => {
                   <CommonDatePicker
                     label='実開始日'
                     name='actual_start_date'
-                    value={editedTask.actual_start_date}
+                    value={editedTask.actual_startdate}
                     onChange={handleInputChange}
                   />
                 </Grid>
@@ -192,7 +192,7 @@ const TaskDialog: React.FC = (props) => {
                   <CommonDatePicker
                     label='終了予定日'
                     name='scheduled_start_date'
-                    value={editedTask.scheduled_start_date}
+                    value={editedTask.scheduled_startdate}
                     onChange={handleInputChange}
                   />
                 </Grid>
@@ -204,7 +204,7 @@ const TaskDialog: React.FC = (props) => {
                   <CommonDatePicker
                     label='実終了日'
                     name='actual_end_date'
-                    value={editedTask.actual_end_date}
+                    value={editedTask.actual_enddate}
                     onChange={handleInputChange}
                   />
                 </Grid>
