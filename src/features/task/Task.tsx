@@ -12,7 +12,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableCell from "@material-ui/core/TableCell";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core";
+import Link from "@material-ui/core/Link";
 import { makeStyles, Theme, alpha } from "@material-ui/core/styles";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
@@ -100,11 +100,9 @@ const columns: ColumnInfo[] = [
   { name: "description", label: "備考", type: "string", width: "15%" },
 ];
 
-let rowCount = 10;
-
 interface SORT_STATE {
   order: "asc" | "desc";
-  column: "" | keyof TASK;
+  columnName: "" | ColumnNames;
 }
 
 const Task = () => {
@@ -114,9 +112,9 @@ const Task = () => {
   const tasks = useSelector(selectTasks);
 
   const [selected, setSelected] = useState<string[]>([]);
-  const [sort, setSort] = useState<SORT_STATE>({
+  const [sortState, setSortState] = useState<SORT_STATE>({
     order: "asc",
-    column: "",
+    columnName: "",
   });
 
   const filterAnchorEl = useRef(null);
@@ -148,23 +146,32 @@ const Task = () => {
     }
   };
 
-  const handleClickSortColumn = (colId) => {
-    setSort({
-      order: sort.column !== colId || sort.order === "desc" ? "asc" : "desc",
-      column: colId,
+  const handleClickSortColumn = (colName: ColumnNames) => {
+    setSortState({
+      order:
+        sortState.columnName !== colName || sortState.order === "desc"
+          ? "asc"
+          : "desc",
+      columnName: colName,
     });
   };
 
-  const sortRows = (rs: typeof tasks): typeof tasks => {
-    if (!sort.column) {
+  const sortRows = (): TASK[] => {
+    if (!sortState.columnName) {
       return tasks;
     }
-    const sortedRows = Array.from(rs).sort((a, b) => {
-      if (a[sort.column as ColumnNames] > b[sort.column as ColumnNames]) {
-        return sort.order === "asc" ? 1 : -1;
+    const sortedRows = Array.from(tasks).sort((a, b) => {
+      if (
+        a[sortState.columnName as ColumnNames] >
+        b[sortState.columnName as ColumnNames]
+      ) {
+        return sortState.order === "asc" ? 1 : -1;
       }
-      if (a[sort.column as ColumnNames] < b[sort.column as ColumnNames]) {
-        return sort.order === "desc" ? -1 : 1;
+      if (
+        a[sortState.columnName as ColumnNames] <
+        b[sortState.columnName as ColumnNames]
+      ) {
+        return sortState.order === "desc" ? -1 : 1;
       }
       return 0;
     });
@@ -173,31 +180,31 @@ const Task = () => {
 
   return (
     <>
-      <Typography className={classes.title} variant="h5" component="h2">
+      <Typography className={classes.title} variant='h5' component='h2'>
         タスク一覧
       </Typography>
       <Toolbar disableGutters>
-        <Tooltip title="登録">
-          <IconButton aria-label="filter list">
+        <Tooltip title='登録'>
+          <IconButton aria-label='filter list'>
             <PlaylistAddIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="編集">
-          <IconButton aria-label="edit task" onClick={handleEditClick}>
+        <Tooltip title='編集'>
+          <IconButton aria-label='edit task' onClick={handleEditClick}>
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="削除">
-          <IconButton aria-label="delete">
+        <Tooltip title='削除'>
+          <IconButton aria-label='delete'>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
 
-        <Tooltip title="フィルター">
+        <Tooltip title='フィルター'>
           <IconButton
             ref={filterAnchorEl}
             className={classes.buttonRight}
-            aria-label="filter list"
+            aria-label='filter list'
             onClick={handleFilterClick}
           >
             <FilterListIcon />
@@ -205,24 +212,30 @@ const Task = () => {
         </Tooltip>
       </Toolbar>
       <TableContainer className={classes.container}>
-        <Table size="medium">
+        <Table size='medium'>
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableCheckCell} padding="checkbox">
+              <TableCell className={classes.tableCheckCell} padding='checkbox'>
                 <Checkbox
                   indeterminate={
                     selected.length > 0 && selected.length < tasks.length
                   }
-                  checked={rowCount > 0 && selected.length === tasks.length}
+                  checked={
+                    selected.length > 0 && selected.length === tasks.length
+                  }
                   onChange={handleSelectAllClic}
-                  color="primary"
+                  color='primary'
                 />
               </TableCell>
               {columns.map((col) => (
                 <TableCell className={classes.tableCell} key={col.name}>
                   <TableSortLabel
-                    active={sort.column === col.name}
-                    direction={sort.column === col.name ? sort.order : "asc"}
+                    active={sortState.columnName === col.name}
+                    direction={
+                      sortState.columnName === col.name
+                        ? sortState.order
+                        : "asc"
+                    }
                     onClick={() => handleClickSortColumn(col.name)}
                   >
                     {col.label}
@@ -232,47 +245,47 @@ const Task = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortRows(tasks).map((row, rowIndex) => (
+            {sortRows().map((row, rowIndex) => (
               <TableRow
                 className={classes.tablerow}
-                onClick={(event) => handleRowClick(event, row.id)}
+                onClick={(event) => handleRowClick(event, row.task_id)}
                 hover
-                selected={selected.indexOf(row.id) !== -1}
+                selected={selected.indexOf(row.task_id) !== -1}
               >
                 <TableCell
                   className={classes.tableCheckCell}
-                  padding="checkbox"
+                  padding='checkbox'
                 >
                   <Checkbox
-                    checked={selected.indexOf(row.id) !== -1}
-                    color="primary"
+                    checked={selected.indexOf(row.task_id) !== -1}
+                    color='primary'
                   />
                 </TableCell>
                 {columns.map((col) => (
                   <TableCell
                     className={
-                      col.isNumeric
+                      col.type === "number"
                         ? classes.tableNumericCell
                         : classes.tableCell
                     }
                     width={col.width}
-                    align={col.isNumeric ? "right" : "inherit"}
+                    align={col.type === "number" ? "right" : "inherit"}
                   >
                     <Typography>
-                      {col.name === "name" ? (
+                      {col.name === "task_name" ? (
                         <Link
                           className={classes.link}
-                          underline="always"
-                          color="textPrimary"
+                          underline='always'
+                          color='textPrimary'
                           onClick={(event: any) => {
                             event.stopPropagation();
                             setEditTaskOpen(true);
                           }}
                         >
-                          {row[col.name] as keyof Data}
+                          {row[col.name]}
                         </Link>
                       ) : (
-                        (row[col.name] as keyof Data)
+                        row[col.name]
                       )}
                     </Typography>
                   </TableCell>
