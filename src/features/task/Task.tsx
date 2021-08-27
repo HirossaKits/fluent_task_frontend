@@ -20,7 +20,12 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TaskDialog from "./TaskDialog";
 import TaskFilter from "./TaskFilter";
-import { selectTasks, setEditTaskOpen, setFilterTaskOpen } from "./taskSlice";
+import {
+  selectTasks,
+  selectFilterTask,
+  setEditTaskOpen,
+  setFilterTaskOpen,
+} from "./taskSlice";
 import { TASK } from "../types";
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -110,6 +115,7 @@ const Task = () => {
   const dispatch = useDispatch();
 
   const tasks = useSelector(selectTasks);
+  const filterTask = useSelector(selectFilterTask);
 
   const [selected, setSelected] = useState<string[]>([]);
   const [sortState, setSortState] = useState<SORT_STATE>({
@@ -156,11 +162,11 @@ const Task = () => {
     });
   };
 
-  const sortRows = (): TASK[] => {
+  const sortRows = (ts: TASK[]): TASK[] => {
     if (!sortState.columnName) {
-      return tasks;
+      return ts;
     }
-    const sortedRows = Array.from(tasks).sort((a, b) => {
+    const sortedRows = Array.from(ts).sort((a, b) => {
       if (
         a[sortState.columnName as ColumnNames] >
         b[sortState.columnName as ColumnNames]
@@ -178,33 +184,52 @@ const Task = () => {
     return sortedRows;
   };
 
+  const filterTasks = (ts: TASK[]): TASK[] => {
+    const filtered = ts.filter((row, index) => {
+      const columnValue = row[filterTask[index].column as ColumnNames];
+      const filterValue = filterTask[index].value;
+      const operator = filterTask[index].operator;
+
+      if (operator === "=") {
+        return columnValue === filterValue;
+      } else if (operator === "start_from") {
+        return columnValue.startsWith(filterValue);
+      } else if (operator === "include") {
+        return columnValue.indexOf(filterValue) === -1 ? false : true;
+      } else if (operator === "exclude") {
+        return columnValue.indexOf(filterValue) === -1 ? true : false;
+      }
+    });
+    return filtered;
+  };
+
   return (
     <>
-      <Typography className={classes.title} variant='h5' component='h2'>
+      <Typography className={classes.title} variant="h5" component="h2">
         タスク一覧
       </Typography>
       <Toolbar disableGutters>
-        <Tooltip title='登録'>
-          <IconButton aria-label='filter list'>
+        <Tooltip title="登録">
+          <IconButton aria-label="filter list">
             <PlaylistAddIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title='編集'>
-          <IconButton aria-label='edit task' onClick={handleEditClick}>
+        <Tooltip title="編集">
+          <IconButton aria-label="edit task" onClick={handleEditClick}>
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title='削除'>
-          <IconButton aria-label='delete'>
+        <Tooltip title="削除">
+          <IconButton aria-label="delete">
             <DeleteIcon />
           </IconButton>
         </Tooltip>
 
-        <Tooltip title='フィルター'>
+        <Tooltip title="フィルター">
           <IconButton
             ref={filterAnchorEl}
             className={classes.buttonRight}
-            aria-label='filter list'
+            aria-label="filter list"
             onClick={handleFilterClick}
           >
             <FilterListIcon />
@@ -212,10 +237,10 @@ const Task = () => {
         </Tooltip>
       </Toolbar>
       <TableContainer className={classes.container}>
-        <Table size='medium'>
+        <Table size="medium">
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableCheckCell} padding='checkbox'>
+              <TableCell className={classes.tableCheckCell} padding="checkbox">
                 <Checkbox
                   indeterminate={
                     selected.length > 0 && selected.length < tasks.length
@@ -224,7 +249,7 @@ const Task = () => {
                     selected.length > 0 && selected.length === tasks.length
                   }
                   onChange={handleSelectAllClic}
-                  color='primary'
+                  color="primary"
                 />
               </TableCell>
               {columns.map((col) => (
@@ -245,7 +270,7 @@ const Task = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortRows().map((row, rowIndex) => (
+            {sortRows(filterTasks(tasks)).map((row, rowIndex) => (
               <TableRow
                 className={classes.tablerow}
                 onClick={(event) => handleRowClick(event, row.task_id)}
@@ -254,11 +279,11 @@ const Task = () => {
               >
                 <TableCell
                   className={classes.tableCheckCell}
-                  padding='checkbox'
+                  padding="checkbox"
                 >
                   <Checkbox
                     checked={selected.indexOf(row.task_id) !== -1}
-                    color='primary'
+                    color="primary"
                   />
                 </TableCell>
                 {columns.map((col) => (
@@ -275,8 +300,8 @@ const Task = () => {
                       {col.name === "task_name" ? (
                         <Link
                           className={classes.link}
-                          underline='always'
-                          color='textPrimary'
+                          underline="always"
+                          color="textPrimary"
                           onClick={(event: any) => {
                             event.stopPropagation();
                             setEditTaskOpen(true);
