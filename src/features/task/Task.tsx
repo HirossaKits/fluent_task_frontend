@@ -26,7 +26,7 @@ import {
   setEditTaskOpen,
   setFilterTaskOpen,
 } from "./taskSlice";
-import { TASK } from "../types";
+import { TASK, COLUMN_NAME } from "../types";
 
 const useStyles = makeStyles((theme: Theme) => ({
   title: {
@@ -62,24 +62,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-type ColumnNames =
-  | "task_name"
-  | "category"
-  | "status"
-  | "scheduled_startdate"
-  | "scheduled_enddate"
-  | "estimate_manhour"
-  | "assigned"
-  | "description";
-
-interface ColumnInfo {
-  name: ColumnNames;
+export interface COLUMN_INFO {
+  name: COLUMN_NAME;
   label: string;
   type: "string" | "number" | "Date";
   width: string;
 }
 
-const columns: ColumnInfo[] = [
+export const columnsInfo: COLUMN_INFO[] = [
   { name: "task_name", label: "タスク名", type: "string", width: "13%" },
   { name: "category", label: "カテゴリー", type: "string", width: "10%" },
   { name: "status", label: "ステータス", type: "string", width: "10%" },
@@ -107,7 +97,7 @@ const columns: ColumnInfo[] = [
 
 interface SORT_STATE {
   order: "asc" | "desc";
-  columnName: "" | ColumnNames;
+  columnName: "" | COLUMN_NAME;
 }
 
 const Task = () => {
@@ -152,7 +142,7 @@ const Task = () => {
     }
   };
 
-  const handleClickSortColumn = (colName: ColumnNames) => {
+  const handleClickSortColumn = (colName: COLUMN_NAME) => {
     setSortState({
       order:
         sortState.columnName !== colName || sortState.order === "desc"
@@ -163,19 +153,17 @@ const Task = () => {
   };
 
   const sortRows = (ts: TASK[]): TASK[] => {
-    if (!sortState.columnName) {
-      return ts;
-    }
+    if (!sortState.columnName) return ts;
     const sortedRows = Array.from(ts).sort((a, b) => {
       if (
-        a[sortState.columnName as ColumnNames] >
-        b[sortState.columnName as ColumnNames]
+        a[sortState.columnName as COLUMN_NAME] >
+        b[sortState.columnName as COLUMN_NAME]
       ) {
         return sortState.order === "asc" ? 1 : -1;
       }
       if (
-        a[sortState.columnName as ColumnNames] <
-        b[sortState.columnName as ColumnNames]
+        a[sortState.columnName as COLUMN_NAME] <
+        b[sortState.columnName as COLUMN_NAME]
       ) {
         return sortState.order === "desc" ? -1 : 1;
       }
@@ -184,52 +172,78 @@ const Task = () => {
     return sortedRows;
   };
 
-  const filterTasks = (ts: TASK[]): TASK[] => {
-    const filtered = ts.filter((row, index) => {
-      const columnValue = row[filterTask[index].column as ColumnNames];
-      const filterValue = filterTask[index].value;
-      const operator = filterTask[index].operator;
+  const filterTasks = (tsk: TASK[]): TASK[] => {
+    if (filterTask.length < 1) return tsk;
 
-      if (operator === "=") {
-        return columnValue === filterValue;
-      } else if (operator === "start_from") {
-        return columnValue.startsWith(filterValue);
-      } else if (operator === "include") {
-        return columnValue.indexOf(filterValue) === -1 ? false : true;
-      } else if (operator === "exclude") {
-        return columnValue.indexOf(filterValue) === -1 ? true : false;
-      }
+    const filtered = tsk.filter((row, rowId) => {
+      let validity = true;
+
+      filterTask.forEach((filter, filterId) => {
+        if (!validity) return;
+        if (!filter.value) return;
+
+        const columnValue = row[filter.columnName];
+        const filterValue = filter.value;
+        const operator = filter.operator;
+        const type = columnsInfo.filter(
+          (col) => col.name === filter.columnName
+        )[0].type;
+
+        if (type === "string") {
+          if (operator === "=") {
+            validity = columnValue === filterValue;
+          } else if (operator === "start_from") {
+            validity = columnValue.startsWith(filterValue);
+          } else if (operator === "include") {
+            validity = columnValue.indexOf(filterValue) === -1 ? false : true;
+          } else if (operator === "exclude") {
+            validity = columnValue.indexOf(filterValue) === -1 ? true : false;
+          }
+        }
+
+        if (type === "number" || type === "Date") {
+          if (operator === "=") {
+            validity = columnValue === filterValue;
+          } else if (operator === "<=") {
+            validity = columnValue <= filterValue;
+          } else if (operator === ">=") {
+            validity = columnValue >= filterValue;
+          }
+        }
+      });
+
+      return validity;
     });
     return filtered;
   };
 
   return (
     <>
-      <Typography className={classes.title} variant="h5" component="h2">
+      <Typography className={classes.title} variant='h5' component='h2'>
         タスク一覧
       </Typography>
       <Toolbar disableGutters>
-        <Tooltip title="登録">
-          <IconButton aria-label="filter list">
+        <Tooltip title='登録'>
+          <IconButton aria-label='filter list'>
             <PlaylistAddIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="編集">
-          <IconButton aria-label="edit task" onClick={handleEditClick}>
+        <Tooltip title='編集'>
+          <IconButton aria-label='edit task' onClick={handleEditClick}>
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="削除">
-          <IconButton aria-label="delete">
+        <Tooltip title='削除'>
+          <IconButton aria-label='delete'>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
 
-        <Tooltip title="フィルター">
+        <Tooltip title='フィルター'>
           <IconButton
             ref={filterAnchorEl}
             className={classes.buttonRight}
-            aria-label="filter list"
+            aria-label='filter list'
             onClick={handleFilterClick}
           >
             <FilterListIcon />
@@ -237,10 +251,10 @@ const Task = () => {
         </Tooltip>
       </Toolbar>
       <TableContainer className={classes.container}>
-        <Table size="medium">
+        <Table size='medium'>
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableCheckCell} padding="checkbox">
+              <TableCell className={classes.tableCheckCell} padding='checkbox'>
                 <Checkbox
                   indeterminate={
                     selected.length > 0 && selected.length < tasks.length
@@ -249,10 +263,10 @@ const Task = () => {
                     selected.length > 0 && selected.length === tasks.length
                   }
                   onChange={handleSelectAllClic}
-                  color="primary"
+                  color='primary'
                 />
               </TableCell>
-              {columns.map((col) => (
+              {columnsInfo.map((col) => (
                 <TableCell className={classes.tableCell} key={col.name}>
                   <TableSortLabel
                     active={sortState.columnName === col.name}
@@ -279,14 +293,14 @@ const Task = () => {
               >
                 <TableCell
                   className={classes.tableCheckCell}
-                  padding="checkbox"
+                  padding='checkbox'
                 >
                   <Checkbox
                     checked={selected.indexOf(row.task_id) !== -1}
-                    color="primary"
+                    color='primary'
                   />
                 </TableCell>
-                {columns.map((col) => (
+                {columnsInfo.map((col) => (
                   <TableCell
                     className={
                       col.type === "number"
@@ -300,8 +314,8 @@ const Task = () => {
                       {col.name === "task_name" ? (
                         <Link
                           className={classes.link}
-                          underline="always"
-                          color="textPrimary"
+                          underline='always'
+                          color='textPrimary'
                           onClick={(event: any) => {
                             event.stopPropagation();
                             setEditTaskOpen(true);

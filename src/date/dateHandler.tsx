@@ -1,3 +1,32 @@
+// 文字列を指定した桁数で0埋めする
+export const fillDigitsByZero = (num: Number, digit: Number): string => {
+  let val = num.toString() + "";
+  if (val.length === 1) {
+    val = "0" + val;
+  }
+  return val;
+};
+
+// yyyy-MM-dd 形式の文字列を日付に変換する
+export const parseDate = (value: string): Date => {
+  const year = parseInt(value.substr(0, 4));
+  const month = parseInt(value.substr(5, 2));
+  const date = parseInt(value.substr(8, 2));
+  return new Date(year, month, date);
+};
+
+// 日付を yyyy-MM-dd形式の文字列に変換する
+export const parseString = (value: Date): string => {
+  if (value) {
+    const year = value.getFullYear();
+    const month = fillDigitsByZero(value.getMonth() + 1, 2);
+    const date = fillDigitsByZero(value.getDate(), 2);
+    return `${year}-${month}-${date}`;
+  } else {
+    return "";
+  }
+};
+
 // 月の初日を返す
 export const getFirstDateOfMonth = (year: number, month: number) => {
   return new Date(year, month - 1, 1);

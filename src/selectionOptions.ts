@@ -1,3 +1,5 @@
+import { COLUMN_NAME } from "./features/types";
+
 export const Status = [
   {
     value: "Not started",
@@ -28,9 +30,11 @@ export const DemoMember = [
   },
 ];
 
-export const ListColumns = [
+
+
+export const ListColumns: { value: COLUMN_NAME, label: string; }[] = [
   {
-    value: "name",
+    value: "task_name",
     label: "タスク名",
   },
   {
@@ -42,15 +46,15 @@ export const ListColumns = [
     label: "ステータス",
   },
   {
-    value: "startdate",
+    value: "scheduled_startdate",
     label: "開始予定日",
   },
   {
-    value: "enddate",
+    value: "scheduled_enddate",
     label: "終了予定日",
   },
   {
-    value: "manhour",
+    value: "estimate_manhour",
     label: "見積工数",
   },
   {
@@ -58,7 +62,7 @@ export const ListColumns = [
     label: "担当",
   },
   {
-    value: "note",
+    value: "description",
     label: "備考",
   },
 ];
@@ -88,11 +92,11 @@ export const FilterOperatorOfNumber = [
     label: "に等しい",
   },
   {
-    value: "<",
+    value: "<=",
     label: "より小さい",
   },
   {
-    value: ">",
+    value: ">=",
     label: "より大きい",
   },
 ];
@@ -103,11 +107,11 @@ export const FilterOperatorOfDate = [
     label: "に等しい",
   },
   {
-    value: "<",
-    label: "より前の",
+    value: "<=",
+    label: "より以前の",
   },
   {
-    value: ">",
-    label: "より後の",
+    value: ">=",
+    label: "より以後の",
   },
 ];

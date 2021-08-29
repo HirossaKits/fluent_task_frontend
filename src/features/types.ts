@@ -48,6 +48,18 @@ export interface NAV_STATE {
   profile: PROFILE;
 }
 
+/*Task*/
+
+export type COLUMN_NAME =
+  | "task_name"
+  | "category"
+  | "status"
+  | "scheduled_startdate"
+  | "scheduled_enddate"
+  | "estimate_manhour"
+  | "assigned"
+  | "description";
+
 /*taskSlice*/
 
 export interface TASK {
@@ -64,8 +76,8 @@ export interface TASK {
   actual_startdate: string,
   actual_enddate: string,
   assigned: string,
-  author: string,
   description: string,
+  author: string,
   created_at: string,
   update_at: string,
 }
@@ -81,10 +93,10 @@ export interface EDITED_TASK {
   status: string;
   estimate_manhour: number;
   actual_manhour: number;
-  scheduled_startdate: Date | null;
-  scheduled_enddate: Date | null;
-  actual_startdate: Date | null;
-  actual_enddate: Date | null;
+  scheduled_startdate: null | string;
+  scheduled_enddate: null | string;
+  actual_startdate: null | string;
+  actual_enddate: null | string;
 }
 
 export interface SELECTED_TASK {
@@ -98,20 +110,19 @@ export interface SELECTED_TASK {
   status: string;
   estimate_manhour: number;
   actual_manhour: number;
-  scheduled_startdate: Date | null;
-  scheduled_enddate: Date | null;
-  actual_startdate: Date | null;
-  actual_enddate: Date | null;
+  scheduled_startdate: null | string;
+  scheduled_enddate: null | string;
+  actual_startdate: null | string;
+  actual_enddate: null | string;
   created_at: string;
   update_at: string;
 }
 
 export interface FILTER_TASK {
-  column: string;
+  columnName: COLUMN_NAME;
+  type: "string" | "number" | "Date";
   operator: string;
   value: string;
-  startDate: Date | null;
-  endDate: Date | null;
 }
 
 export interface TASK_STATE {

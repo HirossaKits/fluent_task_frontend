@@ -4,7 +4,7 @@ import { RootState } from "../../app/store";
 import { NAV_STATE } from "../types";
 
 const initialState: NAV_STATE = {
-  mainComponent: "Calendar",
+  mainComponent: "List",
   settingsMenuOpen: false,
   profileMenuOpen: false,
   settings: {

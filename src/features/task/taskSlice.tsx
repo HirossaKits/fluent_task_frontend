@@ -11,11 +11,10 @@ const initialState: TASK_STATE = {
   filterTaskOpen: false,
   filterTask: [
     {
-      column: "name",
+      columnName: "task_name",
+      type: "string",
       operator: "=",
       value: "",
-      startDate: null,
-      endDate: null,
     },
   ],
   editedTask: {
