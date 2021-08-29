@@ -18,10 +18,10 @@ import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
-
-import { makeStyles, createTheme } from "@material-ui/core/styles";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+import { makeStyles, createTheme } from "@material-ui/core/styles";
+import { fillDigitsByZero } from "../../date/dateHandler";
 
 // カレンダーのヘッダー用
 const week = ["日", "月", "火", "水", "木", "金", "土"];
@@ -128,15 +128,6 @@ const useStyles = (darkMode: boolean) =>
     };
   });
 
-// 2桁で0埋め
-const toDoubleDigits = (num: Number): String => {
-  let val = num.toString() + "";
-  if (val.length === 1) {
-    val = "0" + val;
-  }
-  return val;
-};
-
 // デモデータ
 const Data: TaskData[] = [
   {
@@ -190,7 +181,7 @@ const Calendar = () => {
   const [yearMonth, setYearMonth] = useState(initialYearMonth);
   // TextFieldの値
   const [ymText, setYmText] = useState(
-    `${yearMonth.year}${toDoubleDigits(yearMonth.month)}`
+    `${yearMonth.year}${fillDigitsByZero(yearMonth.month, 2)}`
   );
   // TexFieldのエラーメッセージ
   const [ymError, setymError] = useState(" ");
@@ -208,7 +199,7 @@ const Calendar = () => {
 
   // 年月更新時
   useEffect(() => {
-    setYmText(`${yearMonth.year}${toDoubleDigits(yearMonth.month)}`);
+    setYmText(`${yearMonth.year}${fillDigitsByZero(yearMonth.month, 2)}`);
   }, [yearMonth]);
 
   // Themeの設定
@@ -289,7 +280,7 @@ const Calendar = () => {
       let d = dt.getDate();
       let dc: DateContext = {
         index: i,
-        dateStr: `${y}-${toDoubleDigits(m)}-${toDoubleDigits(d)}`,
+        dateStr: `${y}-${fillDigitsByZero(m, 2)}-${fillDigitsByZero(d, 2)}`,
         year: y,
         month: m,
         date: d,

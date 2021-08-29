@@ -7,10 +7,9 @@ import IconButton from "@material-ui/core/IconButton";
 import Grid from "@material-ui/core/Grid";
 import AddIcon from "@material-ui/icons/Add";
 import ClearIcon from "@material-ui/icons/Clear";
-import Tooltip from "@material-ui/core/Tooltip";
 import CommonTextField from "../../common/CommonTextField";
 import CommonDatePicker from "../../common/CommonDatePicker";
-import { setEditedTask, setFilterTask } from "../task/taskSlice";
+import { setFilterTask } from "../task/taskSlice";
 import { TARGET } from "../types";
 import CommonSelect from "../../common/CommonSelect";
 import {
