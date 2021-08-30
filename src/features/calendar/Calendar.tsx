@@ -20,7 +20,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import { makeStyles, createTheme } from "@material-ui/core/styles";
+import { makeStyles, Theme } from "@material-ui/core/styles";
 import { fillDigitsByZero } from "../../date/dateHandler";
 
 // カレンダーのヘッダー用
@@ -77,56 +77,53 @@ const initialYearMonth = (): YearMonth => {
 };
 
 // Material-Uiのスタイル
-const useStyles = (darkMode: boolean) =>
-  makeStyles((theme) => {
-    return {
-      grid: {
-        width: "80%",
-        borderTop: `1px solid`,
-        borderLeft: `1px solid`,
-        position: "relative",
+const useStyles = makeStyles((theme: Theme) => {
+  return {
+    grid: {
+      width: "80%",
+      borderTop: `1px solid`,
+      borderLeft: `1px solid`,
+      position: "relative",
+    },
+    tile: {
+      width: "1/7",
+      borderBottom: `1px solid`,
+      borderRight: `1px solid`,
+    },
+    tilegray: {
+      width: "1/7",
+      borderBottom: `1px solid`,
+      borderRight: `1px solid`,
+      background: "rgba(255, 255, 255, 0.08)",
+    },
+    headerdate: {
+      textAlign: "left",
+      "&:hover .plus": {
+        color: "inherit",
+        transition: "0.5s",
       },
-      tile: {
-        width: "1/7",
-        borderBottom: `1px solid`,
-        borderRight: `1px solid`,
-      },
-      tilegray: {
-        width: "1/7",
-        borderBottom: `1px solid`,
-        borderRight: `1px solid`,
-        background: darkMode
-          ? "rgba(255, 255, 255, 0.08)"
-          : "rgba(0, 0, 0, 0.04)",
-      },
-      headerdate: {
-        textAlign: "left",
-        "&:hover .plus": {
-          color: "inherit",
-          transition: "0.5s",
-        },
-        cursor: "pointer",
-      },
-      textdate: {
-        display: "inline",
-        marginLeft: 10,
-      },
-      texttoday: {
-        display: "inline",
-        marginLeft: 10,
-        padding: "5px 10px",
-        color: "white",
-        background: theme.palette.primary.main,
-        borderRadius: "15px",
-      },
-      texttask: {
-        display: "block",
-        color: "white",
-        background: theme.palette.primary.main,
-        position: "absolute",
-      },
-    };
-  });
+      cursor: "pointer",
+    },
+    textdate: {
+      display: "inline",
+      marginLeft: 10,
+    },
+    texttoday: {
+      display: "inline",
+      marginLeft: 10,
+      padding: "5px 10px",
+      color: "white",
+      background: theme.palette.primary.main,
+      borderRadius: "15px",
+    },
+    texttask: {
+      display: "block",
+      color: "white",
+      background: theme.palette.primary.main,
+      position: "absolute",
+    },
+  };
+});
 
 // デモデータ
 const Data: TaskData[] = [
@@ -175,8 +172,7 @@ const Data: TaskData[] = [
 ];
 
 const Calendar = () => {
-  // ダークモード
-  const [darkMode, setDarkMode] = useState(false);
+  const classes = useStyles();
   // 年月
   const [yearMonth, setYearMonth] = useState(initialYearMonth);
   // TextFieldの値
@@ -201,23 +197,6 @@ const Calendar = () => {
   useEffect(() => {
     setYmText(`${yearMonth.year}${fillDigitsByZero(yearMonth.month, 2)}`);
   }, [yearMonth]);
-
-  // Themeの設定
-  const theme = useMemo(() => {
-    return createTheme({
-      palette: {
-        type: darkMode ? "dark" : "light",
-      },
-    });
-  }, [darkMode]);
-
-  // Styleの設定
-  let classes = useStyles(darkMode)();
-
-  //
-  const handleSwitchChanged = () => {
-    setDarkMode(!darkMode);
-  };
 
   // Button押下時
   const incrementMonth = () => {
@@ -562,7 +541,7 @@ const Calendar = () => {
                 className={classes.headerdate}
                 id={dateCon.dateStr}
                 container
-                direction='row'
+                direction="row"
                 onClick={handleDateHeaderClick}
               >
                 <Grid item>
@@ -577,7 +556,7 @@ const Calendar = () => {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography className='plus'>+</Typography>
+                  <Typography className="plus">+</Typography>
                 </Grid>
               </Grid>
             </GridListTile>
@@ -612,44 +591,44 @@ const Calendar = () => {
         <DialogContent>
           <Grid
             container
-            direction='row'
-            justifyContent='center'
-            alignItems='center'
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
             spacing={2}
             xs={10}
           >
             <Grid item xs={12}>
               <TextField
-                name='title'
-                label='タスク名'
-                size='small'
+                name="title"
+                label="タスク名"
+                size="small"
                 fullWidth
                 onChange={handleDialogInputChange}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                name='startDate'
-                label='開始日'
-                size='small'
+                name="startDate"
+                label="開始日"
+                size="small"
                 onChange={handleDialogInputChange}
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                name='endDate'
-                label='終了日'
-                size='small'
+                name="endDate"
+                label="終了日"
+                size="small"
                 onChange={handleDialogInputChange}
               />
             </Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleRegisterClick} color='primary'>
+          <Button onClick={handleRegisterClick} color="primary">
             登録
           </Button>
-          <Button onClick={handleDialogClose} color='primary'>
+          <Button onClick={handleDialogClose} color="primary">
             閉じる
           </Button>
         </DialogActions>

@@ -63,23 +63,23 @@ export type COLUMN_NAME =
 /*taskSlice*/
 
 export interface TASK {
-  task_id: string,
-  task_name: string,
-  project_id: string,
-  project_name: string,
-  category: string,
-  status: string,
-  estimate_manhour: string,
-  actual_manhour: string,
-  scheduled_startdate: string,
-  scheduled_enddate: string,
-  actual_startdate: string,
-  actual_enddate: string,
-  assigned: string,
-  description: string,
-  author: string,
-  created_at: string,
-  update_at: string,
+  task_id: string;
+  task_name: string;
+  project_id: string;
+  project_name: string;
+  category: string;
+  status: string;
+  estimate_manhour: string;
+  actual_manhour: string;
+  scheduled_startdate: string;
+  scheduled_enddate: string;
+  actual_startdate: string;
+  actual_enddate: string;
+  assigned: string;
+  description: string;
+  author: string;
+  created_at: string;
+  update_at: string;
 }
 
 export interface EDITED_TASK {
@@ -138,4 +138,14 @@ export interface TARGET {
   name: string;
   value: string | number | Date | boolean;
   index?: number;
+}
+
+/*calendarSlice*/
+export interface CALENDAR {
+  year: number;
+  month: number;
+  firstDateOfMonth: Date;
+  lastDateOfMonth: Date;
+  firstDateOfCalendar: Date;
+  lastDateOfCalendar: Date;
 }

@@ -1,17 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState, AppThunk } from "../../app/store";
 import * as datehandler from "../../date/dateHandler";
+import { CALENDAR } from "../types";
 
-export interface CalendarState {
-  year: number;
-  month: number;
-  firstDateOfMonth: Date;
-  lastDateOfMonth: Date;
-  firstDateOfCalendar: Date;
-  lastDateOfCalendar: Date;
-}
-
-const initialState = (): CalendarState => {
+const initialState = (): CALENDAR => {
   let today = new Date();
   let year = today.getFullYear();
   let month = today.getMonth() + 1;
@@ -19,7 +11,6 @@ const initialState = (): CalendarState => {
   let lastDateOfMonth = datehandler.getLastDateOfMonth(year, month);
   let firstDateOfCalendar = datehandler.getFirstDateOfCalendar(year, month);
   let lastDateOfCalendar = datehandler.getlastDateOfCalendar(year, month);
-
   return {
     year: year,
     month: month,
@@ -32,6 +23,10 @@ const initialState = (): CalendarState => {
 
 export const calendarSlice = createSlice({
   name: "calendar",
-  initialState,
+  initialState: initialState(),
   reducers: {},
 });
+
+export const selectCalendar = (state: RootState) => state.calendar;
+
+export default calendarSlice.reducer;

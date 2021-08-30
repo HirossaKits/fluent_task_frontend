@@ -1,8 +1,9 @@
-import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
-import authReducer from '../features/auth/authSlice';
-import navReducer from '../features/nav/navSlice';
-import taskReducer from '../features/task/taskSlice';
+import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
+import counterReducer from "../features/counter/counterSlice";
+import authReducer from "../features/auth/authSlice";
+import navReducer from "../features/nav/navSlice";
+import taskReducer from "../features/task/taskSlice";
+import calendarReducer from "../features/calendar/calendarSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     auth: authReducer,
     nav: navReducer,
     task: taskReducer,
+    calendar: calendarReducer,
   },
 });
 
