@@ -1,31 +1,59 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState, AppThunk } from "../../app/store";
-import * as datehandler from "../../date/dateHandler";
-import { CALENDAR } from "../types";
+import {
+  getFirstDateOfMonth,
+  getLastDateOfMonth,
+  getFirstDateOfCalendar,
+  getlastDateOfCalendar,
+  parseString,
+} from "../../date/dateHandler";
+import { CALENDAR, DATE_CONTEXT } from "../types";
 
-const initialState = (): CALENDAR => {
-  let today = new Date();
-  let year = today.getFullYear();
-  let month = today.getMonth() + 1;
-  let firstDateOfMonth = datehandler.getFirstDateOfMonth(year, month);
-  let lastDateOfMonth = datehandler.getLastDateOfMonth(year, month);
-  let firstDateOfCalendar = datehandler.getFirstDateOfCalendar(year, month);
-  let lastDateOfCalendar = datehandler.getlastDateOfCalendar(year, month);
-  return {
-    year: year,
-    month: month,
-    firstDateOfMonth: firstDateOfMonth,
-    lastDateOfMonth: lastDateOfMonth,
-    firstDateOfCalendar: firstDateOfCalendar,
-    lastDateOfCalendar: lastDateOfCalendar,
-  };
+const today = new Date();
+const thisYear = today.getFullYear();
+const thisMonth = today.getMonth() + 1;
+
+const createDates = (year: number, month: number): DATE_CONTEXT[] => {
+  let day = getFirstDateOfMonth(year, month).getDay();
+
+  let dates: DATE_CONTEXT[] = [];
+
+  for (let i = 0; i < 35; i++) {
+    let dt = new Date(year, month - 1, i - day + 1);
+    let dc: DATE_CONTEXT = {
+      index: i,
+      dateStr: parseString(dt),
+      year: dt.getFullYear(),
+      month: dt.getMonth() + 1,
+      date: dt.getDate(),
+      isToday: dt.valueOf() === today.valueOf(),
+    };
+    dates.push(dc);
+  }
+  return dates;
+};
+
+const initialState: CALENDAR = {
+  year: thisYear,
+  month: thisMonth,
+  firstDateOfMonth: getFirstDateOfMonth(thisYear, thisMonth),
+  lastDateOfMonth: getLastDateOfMonth(thisYear, thisMonth),
+  firstDateOfCalendar: getFirstDateOfCalendar(thisYear, thisMonth),
+  lastDateOfCalendar: getlastDateOfCalendar(thisYear, thisMonth),
+  dates: createDates(thisYear, thisMonth),
 };
 
 export const calendarSlice = createSlice({
   name: "calendar",
-  initialState: initialState(),
-  reducers: {},
+  initialState: initialState,
+  reducers: {
+    setCalendar(state, action) {
+      state = action.payload;
+    },
+  },
 });
+
+export const { setCalendar } = calendarSlice.actions;
 
 export const selectCalendar = (state: RootState) => state.calendar;
 

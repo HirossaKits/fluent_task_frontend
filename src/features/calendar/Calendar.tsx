@@ -1,12 +1,5 @@
-import React, {
-  useState,
-  useEffect,
-  useMemo,
-  useRef,
-  createRef,
-  useLayoutEffect,
-  useCallback,
-} from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
@@ -22,25 +15,10 @@ import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import { fillDigitsByZero } from "../../date/dateHandler";
+import { selectCalendar, setCalendar } from "./calendarSlice";
+import { selectTasks } from "../task/taskSlice";
 
-// カレンダーのヘッダー用
 const week = ["日", "月", "火", "水", "木", "金", "土"];
-
-// カレンダーの年月
-interface YearMonth {
-  year: number;
-  month: number;
-}
-
-// カレンダー内の日付オブジェクトの型
-interface DateContext {
-  index: number;
-  dateStr: string;
-  year: number;
-  month: number;
-  date: number;
-  isToday: boolean;
-}
 
 // タスクデータの型
 interface TaskData {
@@ -68,15 +46,6 @@ interface Task {
   otherCount: number;
 }
 
-// カレンダーの年月の初期値
-const initialYearMonth = (): YearMonth => {
-  let today = new Date();
-  let year = today.getFullYear();
-  let month = today.getMonth() + 1;
-  return { year: year, month: month };
-};
-
-// Material-Uiのスタイル
 const useStyles = makeStyles((theme: Theme) => {
   return {
     grid: {
@@ -173,102 +142,37 @@ const Data: TaskData[] = [
 
 const Calendar = () => {
   const classes = useStyles();
-  // 年月
-  const [yearMonth, setYearMonth] = useState(initialYearMonth);
+  const calendar = useSelector(selectCalendar);
+  const tasks = useSelector(selectTasks);
+  const dispatch = useDispatch();
+
   // TextFieldの値
   const [ymText, setYmText] = useState(
-    `${yearMonth.year}${fillDigitsByZero(yearMonth.month, 2)}`
+    `${calendar.year}${fillDigitsByZero(calendar.month, 2)}`
   );
-  // TexFieldのエラーメッセージ
-  const [ymError, setymError] = useState(" ");
-  // ダイアログのオープン
-  const [openDialog, setOpenDialog] = useState(false);
-  // ダイアログの入力
-  const [dialogInput, setDialogInput] = useState<TaskData>({
-    id: "",
-    title: "",
-    startDate: "",
-    endDate: "",
-    color: "",
-  });
+
   const [taskData, setTaskData] = useState(Data);
 
   // 年月更新時
   useEffect(() => {
-    setYmText(`${yearMonth.year}${fillDigitsByZero(yearMonth.month, 2)}`);
-  }, [yearMonth]);
+    setYmText(`${calendar.year}${fillDigitsByZero(calendar.month, 2)}`);
+  }, [calendar]);
 
   // Button押下時
   const incrementMonth = () => {
-    if (yearMonth.month === 12) {
-      setYearMonth({ year: yearMonth.year + 1, month: 1 });
+    if (calendar.month === 12) {
+      dispatch(setCalendar({ year: calendar.year + 1, month: 1 }));
     } else {
-      setYearMonth({ year: yearMonth.year, month: yearMonth.month + 1 });
+      dispatch(setCalendar({ year: calendar.year, month: calendar.month + 1 }));
     }
   };
 
   const decrementMonth = () => {
-    if (yearMonth.month === 1) {
-      setYearMonth({ year: yearMonth.year - 1, month: 12 });
+    if (calendar.month === 1) {
+      dispatch(setCalendar({ year: calendar.year - 1, month: 12 }));
     } else {
-      setYearMonth({ year: yearMonth.year, month: yearMonth.month - 1 });
+      dispatch(setCalendar({ year: calendar.year, month: calendar.month - 1 }));
     }
-  };
-
-  const handleDateHeaderClick = () => {
-    setOpenDialog(!openDialog);
-  };
-
-  const handleDialogClose = () => {
-    setOpenDialog(false);
-  };
-
-  const handleDialogInputChange = (e: any) => {
-    setDialogInput({ ...dialogInput, [e.target.name]: e.target.value });
-  };
-
-  const handleRegisterClick = () => {
-    setTaskData([...taskData, dialogInput]);
-    setOpenDialog(false);
-  };
-  // Visible Plus
-  // const handleMouseEnter = (e: any) => {
-  //   e.bubbles = true;
-  //   console.log(e.target.id);
-  //   let elem = document.getElementById(`plus_${e.target.id}`);
-  //   console.log(elem);
-  //   if (elem) {
-  //     elem.style.backgroundColor = "#FFFFFF";
-  //   }
-  // };
-
-  // カレンダー内の日付オブジェクト生成
-  const calendarObject = (): DateContext[] => {
-    let day = new Date(yearMonth.year, yearMonth.month - 1, 1).getDay();
-
-    let dateInMonth: DateContext[] = [];
-    let t = new Date();
-    let ty = t.getFullYear();
-    let tm = t.getMonth() + 1;
-    let td = t.getDate();
-
-    for (let i = 0; i < 35; i++) {
-      let dt = new Date(yearMonth.year, yearMonth.month - 1, i - day + 1);
-      let y = dt.getFullYear();
-      let m = dt.getMonth() + 1;
-      let d = dt.getDate();
-      let dc: DateContext = {
-        index: i,
-        dateStr: `${y}-${fillDigitsByZero(m, 2)}-${fillDigitsByZero(d, 2)}`,
-        year: y,
-        month: m,
-        date: d,
-        isToday: ty === y && tm === m && td === d,
-      };
-      dateInMonth.push(dc);
-    }
-
-    return dateInMonth;
   };
 
   const incrementlayerFactory = () => {
@@ -329,17 +233,9 @@ const Calendar = () => {
     let dividedTasks: Task[] = [];
 
     for (let tIdx = 0; tIdx < tasks.length; tIdx++) {
-      let firstDay = new Date(yearMonth.year, yearMonth.month - 1, 1).getDay();
-      let firstDate = new Date(
-        yearMonth.year,
-        yearMonth.month - 1,
-        1 - firstDay
-      );
-      let lastDate = new Date(
-        yearMonth.year,
-        yearMonth.month - 1,
-        35 - firstDay
-      );
+      let firstDay = new Date(calendar.year, calendar.month - 1, 1).getDay();
+      let firstDate = new Date(calendar.year, calendar.month - 1, 1 - firstDay);
+      let lastDate = new Date(calendar.year, calendar.month - 1, 35 - firstDay);
 
       // カレンダーに含まれないものはカット
       if (
@@ -430,13 +326,13 @@ const Calendar = () => {
       // top
       let row: number;
       let month = task.startDate.getMonth() + 1;
-      if (month < yearMonth.month) {
+      if (month < calendar.month) {
         row = 0;
-      } else if (month > yearMonth.month) {
+      } else if (month > calendar.month) {
         row = 4;
       } else {
         row = Math.ceil(
-          (new Date(yearMonth.year, yearMonth.month - 1, 1).getDay() +
+          (new Date(calendar.year, calendar.month - 1, 1).getDay() +
             task.startDate.getDate()) /
             7 -
             1
@@ -460,64 +356,6 @@ const Calendar = () => {
 
   const tasks = shapeTasks();
 
-  // Get Rect
-  // let rect = document
-  // .getElementById(task.startDate)
-  // ?.getBoundingClientRect();
-
-  // Ref Demo1
-  //   const elRef: React.MutableRefObject<React.RefObject<HTMLDivElement>[]> =
-  //   useRef([]);
-  // for (let i = 0; i < 35; i++) {
-  //   elRef.current[i] = createRef<HTMLDivElement>();
-  // }
-
-  // Ref Demo2
-  // interface dateRef {
-  //   [index: string]: React.RefObject<HTMLDivElement>;
-  // }
-  // const elRef: React.MutableRefObject<dateRef> = useRef({});
-
-  // calendarObject().map((dateCon: DateContext) => {
-  //   elRef.current[dateCon.dateStr] = createRef<HTMLDivElement>();
-  // });
-
-  // Windowサイズ
-  const [size, setSize] = useState(null);
-
-  // Windowリサイズ検知
-  const objectRef: React.RefObject<HTMLObjectElement> = useRef(null);
-
-  const _onResize = useCallback((e: Event) => {
-    console.log("woooooo");
-    console.log(e);
-  }, []);
-
-  const onLoad = () => {
-    console.log("Hey");
-  };
-
-  // const onLoad = useCallback(() => {
-  //   console.log("oooooo");
-  //   const obj = objectRef.current;
-  //   console.log("onload!");
-  //   if (obj && obj.contentDocument && obj.contentDocument.defaultView) {
-  //     obj.contentDocument.defaultView.addEventListener("resize", _onResize);
-  //   }
-  // }, []);
-
-  // クリーンアップ処理
-  // useEffect(() => {
-  //   return () => {
-  //     const obj = objectRef.current;
-  //     if (obj && obj.contentDocument && obj.contentDocument.defaultView) {
-  //       obj.contentDocument.defaultView.removeEventListener(
-  //         "resize",
-  //         _onResize
-  //       );
-  //     }
-  //   };
-  // }, []);
   return (
     <>
       <IconButton onClick={decrementMonth}>
@@ -532,7 +370,7 @@ const Calendar = () => {
             <GridListTile
               key={dateCon.dateStr}
               className={
-                dateCon.month === yearMonth.month
+                dateCon.month === calendar.month
                   ? classes.tile
                   : classes.tilegray
               }
@@ -541,7 +379,7 @@ const Calendar = () => {
                 className={classes.headerdate}
                 id={dateCon.dateStr}
                 container
-                direction="row"
+                direction='row'
                 onClick={handleDateHeaderClick}
               >
                 <Grid item>
@@ -556,7 +394,7 @@ const Calendar = () => {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography className="plus">+</Typography>
+                  <Typography className='plus'>+</Typography>
                 </Grid>
               </Grid>
             </GridListTile>
@@ -586,53 +424,6 @@ const Calendar = () => {
           ))}
         </GridList>
       </Grid>
-
-      <Dialog open={openDialog} onClose={handleDialogClose}>
-        <DialogContent>
-          <Grid
-            container
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-            spacing={2}
-            xs={10}
-          >
-            <Grid item xs={12}>
-              <TextField
-                name="title"
-                label="タスク名"
-                size="small"
-                fullWidth
-                onChange={handleDialogInputChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="startDate"
-                label="開始日"
-                size="small"
-                onChange={handleDialogInputChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                name="endDate"
-                label="終了日"
-                size="small"
-                onChange={handleDialogInputChange}
-              />
-            </Grid>
-          </Grid>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleRegisterClick} color="primary">
-            登録
-          </Button>
-          <Button onClick={handleDialogClose} color="primary">
-            閉じる
-          </Button>
-        </DialogActions>
-      </Dialog>
     </>
   );
 };
