@@ -9,10 +9,14 @@ export const fillDigitsByZero = (num: Number, digit: Number): string => {
 
 // yyyy-MM-dd 形式の文字列を日付に変換する
 export const parseDate = (value: string): Date => {
-  const year = parseInt(value.substr(0, 4));
-  const month = parseInt(value.substr(5, 2));
-  const date = parseInt(value.substr(8, 2));
-  return new Date(year, month, date);
+  try {
+    const year = parseInt(value.substr(0, 4));
+    const month = parseInt(value.substr(5, 2));
+    const date = parseInt(value.substr(8, 2));
+    return new Date(year, month, date);
+  } catch {
+    return new Date(value);
+  }
 };
 
 // 日付を yyyy-MM-dd形式の文字列に変換する
@@ -25,6 +29,11 @@ export const parseString = (value: Date): string => {
   } else {
     return "";
   }
+};
+
+// 月の初日の曜日を返す
+export const getFirstDayOfMonth = (year: number, month: number) => {
+  return new Date(year, month - 1, 1).getDay;
 };
 
 // 月の初日を返す

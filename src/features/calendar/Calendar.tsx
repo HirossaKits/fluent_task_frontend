@@ -14,7 +14,12 @@ import DialogActions from "@material-ui/core/DialogActions";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import { makeStyles, Theme } from "@material-ui/core/styles";
-import { fillDigitsByZero } from "../../date/dateHandler";
+import {
+  fillDigitsByZero,
+  parseDate,
+  getFirstDateOfCalendar,
+  getLastDateOfCalendar,
+} from "../../date/dateHandler";
 import { selectCalendar, setCalendar } from "./calendarSlice";
 import { selectTasks } from "../task/taskSlice";
 
@@ -29,7 +34,7 @@ interface TaskData {
   title: string;
 }
 
-interface Task {
+interface TASK_OBJECT {
   startDate: Date;
   endDate: Date;
   dateSpan: number;
@@ -202,25 +207,24 @@ const Calendar = () => {
 
     const incrementlayer = incrementlayerFactory();
 
-    const tasks: Task[] = taskData.map((data, index) => {
+    const taskObjects: TASK_OBJECT[] = tasks.map((task, index) => {
       // startDate
-      let startDate = new Date(data.startDate + " 00:00:00");
+      let startDate = parseDate(task.scheduled_startdate);
       // endDate
-      let endDate = new Date(data.endDate + " 00:00:00");
+      let endDate = parseDate(task.scheduled_enddate);
       // layer
       let layer = incrementlayer(startDate, endDate);
 
       return {
-        id: data.id,
-        startDate: startDate,
-        endDate: endDate,
+        id: task.task_id,
+        startDate: parseDate(task.scheduled_startdate),
+        endDate: parseDate(task.scheduled_enddate),
         dateSpan: 0,
         top: "",
         left: "",
         width: "",
         layer: layer,
-        color: data.color,
-        title: data.title,
+        task_name: task.task_name,
         divided: false,
         startEdge: true,
         endEdge: true,
@@ -229,90 +233,95 @@ const Calendar = () => {
       };
     });
 
-    // タスクの分割
-    let dividedTasks: Task[] = [];
+    const formatTaskObject = (ts: TASK_OBJECT[]): TASK_OBJECT[] => {
+      let formattedTasks: TASK_OBJECT[] = [];
 
-    for (let tIdx = 0; tIdx < tasks.length; tIdx++) {
-      let firstDay = new Date(calendar.year, calendar.month - 1, 1).getDay();
-      let firstDate = new Date(calendar.year, calendar.month - 1, 1 - firstDay);
-      let lastDate = new Date(calendar.year, calendar.month - 1, 35 - firstDay);
+      for (let tIdx = 0; tIdx < tasks.length; tIdx++) {
+        let firstDate = getFirstDateOfCalendar(calendar.year, calendar.month);
+        let lastDate = getLastDateOfCalendar(calendar.year, calendar.month);
 
-      // カレンダーに含まれないものはカット
-      if (
-        tasks[tIdx].endDate.getTime() < firstDate.getTime() ||
-        lastDate.getTime() < tasks[tIdx].startDate.getTime()
-      ) {
-        continue;
-      }
+        // カレンダーに含まれないものはカット
+        if (
+          tasks[tIdx].endDate.getTime() < firstDate.getTime() ||
+          lastDate.getTime() < tasks[tIdx].startDate.getTime()
+        ) {
+          continue;
+        }
 
-      // カレンダーからオーバーフローするものはカット
-      if (tasks[tIdx].startDate.getTime() < firstDate.getTime()) {
-        tasks[tIdx].startDate = firstDate;
-        tasks[tIdx].startEdge = false;
-      }
-      if (lastDate.getTime() < tasks[tIdx].endDate.getTime()) {
-        tasks[tIdx].endDate = lastDate;
-        tasks[tIdx].endEdge = false;
-      }
+        // カレンダーからオーバーフローするものはカット
+        if (tasks[tIdx].startDate.getTime() < firstDate.getTime()) {
+          tasks[tIdx].startDate = firstDate;
+          tasks[tIdx].startEdge = false;
+        }
+        if (lastDate.getTime() < tasks[tIdx].endDate.getTime()) {
+          tasks[tIdx].endDate = lastDate;
+          tasks[tIdx].endEdge = false;
+        }
 
-      // 期間を設定
-      tasks[tIdx].dateSpan =
-        (tasks[tIdx].endDate.valueOf() - tasks[tIdx].startDate.valueOf()) /
-          86400000 +
-        1;
+        // 期間を設定
+        tasks[tIdx].dateSpan =
+          (tasks[tIdx].endDate.valueOf() - tasks[tIdx].startDate.valueOf()) /
+            86400000 +
+          1;
 
-      // その他タスクを設定
-      let otherTasks: Task[] = [];
-      if (tasks[tIdx].layer >= 5) {
-        for (let i = 0; i < tasks[tIdx].dateSpan; i++) {}
-      }
+        // その他タスクを設定
+        let otherTasks: Task[] = [];
+        if (tasks[tIdx].layer >= 5) {
+          for (let i = 0; i < tasks[tIdx].dateSpan; i++) {}
+        }
 
-      let dayStart = tasks[tIdx].startDate.getDay();
-      let divCount = Math.ceil((dayStart + tasks[tIdx].dateSpan) / 7);
+        let dayStart = tasks[tIdx].startDate.getDay();
+        let divCount = Math.ceil((dayStart + tasks[tIdx].dateSpan) / 7);
 
-      if (divCount === 1) {
-        dividedTasks.push(tasks[tIdx]);
-      } else {
-        for (let dIdx = 0; dIdx < divCount; dIdx++) {
-          if (dIdx === 0) {
-            let newEndDate = new Date(tasks[tIdx].startDate.getTime());
-            newEndDate.setDate(tasks[tIdx].startDate.getDate() + 6 - dayStart);
-            dividedTasks.push({
-              ...tasks[tIdx],
-              endDate: newEndDate,
-              endEdge: false,
-            });
-          } else if (dIdx !== divCount - 1) {
-            let newStartDate = new Date(tasks[tIdx].startDate.getTime());
-            let newEndDate = new Date(tasks[tIdx].endDate.getTime());
-            newStartDate.setDate(
-              tasks[tIdx].startDate.getDate() + 7 * dIdx - dayStart
-            );
+        if (divCount === 1) {
+          dividedTasks.push(tasks[tIdx]);
+        } else {
+          for (let dIdx = 0; dIdx < divCount; dIdx++) {
+            if (dIdx === 0) {
+              let newEndDate = new Date(tasks[tIdx].startDate.getTime());
+              newEndDate.setDate(
+                tasks[tIdx].startDate.getDate() + 6 - dayStart
+              );
+              dividedTasks.push({
+                ...tasks[tIdx],
+                endDate: newEndDate,
+                endEdge: false,
+              });
+            } else if (dIdx !== divCount - 1) {
+              let newStartDate = new Date(tasks[tIdx].startDate.getTime());
+              let newEndDate = new Date(tasks[tIdx].endDate.getTime());
+              newStartDate.setDate(
+                tasks[tIdx].startDate.getDate() + 7 * dIdx - dayStart
+              );
 
-            newEndDate.setDate(newStartDate.getDate() + 6 * dIdx - dayStart);
+              newEndDate.setDate(newStartDate.getDate() + 6 * dIdx - dayStart);
 
-            dividedTasks.push({
-              ...tasks[tIdx],
-              startDate: newStartDate,
-              endDate: newEndDate,
-              startEdge: false,
-              endEdge: false,
-            });
-          } else if (dIdx === divCount - 1) {
-            let newStartDate = new Date(tasks[tIdx].startDate.getTime());
-            newStartDate.setDate(
-              tasks[tIdx].startDate.getDate() + 7 * dIdx - dayStart
-            );
+              dividedTasks.push({
+                ...tasks[tIdx],
+                startDate: newStartDate,
+                endDate: newEndDate,
+                startEdge: false,
+                endEdge: false,
+              });
+            } else if (dIdx === divCount - 1) {
+              let newStartDate = new Date(tasks[tIdx].startDate.getTime());
+              newStartDate.setDate(
+                tasks[tIdx].startDate.getDate() + 7 * dIdx - dayStart
+              );
 
-            dividedTasks.push({
-              ...tasks[tIdx],
-              startDate: newStartDate,
-              startEdge: false,
-            });
+              dividedTasks.push({
+                ...tasks[tIdx],
+                startDate: newStartDate,
+                startEdge: false,
+              });
+            }
           }
         }
       }
-    }
+    };
+
+    // タスクの分割
+    let dividedTasks: Task[] = [];
 
     // 要素の位置の指定
     let shapedTasks = dividedTasks.map((task) => {
@@ -379,7 +388,7 @@ const Calendar = () => {
                 className={classes.headerdate}
                 id={dateCon.dateStr}
                 container
-                direction='row'
+                direction="row"
                 onClick={handleDateHeaderClick}
               >
                 <Grid item>
@@ -394,7 +403,7 @@ const Calendar = () => {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography className='plus'>+</Typography>
+                  <Typography className="plus">+</Typography>
                 </Grid>
               </Grid>
             </GridListTile>
