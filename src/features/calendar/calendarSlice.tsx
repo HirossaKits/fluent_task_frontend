@@ -4,7 +4,7 @@ import {
   getFirstDateOfMonth,
   getLastDateOfMonth,
   getFirstDateOfCalendar,
-  getlastDateOfCalendar,
+  getLastDateOfCalendar,
   parseString,
 } from "../../date/dateHandler";
 import { CALENDAR, DATE_CONTEXT } from "../types";
@@ -39,7 +39,7 @@ const initialState: CALENDAR = {
   firstDateOfMonth: getFirstDateOfMonth(thisYear, thisMonth),
   lastDateOfMonth: getLastDateOfMonth(thisYear, thisMonth),
   firstDateOfCalendar: getFirstDateOfCalendar(thisYear, thisMonth),
-  lastDateOfCalendar: getlastDateOfCalendar(thisYear, thisMonth),
+  lastDateOfCalendar: getLastDateOfCalendar(thisYear, thisMonth),
   dates: createDates(thisYear, thisMonth),
 };
 

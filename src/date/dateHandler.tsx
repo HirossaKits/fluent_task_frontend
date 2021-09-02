@@ -54,7 +54,7 @@ export const getFirstDateOfCalendar = (year: number, month: number): Date => {
 };
 
 // カレンダーに表示される最後の日付を返す
-export const getlastDateOfCalendar = (year: number, month: number): Date => {
+export const getLastDateOfCalendar = (year: number, month: number): Date => {
   let firstDay = new Date(year, month - 1, 1).getDay();
   let lastDate = new Date(year, month - 1, 35 - firstDay);
   return lastDate;
