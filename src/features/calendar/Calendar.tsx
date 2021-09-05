@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import GridList from "@material-ui/core/GridList";
-import GridListTile from "@material-ui/core/GridListTile";
+import ImageList from "@material-ui/core/ImageList";
+import ImageListItem from "@material-ui/core/ImageListItem";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -49,22 +49,28 @@ const roundEdge = 10;
 
 const useStyles = makeStyles((theme: Theme) => {
   return {
-    grid: {
-      width: "80%",
+    gridWrap: {
+      height: "450",
+    },
+    gridList: {
+      width: "90%",
+      // height: 400,
       borderTop: `1px solid`,
       borderLeft: `1px solid`,
+      borderColor: theme.palette.divider,
       position: "relative",
     },
-    tile: {
+    gridTile: {
       width: "1/7",
-      borderBottom: `1px solid`,
-      borderRight: `1px solid`,
+      borderBottom: `1px solid ${theme.palette.divider}`,
+      borderRight: `1px solid ${theme.palette.divider}`,
+      borderColor: theme.palette.divider,
     },
-    tilegray: {
+    gridTileGray: {
       width: "1/7",
-      borderBottom: `1px solid`,
-      borderRight: `1px solid`,
-      background: "rgba(255, 255, 255, 0.08)",
+      borderBottom: `1px solid ${theme.palette.divider}`,
+      borderRight: `1px solid ${theme.palette.divider}`,
+      background: theme.palette.action.hover,
     },
     headerdate: {
       textAlign: "left",
@@ -77,6 +83,9 @@ const useStyles = makeStyles((theme: Theme) => {
     textdate: {
       display: "inline",
       marginLeft: 10,
+      marginTop: 0,
+      padding: 0,
+      backgournd: "green",
     },
     texttoday: {
       display: "inline",
@@ -284,7 +293,7 @@ const Calendar = () => {
               ts[tIdx].startDate.getDate() + 7 * dIdx - dayStart
             );
 
-            newEndDate.setDate(newStartDate.getDate() + 6 * dIdx - dayStart);
+            newEndDate.setDate(newStartDate.getDate() + 6);
 
             shapedTasks.push({
               ...ts[tIdx],
@@ -308,7 +317,7 @@ const Calendar = () => {
         }
       }
     }
-
+    console.log(shapedTasks);
     return shapedTasks;
   };
 
@@ -362,15 +371,21 @@ const Calendar = () => {
       <IconButton onClick={incrementMonth}>
         <ArrowForwardIosIcon />
       </IconButton>
-      <Grid container xs={12}>
-        <GridList className={classes.grid} cols={7} spacing={0}>
+      <Grid
+        className={classes.gridWrap}
+        container
+        direction='column'
+        justifyContent='center'
+        alignItems='center'
+      >
+        <ImageList className={classes.gridList} cols={7} spacing={0}>
           {createDates(calendar.year, calendar.month).map((dateCon, i) => (
-            <GridListTile
+            <ImageListItem
               key={dateCon.dateStr}
               className={
                 dateCon.month === calendar.month
-                  ? classes.tile
-                  : classes.tilegray
+                  ? classes.gridTile
+                  : classes.gridTileGray
               }
             >
               <Grid
@@ -378,6 +393,8 @@ const Calendar = () => {
                 id={dateCon.dateStr}
                 container
                 direction='row'
+                justifyContent='flex-start'
+                alignItems='flex-start'
                 // onClick={handleDateHeaderClick}
               >
                 <Grid item>
@@ -391,11 +408,11 @@ const Calendar = () => {
                       : dateCon.date}
                   </Typography>
                 </Grid>
-                <Grid item>
+                {/* <Grid item>
                   <Typography className='plus'>+</Typography>
-                </Grid>
+                </Grid> */}
               </Grid>
-            </GridListTile>
+            </ImageListItem>
           ))}
           {setPositionTaskObjects(
             shapeTaskObjects(sortTaskObjects(initTaskObjects()))
@@ -422,7 +439,7 @@ const Calendar = () => {
               {taskObject.task_name}
             </Typography>
           ))}
-        </GridList>
+        </ImageList>
       </Grid>
     </>
   );
