@@ -79,21 +79,23 @@ const useStyles = makeStyles((theme: Theme) => {
         transition: "0.5s",
       },
       cursor: "pointer",
+      backgournd: "blue",
     },
     textdate: {
-      display: "inline",
+      // display: "inline",
       marginLeft: 10,
-      marginTop: 0,
-      padding: 0,
-      backgournd: "green",
+      // marginTop: 0,
+      // padding: 0,
+      // backgournd: "blue",
     },
     texttoday: {
-      display: "inline",
-      marginLeft: 10,
-      padding: "5px 10px",
+      // display: "inline",
+      marginLeft: 3,
+      padding: "0px 7px",
       color: "white",
       background: theme.palette.primary.main,
       borderRadius: "15px",
+      // backgournd: "blue",
     },
     texttask: {
       display: "block",
@@ -108,15 +110,18 @@ const createDates = (year: number, month: number): DATE_CONTEXT[] => {
   let dates: DATE_CONTEXT[] = [];
   let day = dateHandler.getFirstDateOfMonth(year, month).getDay();
 
+  console.log("today", dateHandler.getToday());
+
   for (let i = 0; i < 35; i++) {
-    let dt = new Date(year, month - 1, i - day + 1);
-    let dc: DATE_CONTEXT = {
+    const dt = new Date(year, month - 1, i - day + 1);
+    console.log("date", dt);
+    const dc: DATE_CONTEXT = {
       index: i,
       dateStr: dateHandler.parseString(dt),
       year: dt.getFullYear(),
       month: dt.getMonth() + 1,
       date: dt.getDate(),
-      isToday: dt.valueOf() === new Date().valueOf(),
+      isToday: dt.valueOf() === dateHandler.getToday().valueOf(),
     };
     dates.push(dc);
   }

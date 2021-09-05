@@ -7,6 +7,12 @@ export const fillDigitsByZero = (num: Number, digit: Number): string => {
   return val;
 };
 
+// 今日の日付を取得
+export const getToday = () => {
+  const today = new Date();
+  return new Date(today.getFullYear(), today.getMonth(), today.getDate());
+};
+
 // yyyy-MM-dd 形式の文字列を日付に変換する
 export const parseDate = (value: string): Date => {
   try {
