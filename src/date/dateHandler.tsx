@@ -13,7 +13,7 @@ export const parseDate = (value: string): Date => {
     const year = parseInt(value.substr(0, 4));
     const month = parseInt(value.substr(5, 2));
     const date = parseInt(value.substr(8, 2));
-    return new Date(year, month, date);
+    return new Date(year, month - 1, date);
   } catch {
     return new Date(value);
   }

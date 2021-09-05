@@ -14,24 +14,19 @@ import DialogActions from "@material-ui/core/DialogActions";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import { makeStyles, Theme } from "@material-ui/core/styles";
-import {
-  fillDigitsByZero,
-  parseDate,
-  getFirstDateOfCalendar,
-  getLastDateOfCalendar,
-} from "../../date/dateHandler";
+import * as dateHandler from "../../date/dateHandler";
 import { selectCalendar, setCalendar } from "./calendarSlice";
 import { selectTasks } from "../task/taskSlice";
 
 const week = ["日", "月", "火", "水", "木", "金", "土"];
 
-// タスクデータの型
-interface TaskData {
-  id: string;
-  startDate: string;
-  endDate: string;
-  color: string;
-  title: string;
+export interface DATE_CONTEXT {
+  index: number;
+  dateStr: string;
+  year: number;
+  month: number;
+  date: number;
+  isToday: boolean;
 }
 
 interface TASK_OBJECT {
@@ -49,6 +44,8 @@ interface TASK_OBJECT {
   endEdge: boolean;
   other: boolean;
 }
+
+const roundEdge = 10;
 
 const useStyles = makeStyles((theme: Theme) => {
   return {
@@ -98,6 +95,25 @@ const useStyles = makeStyles((theme: Theme) => {
   };
 });
 
+const createDates = (year: number, month: number): DATE_CONTEXT[] => {
+  let dates: DATE_CONTEXT[] = [];
+  let day = dateHandler.getFirstDateOfMonth(year, month).getDay();
+
+  for (let i = 0; i < 35; i++) {
+    let dt = new Date(year, month - 1, i - day + 1);
+    let dc: DATE_CONTEXT = {
+      index: i,
+      dateStr: dateHandler.parseString(dt),
+      year: dt.getFullYear(),
+      month: dt.getMonth() + 1,
+      date: dt.getDate(),
+      isToday: dt.valueOf() === new Date().valueOf(),
+    };
+    dates.push(dc);
+  }
+  return dates;
+};
+
 const Calendar = () => {
   const classes = useStyles();
   const calendar = useSelector(selectCalendar);
@@ -106,22 +122,23 @@ const Calendar = () => {
 
   // TextFieldの値
   const [ymText, setYmText] = useState(
-    `${calendar.year}${fillDigitsByZero(calendar.month, 2)}`
+    `${calendar.year}${dateHandler.fillDigitsByZero(calendar.month, 2)}`
   );
 
   // 年月更新時
   useEffect(() => {
-    setYmText(`${calendar.year}${fillDigitsByZero(calendar.month, 2)}`);
+    setYmText(
+      `${calendar.year}${dateHandler.fillDigitsByZero(calendar.month, 2)}`
+    );
   }, [calendar]);
 
   // Button押下時
   const incrementMonth = () => {
     if (calendar.month === 12) {
-      dispatch(setCalendar({ ...calendar, year: calendar.year + 1, month: 1 }));
+      dispatch(setCalendar({ year: calendar.year + 1, month: 1 }));
     } else {
       dispatch(
         setCalendar({
-          ...calendar,
           year: calendar.year,
           month: calendar.month + 1,
         })
@@ -131,13 +148,10 @@ const Calendar = () => {
 
   const decrementMonth = () => {
     if (calendar.month === 1) {
-      dispatch(
-        setCalendar({ ...calendar, year: calendar.year - 1, month: 12 })
-      );
+      dispatch(setCalendar({ year: calendar.year - 1, month: 12 }));
     } else {
       dispatch(
         setCalendar({
-          ...calendar,
           year: calendar.year,
           month: calendar.month - 1,
         })
@@ -161,29 +175,23 @@ const Calendar = () => {
   };
 
   const initTaskObjects = (): TASK_OBJECT[] => {
-    const incrementlayer = incrementlayerFactory();
-
-    const initialTaskObjects = tasks.map((task, index) => {
+    const initialTaskObjects = tasks.map((taskObj, index) => {
       // startDate
-      const startDate = parseDate(task.scheduled_startdate);
+      const startDate = dateHandler.parseDate(taskObj.scheduled_startdate);
       // endDate
-      const endDate = parseDate(task.scheduled_enddate);
-      // layer
-      const layer = incrementlayer(startDate, endDate);
-      // visible
-      const visible = layer < 5;
+      const endDate = dateHandler.parseDate(taskObj.scheduled_enddate);
 
       return {
-        task_id: task.task_id,
-        task_name: task.task_name,
-        startDate: parseDate(task.scheduled_startdate),
-        endDate: parseDate(task.scheduled_enddate),
+        task_id: taskObj.task_id,
+        task_name: taskObj.task_name,
+        startDate: startDate,
+        endDate: endDate,
         dateSpan: 0,
         top: "",
         left: "",
         width: "",
-        layer: layer,
-        visible: visible,
+        layer: 0,
+        visible: true,
         divided: false,
         startEdge: true,
         endEdge: true,
@@ -191,24 +199,44 @@ const Calendar = () => {
       };
     });
 
-    //Sort
+    // 開始日によってソート
     initialTaskObjects.sort((a, b) => {
-      if (a.startDate > b.startDate) {
-        return 1;
-      } else {
+      if (a.startDate.valueOf() < b.startDate.valueOf()) {
         return -1;
+      } else {
+        return 1;
       }
     });
 
     return initialTaskObjects;
   };
 
+  const sortTaskObjects = (ts: TASK_OBJECT[]): TASK_OBJECT[] => {
+    const incrementlayer = incrementlayerFactory();
+
+    const sortedTasks = ts.map((taskObj, index) => {
+      // layer
+      const layer = incrementlayer(taskObj.startDate, taskObj.endDate);
+      // visible
+      const visible = layer < 5;
+      return { ...taskObj, layer: layer, visible: visible };
+    });
+
+    return sortedTasks;
+  };
+
   const shapeTaskObjects = (ts: TASK_OBJECT[]): TASK_OBJECT[] => {
     let shapedTasks: TASK_OBJECT[] = [];
 
     for (let tIdx = 0; tIdx < ts.length; tIdx++) {
-      let firstDate = getFirstDateOfCalendar(calendar.year, calendar.month);
-      let lastDate = getLastDateOfCalendar(calendar.year, calendar.month);
+      let firstDate = dateHandler.getFirstDateOfCalendar(
+        calendar.year,
+        calendar.month
+      );
+      let lastDate = dateHandler.getLastDateOfCalendar(
+        calendar.year,
+        calendar.month
+      );
 
       // カレンダーに含まれないタスクを除外
       if (
@@ -336,7 +364,7 @@ const Calendar = () => {
       </IconButton>
       <Grid container xs={12}>
         <GridList className={classes.grid} cols={7} spacing={0}>
-          {calendar.dates.map((dateCon, i) => (
+          {createDates(calendar.year, calendar.month).map((dateCon, i) => (
             <GridListTile
               key={dateCon.dateStr}
               className={
@@ -369,31 +397,31 @@ const Calendar = () => {
               </Grid>
             </GridListTile>
           ))}
-          {setPositionTaskObjects(shapeTaskObjects(initTaskObjects())).map(
-            (taskObject) => (
-              <Typography
-                className={classes.texttask}
-                style={{
-                  top: taskObject.top,
-                  left: taskObject.left,
-                  width: taskObject.width,
-                  height: 24,
-                  paddingLeft: 10,
-                  borderRadius:
-                    !taskObject.startEdge && !taskObject.endEdge
-                      ? "0px"
-                      : taskObject.startEdge && !taskObject.endEdge
-                      ? "4px 0px 0px 4px"
-                      : !taskObject.startEdge && taskObject.endEdge
-                      ? "0px 4px 4px 0px"
-                      : "4px",
-                  // background: taskObject.color,
-                }}
-              >
-                {taskObject.task_name}
-              </Typography>
-            )
-          )}
+          {setPositionTaskObjects(
+            shapeTaskObjects(sortTaskObjects(initTaskObjects()))
+          ).map((taskObject) => (
+            <Typography
+              className={classes.texttask}
+              style={{
+                top: taskObject.top,
+                left: taskObject.left,
+                width: taskObject.width,
+                height: 24,
+                paddingLeft: 10,
+                borderRadius:
+                  !taskObject.startEdge && !taskObject.endEdge
+                    ? "0px"
+                    : taskObject.startEdge && !taskObject.endEdge
+                    ? `${roundEdge}px 0px 0px ${roundEdge}px`
+                    : !taskObject.startEdge && taskObject.endEdge
+                    ? `0px ${roundEdge}px ${roundEdge}px 0px`
+                    : `${roundEdge}px`,
+                // background: taskObject.color,
+              }}
+            >
+              {taskObject.task_name}
+            </Typography>
+          ))}
         </GridList>
       </Grid>
     </>

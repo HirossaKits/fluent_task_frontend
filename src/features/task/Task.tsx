@@ -154,7 +154,7 @@ const Task = () => {
 
   const sortRows = (ts: TASK[]): TASK[] => {
     if (!sortState.columnName) return ts;
-    const sortedRows = Array.from(ts).sort((a, b) => {
+    const sortedRows = ts.slice().sort((a, b) => {
       if (
         a[sortState.columnName as COLUMN_NAME] >
         b[sortState.columnName as COLUMN_NAME]

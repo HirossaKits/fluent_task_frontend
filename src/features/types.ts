@@ -154,9 +154,5 @@ export interface DATE_CONTEXT {
 export interface CALENDAR {
   year: number;
   month: number;
-  firstDateOfMonth: Date;
-  lastDateOfMonth: Date;
-  firstDateOfCalendar: Date;
-  lastDateOfCalendar: Date;
-  dates: DATE_CONTEXT[];
 }
+
