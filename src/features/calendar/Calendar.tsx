@@ -12,6 +12,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import AddIcon from "@material-ui/icons/Add";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import * as dateHandler from "../../date/dateHandler";
@@ -82,26 +83,25 @@ const useStyles = makeStyles((theme: Theme) => {
       backgournd: "blue",
     },
     textdate: {
-      // display: "inline",
       marginLeft: 10,
-      // marginTop: 0,
-      // padding: 0,
-      // backgournd: "blue",
     },
     texttoday: {
-      // display: "inline",
-      marginLeft: 3,
+      marginLeft: 5,
       padding: "0px 7px",
       color: "white",
       background: theme.palette.primary.main,
       borderRadius: "15px",
-      // backgournd: "blue",
     },
     texttask: {
       display: "block",
       color: "white",
       background: theme.palette.primary.main,
       position: "absolute",
+    },
+    addIcon: {
+      height: 10,
+      fontSize: "small",
+      color: "action",
     },
   };
 });
@@ -379,9 +379,9 @@ const Calendar = () => {
       <Grid
         className={classes.gridWrap}
         container
-        direction='column'
-        justifyContent='center'
-        alignItems='center'
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
       >
         <ImageList className={classes.gridList} cols={7} spacing={0}>
           {createDates(calendar.year, calendar.month).map((dateCon, i) => (
@@ -397,12 +397,13 @@ const Calendar = () => {
                 className={classes.headerdate}
                 id={dateCon.dateStr}
                 container
-                direction='row'
-                justifyContent='flex-start'
-                alignItems='flex-start'
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="center"
+                spacing={1}
                 // onClick={handleDateHeaderClick}
               >
-                <Grid item>
+                <Grid>
                   <Typography
                     className={
                       dateCon.isToday ? classes.texttoday : classes.textdate
@@ -413,9 +414,9 @@ const Calendar = () => {
                       : dateCon.date}
                   </Typography>
                 </Grid>
-                {/* <Grid item>
-                  <Typography className='plus'>+</Typography>
-                </Grid> */}
+                <Grid item>
+                  <Typography className="plus">+</Typography>
+                </Grid>
               </Grid>
             </ImageListItem>
           ))}
