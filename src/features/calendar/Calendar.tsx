@@ -73,11 +73,19 @@ const useStyles = makeStyles((theme: Theme) => {
       borderRight: `1px solid ${theme.palette.divider}`,
       background: theme.palette.action.hover,
     },
+    // plus: {
+    //   color: "rgba(0,0,0,0)",
+    // },
     headerdate: {
       textAlign: "left",
-      "&:hover .plus": {
-        color: "inherit",
-        transition: "0.5s",
+      "& .plus": {
+        color: "rgba(0,0,0,0)",
+      },
+      "&:hover": {
+        "& .plus": {
+          color: "inherit",
+          transition: "0.8s",
+        },
       },
       cursor: "pointer",
       backgournd: "blue",
@@ -415,7 +423,7 @@ const Calendar = () => {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography className="plus">+</Typography>
+                  <Typography className={"plus"}>+</Typography>
                 </Grid>
               </Grid>
             </ImageListItem>
