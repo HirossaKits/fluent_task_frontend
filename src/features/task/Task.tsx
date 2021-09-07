@@ -124,13 +124,15 @@ const Task = () => {
   };
 
   const handleRowClick = (event: React.MouseEvent<unknown>, id: string) => {
-    let newSelected = Array.from(selected);
+    console.log(id);
+    let newSelected = selected.slice();
     const index = newSelected.indexOf(id);
     if (index === -1) {
       newSelected.push(id);
     } else {
       newSelected.splice(index, 1);
     }
+    console.log(newSelected);
     setSelected(newSelected);
   };
 

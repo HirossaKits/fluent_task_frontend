@@ -54,7 +54,7 @@ const TaskFilter: React.FC<Props> = (props) => {
   const filterTask = useSelector(selectFilterTask);
 
   const handleAddClick = (index: number) => {
-    if (filterTask[index].value === "") {
+    if (filterTask[index].value !== "") {
       dispatch(
         setFilterTask([
           ...filterTask,

@@ -115,3 +115,9 @@ export const FilterOperatorOfDate = [
     label: "より以後の",
   },
 ];
+
+export const YearMonth = Array(72).map((_, index) => {
+  return {
+
+  };
+});

@@ -3,21 +3,18 @@ import { useSelector, useDispatch } from "react-redux";
 
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Grid from "@material-ui/core/Grid";
 import ImageList from "@material-ui/core/ImageList";
 import ImageListItem from "@material-ui/core/ImageListItem";
 import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogActions from "@material-ui/core/DialogActions";
-import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
-import AddIcon from "@material-ui/icons/Add";
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+import NavigateBeforeIcon from "@material-ui/icons/NavigateBefore";
+import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import * as dateHandler from "../../date/dateHandler";
 import { selectCalendar, setCalendar } from "./calendarSlice";
 import { selectTasks } from "../task/taskSlice";
+import CommonSelect from "../../common/CommonSelect";
 
 const week = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -50,12 +47,15 @@ const roundEdge = 10;
 
 const useStyles = makeStyles((theme: Theme) => {
   return {
+    selector: {
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(2),
+    },
     gridWrap: {
       height: "450",
     },
     gridList: {
-      width: "90%",
-      // height: 400,
+      width: "84%",
       borderTop: `1px solid`,
       borderLeft: `1px solid`,
       borderColor: theme.palette.divider,
@@ -73,9 +73,6 @@ const useStyles = makeStyles((theme: Theme) => {
       borderRight: `1px solid ${theme.palette.divider}`,
       background: theme.palette.action.hover,
     },
-    // plus: {
-    //   color: "rgba(0,0,0,0)",
-    // },
     headerdate: {
       textAlign: "left",
       "& .plus": {
@@ -360,7 +357,7 @@ const Calendar = () => {
             1
         );
       }
-      let top = row * 180 + 40 + taskObject.layer * 28;
+      let top = row * 164 + 32 + taskObject.layer * 28;
 
       // left
       let left = (100 / 7) * taskObject.startDate.getDay();
@@ -378,20 +375,53 @@ const Calendar = () => {
 
   return (
     <>
-      <IconButton onClick={decrementMonth}>
-        <ArrowBackIosIcon />
-      </IconButton>
-      <IconButton onClick={incrementMonth}>
-        <ArrowForwardIosIcon />
-      </IconButton>
       <Grid
         className={classes.gridWrap}
         container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
+        direction='column'
+        justifyContent='center'
+        alignItems='center'
       >
-        <ImageList className={classes.gridList} cols={7} spacing={0}>
+        <Grid
+          className={classes.selector}
+          xs={10}
+          container
+          direction='row'
+          justifyContent='space-between'
+          alignItems='center'
+        >
+          <Grid item>
+            <CommonSelect
+              name='year_month'
+              value={""}
+              options={[
+                {
+                  value: "task_name",
+                  label: "タスク名",
+                },
+                {
+                  value: "task_name",
+                  label: "タスク名",
+                },
+              ]}
+              onChange={() => {}}
+            />
+          </Grid>
+          <Grid item>
+            <IconButton onClick={decrementMonth}>
+              <NavigateBeforeIcon />
+            </IconButton>
+            <IconButton onClick={incrementMonth}>
+              <NavigateNextIcon />
+            </IconButton>
+          </Grid>
+        </Grid>
+        <ImageList
+          className={classes.gridList}
+          rowHeight={160}
+          cols={7}
+          spacing={0}
+        >
           {createDates(calendar.year, calendar.month).map((dateCon, i) => (
             <ImageListItem
               key={dateCon.dateStr}
@@ -405,9 +435,9 @@ const Calendar = () => {
                 className={classes.headerdate}
                 id={dateCon.dateStr}
                 container
-                direction="row"
-                justifyContent="flex-start"
-                alignItems="center"
+                direction='row'
+                justifyContent='flex-start'
+                alignItems='center'
                 spacing={1}
                 // onClick={handleDateHeaderClick}
               >

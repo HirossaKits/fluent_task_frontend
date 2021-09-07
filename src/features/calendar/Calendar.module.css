@@ -1,0 +1,12 @@
+.dateheader {
+  cursor: pointer;
+  background-color: ivory;
+}
+
+.plus {
+  color: rgba(0, 0, 0, 0);
+}
+
+.dateheader:hover + .plus {
+  color: green;
+}

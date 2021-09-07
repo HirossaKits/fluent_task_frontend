@@ -142,15 +142,6 @@ export interface TARGET {
 
 /*calendarSlice*/
 
-export interface DATE_CONTEXT {
-  index: number;
-  dateStr: string;
-  year: number;
-  month: number;
-  date: number;
-  isToday: boolean;
-}
-
 export interface CALENDAR {
   year: number;
   month: number;
