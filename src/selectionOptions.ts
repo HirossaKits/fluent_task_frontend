@@ -116,8 +116,4 @@ export const FilterOperatorOfDate = [
   },
 ];
 
-export const YearMonth = Array(72).map((_, index) => {
-  return {
 
-  };
-});

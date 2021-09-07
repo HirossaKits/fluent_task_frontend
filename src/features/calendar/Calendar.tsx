@@ -115,11 +115,8 @@ const createDates = (year: number, month: number): DATE_CONTEXT[] => {
   let dates: DATE_CONTEXT[] = [];
   let day = dateHandler.getFirstDateOfMonth(year, month).getDay();
 
-  console.log("today", dateHandler.getToday());
-
   for (let i = 0; i < 35; i++) {
     const dt = new Date(year, month - 1, i - day + 1);
-    console.log("date", dt);
     const dc: DATE_CONTEXT = {
       index: i,
       dateStr: dateHandler.parseString(dt),
@@ -177,6 +174,20 @@ const Calendar = () => {
       );
     }
   };
+
+  const yearMonthOptions = Array(24)
+    .fill("")
+    .map((_, index, array) => {
+      const ym = `${
+        calendar.year - ~~(array.length / 2 / 12) + ~~(index / 12)
+      }-${((calendar.month + index) % 12) + 1}`;
+      return {
+        value: ym,
+        label: ym,
+      };
+    });
+
+  console.log("test", yearMonthOptions);
 
   const incrementlayerFactory = () => {
     let xEndDate: Date;
@@ -327,7 +338,6 @@ const Calendar = () => {
         }
       }
     }
-    console.log(shapedTasks);
     return shapedTasks;
   };
 
@@ -394,16 +404,7 @@ const Calendar = () => {
             <CommonSelect
               name='year_month'
               value={""}
-              options={[
-                {
-                  value: "task_name",
-                  label: "タスク名",
-                },
-                {
-                  value: "task_name",
-                  label: "タスク名",
-                },
-              ]}
+              options={yearMonthOptions}
               onChange={() => {}}
             />
           </Grid>
