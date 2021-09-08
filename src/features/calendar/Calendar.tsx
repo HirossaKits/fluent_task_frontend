@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "@material-ui/core/Grid";
 import ImageList from "@material-ui/core/ImageList";
 import ImageListItem from "@material-ui/core/ImageListItem";
@@ -14,7 +16,7 @@ import { makeStyles, Theme } from "@material-ui/core/styles";
 import * as dateHandler from "../../date/dateHandler";
 import { selectCalendar, setCalendar } from "./calendarSlice";
 import { selectTasks } from "../task/taskSlice";
-import CommonSelect from "../../common/CommonSelect";
+import { fillDigitsByZero } from "../../date/dateHandler";
 
 const week = ["日", "月", "火", "水", "木", "金", "土"];
 
@@ -50,6 +52,9 @@ const useStyles = makeStyles((theme: Theme) => {
     selector: {
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(2),
+    },
+    dropdownStyle: {
+      maxHeight: 300,
     },
     gridWrap: {
       height: "450",
@@ -151,12 +156,22 @@ const Calendar = () => {
   // Button押下時
   const incrementMonth = () => {
     if (calendar.month === 12) {
-      dispatch(setCalendar({ year: calendar.year + 1, month: 1 }));
+      dispatch(
+        setCalendar({
+          year: calendar.year + 1,
+          month: 1,
+          year_month: `${calendar.year + 1}-01`,
+        })
+      );
     } else {
       dispatch(
         setCalendar({
           year: calendar.year,
           month: calendar.month + 1,
+          year_month: `${calendar.year}-${fillDigitsByZero(
+            calendar.month + 1,
+            2
+          )}`,
         })
       );
     }
@@ -164,27 +179,34 @@ const Calendar = () => {
 
   const decrementMonth = () => {
     if (calendar.month === 1) {
-      dispatch(setCalendar({ year: calendar.year - 1, month: 12 }));
+      dispatch(
+        setCalendar({
+          year: calendar.year - 1,
+          month: 12,
+          year_month: `${calendar.year - 1}-12`,
+        })
+      );
     } else {
       dispatch(
         setCalendar({
           year: calendar.year,
           month: calendar.month - 1,
+          year_month: `${calendar.year}-${fillDigitsByZero(
+            calendar.month - 1,
+            2
+          )}`,
         })
       );
     }
   };
 
-  const yearMonthOptions = Array(24)
+  const yearMonthOptions: string[] = Array(24)
     .fill("")
     .map((_, index, array) => {
       const ym = `${
         calendar.year - ~~(array.length / 2 / 12) + ~~(index / 12)
-      }-${((calendar.month + index) % 12) + 1}`;
-      return {
-        value: ym,
-        label: ym,
-      };
+      }-${fillDigitsByZero(((calendar.month + index) % 12) + 1, 2)}`;
+      return ym;
     });
 
   console.log("test", yearMonthOptions);
@@ -388,25 +410,41 @@ const Calendar = () => {
       <Grid
         className={classes.gridWrap}
         container
-        direction='column'
-        justifyContent='center'
-        alignItems='center'
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
       >
         <Grid
           className={classes.selector}
           xs={10}
           container
-          direction='row'
-          justifyContent='space-between'
-          alignItems='center'
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
         >
           <Grid item>
-            <CommonSelect
-              name='year_month'
-              value={""}
-              options={yearMonthOptions}
-              onChange={() => {}}
-            />
+            <Select
+              name="year_month"
+              value={"2020-01"}
+              MenuProps={{
+                anchorOrigin: {
+                  vertical: "bottom",
+                  horizontal: "left",
+                },
+                transformOrigin: {
+                  vertical: "top",
+                  horizontal: "left",
+                },
+                getContentAnchorEl: null,
+                classes: {
+                  paper: classes.dropdownStyle,
+                },
+              }}
+            >
+              {yearMonthOptions.map((yearMonth) => (
+                <MenuItem>{yearMonth}</MenuItem>
+              ))}
+            </Select>
           </Grid>
           <Grid item>
             <IconButton onClick={decrementMonth}>
@@ -436,9 +474,9 @@ const Calendar = () => {
                 className={classes.headerdate}
                 id={dateCon.dateStr}
                 container
-                direction='row'
-                justifyContent='flex-start'
-                alignItems='center'
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="center"
                 spacing={1}
                 // onClick={handleDateHeaderClick}
               >

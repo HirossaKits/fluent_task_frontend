@@ -145,5 +145,5 @@ export interface TARGET {
 export interface CALENDAR {
   year: number;
   month: number;
+  year_month: string;
 }
-
