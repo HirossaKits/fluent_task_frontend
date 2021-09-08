@@ -78,25 +78,8 @@ export interface TASK {
   assigned: string;
   description: string;
   author: string;
-  created_at: string;
-  update_at: string;
-}
-
-export interface EDITED_TASK {
-  id: string;
-  projectId: string;
-  assigned: string;
-  author: string;
-  title: string;
-  category: string;
-  description: string;
-  status: string;
-  estimate_manhour: number;
-  actual_manhour: number;
-  scheduled_startdate: null | string;
-  scheduled_enddate: null | string;
-  actual_startdate: null | string;
-  actual_enddate: null | string;
+  created_at?: string;
+  update_at?: string;
 }
 
 export interface SELECTED_TASK {
@@ -130,7 +113,7 @@ export interface TASK_STATE {
   editTaskOpen: boolean;
   filterTaskOpen: boolean;
   filterTask: FILTER_TASK[];
-  editedTask: EDITED_TASK;
+  editedTask: TASK;
   selectedTask: SELECTED_TASK;
 }
 

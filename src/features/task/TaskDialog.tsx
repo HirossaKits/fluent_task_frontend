@@ -29,9 +29,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   title: {
     marginLeft: theme.spacing(3),
+    marginTop: theme.spacing(0),
   },
   close: {
-    margin: theme.spacing(1),
+    margin: 10,
   },
   gridcol: {
     textAlign: "center",
@@ -68,13 +69,13 @@ const TaskDialog: React.FC = (props) => {
           container
           direction='row'
           justifyContent='space-between'
-          alignItems='center'
+          alignItems='flex-start'
         >
           <Grid className={classes.title} item>
             <DialogTitle>タスクを登録</DialogTitle>
           </Grid>
           <Grid className={classes.close} item>
-            <IconButton size='small'>
+            <IconButton size='small' onClick={handleClose}>
               <CloseIcon />
             </IconButton>
           </Grid>

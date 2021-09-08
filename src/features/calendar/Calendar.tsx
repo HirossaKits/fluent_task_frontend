@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme: Theme) => {
       marginBottom: 10,
     },
     dropdownStyle: {
-      maxHeight: 300,
+      maxHeight: 250,
     },
     gridWrap: {
       height: "450",
