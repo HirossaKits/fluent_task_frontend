@@ -53,6 +53,9 @@ const useStyles = makeStyles((theme: Theme) => {
       marginTop: theme.spacing(1),
       marginBottom: theme.spacing(2),
     },
+    select: {
+      marginBottom: 10,
+    },
     dropdownStyle: {
       maxHeight: 300,
     },
@@ -141,19 +144,19 @@ const Calendar = () => {
   const tasks = useSelector(selectTasks);
   const dispatch = useDispatch();
 
-  // TextFieldの値
-  const [ymText, setYmText] = useState(
-    `${calendar.year}${dateHandler.fillDigitsByZero(calendar.month, 2)}`
-  );
-
-  // 年月更新時
-  useEffect(() => {
-    setYmText(
-      `${calendar.year}${dateHandler.fillDigitsByZero(calendar.month, 2)}`
+  const handleSelectChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const val = event.target.value as string;
+    console.log(parseInt(val.slice(0, 4)), parseInt(val.slice(4, 6)));
+    dispatch(
+      setCalendar({
+        year: parseInt(val.slice(0, 4)),
+        month: parseInt(val.slice(5, 7)),
+        year_month: val,
+      })
     );
-  }, [calendar]);
+  };
 
-  // Button押下時
+  // Button
   const incrementMonth = () => {
     if (calendar.month === 12) {
       dispatch(
@@ -200,14 +203,15 @@ const Calendar = () => {
     }
   };
 
-  const yearMonthOptions: string[] = Array(24)
-    .fill("")
-    .map((_, index, array) => {
-      const ym = `${
-        calendar.year - ~~(array.length / 2 / 12) + ~~(index / 12)
-      }-${fillDigitsByZero(((calendar.month + index) % 12) + 1, 2)}`;
-      return ym;
-    });
+  const yearMonthOptions = () =>
+    Array(48)
+      .fill("")
+      .map((_, index, array) => {
+        const ym = `${
+          calendar.year - ~~(array.length / 2 / 12) + ~~(index / 12)
+        }-${fillDigitsByZero(((calendar.month + index) % 12) + 1, 2)}`;
+        return ym;
+      });
 
   console.log("test", yearMonthOptions);
 
@@ -410,22 +414,23 @@ const Calendar = () => {
       <Grid
         className={classes.gridWrap}
         container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
+        direction='column'
+        justifyContent='center'
+        alignItems='center'
       >
         <Grid
           className={classes.selector}
           xs={10}
           container
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
+          direction='row'
+          justifyContent='space-between'
+          alignItems='center'
         >
-          <Grid item>
+          <Grid item xs={1}>
             <Select
-              name="year_month"
-              value={"2020-01"}
+              className={classes.select}
+              fullWidth
+              value={calendar.year_month}
               MenuProps={{
                 anchorOrigin: {
                   vertical: "bottom",
@@ -440,9 +445,10 @@ const Calendar = () => {
                   paper: classes.dropdownStyle,
                 },
               }}
+              onChange={handleSelectChange}
             >
-              {yearMonthOptions.map((yearMonth) => (
-                <MenuItem>{yearMonth}</MenuItem>
+              {yearMonthOptions().map((yearMonth) => (
+                <MenuItem value={yearMonth}>{yearMonth}</MenuItem>
               ))}
             </Select>
           </Grid>
@@ -474,9 +480,9 @@ const Calendar = () => {
                 className={classes.headerdate}
                 id={dateCon.dateStr}
                 container
-                direction="row"
-                justifyContent="flex-start"
-                alignItems="center"
+                direction='row'
+                justifyContent='flex-start'
+                alignItems='center'
                 spacing={1}
                 // onClick={handleDateHeaderClick}
               >
