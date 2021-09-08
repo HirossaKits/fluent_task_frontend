@@ -204,12 +204,14 @@ const Calendar = () => {
   };
 
   const yearMonthOptions = () =>
-    Array(48)
+    Array(24)
       .fill("")
       .map((_, index, array) => {
         const ym = `${
-          calendar.year - ~~(array.length / 2 / 12) + ~~(index / 12)
-        }-${fillDigitsByZero(((calendar.month + index) % 12) + 1, 2)}`;
+          calendar.year -
+          ~~(array.length / 2 / 12) +
+          ~~((calendar.month + index - 1) / 12)
+        }-${fillDigitsByZero(((calendar.month + index - 1) % 12) + 1, 2)}`;
         return ym;
       });
 
