@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { EDITED_TASK, TASK_STATE } from "../types";
+import { TASK_STATE } from "../types";
 
 // Demo
 import { demoData } from "../../DummyData";
@@ -26,12 +26,26 @@ const initialState: TASK_STATE = {
     category: "",
     description: "",
     status: "Not started",
-    estimate_manhour: 0,
-    actual_manhour: 0,
+    estimate_manhour: "0",
+    actual_manhour: "0",
     scheduled_startdate: null,
     scheduled_enddate: null,
     actual_startdate: null,
     actual_enddate: null,
+
+
+
+    estimate_manhour: string;
+    actual_manhour: string;
+    scheduled_startdate: string;
+    scheduled_enddate: string;
+    actual_startdate: string;
+    actual_enddate: string;
+    assigned: string;
+    description: string;
+    author: string;
+    created_at?: string;
+    update_at?: string;
   },
   selectedTask: {
     id: "",

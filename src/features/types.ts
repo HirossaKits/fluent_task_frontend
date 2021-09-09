@@ -71,34 +71,20 @@ export interface TASK {
   status: string;
   estimate_manhour: string;
   actual_manhour: string;
-  scheduled_startdate: string;
-  scheduled_enddate: string;
-  actual_startdate: string;
-  actual_enddate: string;
-  assigned: string;
-  description: string;
-  author: string;
-  created_at?: string;
-  update_at?: string;
-}
-
-export interface SELECTED_TASK {
-  id: string;
-  projectId: string;
-  assigned: string;
-  author: string;
-  title: string;
-  category: string;
-  description: string;
-  status: string;
-  estimate_manhour: number;
-  actual_manhour: number;
   scheduled_startdate: null | string;
   scheduled_enddate: null | string;
   actual_startdate: null | string;
   actual_enddate: null | string;
-  created_at: string;
-  update_at: string;
+  assigned: string;
+  description: string;
+  author: string;
+  created_at?: null | string;
+  update_at?: null | string;
+}
+
+export interface TASK_CATEGORY {
+  value: string;
+  title: string;
 }
 
 export interface FILTER_TASK {
@@ -114,7 +100,7 @@ export interface TASK_STATE {
   filterTaskOpen: boolean;
   filterTask: FILTER_TASK[];
   editedTask: TASK;
-  selectedTask: SELECTED_TASK;
+  selectedTask: TASK;
 }
 
 export interface TARGET {

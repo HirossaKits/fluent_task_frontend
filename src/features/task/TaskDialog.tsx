@@ -92,26 +92,31 @@ const TaskDialog: React.FC = (props) => {
               <Grid item xs={12}>
                 <Grid item xs={10}>
                   <CommonTextField
+                    label='プロジェクト'
+                    name='title'
+                    value={editedTask.task_name}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <Grid item xs={10}>
+                  <CommonTextField
                     label='タスク名'
                     name='title'
-                    value={editedTask.title}
+                    value={editedTask.task_name}
                     onChange={handleInputChange}
                   />
                 </Grid>
               </Grid>
               <Grid item xs={12}>
                 <Grid item xs={4}>
-                  <TextField
-                    autoFocus
-                    variant='standard'
-                    fullWidth
-                    margin='dense'
-                    size='small'
-                    id='category'
+                  <CommonSelect
                     label='カテゴリー'
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
+                    name='status'
+                    options={Status}
+                    value={editedTask.status}
+                    onChange={handleInputChange}
                   />
                 </Grid>
               </Grid>
@@ -180,7 +185,7 @@ const TaskDialog: React.FC = (props) => {
                 </Grid>
                 <Grid item xs={4}>
                   <CommonDatePicker
-                    label='実開始日'
+                    label='開始日'
                     name='actual_start_date'
                     value={editedTask.actual_startdate}
                     onChange={handleInputChange}
@@ -203,7 +208,7 @@ const TaskDialog: React.FC = (props) => {
                 </Grid>
                 <Grid item xs={4}>
                   <CommonDatePicker
-                    label='実終了日'
+                    label='終了日'
                     name='actual_end_date'
                     value={editedTask.actual_enddate}
                     onChange={handleInputChange}
