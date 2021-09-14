@@ -416,17 +416,17 @@ const Calendar = () => {
       <Grid
         className={classes.gridWrap}
         container
-        direction='column'
-        justifyContent='center'
-        alignItems='center'
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
       >
         <Grid
           className={classes.selector}
           xs={10}
           container
-          direction='row'
-          justifyContent='space-between'
-          alignItems='center'
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
         >
           <Grid item xs={1}>
             <Select
@@ -482,9 +482,9 @@ const Calendar = () => {
                 className={classes.headerdate}
                 id={dateCon.dateStr}
                 container
-                direction='row'
-                justifyContent='flex-start'
-                alignItems='center'
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="center"
                 spacing={1}
                 // onClick={handleDateHeaderClick}
               >

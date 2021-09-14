@@ -57,7 +57,7 @@ export type COLUMN_NAME =
   | "scheduled_startdate"
   | "scheduled_enddate"
   | "estimate_manhour"
-  | "assigned"
+  | "assigned_name"
   | "description";
 
 /*taskSlice*/
@@ -69,15 +69,17 @@ export interface TASK {
   project_name: string;
   category: string;
   status: string;
-  estimate_manhour: string;
-  actual_manhour: string;
-  scheduled_startdate: null | string;
-  scheduled_enddate: null | string;
+  description: string;
+  estimate_manhour: number;
+  actual_manhour: number;
+  scheduled_startdate: string;
+  scheduled_enddate: string;
   actual_startdate: null | string;
   actual_enddate: null | string;
-  assigned: string;
-  description: string;
-  author: string;
+  assigned_id: string;
+  assigned_name: string;
+  author_id: string;
+  author_name: string;
   created_at?: null | string;
   update_at?: null | string;
 }

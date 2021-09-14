@@ -18,50 +18,42 @@ const initialState: TASK_STATE = {
     },
   ],
   editedTask: {
-    id: "",
-    projectId: "",
-    assigned: "",
-    author: "",
-    title: "",
+    task_id: "",
+    task_name: "",
+    project_id: "",
+    project_name: "",
     category: "",
-    description: "",
     status: "Not started",
-    estimate_manhour: "0",
-    actual_manhour: "0",
-    scheduled_startdate: null,
-    scheduled_enddate: null,
-    actual_startdate: null,
-    actual_enddate: null,
-
-
-
-    estimate_manhour: string;
-    actual_manhour: string;
-    scheduled_startdate: string;
-    scheduled_enddate: string;
-    actual_startdate: string;
-    actual_enddate: string;
-    assigned: string;
-    description: string;
-    author: string;
-    created_at?: string;
-    update_at?: string;
-  },
-  selectedTask: {
-    id: "",
-    projectId: "",
-    assigned: "",
-    author: "",
-    title: "",
-    category: "",
     description: "",
-    status: "",
     estimate_manhour: 0,
     actual_manhour: 0,
-    scheduled_startdate: null,
-    scheduled_enddate: null,
+    scheduled_startdate: "",
+    scheduled_enddate: "",
     actual_startdate: null,
     actual_enddate: null,
+    assigned_id: "",
+    assigned_name: "",
+    author_id: "",
+    author_name: "",
+  },
+  selectedTask: {
+    task_id: "",
+    task_name: "",
+    project_id: "",
+    project_name: "",
+    category: "",
+    status: "Not started",
+    description: "",
+    estimate_manhour: 0,
+    actual_manhour: 0,
+    scheduled_startdate: "",
+    scheduled_enddate: "",
+    actual_startdate: null,
+    actual_enddate: null,
+    assigned_id: "",
+    assigned_name: "",
+    author_id: "",
+    author_name: "",
     created_at: "",
     update_at: "",
   },

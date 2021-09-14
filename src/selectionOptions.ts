@@ -30,9 +30,7 @@ export const DemoMember = [
   },
 ];
 
-
-
-export const ListColumns: { value: COLUMN_NAME, label: string; }[] = [
+export const ListColumns: { value: COLUMN_NAME; label: string }[] = [
   {
     value: "task_name",
     label: "タスク名",
@@ -58,7 +56,7 @@ export const ListColumns: { value: COLUMN_NAME, label: string; }[] = [
     label: "見積工数",
   },
   {
-    value: "assigned",
+    value: "assigned_name",
     label: "担当",
   },
   {
@@ -115,4 +113,3 @@ export const FilterOperatorOfDate = [
     label: "より以後の",
   },
 ];
-

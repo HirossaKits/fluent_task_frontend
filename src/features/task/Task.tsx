@@ -91,7 +91,7 @@ export const columnsInfo: COLUMN_INFO[] = [
     type: "number",
     width: "10%",
   },
-  { name: "assigned", label: "担当", type: "string", width: "10%" },
+  { name: "assigned_name", label: "担当", type: "string", width: "10%" },
   { name: "description", label: "備考", type: "string", width: "15%" },
 ];
 
@@ -195,11 +195,13 @@ const Task = () => {
           if (operator === "=") {
             validity = columnValue === filterValue;
           } else if (operator === "start_from") {
-            validity = columnValue.startsWith(filterValue);
+            validity = columnValue.toString().startsWith(filterValue);
           } else if (operator === "include") {
-            validity = columnValue.indexOf(filterValue) === -1 ? false : true;
+            validity =
+              columnValue.toString().indexOf(filterValue) === -1 ? false : true;
           } else if (operator === "exclude") {
-            validity = columnValue.indexOf(filterValue) === -1 ? true : false;
+            validity =
+              columnValue.toString().indexOf(filterValue) === -1 ? true : false;
           }
         }
 
@@ -221,31 +223,31 @@ const Task = () => {
 
   return (
     <>
-      <Typography className={classes.title} variant='h5' component='h2'>
+      <Typography className={classes.title} variant="h5" component="h2">
         タスク一覧
       </Typography>
       <Toolbar disableGutters>
-        <Tooltip title='登録'>
-          <IconButton aria-label='filter list'>
+        <Tooltip title="登録">
+          <IconButton aria-label="filter list">
             <PlaylistAddIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title='編集'>
-          <IconButton aria-label='edit task' onClick={handleEditClick}>
+        <Tooltip title="編集">
+          <IconButton aria-label="edit task" onClick={handleEditClick}>
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title='削除'>
-          <IconButton aria-label='delete'>
+        <Tooltip title="削除">
+          <IconButton aria-label="delete">
             <DeleteIcon />
           </IconButton>
         </Tooltip>
 
-        <Tooltip title='フィルター'>
+        <Tooltip title="フィルター">
           <IconButton
             ref={filterAnchorEl}
             className={classes.buttonRight}
-            aria-label='filter list'
+            aria-label="filter list"
             onClick={handleFilterClick}
           >
             <FilterListIcon />
@@ -253,10 +255,10 @@ const Task = () => {
         </Tooltip>
       </Toolbar>
       <TableContainer className={classes.container}>
-        <Table size='medium'>
+        <Table size="medium">
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableCheckCell} padding='checkbox'>
+              <TableCell className={classes.tableCheckCell} padding="checkbox">
                 <Checkbox
                   indeterminate={
                     selected.length > 0 && selected.length < tasks.length
@@ -265,7 +267,7 @@ const Task = () => {
                     selected.length > 0 && selected.length === tasks.length
                   }
                   onChange={handleSelectAllClic}
-                  color='primary'
+                  color="primary"
                 />
               </TableCell>
               {columnsInfo.map((col) => (
@@ -295,11 +297,11 @@ const Task = () => {
               >
                 <TableCell
                   className={classes.tableCheckCell}
-                  padding='checkbox'
+                  padding="checkbox"
                 >
                   <Checkbox
                     checked={selected.indexOf(row.task_id) !== -1}
-                    color='primary'
+                    color="primary"
                   />
                 </TableCell>
                 {columnsInfo.map((col) => (
@@ -316,8 +318,8 @@ const Task = () => {
                       {col.name === "task_name" ? (
                         <Link
                           className={classes.link}
-                          underline='always'
-                          color='textPrimary'
+                          underline="always"
+                          color="textPrimary"
                           onClick={(event: any) => {
                             event.stopPropagation();
                             setEditTaskOpen(true);
