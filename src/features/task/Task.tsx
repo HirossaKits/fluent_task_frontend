@@ -67,11 +67,18 @@ export interface COLUMN_INFO {
   label: string;
   type: "string" | "number" | "Date";
   width: string;
+  related?: string;
 }
 
 export const columnsInfo: COLUMN_INFO[] = [
   { name: "task_name", label: "タスク名", type: "string", width: "13%" },
-  { name: "category", label: "カテゴリー", type: "string", width: "10%" },
+  {
+    name: "category_name",
+    label: "カテゴリー",
+    type: "string",
+    width: "10%",
+    related: "category_id",
+  },
   { name: "status", label: "ステータス", type: "string", width: "10%" },
   {
     name: "scheduled_startdate",
@@ -91,7 +98,13 @@ export const columnsInfo: COLUMN_INFO[] = [
     type: "number",
     width: "10%",
   },
-  { name: "assigned_name", label: "担当", type: "string", width: "10%" },
+  {
+    name: "assigned_name",
+    label: "担当",
+    type: "string",
+    width: "10%",
+    related: "assigned_id",
+  },
   { name: "description", label: "備考", type: "string", width: "15%" },
 ];
 
@@ -156,7 +169,11 @@ const Task = () => {
 
   const sortRows = (ts: TASK[]): TASK[] => {
     if (!sortState.columnName) return ts;
+    if(columnsInfo.filter())
+
+
     const sortedRows = ts.slice().sort((a, b) => {
+      if.
       if (
         a[sortState.columnName as COLUMN_NAME] >
         b[sortState.columnName as COLUMN_NAME]

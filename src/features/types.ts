@@ -52,7 +52,7 @@ export interface NAV_STATE {
 
 export type COLUMN_NAME =
   | "task_name"
-  | "category"
+  | "category_name"
   | "status"
   | "scheduled_startdate"
   | "scheduled_enddate"
@@ -66,20 +66,20 @@ export interface TASK {
   task_id: string;
   task_name: string;
   project_id: string;
-  project_name: string;
-  category: string;
+  // project_name: string;
+  category_id: null | string;
   status: string;
   description: string;
-  estimate_manhour: number;
-  actual_manhour: number;
+  estimate_manhour: null | number;
+  actual_manhour: null | number;
   scheduled_startdate: string;
   scheduled_enddate: string;
   actual_startdate: null | string;
   actual_enddate: null | string;
   assigned_id: string;
-  assigned_name: string;
+  // assigned_name: string;
   author_id: string;
-  author_name: string;
+  // author_name: string;
   created_at?: null | string;
   update_at?: null | string;
 }
