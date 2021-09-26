@@ -66,8 +66,13 @@ export interface TASK {
   task_id: string;
   task_name: string;
   project_id: string;
-  // project_name: string;
+  project_name: string;
   category_id: null | string;
+  category_name: string;
+  assigned_id: null | string;
+  assigned_name: string;
+  author_id: null | string;
+  author_name: string;
   status: string;
   description: string;
   estimate_manhour: null | number;
@@ -76,10 +81,6 @@ export interface TASK {
   scheduled_enddate: string;
   actual_startdate: null | string;
   actual_enddate: null | string;
-  assigned_id: string;
-  // assigned_name: string;
-  author_id: string;
-  // author_name: string;
   created_at?: null | string;
   update_at?: null | string;
 }

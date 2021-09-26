@@ -30,13 +30,13 @@ export const DemoMember = [
   },
 ];
 
-export const ListColumns: { value: COLUMN_NAME; label: string }[] = [
+export const ListColumns: { value: COLUMN_NAME; label: string; }[] = [
   {
     value: "task_name",
     label: "タスク名",
   },
   {
-    value: "category",
+    value: "category_name",
     label: "カテゴリー",
   },
   {

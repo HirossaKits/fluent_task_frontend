@@ -67,18 +67,12 @@ export interface COLUMN_INFO {
   label: string;
   type: "string" | "number" | "Date";
   width: string;
-  related?: string;
+  related?: any;
 }
 
 export const columnsInfo: COLUMN_INFO[] = [
   { name: "task_name", label: "タスク名", type: "string", width: "13%" },
-  {
-    name: "category_name",
-    label: "カテゴリー",
-    type: "string",
-    width: "10%",
-    related: "category_id",
-  },
+  { name: "category_name", label: "カテゴリー", type: "string", width: "10%" },
   { name: "status", label: "ステータス", type: "string", width: "10%" },
   {
     name: "scheduled_startdate",
@@ -98,13 +92,7 @@ export const columnsInfo: COLUMN_INFO[] = [
     type: "number",
     width: "10%",
   },
-  {
-    name: "assigned_name",
-    label: "担当",
-    type: "string",
-    width: "10%",
-    related: "assigned_id",
-  },
+  { name: "assigned_name", label: "担当", type: "string", width: "10%" },
   { name: "description", label: "備考", type: "string", width: "15%" },
 ];
 
@@ -169,21 +157,23 @@ const Task = () => {
 
   const sortRows = (ts: TASK[]): TASK[] => {
     if (!sortState.columnName) return ts;
-    if(columnsInfo.filter())
+    const sortedRows = ts.slice().sort((next, now) => {
+      const nextVal = next[sortState.columnName as COLUMN_NAME];
+      const nowVal = now[sortState.columnName as COLUMN_NAME];
 
-
-    const sortedRows = ts.slice().sort((a, b) => {
-      if.
-      if (
-        a[sortState.columnName as COLUMN_NAME] >
-        b[sortState.columnName as COLUMN_NAME]
-      ) {
+      if (nowVal === null && nextVal === null) {
+        return 1;
+      }
+      if (nextVal === null) {
+        return 1;
+      }
+      if (nowVal === null) {
+        return -1;
+      }
+      if (nextVal > nowVal) {
         return sortState.order === "asc" ? 1 : -1;
       }
-      if (
-        a[sortState.columnName as COLUMN_NAME] <
-        b[sortState.columnName as COLUMN_NAME]
-      ) {
+      if (nextVal < nowVal) {
         return sortState.order === "desc" ? -1 : 1;
       }
       return 0;
@@ -207,6 +197,11 @@ const Task = () => {
         const type = columnsInfo.filter(
           (col) => col.name === filter.columnName
         )[0].type;
+
+        if (columnValue === null) {
+          validity = false;
+          return;
+        }
 
         if (type === "string") {
           if (operator === "=") {
@@ -240,31 +235,31 @@ const Task = () => {
 
   return (
     <>
-      <Typography className={classes.title} variant="h5" component="h2">
+      <Typography className={classes.title} variant='h5' component='h2'>
         タスク一覧
       </Typography>
       <Toolbar disableGutters>
-        <Tooltip title="登録">
-          <IconButton aria-label="filter list">
+        <Tooltip title='登録'>
+          <IconButton aria-label='filter list'>
             <PlaylistAddIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="編集">
-          <IconButton aria-label="edit task" onClick={handleEditClick}>
+        <Tooltip title='編集'>
+          <IconButton aria-label='edit task' onClick={handleEditClick}>
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="削除">
-          <IconButton aria-label="delete">
+        <Tooltip title='削除'>
+          <IconButton aria-label='delete'>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
 
-        <Tooltip title="フィルター">
+        <Tooltip title='フィルター'>
           <IconButton
             ref={filterAnchorEl}
             className={classes.buttonRight}
-            aria-label="filter list"
+            aria-label='filter list'
             onClick={handleFilterClick}
           >
             <FilterListIcon />
@@ -272,10 +267,10 @@ const Task = () => {
         </Tooltip>
       </Toolbar>
       <TableContainer className={classes.container}>
-        <Table size="medium">
+        <Table size='medium'>
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableCheckCell} padding="checkbox">
+              <TableCell className={classes.tableCheckCell} padding='checkbox'>
                 <Checkbox
                   indeterminate={
                     selected.length > 0 && selected.length < tasks.length
@@ -284,7 +279,7 @@ const Task = () => {
                     selected.length > 0 && selected.length === tasks.length
                   }
                   onChange={handleSelectAllClic}
-                  color="primary"
+                  color='primary'
                 />
               </TableCell>
               {columnsInfo.map((col) => (
@@ -314,11 +309,11 @@ const Task = () => {
               >
                 <TableCell
                   className={classes.tableCheckCell}
-                  padding="checkbox"
+                  padding='checkbox'
                 >
                   <Checkbox
                     checked={selected.indexOf(row.task_id) !== -1}
-                    color="primary"
+                    color='primary'
                   />
                 </TableCell>
                 {columnsInfo.map((col) => (
@@ -335,8 +330,8 @@ const Task = () => {
                       {col.name === "task_name" ? (
                         <Link
                           className={classes.link}
-                          underline="always"
-                          color="textPrimary"
+                          underline='always'
+                          color='textPrimary'
                           onClick={(event: any) => {
                             event.stopPropagation();
                             setEditTaskOpen(true);

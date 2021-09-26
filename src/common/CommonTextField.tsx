@@ -7,7 +7,7 @@ type Props = {
   label?: string;
   type?: string;
   name: string;
-  value: string | number;
+  value: null | string | number;
   index?: number;
   onChange: Function;
 };
