@@ -3,37 +3,18 @@ import ReactDOM from "react-dom";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 import { Route, BrowserRouter } from "react-router-dom";
-import { createTheme } from "@mui/material";
-import { ThemeProvider } from "@emotion/react";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import Auth from "./features/auth/Auth";
 
-const theme = createTheme({
-  typography: {
-    fontFamily: ["Noto Sans JP", "M PLUS Rounded 1c"].join(","),
-    fontSize: 12,
-  },
-  palette: {
-    text: {
-      primary: "rgba(0, 0, 0, 0.7)",
-    },
-  },
-  // palette: {
-  //   type: 'dark',
-  // },
-});
-
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <Route exact path='/' component={Auth} />
-          <Route exact path='/app' component={App} />
-        </BrowserRouter>
-      </ThemeProvider>
+      <BrowserRouter>
+        <Route exact path='/' component={Auth} />
+        <Route exact path='/app' component={App} />
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")
