@@ -3,7 +3,8 @@ import ReactDOM from "react-dom";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 import { Route, BrowserRouter } from "react-router-dom";
-import { createTheme, MuiThemeProvider } from "@material-ui/core";
+import { createTheme } from "@mui/material";
+import { ThemeProvider } from "@emotion/react";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
@@ -27,12 +28,12 @@ const theme = createTheme({
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <MuiThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Route exact path='/' component={Auth} />
           <Route exact path='/app' component={App} />
         </BrowserRouter>
-      </MuiThemeProvider>
+      </ThemeProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

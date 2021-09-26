@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import "./App.css";
-import { createTheme, ThemeProvider } from "@material-ui/core";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import { createTheme, ThemeProvider } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
 import Nav from "./features/nav/Nav";
 import { selectSettings } from "./features/nav/navSlice";
 

@@ -10,9 +10,9 @@ import {
   Box,
   FormControlLabel,
   Checkbox,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
+} from "@mui/material";
+import { makeStyles } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 import styles from "./Auth.module.css";
 import { CRED, REG_INFO } from "../types";
 import { AppDispatch } from "../../app/store";

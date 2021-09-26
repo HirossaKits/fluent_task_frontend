@@ -1,23 +1,24 @@
 import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Typography from "@material-ui/core/Typography";
-import Toolbar from "@material-ui/core/Toolbar";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
-import TableContainer from "@material-ui/core/TableContainer";
-import Table from "@material-ui/core/Table";
-import TableHead from "@material-ui/core/TableHead";
-import TableBody from "@material-ui/core/TableBody";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import { makeStyles, Theme, alpha } from "@material-ui/core/styles";
-import FilterListIcon from "@material-ui/icons/FilterList";
-import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { css,Theme } from "@emotion/react";
+import { alpha } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import TableContainer from "@mui/material/TableContainer";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import TaskDialog from "./TaskDialog";
 import TaskFilter from "./TaskFilter";
 import {
@@ -27,40 +28,6 @@ import {
   setFilterTaskOpen,
 } from "./taskSlice";
 import { TASK, COLUMN_NAME } from "../types";
-
-const useStyles = makeStyles((theme: Theme) => ({
-  title: {
-    color: theme.palette.text.primary,
-  },
-  buttonRight: {
-    margin: "0 0 0 auto",
-  },
-  container: {
-    maxHeight: 440,
-  },
-  tablerow: {
-    "&.Mui-selected, &.Mui-selected:hover": {
-      backgroundColor: alpha(
-        theme.palette.primary.main,
-        theme.palette.action.selectedOpacity
-      ),
-    },
-  },
-  tableCheckCell: {
-    width: "4%",
-  },
-  tableCell: {
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
-  tableNumericCell: {
-    paddingLeft: 0,
-    paddingRight: "5%",
-  },
-  link: {
-    cursor: "pointer",
-  },
-}));
 
 export interface COLUMN_INFO {
   name: COLUMN_NAME;
@@ -102,7 +69,6 @@ interface SORT_STATE {
 }
 
 const Task = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
 
   const tasks = useSelector(selectTasks);
@@ -235,7 +201,7 @@ const Task = () => {
 
   return (
     <>
-      <Typography className={classes.title} variant='h5' component='h2'>
+      <Typography variant='h5' component='h2'>
         タスク一覧
       </Typography>
       <Toolbar disableGutters>
@@ -258,7 +224,7 @@ const Task = () => {
         <Tooltip title='フィルター'>
           <IconButton
             ref={filterAnchorEl}
-            className={classes.buttonRight}
+            css={filterButtonStyle}
             aria-label='filter list'
             onClick={handleFilterClick}
           >
@@ -266,7 +232,7 @@ const Task = () => {
           </IconButton>
         </Tooltip>
       </Toolbar>
-      <TableContainer className={classes.container}>
+      <TableContainer css={tableContainerStyle}>
         <Table size='medium'>
           <TableHead>
             <TableRow>
@@ -356,4 +322,42 @@ const Task = () => {
   );
 };
 
+const filterButtonStyle = css`
+  margin: 0 0 0 auto;
+`;
+const tableContainerStyle = css`
+  maxheight: 440;
+`;
+const tableRowStyle=( theme:Theme) => css`
+  "&.Mui-selected, &.Mui-selected:hover": {
+    backgroundColor: ${alpha(
+      theme.palette.primary.main,
+      theme.palette.action.selectedOpacity
+    )}
+`
+
+const tableCellStyle = css`
+  paddingLeft: 0,
+  paddingRight: 0,
+`;
+const tableCheckCellStyle = css`
+  width: 4%;
+`;
+const tableNumericCell = css`
+  paddingLeft: 0,
+  paddingRight: 5%,
+`;
+
 export default Task;
+
+const useStyles = makeStyles((theme: Theme) => ({
+  tablerow: {
+    ,
+    },
+  },
+
+  tableNumericCell: {},
+  link: {
+    cursor: "pointer",
+  },
+}));

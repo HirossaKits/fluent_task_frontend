@@ -1,7 +1,7 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import Switch, { SwitchClassKey, SwitchProps } from "@material-ui/core/Switch";
-import { makeStyles, Typography } from "@material-ui/core";
+import Grid from "@mui/material/Grid";
+import Switch, { SwitchClassKey, SwitchProps } from "@mui/material/Switch";
+import { makeStyles, Typography } from "@mui/material";
 import { TARGET } from "../features/types";
 
 const useStyles = makeStyles((theme) => ({

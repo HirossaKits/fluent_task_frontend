@@ -1,8 +1,8 @@
 import React from "react";
-import Popover from "@material-ui/core/Popover";
-import Paper from "@material-ui/core/Paper";
+import Popover from "@mui/material/Popover";
+import Paper from "@mui/material/Paper";
 import CommonSwitch from "../../common/CommonSwitch";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/material/styles";
 import { useSelector, useDispatch } from "react-redux";
 import { selectSettingsMenuOpen, selectSettings } from "./navSlice";
 import { setSettingsMenuOpen, setSettings } from "./navSlice";
