@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { makeStyles } from "@mui/material/styles";
-import { Theme } from "../types";
+import { css } from "@emotion/react";
+import { useTheme } from "@mui/material";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Dialog from "@mui/material/Dialog";
@@ -19,27 +19,8 @@ import CommonSelect from "../../common/CommonSelect";
 import { Status, DemoMember } from "../../selectionOptions";
 import { selectEditTaskOpen, setEditTaskOpen } from "./taskSlice";
 
-const useStyles = makeStyles((theme: Theme) => ({
-  form: {
-    width: "100%",
-  },
-  title: {
-    marginLeft: theme.spacing(3),
-    marginTop: theme.spacing(0),
-  },
-  close: {
-    margin: 10,
-  },
-  gridcol: {
-    textAlign: "center",
-  },
-  arrowIcon: {
-    marginTop: 22,
-  },
-}));
-
 const TaskDialog: React.FC = (props) => {
-  const classes = useStyles();
+  const theme = useTheme();
   const dispatch = useDispatch();
   const editTaskOpen = useSelector(selectEditTaskOpen);
   const editedTask = useSelector(selectEditedTask);
@@ -50,6 +31,25 @@ const TaskDialog: React.FC = (props) => {
 
   const handleClose = () => {
     dispatch(setEditTaskOpen(false));
+  };
+
+  const styles = {
+    form: css`
+      width: 100%;
+    `,
+    title: css`
+      marginleft: ${theme.spacing(3)};
+      margintop: ${theme.spacing(0)};
+    `,
+    close: css`
+      margin: 10;
+    `,
+    gridCol: css`
+      textalign: center;
+    `,
+    arrowIcon: css`
+      margintop: 22;
+    `,
   };
 
   return (
@@ -67,19 +67,19 @@ const TaskDialog: React.FC = (props) => {
           justifyContent='space-between'
           alignItems='flex-start'
         >
-          <Grid className={classes.title} item>
+          <Grid css={styles.title} item>
             <DialogTitle>タスクを登録</DialogTitle>
           </Grid>
-          <Grid className={classes.close} item>
+          <Grid css={styles.close} item>
             <IconButton size='small' onClick={handleClose}>
               <CloseIcon />
             </IconButton>
           </Grid>
         </Grid>
-        <form className={classes.form} noValidate autoComplete='off'>
+        <form css={styles.form} noValidate autoComplete='off'>
           <Grid container direction='row' justifyContent='center'>
             <Grid
-              className={classes.gridcol}
+              css={styles.gridCol}
               container
               justifyContent='flex-start'
               alignItems='center'
@@ -155,7 +155,7 @@ const TaskDialog: React.FC = (props) => {
                   />
                 </Grid>
                 <Grid item xs={2}>
-                  <SwapHorizIcon className={classes.arrowIcon} />
+                  <SwapHorizIcon css={styles.arrowIcon} />
                 </Grid>
                 <Grid item xs={2}>
                   <CommonTextField
@@ -177,7 +177,7 @@ const TaskDialog: React.FC = (props) => {
                   />
                 </Grid>
                 <Grid item xs={2}>
-                  <SwapHorizIcon className={classes.arrowIcon} />
+                  <SwapHorizIcon css={styles.arrowIcon} />
                 </Grid>
                 <Grid item xs={4}>
                   <CommonDatePicker
@@ -200,7 +200,7 @@ const TaskDialog: React.FC = (props) => {
                 </Grid>
 
                 <Grid item xs={2}>
-                  <SwapHorizIcon className={classes.arrowIcon} />
+                  <SwapHorizIcon css={styles.arrowIcon} />
                 </Grid>
                 <Grid item xs={4}>
                   <CommonDatePicker

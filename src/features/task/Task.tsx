@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { css, Theme } from "@emotion/react";
+import { css } from "@emotion/react";
 import { useTheme } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
@@ -71,35 +71,6 @@ interface SORT_STATE {
 
 const Task = () => {
   const theme = useTheme();
-
-  const styles = {
-    filterButton: css`
-      margin: 0 0 0 auto;
-    `,
-    tableContainer: css`
-      maxheight: 440;
-    `,
-    tableRow: css`
-    "&.Mui-selected, &.Mui-selected:hover": {
-      backgroundColor: ${alpha(
-        theme.palette.primary.main,
-        theme.palette.action.selectedOpacity
-      )};
-  `,
-    tableCell: css`
-      paddingleft: 0;
-      paddingright: 0;
-    `,
-    tableCheckCell: css`
-      width: 4%;
-    `,
-    tableNumericCell: css`
-    paddingLeft: 0,
-    paddingRight: 5%,
-  `,
-    link: css``,
-  };
-
   const dispatch = useDispatch();
 
   const tasks = useSelector(selectTasks);
@@ -230,33 +201,61 @@ const Task = () => {
     return filtered;
   };
 
+  const styles = {
+    filterButton: css`
+      margin: 0 0 0 auto;
+    `,
+    tableContainer: css`
+      maxheight: 440;
+    `,
+    tableRow: css`
+    "&.Mui-selected, &.Mui-selected:hover": {
+      backgroundColor: ${alpha(
+        theme.palette.primary.main,
+        theme.palette.action.selectedOpacity
+      )};
+  `,
+    tableCell: css`
+      paddingleft: 0;
+      paddingright: 0;
+    `,
+    tableCheckCell: css`
+      width: 4%;
+    `,
+    tableNumericCell: css`
+    paddingLeft: 0,
+    paddingRight: 5%,
+  `,
+    link: css``,
+  };
+
   return (
     <>
-      <Typography variant="h5" component="h2">
+      <Typography variant='h5' component='h2'>
         タスク一覧
       </Typography>
       <Toolbar disableGutters>
-        <Tooltip title="登録">
-          <IconButton aria-label="filter list">
+        <Tooltip title='登録'>
+          <IconButton aria-label='filter list'>
             <PlaylistAddIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="編集">
-          <IconButton aria-label="edit task" onClick={handleEditClick}>
+        <Tooltip title='編集'>
+          <IconButton aria-label='edit task' onClick={handleEditClick}>
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title="削除">
-          <IconButton aria-label="delete">
+        <Tooltip title='削除'>
+          <IconButton aria-label='delete'>
             <DeleteIcon />
           </IconButton>
         </Tooltip>
 
-        <Tooltip title="フィルター">
+        <Tooltip title='フィルター'>
           <IconButton
             ref={filterAnchorEl}
-            css={filterButtonStyle}
-            aria-label="filter list"
+            css={styles.filterButton}
+            aria-label='filter list'
             onClick={handleFilterClick}
           >
             <FilterListIcon />
@@ -264,10 +263,10 @@ const Task = () => {
         </Tooltip>
       </Toolbar>
       <TableContainer css={styles.tableContainer}>
-        <Table size="medium">
+        <Table size='medium'>
           <TableHead>
             <TableRow>
-              <TableCell css={styles.tableCheckCell} padding="checkbox">
+              <TableCell css={styles.tableCheckCell} padding='checkbox'>
                 <Checkbox
                   indeterminate={
                     selected.length > 0 && selected.length < tasks.length
@@ -276,7 +275,7 @@ const Task = () => {
                     selected.length > 0 && selected.length === tasks.length
                   }
                   onChange={handleSelectAllClic}
-                  color="primary"
+                  color='primary'
                 />
               </TableCell>
               {columnsInfo.map((col) => (
@@ -304,10 +303,10 @@ const Task = () => {
                 hover
                 selected={selected.indexOf(row.task_id) !== -1}
               >
-                <TableCell css={styles.tableCheckCell} padding="checkbox">
+                <TableCell css={styles.tableCheckCell} padding='checkbox'>
                   <Checkbox
                     checked={selected.indexOf(row.task_id) !== -1}
-                    color="primary"
+                    color='primary'
                   />
                 </TableCell>
                 {columnsInfo.map((col) => (
@@ -323,9 +322,9 @@ const Task = () => {
                     <Typography>
                       {col.name === "task_name" ? (
                         <Link
-                          className={classes.link}
-                          underline="always"
-                          color="textPrimary"
+                          css={styles.link}
+                          underline='always'
+                          color='textPrimary'
                           onClick={(event: any) => {
                             event.stopPropagation();
                             setEditTaskOpen(true);

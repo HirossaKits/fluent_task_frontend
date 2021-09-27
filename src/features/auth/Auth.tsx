@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { css } from "@emotion/react";
+import { useTheme } from "@mui/material";
 import {
   Container,
   Grid,
@@ -8,8 +10,6 @@ import {
   Button,
   Link,
   Box,
-  FormControlLabel,
-  Checkbox,
 } from "@mui/material";
 import { makeStyles } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -30,21 +30,7 @@ const initRegInfo: REG_INFO = {
   password: "",
 };
 
-const useStyles = makeStyles((theme) => ({
-  title: {
-    fontFamily: "Oleo Script",
-  },
-  wrap: {
-    marginTop: theme.spacing(2),
-  },
-  submit: {
-    marginTop: theme.spacing(3),
-    padding: theme.spacing(1, 6),
-  },
-}));
-
 const Auth: React.FC = () => {
-  const classes = useStyles();
   const dispatch: AppDispatch = useDispatch();
 
   const [mode, setMode] = useState(MODE.Login);
@@ -79,16 +65,39 @@ const Auth: React.FC = () => {
     }
   };
 
+  const theme = useTheme();
+
+  const styles = {
+    root: css`
+      min-height: 100vh;
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    `,
+    title: css`
+      fontfamily: Oleo Script;
+    `,
+    wrap: css`
+      margintop: ${theme.spacing(2)};
+    `,
+    submit: css`
+      margintop: ${theme.spacing(3)};
+      padding: ${theme.spacing(1, 6)};
+    `,
+  };
+
   return (
-    <div className={styles.Auth}>
+    <div css={styles.root}>
       <Container component='main' maxWidth='xs'>
         <CssBaseline />
-        <Typography className={classes.title} component='h1' variant='h2'>
+        <Typography css={styles.title} component='h1' variant='h2'>
           Fluent Task
         </Typography>
         <form>
           <Grid
-            className={classes.wrap}
+            css={styles.wrap}
             container
             justifyContent='center'
             alignItems='center'
@@ -195,7 +204,7 @@ const Auth: React.FC = () => {
                 type='submit'
                 variant='contained'
                 color='primary'
-                className={classes.submit}
+                css={styles.submit}
                 onClick={mode === MODE.Login ? login : register}
               >
                 {mode === MODE.Login ? "ログイン" : "サインアップ"}

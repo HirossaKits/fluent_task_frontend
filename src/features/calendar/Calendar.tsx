@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-
+import { css } from "@emotion/react";
+import { useTheme } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -12,7 +13,6 @@ import ImageListItem from "@mui/material/ImageListItem";
 import Typography from "@mui/material/Typography";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import { makeStyles, Theme } from "@mui/material/styles";
 import * as dateHandler from "../../date/dateHandler";
 import { selectCalendar, setCalendar } from "./calendarSlice";
 import { selectTasks } from "../task/taskSlice";
@@ -45,80 +45,6 @@ interface TASK_OBJECT {
   other: boolean;
 }
 
-const roundEdge = 10;
-
-const useStyles = makeStyles((theme: Theme) => {
-  return {
-    selector: {
-      marginTop: theme.spacing(1),
-      marginBottom: theme.spacing(2),
-    },
-    select: {
-      marginBottom: 10,
-    },
-    dropdownStyle: {
-      maxHeight: 250,
-    },
-    gridWrap: {
-      height: "450",
-    },
-    gridList: {
-      width: "84%",
-      borderTop: `1px solid`,
-      borderLeft: `1px solid`,
-      borderColor: theme.palette.divider,
-      position: "relative",
-    },
-    gridTile: {
-      width: "1/7",
-      borderBottom: `1px solid ${theme.palette.divider}`,
-      borderRight: `1px solid ${theme.palette.divider}`,
-      borderColor: theme.palette.divider,
-    },
-    gridTileGray: {
-      width: "1/7",
-      borderBottom: `1px solid ${theme.palette.divider}`,
-      borderRight: `1px solid ${theme.palette.divider}`,
-      background: theme.palette.action.hover,
-    },
-    headerdate: {
-      textAlign: "left",
-      "& .plus": {
-        color: "rgba(0,0,0,0)",
-      },
-      "&:hover": {
-        "& .plus": {
-          color: "inherit",
-          transition: "0.8s",
-        },
-      },
-      cursor: "pointer",
-      backgournd: "blue",
-    },
-    textdate: {
-      marginLeft: 10,
-    },
-    texttoday: {
-      marginLeft: 5,
-      padding: "0px 7px",
-      color: "white",
-      background: theme.palette.primary.main,
-      borderRadius: "15px",
-    },
-    texttask: {
-      display: "block",
-      color: "white",
-      background: theme.palette.primary.main,
-      position: "absolute",
-    },
-    addIcon: {
-      height: 10,
-      fontSize: "small",
-      color: "action",
-    },
-  };
-});
-
 const createDates = (year: number, month: number): DATE_CONTEXT[] => {
   let dates: DATE_CONTEXT[] = [];
   let day = dateHandler.getFirstDateOfMonth(year, month).getDay();
@@ -139,12 +65,11 @@ const createDates = (year: number, month: number): DATE_CONTEXT[] => {
 };
 
 const Calendar = () => {
-  const classes = useStyles();
   const calendar = useSelector(selectCalendar);
   const tasks = useSelector(selectTasks);
   const dispatch = useDispatch();
 
-  const handleSelectChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleSelectChange = (event: any) => {
     const val = event.target.value as string;
     console.log(parseInt(val.slice(0, 4)), parseInt(val.slice(4, 6)));
     dispatch(
@@ -411,26 +336,98 @@ const Calendar = () => {
     return positionedTaskObjects;
   };
 
+  const theme = useTheme();
+  const roundEdge = 10;
+  const styles = {
+    selector: css`
+      margintop: theme.spacing(1);
+      marginbottom: theme.spacing(2);
+    `,
+    select: css`
+      marginbottom: 10;
+    `,
+    dropdownStyle: css`
+      maxheight: 250;
+    `,
+    gridWrap: css`
+      height: 450;
+    `,
+    gridList: css`
+      width: 84%;
+      borderTop: 1px solid'
+      borderLeft: 1px solid;
+      borderColor: ${theme.palette.divider},
+      position: "relative",
+    `,
+    gridTile: css`
+      width: "1/7",
+      borderBottom: 1px solid ${theme.palette.divider},
+      borderRight: 1px solid ${theme.palette.divider},
+      borderColor: ${theme.palette.divider},
+    `,
+    gridTileGray: css`
+      width: "1/7",
+      borderBottom: 1px solid ${theme.palette.divider},
+      borderRight:1px solid ${theme.palette.divider},
+      background: ${theme.palette.action.hover},
+    `,
+    headerdate: css`
+      textAlign: left;
+      & .plus: {
+        color: rgba(0,0,0,0);
+      }
+      &:hover: {
+        & .plus: {
+          color: inherit;
+          transition: 0.8s;
+        },
+      },
+      cursor: pointer;
+      backgournd: blue;
+    `,
+    textdate: css`
+      marginleft: 10;
+    `,
+    texttoday: css`
+      marginleft: 5;
+      padding: 0px 7px;
+      color: white;
+      background: ${theme.palette.primary.main};
+      borderradius: 15px;
+    `,
+    texttask: css`
+      display: block;
+      color: white;
+      background: ${theme.palette.primary.main};
+      position: absolute;
+    `,
+    addIcon: css`
+      height: 10;
+      fontsize: small;
+      color: action;
+    `,
+  };
+
   return (
     <>
       <Grid
-        className={classes.gridWrap}
+        css={styles.gridWrap}
         container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
+        direction='column'
+        justifyContent='center'
+        alignItems='center'
       >
         <Grid
-          className={classes.selector}
+          css={styles.selector}
           xs={10}
           container
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
+          direction='row'
+          justifyContent='space-between'
+          alignItems='center'
         >
           <Grid item xs={1}>
             <Select
-              className={classes.select}
+              css={styles.select}
               fullWidth
               value={calendar.year_month}
               MenuProps={{
@@ -442,10 +439,10 @@ const Calendar = () => {
                   vertical: "top",
                   horizontal: "left",
                 },
-                getContentAnchorEl: null,
-                classes: {
-                  paper: classes.dropdownStyle,
-                },
+                // getContentAnchorEl: null,
+                // classes: {
+                //   paper: styles.dropdownStyle,
+                // },
               }}
               onChange={handleSelectChange}
             >
@@ -463,36 +460,29 @@ const Calendar = () => {
             </IconButton>
           </Grid>
         </Grid>
-        <ImageList
-          className={classes.gridList}
-          rowHeight={160}
-          cols={7}
-          spacing={0}
-        >
+        <ImageList css={styles.gridList} rowHeight={160} cols={7}>
           {createDates(calendar.year, calendar.month).map((dateCon, i) => (
             <ImageListItem
               key={dateCon.dateStr}
-              className={
+              css={
                 dateCon.month === calendar.month
-                  ? classes.gridTile
-                  : classes.gridTileGray
+                  ? styles.gridTile
+                  : styles.gridTileGray
               }
             >
               <Grid
-                className={classes.headerdate}
+                css={styles.headerdate}
                 id={dateCon.dateStr}
                 container
-                direction="row"
-                justifyContent="flex-start"
-                alignItems="center"
+                direction='row'
+                justifyContent='flex-start'
+                alignItems='center'
                 spacing={1}
                 // onClick={handleDateHeaderClick}
               >
                 <Grid>
                   <Typography
-                    className={
-                      dateCon.isToday ? classes.texttoday : classes.textdate
-                    }
+                    css={dateCon.isToday ? styles.texttoday : styles.textdate}
                   >
                     {dateCon.date === 1
                       ? `${dateCon.month}月${dateCon.date}日`
@@ -509,7 +499,7 @@ const Calendar = () => {
             shapeTaskObjects(sortTaskObjects(initTaskObjects()))
           ).map((taskObject) => (
             <Typography
-              className={classes.texttask}
+              css={styles.texttask}
               style={{
                 top: taskObject.top,
                 left: taskObject.left,

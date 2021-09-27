@@ -2,7 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import "./App.css";
 import { createTheme } from "@mui/material";
-import { ThemeProvider } from "@emotion/react";
+import { ThemeProvider } from "@mui/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Nav from "./features/nav/Nav";
 import { selectSettings } from "./features/nav/navSlice";
