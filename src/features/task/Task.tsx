@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { css ,Theme} from "@emotion/react";
-// import Theme from "../../types/emotion"
+import { css, Theme } from "@emotion/react";
+import { useTheme } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
@@ -70,6 +70,36 @@ interface SORT_STATE {
 }
 
 const Task = () => {
+  const theme = useTheme();
+
+  const styles = {
+    filterButton: css`
+      margin: 0 0 0 auto;
+    `,
+    tableContainer: css`
+      maxheight: 440;
+    `,
+    tableRow: css`
+    "&.Mui-selected, &.Mui-selected:hover": {
+      backgroundColor: ${alpha(
+        theme.palette.primary.main,
+        theme.palette.action.selectedOpacity
+      )};
+  `,
+    tableCell: css`
+      paddingleft: 0;
+      paddingright: 0;
+    `,
+    tableCheckCell: css`
+      width: 4%;
+    `,
+    tableNumericCell: css`
+    paddingLeft: 0,
+    paddingRight: 5%,
+  `,
+    link: css``,
+  };
+
   const dispatch = useDispatch();
 
   const tasks = useSelector(selectTasks);
@@ -202,42 +232,42 @@ const Task = () => {
 
   return (
     <>
-      <Typography variant='h5' component='h2'>
+      <Typography variant="h5" component="h2">
         タスク一覧
       </Typography>
       <Toolbar disableGutters>
-        <Tooltip title='登録'>
-          <IconButton aria-label='filter list'>
+        <Tooltip title="登録">
+          <IconButton aria-label="filter list">
             <PlaylistAddIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title='編集'>
-          <IconButton aria-label='edit task' onClick={handleEditClick}>
+        <Tooltip title="編集">
+          <IconButton aria-label="edit task" onClick={handleEditClick}>
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title='削除'>
-          <IconButton aria-label='delete'>
+        <Tooltip title="削除">
+          <IconButton aria-label="delete">
             <DeleteIcon />
           </IconButton>
         </Tooltip>
 
-        <Tooltip title='フィルター'>
+        <Tooltip title="フィルター">
           <IconButton
             ref={filterAnchorEl}
             css={filterButtonStyle}
-            aria-label='filter list'
+            aria-label="filter list"
             onClick={handleFilterClick}
           >
             <FilterListIcon />
           </IconButton>
         </Tooltip>
       </Toolbar>
-      <TableContainer css={tableContainerStyle}>
-        <Table size='medium'>
+      <TableContainer css={styles.tableContainer}>
+        <Table size="medium">
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableCheckCell} padding='checkbox'>
+              <TableCell css={styles.tableCheckCell} padding="checkbox">
                 <Checkbox
                   indeterminate={
                     selected.length > 0 && selected.length < tasks.length
@@ -246,11 +276,11 @@ const Task = () => {
                     selected.length > 0 && selected.length === tasks.length
                   }
                   onChange={handleSelectAllClic}
-                  color='primary'
+                  color="primary"
                 />
               </TableCell>
               {columnsInfo.map((col) => (
-                <TableCell className={classes.tableCell} key={col.name}>
+                <TableCell css={styles.tableCell} key={col.name}>
                   <TableSortLabel
                     active={sortState.columnName === col.name}
                     direction={
@@ -269,26 +299,23 @@ const Task = () => {
           <TableBody>
             {sortRows(filterTasks(tasks)).map((row, rowIndex) => (
               <TableRow
-                className={classes.tablerow}
+                css={styles.tableRow}
                 onClick={(event) => handleRowClick(event, row.task_id)}
                 hover
                 selected={selected.indexOf(row.task_id) !== -1}
               >
-                <TableCell
-                  className={classes.tableCheckCell}
-                  padding='checkbox'
-                >
+                <TableCell css={styles.tableCheckCell} padding="checkbox">
                   <Checkbox
                     checked={selected.indexOf(row.task_id) !== -1}
-                    color='primary'
+                    color="primary"
                   />
                 </TableCell>
                 {columnsInfo.map((col) => (
                   <TableCell
-                    className={
+                    css={
                       col.type === "number"
-                        ? classes.tableNumericCell
-                        : classes.tableCell
+                        ? styles.tableNumericCell
+                        : styles.tableCell
                     }
                     width={col.width}
                     align={col.type === "number" ? "right" : "inherit"}
@@ -297,8 +324,8 @@ const Task = () => {
                       {col.name === "task_name" ? (
                         <Link
                           className={classes.link}
-                          underline='always'
-                          color='textPrimary'
+                          underline="always"
+                          color="textPrimary"
                           onClick={(event: any) => {
                             event.stopPropagation();
                             setEditTaskOpen(true);
@@ -323,42 +350,4 @@ const Task = () => {
   );
 };
 
-const filterButtonStyle = css`
-  margin: 0 0 0 auto;
-`;
-const tableContainerStyle = css`
-  maxheight: 440;
-`;
-const tableRowStyle=( theme:Theme) => css`
-  "&.Mui-selected, &.Mui-selected:hover": {
-    backgroundColor: ${alpha(
-      theme.palette.primary.main,
-      theme.palette.action.selectedOpacity
-    )}
-`
-
-const tableCellStyle = css`
-  paddingLeft: 0,
-  paddingRight: 0,
-`;
-const tableCheckCellStyle = css`
-  width: 4%;
-`;
-const tableNumericCell = css`
-  paddingLeft: 0,
-  paddingRight: 5%,
-`;
-
 export default Task;
-
-const useStyles = makeStyles((theme: Theme) => ({
-  tablerow: {
-    ,
-    },
-  },
-
-  tableNumericCell: {},
-  link: {
-    cursor: "pointer",
-  },
-}));
