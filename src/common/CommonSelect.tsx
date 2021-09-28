@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@mui/material/styles";
+import { css } from "@emotion/react";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import { TARGET } from "../features/types";
@@ -16,12 +16,6 @@ type Props = {
   onChange: Function;
 };
 
-const useStyles = makeStyles(() => ({
-  select: {
-    textAlign: "left",
-  },
-}));
-
 const CommonSelect: React.FC<Props> = (props) => {
   const handleSelectChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let target: TARGET = {
@@ -34,15 +28,17 @@ const CommonSelect: React.FC<Props> = (props) => {
     props.onChange(target);
   };
 
-  const classes = useStyles();
+  const selectStyle = css`
+    textalign: left;
+  `;
 
   return (
     <TextField
-      className={classes.select}
+      css={selectStyle}
       select
       fullWidth
-      margin="normal"
-      size="small"
+      margin='normal'
+      size='small'
       label={"label" in props ? props.label : undefined}
       value={props.value}
       onChange={handleSelectChange}

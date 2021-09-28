@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { css } from "@emotion/react";
@@ -70,9 +71,7 @@ interface SORT_STATE {
 }
 
 const Task = () => {
-  const theme = useTheme();
   const dispatch = useDispatch();
-
   const tasks = useSelector(selectTasks);
   const filterTask = useSelector(selectFilterTask);
 
@@ -201,6 +200,7 @@ const Task = () => {
     return filtered;
   };
 
+  const theme = useTheme();
   const styles = {
     filterButton: css`
       margin: 0 0 0 auto;

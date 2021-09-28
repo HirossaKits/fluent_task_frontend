@@ -1,22 +1,11 @@
+/** @jsxImportSource @emotion/react */
 import React from "react";
-import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
-import jaLocale from "date-fns/locale/ja";
-import format from "date-fns/format";
+import TextField from "@mui/material/TextField";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import { parseString } from "../date/dateHandler";
 import { TARGET } from "../features/types";
-
-class ExtendedUtils extends DateFnsUtils {
-  getCalendarHeaderText(date: any) {
-    return format(date, "yyyy年MM月", { locale: this.locale });
-  }
-  getDatePickerHeaderText(date: any) {
-    return format(date, "MMMd日 EEEE", { locale: this.locale });
-  }
-}
 
 type Props = {
   id?: string;
@@ -42,33 +31,15 @@ const DatePickerDialog: React.FC<Props> = (props) => {
 
   return (
     <>
-      <MuiPickersUtilsProvider utils={ExtendedUtils} locale={jaLocale}>
-        <KeyboardDatePicker
-          autoOk
-          disableToolbar
-          variant='inline'
-          // inputVariant='outlined'
-          size='small'
-          margin='normal'
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <DesktopDatePicker
           label={"label" in props ? props.label : "日付"}
-          format='yyyy-MM-dd'
-          clearable
+          mask='____/__/__'
           value={props.value ? Date.parse(props.value) : null}
           onChange={(date) => handleDateChange(date)}
-          // KeyboardButtonProps={{
-          //   "aria-label": "change date",
-          // }}
-          maxDateMessage='2100-01-01より前の日付を入力してください。'
-          minDateMessage='1900-01-01より後の日付を入力してください。'
-          invalidDateMessage='yyyy-MM-dd形式で入力してください。'
-          // clearLabel='クリア'
-          // okLabel='決定'
-          // cancelLabel='キャンセル'
-          InputLabelProps={{
-            shrink: true,
-          }}
+          renderInput={(params) => <TextField {...params} />}
         />
-      </MuiPickersUtilsProvider>
+      </LocalizationProvider>
     </>
   );
 };

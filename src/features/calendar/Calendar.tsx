@@ -65,6 +65,7 @@ const createDates = (year: number, month: number): DATE_CONTEXT[] => {
 };
 
 const Calendar = () => {
+  const theme = useTheme();
   const calendar = useSelector(selectCalendar);
   const tasks = useSelector(selectTasks);
   const dispatch = useDispatch();
@@ -336,25 +337,24 @@ const Calendar = () => {
     return positionedTaskObjects;
   };
 
-  const theme = useTheme();
   const roundEdge = 10;
   const styles = {
     selector: css`
-      margintop: theme.spacing(1);
-      marginbottom: theme.spacing(2);
+      margin-top: theme.spacing(1);
+      margin-bottom: theme.spacing(2);
     `,
     select: css`
-      marginbottom: 10;
+      margin-bottom: 10;
     `,
     dropdownStyle: css`
-      maxheight: 250;
+      max-height: 250;
     `,
     gridWrap: css`
       height: 450;
     `,
     gridList: css`
       width: 84%;
-      borderTop: 1px solid'
+      border-top: 1px solid'
       borderLeft: 1px solid;
       borderColor: ${theme.palette.divider},
       position: "relative",

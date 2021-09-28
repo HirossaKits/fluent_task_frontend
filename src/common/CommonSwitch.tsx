@@ -1,24 +1,10 @@
 import React from "react";
+import { css } from "@emotion/react";
+import { useTheme } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Switch, { SwitchClassKey, SwitchProps } from "@mui/material/Switch";
 import { makeStyles, Typography } from "@mui/material";
 import { TARGET } from "../features/types";
-
-const useStyles = makeStyles((theme) => ({
-  wrapper: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
-  switch: {
-    color: theme.palette.primary.main,
-    "&$checked": {
-      color: theme.palette.primary.main,
-    },
-    "&$checked + $track": {
-      backgroundColor: theme.palette.primary.main,
-    },
-  },
-}));
 
 type WidthNumber = 2 | 4 | 6 | 8 | 10 | 12;
 
@@ -32,8 +18,6 @@ type Props = {
 };
 
 const CommonSwitch: React.FC<Props> = (props) => {
-  const classes = useStyles();
-
   const handleToggleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let target: TARGET = {
       name: props.name,
@@ -42,8 +26,25 @@ const CommonSwitch: React.FC<Props> = (props) => {
     props.onChange(target);
   };
 
+  const theme = useTheme();
+  const styles = {
+    wrapper: css`
+      marginTop: ${theme.spacing(1)},
+      marginBottom: ${theme.spacing(1)},
+    `,
+    switch: css`
+      color: ${theme.palette.primary.main};
+      &$checked: {
+        color: ${theme.palette.primary.main}
+      },
+      &$checked + $track: {
+        backgroundColor: ${theme.palette.primary.main}
+      ,
+    `,
+  };
+
   return (
-    <Grid className={classes.wrapper} container alignItems='center' xs={12}>
+    <Grid css={styles.wrapper} container alignItems='center' xs={12}>
       {"label" in props && (
         <Grid item xs={"labelWidth" in props ? props.labelWidth : 8}>
           <Typography variant='body2'>{props.label}</Typography>
@@ -58,7 +59,7 @@ const CommonSwitch: React.FC<Props> = (props) => {
       >
         <Switch
           checked={props.value}
-          className={classes.switch}
+          css={styles.switch}
           color='primary'
           size='small'
           onChange={handleToggleChange}

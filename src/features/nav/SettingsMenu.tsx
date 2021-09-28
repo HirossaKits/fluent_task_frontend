@@ -1,4 +1,7 @@
+/** @jsxImportSource @emotion/react */
 import React from "react";
+import { css } from "@emotion/react";
+import { useTheme } from "@mui/material";
 import Popover from "@mui/material/Popover";
 import Paper from "@mui/material/Paper";
 import CommonSwitch from "../../common/CommonSwitch";
@@ -12,18 +15,8 @@ type Props = {
   anchorEl: React.MutableRefObject<null>;
 };
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    width: 180,
-    paddingLeft: theme.spacing(2),
-    paddingTop: theme.spacing(2),
-    paddingRight: theme.spacing(4),
-    paddingBottom: theme.spacing(2),
-  },
-}));
-
 const SettingsMenu: React.FC<Props> = (props) => {
-  const classes = useStyles();
+  const theme = useTheme();
   const settingsMenuOpen = useSelector(selectSettingsMenuOpen);
   const settings = useSelector(selectSettings);
   const dispatch = useDispatch();
@@ -34,6 +27,16 @@ const SettingsMenu: React.FC<Props> = (props) => {
 
   const handleColse = () => {
     dispatch(setSettingsMenuOpen(false));
+  };
+
+  const styles = {
+    paper: css`
+    width: 180,
+    paddingLeft: ${theme.spacing(2)};
+    paddingTop: ${theme.spacing(2)};
+    paddingRight: ${theme.spacing(4)};
+    paddingBottom: ${theme.spacing(2)};
+  `,
   };
 
   return (
@@ -51,7 +54,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
       onClose={handleColse}
       keepMounted
     >
-      <Paper className={classes.paper}>
+      <Paper css={styles.paper}>
         {/* <div className={classes.switchWrapper}> */}
         <CommonSwitch
           label={"ダークモード"}

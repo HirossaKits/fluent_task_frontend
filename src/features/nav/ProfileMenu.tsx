@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { makeStyles } from "@mui/material/styles";
+import { css } from "@emotion/react";
+import { useTheme } from "@mui/material";
 import Popover from "@mui/material/Popover";
 import Paper from "@mui/material/Paper";
 import Avatar from "@mui/material/Avatar";
@@ -17,32 +18,8 @@ type Props = {
   anchorEl: React.MutableRefObject<null>;
 };
 
-const useStyles = makeStyles((theme) => ({
-  avatorWrapper: {
-    padding: theme.spacing(1),
-  },
-  avatorLarge: {
-    background: theme.palette.grey[600],
-    width: theme.spacing(10),
-    height: theme.spacing(10),
-  },
-  nameWrapper: {
-    margin: 3,
-    marginLeft: 3,
-    marginRight: theme.spacing(2),
-  },
-  menuItem: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2),
-  },
-  iconWrapper: {
-    paddingTop: 6,
-    paddingRight: 12,
-  },
-}));
-
 const ProfileMenu: React.FC<Props> = (props) => {
-  const classes = useStyles();
+  const theme = useTheme();
   const dispatch = useDispatch();
   const profileMenuOpen = useSelector(selectProfileMenuOpen);
   const profile = useSelector(selectProfile);
@@ -56,6 +33,30 @@ const ProfileMenu: React.FC<Props> = (props) => {
 
   const handleProfileColse = () => {
     dispatch(setProfileMenuOpen(false));
+  };
+
+  const styles = {
+    avatorWrapper: css`
+      padding: ${theme.spacing(1)};
+    `,
+    avatorLarge: css`
+      background: ${theme.palette.grey[600]}
+      width: ${theme.spacing(10)};
+      height: ${theme.spacing(10)};
+    `,
+    nameWrapper: css`
+      margin: 3,
+      marginLeft: 3,
+      marginRight: ${theme.spacing(2)};
+    `,
+    menuItem: css`
+      paddingleft: ${theme.spacing(2)};
+      paddingright: ${theme.spacing(2)};
+    `,
+    iconWrapper: css`
+      paddingTop: 6,
+      paddingRight: 12,
+    `,
   };
 
   return (
@@ -80,8 +81,8 @@ const ProfileMenu: React.FC<Props> = (props) => {
           justifyContent='flex-start'
           alignItems='center'
         >
-          <Grid className={classes.avatorWrapper} item xs={6}>
-            <Avatar className={classes.avatorLarge} src={profile.avatar_img} />
+          <Grid css={styles.avatorWrapper} item xs={6}>
+            <Avatar css={styles.avatorLarge} src={profile.avatar_img} />
           </Grid>
           <Grid
             item
@@ -91,26 +92,26 @@ const ProfileMenu: React.FC<Props> = (props) => {
             alignItems='stretch'
             xs={6}
           >
-            <Grid className={classes.nameWrapper} item>
+            <Grid css={styles.nameWrapper} item>
               <Typography>Kitsuka</Typography>
             </Grid>
-            <Grid className={classes.nameWrapper} item>
+            <Grid css={styles.nameWrapper} item>
               <Typography>Hirohisaaaa</Typography>
             </Grid>
           </Grid>
         </Grid>
-        <Paper className='talk'>
+        <Paper css='talk'>
           <Typography>sample</Typography>
         </Paper>
         <MenuList>
-          <MenuItem className={classes.menuItem}>
-            <div className={classes.iconWrapper}>
+          <MenuItem css={styles.menuItem}>
+            <div css={styles.iconWrapper}>
               <EditIcon fontSize='small' />
             </div>
             <Typography>プロフィール編集</Typography>
           </MenuItem>
-          <MenuItem className={classes.menuItem} onClick={logout}>
-            <div className={classes.iconWrapper}>
+          <MenuItem css={styles.menuItem} onClick={logout}>
+            <div css={styles.iconWrapper}>
               <ExitToAppIcon fontSize='small' />
             </div>
             <Typography>ログアウト</Typography>
