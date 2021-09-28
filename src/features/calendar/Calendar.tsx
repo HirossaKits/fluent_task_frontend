@@ -355,7 +355,7 @@ const Calendar = () => {
     gridList: css`
       width: 84%;
       border-top: 1px solid'
-      borderLeft: 1px solid;
+      border-left: 1px solid;
       borderColor: ${theme.palette.divider},
       position: "relative",
     `,
