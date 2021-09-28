@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { makeStyles } from "@mui/material/styles";
+import { css } from "@emotion/react";
+import { useTheme } from "@mui/material";
 import Popover from "@mui/material/Popover";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
@@ -29,26 +30,7 @@ type Props = {
   anchorEl: React.MutableRefObject<null>;
 };
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    width: 600,
-    paddingRight: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
-  },
-  form: {
-    width: "100%",
-  },
-  gridIcon: {
-    paddingTop: 20,
-  },
-  gridItem: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-  },
-}));
-
 const TaskFilter: React.FC<Props> = (props) => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const filterTaskOpen = useSelector(selectFilterTaskOpen);
   const filterTask = useSelector(selectFilterTask);
@@ -129,6 +111,25 @@ const TaskFilter: React.FC<Props> = (props) => {
     dispatch(setFilterTaskOpen(false));
   };
 
+  const theme = useTheme();
+  const styles = {
+    paper: css`
+      width: 600;
+      paddingright: ${theme.spacing(1)};
+      paddingbottom: ${theme.spacing(1)};
+    `,
+    form: css`
+      width: 100%;
+    `,
+    gridIcon: css`
+      paddingtop: 20;
+    `,
+    gridItem: css`
+      marginleft: ${theme.spacing(1)};
+      marginright: ${theme.spacing(1)};
+    `,
+  };
+
   return (
     <Popover
       open={filterTaskOpen}
@@ -144,23 +145,23 @@ const TaskFilter: React.FC<Props> = (props) => {
       onClose={handleClose}
       keepMounted
     >
-      <Paper className={classes.paper}>
+      <Paper css={styles.paper}>
         <Grid
           container
-          direction='column'
-          justifyContent='center'
-          alignItems='center'
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
         >
-          <form className={classes.form} noValidate autoComplete='off'>
+          <form css={styles.form} noValidate autoComplete="off">
             {filterTask.map((filter, index) => (
               <Grid
                 item
                 container
-                direction='row'
-                justifyContent='center'
-                alignItems='center'
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
               >
-                <Grid className={classes.gridIcon} item xs={1}>
+                <Grid css={styles.gridIcon} item xs={1}>
                   {index === filterTask.length - 1 &&
                     (filterTask[index].value === "" ? (
                       <IconButton disabled>
@@ -172,10 +173,10 @@ const TaskFilter: React.FC<Props> = (props) => {
                       </IconButton>
                     ))}
                 </Grid>
-                <Grid className={classes.gridItem} item xs={3}>
+                <Grid css={styles.gridItem} item xs={3}>
                   <CommonSelect
-                    label='対象'
-                    name='columnName'
+                    label="対象"
+                    name="columnName"
                     options={ListColumns}
                     value={filter.columnName}
                     index={index}
@@ -183,11 +184,11 @@ const TaskFilter: React.FC<Props> = (props) => {
                   />
                 </Grid>
 
-                <Grid className={classes.gridItem} item xs={3}>
+                <Grid css={styles.gridItem} item xs={3}>
                   {filter.type === "string" ? (
                     <CommonSelect
-                      label='演算子'
-                      name='operator'
+                      label="演算子"
+                      name="operator"
                       options={FilterOperatorOfString}
                       value={filter.operator}
                       index={index}
@@ -195,8 +196,8 @@ const TaskFilter: React.FC<Props> = (props) => {
                     />
                   ) : filter.type === "number" ? (
                     <CommonSelect
-                      label='演算子'
-                      name='operator'
+                      label="演算子"
+                      name="operator"
                       options={FilterOperatorOfNumber}
                       value={filter.operator}
                       index={index}
@@ -204,8 +205,8 @@ const TaskFilter: React.FC<Props> = (props) => {
                     />
                   ) : (
                     <CommonSelect
-                      label='演算子'
-                      name='operator'
+                      label="演算子"
+                      name="operator"
                       options={FilterOperatorOfDate}
                       value={filter.operator}
                       index={index}
@@ -213,29 +214,29 @@ const TaskFilter: React.FC<Props> = (props) => {
                     />
                   )}
                 </Grid>
-                <Grid className={classes.gridItem} item xs={3}>
+                <Grid css={styles.gridItem} item xs={3}>
                   {filter.type === "string" || filter.type === "number" ? (
                     <CommonTextField
-                      label='値'
-                      name='value'
+                      label="値"
+                      name="value"
                       value={filter.value}
                       index={index}
                       onChange={handleInputChange}
                     />
                   ) : (
                     <CommonDatePicker
-                      label='値'
-                      name='value'
+                      label="値"
+                      name="value"
                       value={filter.value}
                       index={index}
                       onChange={handleInputChange}
                     />
                   )}
                 </Grid>
-                <Grid className={classes.gridIcon} item xs={1}>
+                <Grid css={styles.gridIcon} item xs={1}>
                   {(filterTask.length !== 1 || index !== 0) && (
                     <IconButton onClick={() => handleClearClick(index)}>
-                      <ClearIcon color='action' />
+                      <ClearIcon color="action" />
                     </IconButton>
                   )}
                 </Grid>
