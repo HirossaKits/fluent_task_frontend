@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { css } from "@emotion/react";
+import { css, Theme } from "@emotion/react";
 import { useTheme } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,7 +12,6 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import { makeStyles } from "@mui/material/styles";
 import AppsIcon from "@mui/icons-material/Apps";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import EventNoteIcon from "@mui/icons-material/EventNote";
@@ -33,8 +32,6 @@ import ProfileMenu from "./ProfileMenu";
 import Task from "../task/Task";
 import Calendar from "../calendar/Calendar";
 import { MAIN_COMPONENT } from "../types";
-
-const drawerWidth = 180;
 
 const Nav = () => {
   const dispatch = useDispatch();
@@ -69,23 +66,24 @@ const Nav = () => {
   }, [dispatch]);
 
   const theme = useTheme();
+  const drawerWidth = 180;
   const styles = {
     toolbar: css`
-      minheight: 0;
-      paddingleft: 0;
+      min-height: 0;
+      padding-left: 0;
     `,
     menuButtonDisp: css`
-      marginright: 36;
+      margin-right: 36;
     `,
     menuButtonHide: css`
       display: none;
     `,
     title: css`
       flexgrow: 1;
-      fontfamily: Oleo Script;
-      textalign: left;
+      font-family: "Oleo Script", cursive;
+      text-align: left;
       display: block;
-      marginleft: ${theme.spacing(3)};
+      margin-left: ${theme.spacing(3)};
     `,
     iconSection: css`
       display: flex;
@@ -99,23 +97,35 @@ const Nav = () => {
     `,
     appBarShift: css`
       width: calc(100% - ${drawerWidth}px);
-      marginleft: drawerWidth;
+      margin-left: drawerWidth;
       transition: ${theme.transitions.create(["margin", "width"], {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
       })};
     `,
     drawerOpen: css`
-      width: drawerWidth;
+      width: 1200;
       flexShrink: 0;
-      whiteSpace: nowrap;
+      white-space: nowrap;
       transition: ${theme.transitions.create("width", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
       })},
       border: 0;
-      background: ${theme.palette.background.paper},
+      background-color: ${theme.palette.background.paper};
     `,
+    // drawerClose: css`
+    //   flexShrink: 0;
+    //   whiteSpace: nowrap;
+    //   transition: ${theme.transitions.create("width", {
+    //     easing: theme.transitions.easing.sharp,
+    //     duration: theme.transitions.duration.leavingScreen,
+    //   })},
+    //   overflowX: hidden;
+    //   width: ${theme.spacing(6) + 1};
+    //   border: 0;
+    //   background-color: ${theme.palette.background.paper};
+    // `,
     drawerClose: css`
       flexShrink: 0;
       whiteSpace: nowrap;
@@ -124,64 +134,70 @@ const Nav = () => {
         duration: theme.transitions.duration.leavingScreen,
       })},
       overflowX: hidden;
-      width: ${theme.spacing(6) + 1};
+      width: 1200;
       border: 0;
-      background: ${theme.palette.background.paper};
+      background-color: ${theme.palette.background.paper};
     `,
     drawerHeader: css`
       display: flex;
-      alignItems: center;
+      align-items: center;
       padding: ${theme.spacing(0, 1)}
       justifyContent: flex-end;
       border: 0;
-      background: ${theme.palette.divider};
+      background-color: ${theme.palette.divider};
     `,
     drawerIcon: css`
-      paddingleft: 12;
+      padding-left: 12;
     `,
     drawerText: css`
       color: ${theme.palette.text.secondary};
-      paddingbottom: 4;
+      padding-bottom: 4;
     `,
     content: css`
       width: calc(96%  - ${drawerWidth}px);
-      paddingTop: ${theme.spacing(3)},
+      padding-top: ${theme.spacing(3)},
       transition: ${theme.transitions.create("margin", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
       })},
-      marginLeft: drawerWidth;
+      margin-left: drawerWidth;
     `,
     contentShift: css`
       width: calc(96%  - ${theme.spacing(6) + 1}px);
-      paddingTop: ${theme.spacing(3)};
+      padding-top: ${theme.spacing(3)};
       transition: ${theme.transitions.create("margin", {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
       })},
-      marginLeft: ${theme.spacing(6) + 1};
+      margin-left: ${theme.spacing(6) + 1};
     `,
   };
+
+  console.log(styles);
 
   return (
     <>
       <AppBar
         css={drawerOpen ? styles.appBarShift : styles.appBar}
-        position="static"
+        position='static'
       >
         <Toolbar css={styles.toolbar}>
           <IconButton
-            css={drawerOpen ? styles.menuButtonHide : styles.menuButtonDisp}
+            className={
+              drawerOpen
+                ? styles.menuButtonHide.styles
+                : styles.menuButtonDisp.styles
+            }
             onClick={handleDrawerOpen}
           >
             <AppsIcon />
           </IconButton>
-          <Typography css={styles.title} variant="h5" noWrap>
+          <Typography css={styles.title} variant='h5' noWrap>
             Fluent Task
           </Typography>
           <div css={styles.iconSection}>
             <IconButton>
-              <Badge badgeContent={1} color="secondary">
+              <Badge badgeContent={1} color='secondary'>
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -194,50 +210,51 @@ const Nav = () => {
           </div>
         </Toolbar>
       </AppBar>
-      <Drawer
+      {/* <Drawer
         css={drawerOpen ? styles.drawerOpen : styles.drawerClose}
-        variant="permanent"
-        anchor="left"
+        className={"1gxenss-drawerOpen"}
+        variant='permanent'
+        anchor='left'
         open={drawerOpen}
-      >
-        <div css={styles.drawerHeader}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <List>
-          <ListItem
-            button
-            css={styles.drawerIcon}
-            onClick={() => handleVirticalMenuClick("List")}
-          >
-            <ListItemIcon>
-              <ListAltIcon />
-            </ListItemIcon>
-            <ListItemText css={styles.drawerText} primary={"一覧"} />
-          </ListItem>
-          <ListItem
-            button
-            css={styles.drawerIcon}
-            onClick={() => handleVirticalMenuClick("Card")}
-          >
-            <ListItemIcon>
-              <ViewWeekIcon />
-            </ListItemIcon>
-            <ListItemText css={styles.drawerText} primary={"カード"} />
-          </ListItem>
-          <ListItem
-            button
-            css={styles.drawerIcon}
-            onClick={() => handleVirticalMenuClick("Calendar")}
-          >
-            <ListItemIcon>
-              <EventNoteIcon />
-            </ListItemIcon>
-            <ListItemText css={styles.drawerText} primary={"カレンダー"} />
-          </ListItem>
-        </List>
-      </Drawer>
+      > */}
+      <div css={styles.drawerHeader}>
+        <IconButton onClick={handleDrawerClose}>
+          <ChevronLeftIcon />
+        </IconButton>
+      </div>
+      <List>
+        <ListItem
+          button
+          css={styles.drawerIcon}
+          onClick={() => handleVirticalMenuClick("List")}
+        >
+          <ListItemIcon>
+            <ListAltIcon />
+          </ListItemIcon>
+          <ListItemText css={styles.drawerText} primary={"一覧"} />
+        </ListItem>
+        <ListItem
+          button
+          css={styles.drawerIcon}
+          onClick={() => handleVirticalMenuClick("Card")}
+        >
+          <ListItemIcon>
+            <ViewWeekIcon />
+          </ListItemIcon>
+          <ListItemText css={styles.drawerText} primary={"カード"} />
+        </ListItem>
+        <ListItem
+          button
+          css={styles.drawerIcon}
+          onClick={() => handleVirticalMenuClick("Calendar")}
+        >
+          <ListItemIcon>
+            <EventNoteIcon />
+          </ListItemIcon>
+          <ListItemText css={styles.drawerText} primary={"カレンダー"} />
+        </ListItem>
+      </List>
+      {/* </Drawer> */}
       <div css={drawerOpen ? styles.content : styles.contentShift}>
         {mainComponent === "List" ? (
           <Task />
