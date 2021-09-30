@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { css, Theme } from "@emotion/react";
 import { useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Drawer from "@mui/material/Drawer";
@@ -32,6 +33,7 @@ import ProfileMenu from "./ProfileMenu";
 import Task from "../task/Task";
 import Calendar from "../calendar/Calendar";
 import { MAIN_COMPONENT } from "../types";
+import MoreIcon from "@mui/icons-material/MoreVert";
 
 const Nav = () => {
   const dispatch = useDispatch();
@@ -87,9 +89,6 @@ const Nav = () => {
       display: block;
       margin-left: ${theme.spacing(3)};
     `,
-    iconSection: css`
-      display: flex;
-    `,
     appBar: css`
       zindex: ${theme.zIndex.drawer + 1};
       transition: ${theme.transitions.create(["margin", "width"], {
@@ -105,17 +104,25 @@ const Nav = () => {
         duration: theme.transitions.duration.enteringScreen,
       })};
     `,
+    // drawerOpen: css`
+    // background-color: green;
+    //   width: ${drawerWidth}px;
+    //   flexShrink: 0;
+    //   white-space: nowrap;
+    //   transition: ${theme.transitions.create("width", {
+    //     easing: theme.transitions.easing.sharp,
+    //     duration: theme.transitions.duration.enteringScreen,
+    //   })},
+    //   border: 0;
+    //   background-color: ${theme.palette.background.paper};
+    // `,
     drawerOpen: css`
-    background-color: green;
+      background-color: green;
       width: ${drawerWidth}px;
-      flexShrink: 0;
+      flexshrink: 0;
       white-space: nowrap;
-      transition: ${theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      })},
       border: 0;
-      background-color: ${theme.palette.background.paper};
+      color: green;
     `,
     // drawerClose: css`
     //   flexShrink: 0;
@@ -133,13 +140,9 @@ const Nav = () => {
       width: 0px;
       flexshrink: 0;
       whitespace: nowrap;
-      /* transition: ${theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      })}, */
       overflowx: hidden;
       border: 0;
-      background-color: ${theme.palette.background.paper};
+      color: green;
     `,
     drawerHeader: css`
       display: flex;
@@ -179,28 +182,32 @@ const Nav = () => {
   console.log(styles);
 
   return (
-    <>
+    <Box sx={{ flexGrow: 1 }}>
       <AppBar
         css={drawerOpen ? styles.appBarShift : styles.appBar}
-        position="static"
+        position='fixed'
       >
-        <Toolbar css={styles.toolbar}>
+        <Toolbar
+          // css={styles.toolbar}
+          variant='dense'
+        >
           <IconButton
-            className={
-              drawerOpen
-                ? styles.menuButtonHide.styles
-                : styles.menuButtonDisp.styles
-            }
+            // className={
+            //   drawerOpen
+            //     ? styles.menuButtonHide.styles
+            //     : styles.menuButtonDisp.styles
+            // }
             onClick={handleDrawerOpen}
           >
             <AppsIcon />
           </IconButton>
-          <Typography css={styles.title} variant="h5" noWrap>
+          <Typography css={styles.title} variant='h5' noWrap>
             Fluent Task
           </Typography>
-          <div css={styles.iconSection}>
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton>
-              <Badge badgeContent={1} color="secondary">
+              <Badge badgeContent={1} color='secondary'>
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -210,14 +217,26 @@ const Nav = () => {
             <IconButton ref={profileAnchorEl} onClick={handleProfileOpen}>
               <AccountCircle />
             </IconButton>
-          </div>
+          </Box>
+          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+            <IconButton
+              size='large'
+              aria-label='show more'
+              aria-controls={mobileMenuId}
+              aria-haspopup='true'
+              onClick={handleMobileMenuOpen}
+              color='inherit'
+            >
+              <MoreIcon />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer
         css={drawerOpen ? styles.drawerOpen : styles.drawerClose}
         className={"1gxenss-drawerOpen"}
-        variant="permanent"
-        anchor="left"
+        variant='permanent'
+        anchor='left'
         open={drawerOpen}
       >
         <div css={styles.drawerHeader}>
@@ -269,7 +288,7 @@ const Nav = () => {
       </div>
       <SettingsMenu anchorEl={settingsAnchorEl} />
       <ProfileMenu anchorEl={profileAnchorEl} />
-    </>
+    </Box>
   );
 };
 
