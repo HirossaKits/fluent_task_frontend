@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { css, Theme } from "@emotion/react";
-import { useTheme } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Drawer from "@mui/material/Drawer";
@@ -40,10 +40,12 @@ const Nav = () => {
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
+    console.log("Opened");
   };
 
   const handleDrawerClose = () => {
     setDrawerOpen(false);
+    console.log("Closed");
   };
 
   const settingsAnchorEl = useRef(null);
@@ -66,7 +68,7 @@ const Nav = () => {
   }, [dispatch]);
 
   const theme = useTheme();
-  const drawerWidth = 180;
+  const drawerWidth = 1800;
   const styles = {
     toolbar: css`
       min-height: 0;
@@ -97,14 +99,15 @@ const Nav = () => {
     `,
     appBarShift: css`
       width: calc(100% - ${drawerWidth}px);
-      margin-left: drawerWidth;
+      margin-left: ${drawerWidth};
       transition: ${theme.transitions.create(["margin", "width"], {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
       })};
     `,
     drawerOpen: css`
-      width: 1200;
+    background-color: green;
+      width: ${drawerWidth}px;
       flexShrink: 0;
       white-space: nowrap;
       transition: ${theme.transitions.create("width", {
@@ -127,14 +130,14 @@ const Nav = () => {
     //   background-color: ${theme.palette.background.paper};
     // `,
     drawerClose: css`
-      flexShrink: 0;
-      whiteSpace: nowrap;
-      transition: ${theme.transitions.create("width", {
+      width: 0px;
+      flexshrink: 0;
+      whitespace: nowrap;
+      /* transition: ${theme.transitions.create("width", {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
-      })},
-      overflowX: hidden;
-      width: 1200;
+      })}, */
+      overflowx: hidden;
       border: 0;
       background-color: ${theme.palette.background.paper};
     `,
@@ -179,7 +182,7 @@ const Nav = () => {
     <>
       <AppBar
         css={drawerOpen ? styles.appBarShift : styles.appBar}
-        position='static'
+        position="static"
       >
         <Toolbar css={styles.toolbar}>
           <IconButton
@@ -192,12 +195,12 @@ const Nav = () => {
           >
             <AppsIcon />
           </IconButton>
-          <Typography css={styles.title} variant='h5' noWrap>
+          <Typography css={styles.title} variant="h5" noWrap>
             Fluent Task
           </Typography>
           <div css={styles.iconSection}>
             <IconButton>
-              <Badge badgeContent={1} color='secondary'>
+              <Badge badgeContent={1} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -210,51 +213,51 @@ const Nav = () => {
           </div>
         </Toolbar>
       </AppBar>
-      {/* <Drawer
+      <Drawer
         css={drawerOpen ? styles.drawerOpen : styles.drawerClose}
         className={"1gxenss-drawerOpen"}
-        variant='permanent'
-        anchor='left'
+        variant="permanent"
+        anchor="left"
         open={drawerOpen}
-      > */}
-      <div css={styles.drawerHeader}>
-        <IconButton onClick={handleDrawerClose}>
-          <ChevronLeftIcon />
-        </IconButton>
-      </div>
-      <List>
-        <ListItem
-          button
-          css={styles.drawerIcon}
-          onClick={() => handleVirticalMenuClick("List")}
-        >
-          <ListItemIcon>
-            <ListAltIcon />
-          </ListItemIcon>
-          <ListItemText css={styles.drawerText} primary={"一覧"} />
-        </ListItem>
-        <ListItem
-          button
-          css={styles.drawerIcon}
-          onClick={() => handleVirticalMenuClick("Card")}
-        >
-          <ListItemIcon>
-            <ViewWeekIcon />
-          </ListItemIcon>
-          <ListItemText css={styles.drawerText} primary={"カード"} />
-        </ListItem>
-        <ListItem
-          button
-          css={styles.drawerIcon}
-          onClick={() => handleVirticalMenuClick("Calendar")}
-        >
-          <ListItemIcon>
-            <EventNoteIcon />
-          </ListItemIcon>
-          <ListItemText css={styles.drawerText} primary={"カレンダー"} />
-        </ListItem>
-      </List>
-      {/* </Drawer> */}
+      >
+        <div css={styles.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </div>
+        <List>
+          <ListItem
+            button
+            css={styles.drawerIcon}
+            onClick={() => handleVirticalMenuClick("List")}
+          >
+            <ListItemIcon>
+              <ListAltIcon />
+            </ListItemIcon>
+            <ListItemText css={styles.drawerText} primary={"一覧"} />
+          </ListItem>
+          <ListItem
+            button
+            css={styles.drawerIcon}
+            onClick={() => handleVirticalMenuClick("Card")}
+          >
+            <ListItemIcon>
+              <ViewWeekIcon />
+            </ListItemIcon>
+            <ListItemText css={styles.drawerText} primary={"カード"} />
+          </ListItem>
+          <ListItem
+            button
+            css={styles.drawerIcon}
+            onClick={() => handleVirticalMenuClick("Calendar")}
+          >
+            <ListItemIcon>
+              <EventNoteIcon />
+            </ListItemIcon>
+            <ListItemText css={styles.drawerText} primary={"カレンダー"} />
+          </ListItem>
+        </List>
+      </Drawer>
       <div css={drawerOpen ? styles.content : styles.contentShift}>
         {mainComponent === "List" ? (
           <Task />

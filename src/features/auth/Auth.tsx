@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { css } from "@emotion/react";
-import { useTheme } from "@mui/material";
-import {
-  Container,
-  Grid,
-  Typography,
-  TextField,
-  Button,
-  Link,
-  Box,
-} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
+import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import { CRED, REG_INFO } from "../types";
 import { AppDispatch } from "../../app/store";
@@ -88,17 +86,17 @@ const Auth: React.FC = () => {
 
   return (
     <div css={styles.root}>
-      <Container component='main' maxWidth='xs'>
+      <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Typography css={styles.title} component='h1' variant='h2'>
+        <Typography css={styles.title} component="h1" variant="h2">
           Fluent Task
         </Typography>
         <form>
           <Grid
             css={styles.wrap}
             container
-            justifyContent='center'
-            alignItems='center'
+            justifyContent="center"
+            alignItems="center"
             spacing={2}
           >
             {mode === MODE.Login && (
@@ -106,29 +104,29 @@ const Auth: React.FC = () => {
                 <Grid item xs={8}>
                   <TextField
                     autoFocus
-                    variant='outlined'
-                    margin='normal'
+                    variant="outlined"
+                    margin="normal"
                     fullWidth
-                    id='email'
-                    label='Email Address'
-                    name='email'
-                    autoComplete='email'
-                    size='small'
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    size="small"
                     value={regInfo.email}
                     onChange={handleInputChange}
                   />
                 </Grid>
                 <Grid item xs={8}>
                   <TextField
-                    variant='outlined'
-                    margin='normal'
+                    variant="outlined"
+                    margin="normal"
                     fullWidth
-                    name='password'
-                    label='Password'
-                    type='password'
-                    id='password'
-                    autoComplete='current-password'
-                    size='small'
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    size="small"
                     value={regInfo.password}
                     onChange={handleInputChange}
                   />
@@ -140,56 +138,56 @@ const Auth: React.FC = () => {
               <>
                 <Grid item xs={4}>
                   <TextField
-                    autoComplete='fname'
-                    margin='normal'
-                    variant='outlined'
+                    autoComplete="fname"
+                    margin="normal"
+                    variant="outlined"
                     fullWidth
-                    id='firstName'
-                    name='first_name'
-                    label='First Name'
+                    id="firstName"
+                    name="first_name"
+                    label="First Name"
                     autoFocus
-                    size='small'
+                    size="small"
                     onChange={handleInputChange}
                   />
                 </Grid>
                 <Grid item xs={4}>
                   <TextField
-                    variant='outlined'
-                    margin='normal'
+                    variant="outlined"
+                    margin="normal"
                     fullWidth
-                    id='lastName'
-                    name='last_name'
-                    label='Last Name'
-                    autoComplete='lname'
-                    size='small'
+                    id="lastName"
+                    name="last_name"
+                    label="Last Name"
+                    autoComplete="lname"
+                    size="small"
                     onChange={handleInputChange}
                   />
                 </Grid>
                 <Grid item xs={8}>
                   <TextField
-                    variant='outlined'
-                    margin='normal'
+                    variant="outlined"
+                    margin="normal"
                     fullWidth
-                    id='email'
-                    label='Email Address'
-                    name='email'
-                    autoComplete='email'
-                    size='small'
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    size="small"
                     value={regInfo.email}
                     onChange={handleInputChange}
                   />
                 </Grid>
                 <Grid item xs={8}>
                   <TextField
-                    variant='outlined'
-                    margin='normal'
+                    variant="outlined"
+                    margin="normal"
                     fullWidth
-                    name='password'
-                    label='Password'
-                    type='password'
-                    id='password'
-                    autoComplete='current-password'
-                    size='small'
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    size="small"
                     value={regInfo.password}
                     onChange={handleInputChange}
                   />
@@ -199,9 +197,9 @@ const Auth: React.FC = () => {
 
             <Grid item xs={12}>
               <Button
-                type='submit'
-                variant='contained'
-                color='primary'
+                type="submit"
+                variant="contained"
+                color="primary"
                 css={styles.submit}
                 onClick={mode === MODE.Login ? login : register}
               >
@@ -209,16 +207,16 @@ const Auth: React.FC = () => {
               </Button>
             </Grid>
             <Grid item xs={12}>
-              <Link variant='body2' onClick={toggleView}>
+              <Link variant="body2" onClick={toggleView}>
                 {mode === MODE.Login ? "アカウント作成" : "ログイン画面に戻る"}
               </Link>
             </Grid>
           </Grid>
         </form>
         <Box mt={8}>
-          <Typography variant='body2' color='textSecondary' align='center'>
+          <Typography variant="body2" color="textSecondary" align="center">
             {"Copyright © "}
-            <Link color='inherit' href=''>
+            <Link color="inherit" href="">
               KITS CREATE
             </Link>{" "}
             {new Date().getFullYear()}
