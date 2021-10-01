@@ -42,12 +42,10 @@ const Nav = () => {
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
-    console.log("Opened");
   };
 
   const handleDrawerClose = () => {
     setDrawerOpen(false);
-    console.log("Closed");
   };
 
   const settingsAnchorEl = useRef(null);
@@ -70,17 +68,19 @@ const Nav = () => {
   }, [dispatch]);
 
   const theme = useTheme();
-  const drawerWidth = 1800;
+  const drawerWidth = 180;
   const styles = {
     toolbar: css`
       min-height: 0;
       padding-left: 0;
     `,
     menuButtonDisp: css`
-      margin-right: 36;
+      margin-right: 36px;
     `,
     menuButtonHide: css`
-      display: none;
+       {
+        display: none;
+      }
     `,
     title: css`
       flexgrow: 1;
@@ -104,47 +104,35 @@ const Nav = () => {
         duration: theme.transitions.duration.enteringScreen,
       })};
     `,
-    // drawerOpen: css`
-    // background-color: green;
-    //   width: ${drawerWidth}px;
-    //   flexShrink: 0;
-    //   white-space: nowrap;
-    //   transition: ${theme.transitions.create("width", {
-    //     easing: theme.transitions.easing.sharp,
-    //     duration: theme.transitions.duration.enteringScreen,
-    //   })},
-    //   border: 0;
-    //   background-color: ${theme.palette.background.paper};
-    // `,
     drawerOpen: css`
-      background-color: green;
-      width: ${drawerWidth}px;
+      & .MuiDrawer-paper {
+        width: ${drawerWidth}px;
+        transition: ${theme.transitions.create("width", {
+          easing: theme.transitions.easing.sharp,
+          duration: theme.transitions.duration.enteringScreen,
+        })};
+        background-color: ${theme.palette.background.paper};
+      }
       flexshrink: 0;
       white-space: nowrap;
       border: 0;
-      color: green;
     `,
-    // drawerClose: css`
-    //   flexShrink: 0;
-    //   whiteSpace: nowrap;
-    //   transition: ${theme.transitions.create("width", {
-    //     easing: theme.transitions.easing.sharp,
-    //     duration: theme.transitions.duration.leavingScreen,
-    //   })},
-    //   overflowX: hidden;
-    //   width: ${theme.spacing(6) + 1};
-    //   border: 0;
-    //   background-color: ${theme.palette.background.paper};
-    // `,
     drawerClose: css`
-      width: 0px;
+      & .MuiDrawer-paper {
+        width: 0px;
+        transition: ${theme.transitions.create("width", {
+          easing: theme.transitions.easing.sharp,
+          duration: theme.transitions.duration.leavingScreen,
+        })};
+        background-color: ${theme.palette.background.paper};
+      }
       flexshrink: 0;
       whitespace: nowrap;
       overflowx: hidden;
       border: 0;
-      color: green;
     `,
     drawerHeader: css`
+      height: 48px;
       display: flex;
       align-items: center;
       padding: ${theme.spacing(0, 1)}
@@ -185,29 +173,29 @@ const Nav = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         css={drawerOpen ? styles.appBarShift : styles.appBar}
-        position='fixed'
+        position="fixed"
       >
         <Toolbar
           // css={styles.toolbar}
-          variant='dense'
+          variant="dense"
         >
           <IconButton
-            // className={
-            //   drawerOpen
-            //     ? styles.menuButtonHide.styles
-            //     : styles.menuButtonDisp.styles
-            // }
+            className={
+              drawerOpen
+                ? styles.menuButtonHide.styles
+                : styles.menuButtonDisp.styles
+            }
             onClick={handleDrawerOpen}
           >
             <AppsIcon />
           </IconButton>
-          <Typography css={styles.title} variant='h5' noWrap>
+          <Typography css={styles.title} variant="h5" noWrap>
             Fluent Task
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton>
-              <Badge badgeContent={1} color='secondary'>
+              <Badge badgeContent={1} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -218,25 +206,13 @@ const Nav = () => {
               <AccountCircle />
             </IconButton>
           </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size='large'
-              aria-label='show more'
-              aria-controls={mobileMenuId}
-              aria-haspopup='true'
-              onClick={handleMobileMenuOpen}
-              color='inherit'
-            >
-              <MoreIcon />
-            </IconButton>
-          </Box>
         </Toolbar>
       </AppBar>
       <Drawer
         css={drawerOpen ? styles.drawerOpen : styles.drawerClose}
         className={"1gxenss-drawerOpen"}
-        variant='permanent'
-        anchor='left'
+        variant="permanent"
+        anchor="left"
         open={drawerOpen}
       >
         <div css={styles.drawerHeader}>
