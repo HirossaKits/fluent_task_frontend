@@ -69,28 +69,29 @@ const Nav = () => {
 
   const theme = useTheme();
   const drawerWidth = 180;
+  const drawerCloseWidth = 54;
   const styles = {
     toolbar: css`
-      min-height: 0;
-      padding-left: 0;
+      padding: 0 9px;
     `,
-    menuButtonDisp: css`
-      margin-right: 36px;
+    menuIcon: css`
+      margin-left: 0px;
     `,
-    menuButtonHide: css`
-       {
-        display: none;
-      }
+    menuIconHide: css`
+      display: none;
     `,
     title: css`
-      flexgrow: 1;
+      flex-grow: 1;
       font-family: "Oleo Script", cursive;
       text-align: left;
       display: block;
-      margin-left: ${theme.spacing(3)};
+      margin-left: ${theme.spacing(4)};
+    `,
+    iconBox: css`
+      margin-right: ${theme.spacing(2)};
     `,
     appBar: css`
-      zindex: ${theme.zIndex.drawer + 1};
+      z-index: ${theme.zIndex.drawer + 1};
       transition: ${theme.transitions.create(["margin", "width"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -112,58 +113,57 @@ const Nav = () => {
           duration: theme.transitions.duration.enteringScreen,
         })};
         background-color: ${theme.palette.background.paper};
+        overflow-x: hidden;
       }
-      flexshrink: 0;
+      flex-shrink: 0;
       white-space: nowrap;
-      border: 0;
     `,
     drawerClose: css`
       & .MuiDrawer-paper {
-        width: 0px;
+        width: ${drawerCloseWidth}px;
         transition: ${theme.transitions.create("width", {
           easing: theme.transitions.easing.sharp,
           duration: theme.transitions.duration.leavingScreen,
         })};
         background-color: ${theme.palette.background.paper};
+        overflow-x: hidden;
       }
       flexshrink: 0;
-      whitespace: nowrap;
-      overflowx: hidden;
-      border: 0;
+      white-space: nowrap;
     `,
     drawerHeader: css`
       height: 48px;
       display: flex;
       align-items: center;
-      padding: ${theme.spacing(0, 1)}
-      justifyContent: flex-end;
-      border: 0;
+      justify-content: flex-end;
+      padding: ${theme.spacing(0, 1)};
       background-color: ${theme.palette.divider};
+      border-right-color: ${theme.palette.primary.main};
     `,
     drawerIcon: css`
-      padding-left: 12;
+      padding-left: 16px;
     `,
     drawerText: css`
       color: ${theme.palette.text.secondary};
       padding-bottom: 4;
     `,
     content: css`
-      width: calc(96%  - ${drawerWidth}px);
-      padding-top: ${theme.spacing(3)},
-      transition: ${theme.transitions.create("margin", {
+      width: calc(100% - ${drawerWidth}px);
+      padding-top: ${theme.spacing(8)};
+      transition: ${theme.transitions.create(["margin", "width"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
-      })},
-      margin-left: drawerWidth;
+      })};
+      margin-left: ${drawerWidth}px;
     `,
     contentShift: css`
-      width: calc(96%  - ${theme.spacing(6) + 1}px);
-      padding-top: ${theme.spacing(3)};
-      transition: ${theme.transitions.create("margin", {
+      width: calc(100% - ${drawerCloseWidth}px);
+      padding-top: ${theme.spacing(8)};
+      transition: ${theme.transitions.create(["margin", "width"], {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
-      })},
-      margin-left: ${theme.spacing(6) + 1};
+      })};
+      margin-left: ${drawerCloseWidth}px;
     `,
   };
 
@@ -173,29 +173,26 @@ const Nav = () => {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         css={drawerOpen ? styles.appBarShift : styles.appBar}
-        position="fixed"
+        position='fixed'
       >
-        <Toolbar
-          // css={styles.toolbar}
-          variant="dense"
-        >
+        <Toolbar css={styles.toolbar} disableGutters variant='dense'>
           <IconButton
-            className={
-              drawerOpen
-                ? styles.menuButtonHide.styles
-                : styles.menuButtonDisp.styles
-            }
+            css={drawerOpen ? styles.menuIconHide : styles.menuIcon}
+            edge='start'
             onClick={handleDrawerOpen}
           >
             <AppsIcon />
           </IconButton>
-          <Typography css={styles.title} variant="h5" noWrap>
+          <Typography css={styles.title} variant='h5' noWrap>
             Fluent Task
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box
+            css={styles.iconBox}
+            sx={{ display: { xs: "none", md: "flex" } }}
+          >
             <IconButton>
-              <Badge badgeContent={1} color="secondary">
+              <Badge badgeContent={1} color='secondary'>
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -211,8 +208,8 @@ const Nav = () => {
       <Drawer
         css={drawerOpen ? styles.drawerOpen : styles.drawerClose}
         className={"1gxenss-drawerOpen"}
-        variant="permanent"
-        anchor="left"
+        variant='permanent'
+        anchor='left'
         open={drawerOpen}
       >
         <div css={styles.drawerHeader}>
@@ -254,6 +251,7 @@ const Nav = () => {
         </List>
       </Drawer>
       <div css={drawerOpen ? styles.content : styles.contentShift}>
+        {/* <Box component='main' sx={{ flexGrow: 1, p: 3 }}> */}
         {mainComponent === "List" ? (
           <Task />
         ) : mainComponent === "Calendar" ? (
@@ -261,6 +259,7 @@ const Nav = () => {
         ) : (
           <div></div>
         )}
+        {/* </Box> */}
       </div>
       <SettingsMenu anchorEl={settingsAnchorEl} />
       <ProfileMenu anchorEl={profileAnchorEl} />

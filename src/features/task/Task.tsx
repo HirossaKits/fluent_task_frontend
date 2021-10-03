@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { css } from "@emotion/react";
 import { useTheme } from "@mui/material";
 import { alpha } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
@@ -214,10 +216,7 @@ const Task = () => {
         theme.palette.action.selectedOpacity
       )};
   `,
-    tableCell: css`
-      paddingleft: 0;
-      paddingright: 0;
-    `,
+    tableCell: css``,
     tableCheckCell: css`
       width: 4%;
     `,
@@ -230,118 +229,117 @@ const Task = () => {
 
   return (
     <>
-      <Typography variant='h5' component='h2'>
-        タスク一覧
-      </Typography>
-      <Toolbar disableGutters>
-        <Tooltip title='登録'>
-          <IconButton aria-label='filter list'>
-            <PlaylistAddIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title='編集'>
-          <IconButton aria-label='edit task' onClick={handleEditClick}>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title='削除'>
-          <IconButton aria-label='delete'>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
+      <Box sx={{ width: "100%" }}>
+        <Toolbar disableGutters>
+          <Tooltip title='登録'>
+            <IconButton aria-label='filter list'>
+              <PlaylistAddIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title='編集'>
+            <IconButton aria-label='edit task' onClick={handleEditClick}>
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title='削除'>
+            <IconButton aria-label='delete'>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
 
-        <Tooltip title='フィルター'>
-          <IconButton
-            ref={filterAnchorEl}
-            css={styles.filterButton}
-            aria-label='filter list'
-            onClick={handleFilterClick}
-          >
-            <FilterListIcon />
-          </IconButton>
-        </Tooltip>
-      </Toolbar>
-      <TableContainer css={styles.tableContainer}>
-        <Table size='medium'>
-          <TableHead>
-            <TableRow>
-              <TableCell css={styles.tableCheckCell} padding='checkbox'>
-                <Checkbox
-                  indeterminate={
-                    selected.length > 0 && selected.length < tasks.length
-                  }
-                  checked={
-                    selected.length > 0 && selected.length === tasks.length
-                  }
-                  onChange={handleSelectAllClic}
-                  color='primary'
-                />
-              </TableCell>
-              {columnsInfo.map((col) => (
-                <TableCell css={styles.tableCell} key={col.name}>
-                  <TableSortLabel
-                    active={sortState.columnName === col.name}
-                    direction={
-                      sortState.columnName === col.name
-                        ? sortState.order
-                        : "asc"
-                    }
-                    onClick={() => handleClickSortColumn(col.name)}
-                  >
-                    {col.label}
-                  </TableSortLabel>
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {sortRows(filterTasks(tasks)).map((row, rowIndex) => (
-              <TableRow
-                css={styles.tableRow}
-                onClick={(event) => handleRowClick(event, row.task_id)}
-                hover
-                selected={selected.indexOf(row.task_id) !== -1}
-              >
+          <Tooltip title='フィルター'>
+            <IconButton
+              ref={filterAnchorEl}
+              css={styles.filterButton}
+              aria-label='filter list'
+              onClick={handleFilterClick}
+            >
+              <FilterListIcon />
+            </IconButton>
+          </Tooltip>
+        </Toolbar>
+        <TableContainer css={styles.tableContainer}>
+          <Table size='medium'>
+            <TableHead>
+              <TableRow>
                 <TableCell css={styles.tableCheckCell} padding='checkbox'>
                   <Checkbox
-                    checked={selected.indexOf(row.task_id) !== -1}
+                    indeterminate={
+                      selected.length > 0 && selected.length < tasks.length
+                    }
+                    checked={
+                      selected.length > 0 && selected.length === tasks.length
+                    }
+                    onChange={handleSelectAllClic}
                     color='primary'
                   />
                 </TableCell>
                 {columnsInfo.map((col) => (
-                  <TableCell
-                    css={
-                      col.type === "number"
-                        ? styles.tableNumericCell
-                        : styles.tableCell
-                    }
-                    width={col.width}
-                    align={col.type === "number" ? "right" : "inherit"}
-                  >
-                    <Typography>
-                      {col.name === "task_name" ? (
-                        <Link
-                          css={styles.link}
-                          underline='always'
-                          color='textPrimary'
-                          onClick={(event: any) => {
-                            event.stopPropagation();
-                            setEditTaskOpen(true);
-                          }}
-                        >
-                          {row[col.name]}
-                        </Link>
-                      ) : (
-                        row[col.name]
-                      )}
-                    </Typography>
+                  <TableCell css={styles.tableCell} key={col.name}>
+                    <TableSortLabel
+                      active={sortState.columnName === col.name}
+                      direction={
+                        sortState.columnName === col.name
+                          ? sortState.order
+                          : "asc"
+                      }
+                      onClick={() => handleClickSortColumn(col.name)}
+                    >
+                      {col.label}
+                    </TableSortLabel>
                   </TableCell>
                 ))}
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {sortRows(filterTasks(tasks)).map((row, rowIndex) => (
+                <TableRow
+                  css={styles.tableRow}
+                  onClick={(event) => handleRowClick(event, row.task_id)}
+                  hover
+                  selected={selected.indexOf(row.task_id) !== -1}
+                >
+                  <TableCell css={styles.tableCheckCell} padding='checkbox'>
+                    <Checkbox
+                      checked={selected.indexOf(row.task_id) !== -1}
+                      color='primary'
+                    />
+                  </TableCell>
+                  {columnsInfo.map((col) => (
+                    <TableCell
+                      css={
+                        col.type === "number"
+                          ? styles.tableNumericCell
+                          : styles.tableCell
+                      }
+                      width={col.width}
+                      align={col.type === "number" ? "right" : "inherit"}
+                    >
+                      <Typography>
+                        {col.name === "task_name" ? (
+                          <Link
+                            css={styles.link}
+                            underline='always'
+                            color='textPrimary'
+                            onClick={(event: any) => {
+                              event.stopPropagation();
+                              setEditTaskOpen(true);
+                            }}
+                          >
+                            {row[col.name]}
+                          </Link>
+                        ) : (
+                          row[col.name]
+                        )}
+                      </Typography>
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
       <TaskDialog />
       <TaskFilter anchorEl={filterAnchorEl} />
     </>
