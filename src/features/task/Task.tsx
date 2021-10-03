@@ -221,9 +221,8 @@ const Task = () => {
       width: 4%;
     `,
     tableNumericCell: css`
-    paddingLeft: 0,
-    paddingRight: 5%,
-  `,
+      padding-right: 5%;
+    `,
     link: css``,
   };
 
@@ -259,7 +258,7 @@ const Task = () => {
           </Tooltip>
         </Toolbar>
         <TableContainer css={styles.tableContainer}>
-          <Table size='medium'>
+          <Table>
             <TableHead>
               <TableRow>
                 <TableCell css={styles.tableCheckCell} padding='checkbox'>
@@ -313,7 +312,7 @@ const Task = () => {
                           : styles.tableCell
                       }
                       width={col.width}
-                      align={col.type === "number" ? "right" : "inherit"}
+                      align={col.type === "number" ? "right" : "left"}
                     >
                       <Typography>
                         {col.name === "task_name" ? (

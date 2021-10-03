@@ -150,6 +150,8 @@ const Nav = () => {
     content: css`
       width: calc(100% - ${drawerWidth}px);
       padding-top: ${theme.spacing(8)};
+      padding-left: ${theme.spacing(6)};
+      padding-right: ${theme.spacing(6)};
       transition: ${theme.transitions.create(["margin", "width"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -159,6 +161,8 @@ const Nav = () => {
     contentShift: css`
       width: calc(100% - ${drawerCloseWidth}px);
       padding-top: ${theme.spacing(8)};
+      padding-left: ${theme.spacing(6)};
+      padding-right: ${theme.spacing(6)};
       transition: ${theme.transitions.create(["margin", "width"], {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
@@ -170,7 +174,7 @@ const Nav = () => {
   console.log(styles);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ display: "flex", width: "100%" }}>
       <AppBar
         css={drawerOpen ? styles.appBarShift : styles.appBar}
         position='fixed'
@@ -186,11 +190,7 @@ const Nav = () => {
           <Typography css={styles.title} variant='h5' noWrap>
             Fluent Task
           </Typography>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box
-            css={styles.iconBox}
-            sx={{ display: { xs: "none", md: "flex" } }}
-          >
+          <Box css={styles.iconBox} sx={{ display: "flex" }}>
             <IconButton>
               <Badge badgeContent={1} color='secondary'>
                 <NotificationsIcon />
@@ -251,7 +251,6 @@ const Nav = () => {
         </List>
       </Drawer>
       <div css={drawerOpen ? styles.content : styles.contentShift}>
-        {/* <Box component='main' sx={{ flexGrow: 1, p: 3 }}> */}
         {mainComponent === "List" ? (
           <Task />
         ) : mainComponent === "Calendar" ? (
@@ -259,7 +258,6 @@ const Nav = () => {
         ) : (
           <div></div>
         )}
-        {/* </Box> */}
       </div>
       <SettingsMenu anchorEl={settingsAnchorEl} />
       <ProfileMenu anchorEl={profileAnchorEl} />

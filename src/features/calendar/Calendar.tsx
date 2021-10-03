@@ -321,7 +321,7 @@ const Calendar = () => {
             1
         );
       }
-      let top = row * 164 + 32 + taskObject.layer * 28;
+      let top = row * 160 + 34 + taskObject.layer * 28;
 
       // left
       let left = (100 / 7) * taskObject.startDate.getDay();
@@ -340,63 +340,63 @@ const Calendar = () => {
   const roundEdge = 10;
   const styles = {
     selector: css`
-      margin-top: theme.spacing(1);
-      margin-bottom: theme.spacing(2);
+      margin-top: ${theme.spacing(1)};
+      margin-bottom: ${theme.spacing(2)};
     `,
     select: css`
       margin-bottom: 10;
     `,
     dropdownStyle: css`
-      max-height: 250;
+      max-height: 250px;
     `,
     gridWrap: css`
       height: 450;
     `,
     gridList: css`
       width: 84%;
-      border-top: 1px solid'
+      border-top: 1px solid;
       border-left: 1px solid;
-      borderColor: ${theme.palette.divider},
-      position: "relative",
+      border-color: ${theme.palette.divider};
+      position: relative;
     `,
     gridTile: css`
-      width: "1/7",
-      borderBottom: 1px solid ${theme.palette.divider},
-      borderRight: 1px solid ${theme.palette.divider},
-      borderColor: ${theme.palette.divider},
+      border-bottom: 1px solid;
+      border-right: 1px solid;
+      border-color: ${theme.palette.divider};
     `,
     gridTileGray: css`
-      width: "1/7",
-      borderBottom: 1px solid ${theme.palette.divider},
-      borderRight:1px solid ${theme.palette.divider},
-      background: ${theme.palette.action.hover},
+      border-bottom: 1px solid;
+      border-right: 1px solid;
+      border-color: ${theme.palette.divider};
+      background-color: ${theme.palette.action.hover};
     `,
     headerdate: css`
-      textAlign: left;
-      & .plus: {
-        color: rgba(0,0,0,0);
+      margin-top: 8px;
+      margin-left: 8px;
+      text-align: left;
+      & .plus {
+        margin-left: 8px;
+        color: rgba(0, 0, 0, 0);
       }
-      &:hover: {
-        & .plus: {
+      &:hover {
+        & .plus {
           color: inherit;
           transition: 0.8s;
-        },
-      },
+        }
+      }
       cursor: pointer;
       backgournd: blue;
     `,
-    textdate: css`
-      marginleft: 10;
-    `,
     texttoday: css`
-      marginleft: 5;
       padding: 0px 7px;
       color: white;
       background: ${theme.palette.primary.main};
-      borderradius: 15px;
+      border-radius: 15px;
     `,
     texttask: css`
       display: block;
+      height: 24px;
+      padding-left: 10px;
       color: white;
       background: ${theme.palette.primary.main};
       position: absolute;
@@ -460,7 +460,7 @@ const Calendar = () => {
             </IconButton>
           </Grid>
         </Grid>
-        <ImageList css={styles.gridList} rowHeight={160} cols={7}>
+        <ImageList css={styles.gridList} rowHeight={160} cols={7} gap={0}>
           {createDates(calendar.year, calendar.month).map((dateCon, i) => (
             <ImageListItem
               key={dateCon.dateStr}
@@ -477,20 +477,17 @@ const Calendar = () => {
                 direction='row'
                 justifyContent='flex-start'
                 alignItems='center'
-                spacing={1}
                 // onClick={handleDateHeaderClick}
               >
                 <Grid>
-                  <Typography
-                    css={dateCon.isToday ? styles.texttoday : styles.textdate}
-                  >
+                  <Typography css={dateCon.isToday && styles.texttoday}>
                     {dateCon.date === 1
                       ? `${dateCon.month}月${dateCon.date}日`
                       : dateCon.date}
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography className={"plus"}>+</Typography>
+                  <Typography className='plus'>+</Typography>
                 </Grid>
               </Grid>
             </ImageListItem>
@@ -499,23 +496,19 @@ const Calendar = () => {
             shapeTaskObjects(sortTaskObjects(initTaskObjects()))
           ).map((taskObject) => (
             <Typography
-              css={styles.texttask}
-              style={{
-                top: taskObject.top,
-                left: taskObject.left,
-                width: taskObject.width,
-                height: 24,
-                paddingLeft: 10,
-                borderRadius:
-                  !taskObject.startEdge && !taskObject.endEdge
-                    ? "0px"
-                    : taskObject.startEdge && !taskObject.endEdge
-                    ? `${roundEdge}px 0px 0px ${roundEdge}px`
-                    : !taskObject.startEdge && taskObject.endEdge
-                    ? `0px ${roundEdge}px ${roundEdge}px 0px`
-                    : `${roundEdge}px`,
-                // background: taskObject.color,
-              }}
+              css={css`
+                ${styles.texttask};
+                top: ${taskObject.top};
+                left: ${taskObject.left};
+                width: ${taskObject.width};
+                border-radius: ${!taskObject.startEdge && !taskObject.endEdge
+                  ? "0px"
+                  : taskObject.startEdge && !taskObject.endEdge
+                  ? `${roundEdge}px 0px 0px ${roundEdge}px`
+                  : !taskObject.startEdge && taskObject.endEdge
+                  ? `0px ${roundEdge}px ${roundEdge}px 0px`
+                  : `${roundEdge}px`};
+              `}
             >
               {taskObject.task_name}
             </Typography>
