@@ -34,6 +34,7 @@ const CommonSelect: React.FC<Props> = (props) => {
 
   return (
     <TextField
+      variant='standard'
       css={selectStyle}
       select
       fullWidth

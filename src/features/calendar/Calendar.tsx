@@ -5,11 +5,15 @@ import { useTheme } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
+import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
+import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
 import Grid from "@mui/material/Grid";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import Autocomplete from "@mui/material/Autocomplete";
+import ImageListItemBar from "@mui/material/ImageListItemBar";
 import Typography from "@mui/material/Typography";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
@@ -72,7 +76,8 @@ const Calendar = () => {
 
   const handleSelectChange = (event: any) => {
     const val = event.target.value as string;
-    console.log(parseInt(val.slice(0, 4)), parseInt(val.slice(4, 6)));
+    console.log(val, "ool");
+    if (!val) return;
     dispatch(
       setCalendar({
         year: parseInt(val.slice(0, 4)),
@@ -138,6 +143,7 @@ const Calendar = () => {
           ~~(array.length / 2 / 12) +
           ~~((calendar.month + index - 1) / 12)
         }-${fillDigitsByZero(((calendar.month + index - 1) % 12) + 1, 2)}`;
+        console.log("ok");
         return ym;
       });
 
@@ -321,7 +327,7 @@ const Calendar = () => {
             1
         );
       }
-      let top = row * 160 + 34 + taskObject.layer * 28;
+      let top = row * 160 + 36 + taskObject.layer * 28;
 
       // left
       let left = (100 / 7) * taskObject.startDate.getDay();
@@ -339,21 +345,19 @@ const Calendar = () => {
 
   const roundEdge = 10;
   const styles = {
-    selector: css`
-      margin-top: ${theme.spacing(1)};
-      margin-bottom: ${theme.spacing(2)};
+    test: css`
+      background-color: transparent;
+    `,
+    header: css`
+      width: 86%;
+      margin-top: 6px;
     `,
     select: css`
-      margin-bottom: 10;
-    `,
-    dropdownStyle: css`
-      max-height: 250px;
-    `,
-    gridWrap: css`
-      height: 450;
+      margin-top: 5px;
+      width: 120px;
     `,
     gridList: css`
-      width: 84%;
+      width: 86%;
       border-top: 1px solid;
       border-left: 1px solid;
       border-color: ${theme.palette.divider};
@@ -372,10 +376,10 @@ const Calendar = () => {
     `,
     headerdate: css`
       margin-top: 8px;
-      margin-left: 8px;
+      margin-left: 12px;
       text-align: left;
       & .plus {
-        margin-left: 8px;
+        margin-left: 12px;
         color: rgba(0, 0, 0, 0);
       }
       &:hover {
@@ -411,45 +415,31 @@ const Calendar = () => {
   return (
     <>
       <Grid
-        css={styles.gridWrap}
+        xs={12}
         container
         direction='column'
         justifyContent='center'
         alignItems='center'
+        css={styles.test}
       >
         <Grid
-          css={styles.selector}
-          xs={10}
+          css={styles.header}
           container
           direction='row'
           justifyContent='space-between'
           alignItems='center'
         >
-          <Grid item xs={1}>
-            <Select
+          <Grid item>
+            <Autocomplete
               css={styles.select}
-              fullWidth
-              value={calendar.year_month}
-              MenuProps={{
-                anchorOrigin: {
-                  vertical: "bottom",
-                  horizontal: "left",
-                },
-                transformOrigin: {
-                  vertical: "top",
-                  horizontal: "left",
-                },
-                // getContentAnchorEl: null,
-                // classes: {
-                //   paper: styles.dropdownStyle,
-                // },
-              }}
+              disableClearable
+              options={yearMonthOptions()}
+              // value={calendar.year_month}
               onChange={handleSelectChange}
-            >
-              {yearMonthOptions().map((yearMonth) => (
-                <MenuItem value={yearMonth}>{yearMonth}</MenuItem>
-              ))}
-            </Select>
+              renderInput={(params) => (
+                <TextField {...params} variant='standard' />
+              )}
+            />
           </Grid>
           <Grid item>
             <IconButton onClick={decrementMonth}>
@@ -471,15 +461,16 @@ const Calendar = () => {
               }
             >
               <Grid
+                xs={10}
                 css={styles.headerdate}
                 id={dateCon.dateStr}
                 container
                 direction='row'
                 justifyContent='flex-start'
-                alignItems='center'
+                alignItems='flex-start'
                 // onClick={handleDateHeaderClick}
               >
-                <Grid>
+                <Grid item>
                   <Typography css={dateCon.isToday && styles.texttoday}>
                     {dateCon.date === 1
                       ? `${dateCon.month}月${dateCon.date}日`
