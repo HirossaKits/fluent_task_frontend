@@ -415,17 +415,17 @@ const Calendar = () => {
       <Grid
         xs={12}
         container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
+        direction='column'
+        justifyContent='center'
+        alignItems='center'
         css={styles.test}
       >
         <Grid
           css={styles.header}
           container
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
+          direction='row'
+          justifyContent='space-between'
+          alignItems='center'
         >
           <Grid item>
             <Autocomplete
@@ -435,7 +435,7 @@ const Calendar = () => {
               value={calendar.year_month}
               onChange={(event, newItem) => handleSelectChange(event, newItem)}
               renderInput={(params) => (
-                <TextField {...params} variant="standard" />
+                <TextField {...params} variant='standard' />
               )}
             />
           </Grid>
@@ -463,9 +463,9 @@ const Calendar = () => {
                 css={styles.headerdate}
                 id={dateCon.dateStr}
                 container
-                direction="row"
-                justifyContent="flex-start"
-                alignItems="flex-start"
+                direction='row'
+                justifyContent='flex-start'
+                alignItems='flex-start'
                 // onClick={handleDateHeaderClick}
               >
                 <Grid item>
@@ -476,7 +476,7 @@ const Calendar = () => {
                   </Typography>
                 </Grid>
                 <Grid item>
-                  <Typography className="plus">+</Typography>
+                  <Typography className='plus'>+</Typography>
                 </Grid>
               </Grid>
             </ImageListItem>

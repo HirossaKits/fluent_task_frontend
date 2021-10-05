@@ -2,16 +2,15 @@ import React from "react";
 import { css } from "@emotion/react";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
 import { TARGET } from "../features/types";
-import internal from "stream";
-import { queryAllByAttribute } from "@testing-library/dom";
+
+type Option = {
+  value: string | number;
+  label: string | number;
+};
 
 type Props = {
-  options: {
-    value: string | number;
-    label: string | number;
-  }[];
+  options: Option[];
   label?: string;
   width?: number;
   name: string;
@@ -21,10 +20,7 @@ type Props = {
 };
 
 const CommonSelect: React.FC<Props> = (props) => {
-  const handleSelectChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    newItem: string
-  ) => {
+  const handleSelectChange = (event: any, newItem: Option) => {
     alert(newItem);
     let target: TARGET = {
       name: props.name,
@@ -33,12 +29,8 @@ const CommonSelect: React.FC<Props> = (props) => {
     if ("index" in props) {
       target.index = props.index;
     }
-    props.onChange(target);
+    props.onChange(newItem.value);
   };
-
-  const selectStyle = css`
-    textalign: left;
-  `;
 
   const styles = {
     autoComp: css`
@@ -54,28 +46,17 @@ const CommonSelect: React.FC<Props> = (props) => {
         options={props.options}
         getOptionLabel={(option) => option.label.toString()}
         onChange={(event, newItem) => handleSelectChange(event, newItem)}
-        renderInput={(params) => <TextField {...params} variant="standard" />}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            variant='standard'
+            label={"label" in props && props.label}
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        )}
       />
-      {/* <TextField
-        variant="standard"
-        css={selectStyle}
-        select
-        fullWidth
-        margin="normal"
-        size="small"
-        label={"label" in props ? props.label : undefined}
-        value={props.value}
-        onChange={handleSelectChange}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      >
-        {props.options.map((option) => (
-          <MenuItem key={option.value} value={option.value}>
-            {option.label}
-          </MenuItem>
-        ))}
-      </TextField> */}
     </>
   );
 };
