@@ -38,17 +38,16 @@ const TaskDialog: React.FC = (props) => {
       width: 100%;
     `,
     title: css`
-      marginleft: ${theme.spacing(3)};
-      margintop: ${theme.spacing(0)};
+      margin-left: ${theme.spacing(3)};
     `,
     close: css`
-      margin: 10;
+      margin: 10px;
     `,
     gridCol: css`
       textalign: center;
     `,
     arrowIcon: css`
-      margintop: 22;
+      margintop: 22px;
     `,
   };
 

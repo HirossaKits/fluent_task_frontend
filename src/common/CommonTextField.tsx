@@ -29,8 +29,8 @@ const CommonTextField: React.FC<Props> = (props) => {
   return (
     <TextField
       variant='standard'
-      fullWidth
       margin='normal'
+      fullWidth
       size='small'
       id={"id" in props ? props.id : undefined}
       label={"label" in props ? props.label : undefined}

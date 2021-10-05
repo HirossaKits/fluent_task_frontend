@@ -21,7 +21,6 @@ type Props = {
 
 const CommonSelect: React.FC<Props> = (props) => {
   const handleSelectChange = (event: any, newItem: Option) => {
-    alert(newItem);
     let target: TARGET = {
       name: props.name,
       value: event.target.value,
@@ -50,6 +49,7 @@ const CommonSelect: React.FC<Props> = (props) => {
           <TextField
             {...params}
             variant='standard'
+            margin='dense'
             label={"label" in props && props.label}
             InputLabelProps={{
               shrink: true,
