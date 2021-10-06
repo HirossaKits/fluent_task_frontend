@@ -40,22 +40,22 @@ const ProfileMenu: React.FC<Props> = (props) => {
       padding: ${theme.spacing(1)};
     `,
     avatorLarge: css`
-      background: ${theme.palette.grey[600]}
+      background-color: ${theme.palette.grey[600]};
       width: ${theme.spacing(10)};
       height: ${theme.spacing(10)};
     `,
     nameWrapper: css`
-      margin: 3,
-      marginLeft: 3,
-      marginRight: ${theme.spacing(2)};
+      margin: 3px,
+      margin-left: 3px,
+      margin-right: ${theme.spacing(2)};
     `,
     menuItem: css`
-      paddingleft: ${theme.spacing(2)};
-      paddingright: ${theme.spacing(2)};
+      padding-left: ${theme.spacing(2)};
+      padding-right: ${theme.spacing(2)};
     `,
     iconWrapper: css`
-      paddingTop: 6,
-      paddingRight: 12,
+      padding-top: 6px,
+      padding-right: 12px,
     `,
   };
 
@@ -77,9 +77,9 @@ const ProfileMenu: React.FC<Props> = (props) => {
       <Paper>
         <Grid
           container
-          direction='row'
-          justifyContent='flex-start'
-          alignItems='center'
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="center"
         >
           <Grid css={styles.avatorWrapper} item xs={6}>
             <Avatar css={styles.avatorLarge} src={profile.avatar_img} />
@@ -87,9 +87,9 @@ const ProfileMenu: React.FC<Props> = (props) => {
           <Grid
             item
             container
-            direction='column'
-            justifyContent='center'
-            alignItems='stretch'
+            direction="column"
+            justifyContent="center"
+            alignItems="stretch"
             xs={6}
           >
             <Grid css={styles.nameWrapper} item>
@@ -100,19 +100,19 @@ const ProfileMenu: React.FC<Props> = (props) => {
             </Grid>
           </Grid>
         </Grid>
-        <Paper css='talk'>
+        <Paper css="talk">
           <Typography>sample</Typography>
         </Paper>
         <MenuList>
           <MenuItem css={styles.menuItem}>
             <div css={styles.iconWrapper}>
-              <EditIcon fontSize='small' />
+              <EditIcon fontSize="small" />
             </div>
             <Typography>プロフィール編集</Typography>
           </MenuItem>
           <MenuItem css={styles.menuItem} onClick={logout}>
             <div css={styles.iconWrapper}>
-              <ExitToAppIcon fontSize='small' />
+              <ExitToAppIcon fontSize="small" />
             </div>
             <Typography>ログアウト</Typography>
           </MenuItem>

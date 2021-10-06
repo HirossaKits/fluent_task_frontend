@@ -114,19 +114,19 @@ const TaskFilter: React.FC<Props> = (props) => {
   const theme = useTheme();
   const styles = {
     paper: css`
-      width: 600;
-      paddingright: ${theme.spacing(1)};
-      paddingbottom: ${theme.spacing(1)};
+      width: 600px;
+      padding-right: ${theme.spacing(1)};
+      padding-bottom: ${theme.spacing(1)};
     `,
     form: css`
       width: 100%;
     `,
     gridIcon: css`
-      paddingtop: 20;
+      padding-top: 20px;
     `,
     gridItem: css`
-      marginleft: ${theme.spacing(1)};
-      marginright: ${theme.spacing(1)};
+      margin-left: ${theme.spacing(1)};
+      marginr-ight: ${theme.spacing(1)};
     `,
   };
 

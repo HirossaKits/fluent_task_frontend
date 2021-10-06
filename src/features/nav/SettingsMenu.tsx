@@ -30,11 +30,11 @@ const SettingsMenu: React.FC<Props> = (props) => {
 
   const styles = {
     paper: css`
-    width: 180,
-    paddingLeft: ${theme.spacing(2)};
-    paddingTop: ${theme.spacing(2)};
-    paddingRight: ${theme.spacing(4)};
-    paddingBottom: ${theme.spacing(2)};
+    width: 180px,
+    padding-left: ${theme.spacing(2)};
+    padding-top: ${theme.spacing(2)};
+    padding-right: ${theme.spacing(4)};
+    padding-bottom: ${theme.spacing(2)};
   `,
   };
 
@@ -58,7 +58,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
         <CommonSwitch
           label={"ダークモード"}
           labelWidth={10}
-          name='dark_mode'
+          name="dark_mode"
           value={settings.dark_mode}
           onChange={handleInputChange}
         />

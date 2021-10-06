@@ -48,8 +48,8 @@ const CommonSelect: React.FC<Props> = (props) => {
         renderInput={(params) => (
           <TextField
             {...params}
-            variant='standard'
-            margin='dense'
+            variant="standard"
+            margin="normal"
             label={"label" in props && props.label}
             InputLabelProps={{
               shrink: true,

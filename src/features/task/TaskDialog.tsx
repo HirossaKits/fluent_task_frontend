@@ -56,39 +56,39 @@ const TaskDialog: React.FC = (props) => {
       <Dialog
         open={editTaskOpen}
         onClose={handleClose}
-        aria-labelledby='form-dialog-title'
-        maxWidth='sm'
+        aria-labelledby="form-dialog-title"
+        maxWidth="sm"
         fullWidth
       >
         <Grid
           container
-          direction='row'
-          justifyContent='space-between'
-          alignItems='flex-start'
+          direction="row"
+          justifyContent="space-between"
+          alignItems="flex-start"
         >
           <Grid css={styles.title} item>
             <DialogTitle>タスクを登録</DialogTitle>
           </Grid>
           <Grid css={styles.close} item>
-            <IconButton size='small' onClick={handleClose}>
+            <IconButton size="small" onClick={handleClose}>
               <CloseIcon />
             </IconButton>
           </Grid>
         </Grid>
-        <form css={styles.form} noValidate autoComplete='off'>
-          <Grid container direction='row' justifyContent='center'>
+        <form css={styles.form} noValidate autoComplete="off">
+          <Grid container direction="row" justifyContent="center">
             <Grid
               css={styles.gridCol}
               container
-              justifyContent='flex-start'
-              alignItems='center'
+              justifyContent="flex-start"
+              alignItems="center"
               xs={10}
             >
               <Grid item xs={12}>
                 <Grid item xs={10}>
                   <CommonTextField
-                    label='プロジェクト'
-                    name='title'
+                    label="プロジェクト"
+                    name="title"
                     value={editedTask.task_name}
                     onChange={handleInputChange}
                   />
@@ -97,8 +97,8 @@ const TaskDialog: React.FC = (props) => {
               <Grid item xs={12}>
                 <Grid item xs={10}>
                   <CommonTextField
-                    label='タスク名'
-                    name='title'
+                    label="タスク名"
+                    name="title"
                     value={editedTask.task_name}
                     onChange={handleInputChange}
                   />
@@ -107,8 +107,8 @@ const TaskDialog: React.FC = (props) => {
               <Grid item xs={12}>
                 <Grid item xs={4}>
                   <CommonSelect
-                    label='カテゴリー'
-                    name='status'
+                    label="カテゴリー"
+                    name="status"
                     options={Status}
                     value={editedTask.status}
                     onChange={handleInputChange}
@@ -118,8 +118,8 @@ const TaskDialog: React.FC = (props) => {
               <Grid item xs={12}>
                 <Grid item xs={3}>
                   <CommonSelect
-                    label='ステータス'
-                    name='status'
+                    label="ステータス"
+                    name="status"
                     options={Status}
                     value={editedTask.status}
                     onChange={handleInputChange}
@@ -129,8 +129,8 @@ const TaskDialog: React.FC = (props) => {
               <Grid item xs={12}>
                 <Grid item xs={4}>
                   <CommonSelect
-                    label='担当者'
-                    name='assigned'
+                    label="担当者"
+                    name="assigned"
                     options={DemoMember}
                     value={editedTask.assigned_name}
                     onChange={handleInputChange}
@@ -139,16 +139,16 @@ const TaskDialog: React.FC = (props) => {
               </Grid>
               <Grid
                 container
-                direction='row'
-                justifyContent='flex-start'
-                alignItems='center'
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="center"
                 xs={12}
               >
                 <Grid item xs={2}>
                   <CommonTextField
-                    label='見積工数'
-                    name='estimate_manhour'
-                    type='number'
+                    label="見積工数"
+                    name="estimate_manhour"
+                    type="number"
                     value={editedTask.estimate_manhour}
                     onChange={handleInputChange}
                   />
@@ -158,9 +158,9 @@ const TaskDialog: React.FC = (props) => {
                 </Grid>
                 <Grid item xs={2}>
                   <CommonTextField
-                    label='実工数'
-                    name='actual_manhour'
-                    type='number'
+                    label="実工数"
+                    name="actual_manhour"
+                    type="number"
                     value={editedTask.actual_manhour}
                     onChange={handleInputChange}
                   />
@@ -169,8 +169,8 @@ const TaskDialog: React.FC = (props) => {
               <Grid container xs={12}>
                 <Grid item xs={4}>
                   <CommonDatePicker
-                    label='開始予定日'
-                    name='scheduled_start_date'
+                    label="開始予定日"
+                    name="scheduled_startdate"
                     value={editedTask.scheduled_startdate}
                     onChange={handleInputChange}
                   />
@@ -180,8 +180,8 @@ const TaskDialog: React.FC = (props) => {
                 </Grid>
                 <Grid item xs={4}>
                   <CommonDatePicker
-                    label='開始日'
-                    name='actual_start_date'
+                    label="開始日"
+                    name="actual_startdate"
                     value={editedTask.actual_startdate}
                     onChange={handleInputChange}
                   />
@@ -191,8 +191,8 @@ const TaskDialog: React.FC = (props) => {
               <Grid container xs={12}>
                 <Grid item xs={4}>
                   <CommonDatePicker
-                    label='終了予定日'
-                    name='scheduled_start_date'
+                    label="終了予定日"
+                    name="scheduled_endate"
                     value={editedTask.scheduled_startdate}
                     onChange={handleInputChange}
                   />
@@ -203,8 +203,8 @@ const TaskDialog: React.FC = (props) => {
                 </Grid>
                 <Grid item xs={4}>
                   <CommonDatePicker
-                    label='終了日'
-                    name='actual_end_date'
+                    label="終了日"
+                    name="actual_enddate"
                     value={editedTask.actual_enddate}
                     onChange={handleInputChange}
                   />
@@ -213,10 +213,10 @@ const TaskDialog: React.FC = (props) => {
             </Grid>
           </Grid>
           <DialogActions>
-            <Button onClick={handleClose} color='primary'>
+            <Button onClick={handleClose} color="primary">
               キャンセル
             </Button>
-            <Button onClick={handleClose} color='primary'>
+            <Button onClick={handleClose} color="primary">
               登録
             </Button>
           </DialogActions>
