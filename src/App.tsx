@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import "./App.css";
-import { createTheme } from "@mui/material";
-import { ThemeProvider } from "@mui/styles";
+import { createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Nav from "./features/nav/Nav";
 import { selectSettings } from "./features/nav/navSlice";
@@ -12,13 +12,22 @@ function App() {
 
   const theme = createTheme({
     typography: {
-      fontFamily: ["Noto Sans JP", "M PLUS Rounded 1c"].join(","),
+      fontFamily: ["M PLUS Rounded 1c", "Roboto"].join(","),
       fontSize: 12,
+      //   body1: {
+      //     fontSize: "0.875rem",
+      //   },
+      //   body2: {
+      //     fontSize: "0.875rem",
+      //   },
+      //   caption: {
+      //     fontSize: "0.875rem",
+      //   },
     },
     palette: {
-      text: {
-        primary: "rgba(0, 0, 0, 0.7)",
-      },
+      // text: {
+      //   primary: "rgba(0, 0, 0, 0.7)",
+      // },
       mode: settings.dark_mode ? "dark" : "light",
     },
   });

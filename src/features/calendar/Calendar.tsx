@@ -9,6 +9,7 @@ import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import MenuItem from "@mui/material/MenuItem";
+import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
@@ -389,6 +390,9 @@ const Calendar = () => {
       cursor: pointer;
       backgournd: blue;
     `,
+    textdate: css`
+      color: ;
+    `,
     texttoday: css`
       padding: 0px 7px;
       color: white;
@@ -411,100 +415,98 @@ const Calendar = () => {
   };
 
   return (
-    <>
+    <Grid
+      xs={12}
+      container
+      direction='column'
+      justifyContent='center'
+      alignItems='center'
+      css={styles.test}
+    >
       <Grid
-        xs={12}
+        css={styles.header}
         container
-        direction='column'
-        justifyContent='center'
+        direction='row'
+        justifyContent='space-between'
         alignItems='center'
-        css={styles.test}
       >
-        <Grid
-          css={styles.header}
-          container
-          direction='row'
-          justifyContent='space-between'
-          alignItems='center'
-        >
-          <Grid item>
-            <Autocomplete
-              css={styles.select}
-              disableClearable
-              options={yearMonthOptions()}
-              value={calendar.year_month}
-              onChange={(event, newItem) => handleSelectChange(event, newItem)}
-              renderInput={(params) => (
-                <TextField {...params} variant='standard' />
-              )}
-            />
-          </Grid>
-          <Grid item>
-            <IconButton onClick={decrementMonth}>
-              <NavigateBeforeIcon />
-            </IconButton>
-            <IconButton onClick={incrementMonth}>
-              <NavigateNextIcon />
-            </IconButton>
-          </Grid>
+        <Grid item>
+          <Autocomplete
+            css={styles.select}
+            disableClearable
+            options={yearMonthOptions()}
+            value={calendar.year_month}
+            onChange={(event, newItem) => handleSelectChange(event, newItem)}
+            renderInput={(params) => (
+              <TextField {...params} variant='standard' />
+            )}
+          />
         </Grid>
-        <ImageList css={styles.gridList} rowHeight={160} cols={7} gap={0}>
-          {createDates(calendar.year, calendar.month).map((dateCon, i) => (
-            <ImageListItem
-              key={dateCon.dateStr}
-              css={
-                dateCon.month === calendar.month
-                  ? styles.gridTile
-                  : styles.gridTileGray
-              }
-            >
-              <Grid
-                xs={10}
-                css={styles.headerdate}
-                id={dateCon.dateStr}
-                container
-                direction='row'
-                justifyContent='flex-start'
-                alignItems='flex-start'
-                // onClick={handleDateHeaderClick}
-              >
-                <Grid item>
-                  <Typography css={dateCon.isToday && styles.texttoday}>
-                    {dateCon.date === 1
-                      ? `${dateCon.month}月${dateCon.date}日`
-                      : dateCon.date}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography className='plus'>+</Typography>
-                </Grid>
-              </Grid>
-            </ImageListItem>
-          ))}
-          {setPositionTaskObjects(
-            shapeTaskObjects(sortTaskObjects(initTaskObjects()))
-          ).map((taskObject) => (
-            <Typography
-              css={css`
-                ${styles.texttask};
-                top: ${taskObject.top};
-                left: ${taskObject.left};
-                width: ${taskObject.width};
-                border-radius: ${!taskObject.startEdge && !taskObject.endEdge
-                  ? "0px"
-                  : taskObject.startEdge && !taskObject.endEdge
-                  ? `${roundEdge}px 0px 0px ${roundEdge}px`
-                  : !taskObject.startEdge && taskObject.endEdge
-                  ? `0px ${roundEdge}px ${roundEdge}px 0px`
-                  : `${roundEdge}px`};
-              `}
-            >
-              {taskObject.task_name}
-            </Typography>
-          ))}
-        </ImageList>
+        <Grid item>
+          <IconButton onClick={decrementMonth}>
+            <NavigateBeforeIcon />
+          </IconButton>
+          <IconButton onClick={incrementMonth}>
+            <NavigateNextIcon />
+          </IconButton>
+        </Grid>
       </Grid>
-    </>
+      <ImageList css={styles.gridList} rowHeight={160} cols={7} gap={0}>
+        {createDates(calendar.year, calendar.month).map((dateCon, i) => (
+          <ImageListItem
+            key={dateCon.dateStr}
+            css={
+              dateCon.month === calendar.month
+                ? styles.gridTile
+                : styles.gridTileGray
+            }
+          >
+            <Grid
+              xs={10}
+              css={styles.headerdate}
+              id={dateCon.dateStr}
+              container
+              direction='row'
+              justifyContent='flex-start'
+              alignItems='flex-start'
+              // onClick={handleDateHeaderClick}
+            >
+              <Grid item>
+                <Typography css={dateCon.isToday && styles.texttoday}>
+                  {dateCon.date === 1
+                    ? `${dateCon.month}月${dateCon.date}日`
+                    : dateCon.date}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <Typography className='plus'>+</Typography>
+              </Grid>
+            </Grid>
+          </ImageListItem>
+        ))}
+        {setPositionTaskObjects(
+          shapeTaskObjects(sortTaskObjects(initTaskObjects()))
+        ).map((taskObject) => (
+          <Typography
+            css={css`
+              ${styles.texttask};
+              top: ${taskObject.top};
+              left: ${taskObject.left};
+              width: ${taskObject.width};
+              border-radius: ${!taskObject.startEdge && !taskObject.endEdge
+                ? "0px"
+                : taskObject.startEdge && !taskObject.endEdge
+                ? `${roundEdge}px 0px 0px ${roundEdge}px`
+                : !taskObject.startEdge && taskObject.endEdge
+                ? `0px ${roundEdge}px ${roundEdge}px 0px`
+                : `${roundEdge}px`};
+            `}
+          >
+            {taskObject.task_name}
+          </Typography>
+        ))}
+      </ImageList>
+    </Grid>
   );
 };
 
