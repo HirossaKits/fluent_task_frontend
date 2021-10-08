@@ -17,6 +17,7 @@ import AppsIcon from "@mui/icons-material/Apps";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import ViewWeekIcon from "@mui/icons-material/ViewWeek";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -30,10 +31,10 @@ import {
 } from "./navSlice";
 import SettingsMenu from "./SettingsMenu";
 import ProfileMenu from "./ProfileMenu";
+import Org from "../organization/Org";
 import Task from "../task/Task";
 import Calendar from "../calendar/Calendar";
 import { MAIN_COMPONENT } from "../types";
-import MoreIcon from "@mui/icons-material/MoreVert";
 
 const Nav = () => {
   const dispatch = useDispatch();
@@ -177,22 +178,22 @@ const Nav = () => {
     <Box sx={{ display: "flex", width: "100%" }}>
       <AppBar
         css={drawerOpen ? styles.appBarShift : styles.appBar}
-        position='fixed'
+        position="fixed"
       >
-        <Toolbar css={styles.toolbar} disableGutters variant='dense'>
+        <Toolbar css={styles.toolbar} disableGutters variant="dense">
           <IconButton
             css={drawerOpen ? styles.menuIconHide : styles.menuIcon}
-            edge='start'
+            edge="start"
             onClick={handleDrawerOpen}
           >
             <AppsIcon />
           </IconButton>
-          <Typography css={styles.title} variant='h5' noWrap>
+          <Typography css={styles.title} variant="h5" noWrap>
             Fluent Task
           </Typography>
           <Box css={styles.iconBox} sx={{ display: "flex" }}>
             <IconButton>
-              <Badge badgeContent={1} color='secondary'>
+              <Badge badgeContent={1} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -208,8 +209,8 @@ const Nav = () => {
       <Drawer
         css={drawerOpen ? styles.drawerOpen : styles.drawerClose}
         className={"1gxenss-drawerOpen"}
-        variant='permanent'
-        anchor='left'
+        variant="permanent"
+        anchor="left"
         open={drawerOpen}
       >
         <div css={styles.drawerHeader}>
@@ -218,6 +219,16 @@ const Nav = () => {
           </IconButton>
         </div>
         <List>
+          <ListItem
+            button
+            css={styles.drawerIcon}
+            onClick={() => handleVirticalMenuClick("Org")}
+          >
+            <ListItemIcon>
+              <PeopleAltIcon />
+            </ListItemIcon>
+            <ListItemText css={styles.drawerText} primary={"組織"} />
+          </ListItem>
           <ListItem
             button
             css={styles.drawerIcon}
@@ -255,6 +266,8 @@ const Nav = () => {
           <Task />
         ) : mainComponent === "Calendar" ? (
           <Calendar />
+        ) : mainComponent === "Org" ? (
+          <Org />
         ) : (
           <div></div>
         )}

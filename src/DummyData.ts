@@ -1,4 +1,21 @@
-import { TASK } from "./features/types";
+import { TASK, USER_PROFILE } from "./features/types";
+
+export const dummyUsers: USER_PROFILE[] = [
+  {
+    user_id: "test1",
+    first_name: "Hirohisa",
+    last_name: "Kitsuka",
+    avatar_img: "https://picsum.photos/200",
+    comment: "Almost human",
+  },
+  {
+    user_id: "test2",
+    first_name: "Hirohisa",
+    last_name: "Kitsuka",
+    avatar_img: "https://picsum.photos/200",
+    comment: "Almost human",
+  },
+];
 
 export const demoData = [
   createData(

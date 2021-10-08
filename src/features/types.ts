@@ -1,3 +1,4 @@
+/*authSlice*/
 export interface CRED {
   email: string;
   password: string;
@@ -25,6 +26,14 @@ export interface LOGIN_USER {
   last_name: string;
 }
 
+export interface USER_PROFILE {
+  user_id: string;
+  first_name: string;
+  last_name: string;
+  avatar_img: null | string;
+  comment: null | string;
+}
+
 /*navSlice*/
 
 export interface PERSONAL_SETTINGS {
@@ -38,7 +47,7 @@ export interface PROFILE {
   description: string;
 }
 
-export type MAIN_COMPONENT = "List" | "Card" | "Calendar";
+export type MAIN_COMPONENT = "Org" | "List" | "Card" | "Calendar";
 
 export interface NAV_STATE {
   mainComponent: MAIN_COMPONENT;
