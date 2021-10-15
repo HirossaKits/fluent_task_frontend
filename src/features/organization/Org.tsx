@@ -17,14 +17,23 @@ const Org = () => {
       flex-direction: column;
     `,
     card: css`
+      display: flex;
       width: 256px;
       height: 160px;
+      margin: 10px;
     `,
-
     avatar: css`
       width: 100px;
       height: 100px;
-      margin: ${theme.spacing(2)};
+      margin: 10px;
+      background-color: gray;
+    `,
+    test: css`
+      background-color: gray;
+    `,
+    test2: css`
+      background-color: gray;
+      flex: auto;
     `,
   };
   return (
@@ -32,16 +41,19 @@ const Org = () => {
       {dummyUsers.map((user: USER_PROFILE) => (
         <Card css={styles.card}>
           <Box sx={{ display: "flex" }}>
-            <CardContent sx={{ flex: "1 0 auto" }}>
-              {user.avatar_img ? (
-                <Avatar css={styles.avatar} src={user.avatar_img} />
-              ) : (
-                <Avatar>OP</Avatar>
-              )}
-            </CardContent>
-            <Box sx={{ flex: "1 0 auto" }}>
+            {/* <CardContent sx={{ flex: "1 0 auto" }} css={styles.test}> */}
+            {user.avatar_img ? (
+              <Avatar css={styles.avatar} src={user.avatar_img} />
+            ) : (
+              <Avatar>OP</Avatar>
+            )}
+            {/* </CardContent> */}
+            <Box css={styles.test2}>
               <Typography variant="h5" component="div">
-                {`${user.last_name} ${user.first_name}`}
+                {user.last_name}
+              </Typography>
+              <Typography variant="h5" component="div">
+                {user.first_name}
               </Typography>
               <Typography variant="body2" component="div">
                 {`${user.comment}`}
