@@ -1,10 +1,7 @@
 import React from "react";
 import { css } from "@emotion/react";
 import { useTheme } from "@mui/material/styles";
-import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
-import Input from "@mui/material/Input";
-import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
@@ -31,7 +28,6 @@ const Org = () => {
   };
   const handleOnBlur = () => {
     setFocus(false);
-    console.log("Abort!!!!!!!!!!!!!!");
   };
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -118,8 +114,6 @@ const Org = () => {
               <InputAdornment position='start'>
                 <IconButton
                   css={focus ? styles.iconbuttonFocus : styles.iconbutton}
-                  // onClick={handleClickShowPassword}
-                  // onMouseDown={handleMouseDownPassword}
                 >
                   <SendIcon />
                 </IconButton>

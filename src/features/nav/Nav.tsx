@@ -31,8 +31,9 @@ import {
 } from "./navSlice";
 import SettingsMenu from "./SettingsMenu";
 import ProfileMenu from "./ProfileMenu";
-import Org from "../organization/Org";
+import Org from "../org/Org";
 import Task from "../task/Task";
+import Kanban from "../kanban/Kanban";
 import Calendar from "../calendar/Calendar";
 import { MAIN_COMPONENT } from "../types";
 
@@ -178,22 +179,22 @@ const Nav = () => {
     <Box sx={{ display: "flex", width: "100%" }}>
       <AppBar
         css={drawerOpen ? styles.appBarShift : styles.appBar}
-        position="fixed"
+        position='fixed'
       >
-        <Toolbar css={styles.toolbar} disableGutters variant="dense">
+        <Toolbar css={styles.toolbar} disableGutters variant='dense'>
           <IconButton
             css={drawerOpen ? styles.menuIconHide : styles.menuIcon}
-            edge="start"
+            edge='start'
             onClick={handleDrawerOpen}
           >
             <AppsIcon />
           </IconButton>
-          <Typography css={styles.title} variant="h5" noWrap>
+          <Typography css={styles.title} variant='h5' noWrap>
             Fluent Task
           </Typography>
           <Box css={styles.iconBox} sx={{ display: "flex" }}>
             <IconButton>
-              <Badge badgeContent={1} color="secondary">
+              <Badge badgeContent={1} color='secondary'>
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -209,8 +210,8 @@ const Nav = () => {
       <Drawer
         css={drawerOpen ? styles.drawerOpen : styles.drawerClose}
         className={"1gxenss-drawerOpen"}
-        variant="permanent"
-        anchor="left"
+        variant='permanent'
+        anchor='left'
         open={drawerOpen}
       >
         <div css={styles.drawerHeader}>
@@ -242,7 +243,7 @@ const Nav = () => {
           <ListItem
             button
             css={styles.drawerIcon}
-            onClick={() => handleVirticalMenuClick("Card")}
+            onClick={() => handleVirticalMenuClick("Kanban")}
           >
             <ListItemIcon>
               <ViewWeekIcon />
@@ -262,12 +263,14 @@ const Nav = () => {
         </List>
       </Drawer>
       <div css={drawerOpen ? styles.content : styles.contentShift}>
-        {mainComponent === "List" ? (
+        {mainComponent === "Org" ? (
+          <Org />
+        ) : mainComponent === "List" ? (
           <Task />
+        ) : mainComponent === "Kanban" ? (
+          <Kanban />
         ) : mainComponent === "Calendar" ? (
           <Calendar />
-        ) : mainComponent === "Org" ? (
-          <Org />
         ) : (
           <div></div>
         )}
