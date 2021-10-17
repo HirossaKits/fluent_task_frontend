@@ -5,7 +5,14 @@ export const dummyUsers: USER_PROFILE[] = [
     user_id: "test1",
     first_name: "Hirohisa",
     last_name: "Kitsuka",
-    avatar_img: "https://picsum.photos/200",
+    avatar_img: "",
+    comment: "Almost human",
+  },
+  {
+    user_id: "test2",
+    first_name: "寛久",
+    last_name: "木塚",
+    avatar_img: "",
     comment: "Almost human",
   },
   {
@@ -13,14 +20,7 @@ export const dummyUsers: USER_PROFILE[] = [
     first_name: "Hirohisa",
     last_name: "Kitsuka",
     avatar_img: "https://picsum.photos/200",
-    comment: "Almost human",
-  },
-  {
-    user_id: "test2",
-    first_name: "Hirohisa",
-    last_name: "Kitsuka",
-    avatar_img: "https://picsum.photos/200",
-    comment: "Almost human",
+    comment: "I'm Almost human. I will be human someday. Cause I'm going my best effort.",
   },
   {
     user_id: "test2",
