@@ -9,7 +9,7 @@ import Popover from "@mui/material/Popover";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
 import { demoData } from "../../DummyData";
 import { TASK } from "../types";
@@ -36,44 +36,67 @@ const Kanban = () => {
     card: css`
       display: flex;
       justify-content: center;
-      align-content: space-between;
       height: ${theme.spacing(7)};
       margin: ${theme.spacing(1)};
     `,
-    dot: css`
-      color: ${theme.palette.divider};
-    `,
-    popver: css`
-      box-shadow: none;
-    `,
-    name: css`
-      margin-top: 10px;
+    boxTitle: css`
+      max-width: 200px;
       display: flex;
       flex-grow: 1;
+      flex-wrap: nowrap;
       flex-direction: column;
       justify-content: center;
-      background-color: lgray;
+      align-items: start;
+      margin-left: 20px;
+    `,
+    boxStatus: css`
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: end;
+      background-color: blue;
+      margin-left: 10px;
+    `,
+    boxDot: css`
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     `,
   };
+
   return (
     <>
       <Card css={styles.wrap}>
         {demoData.map((task: TASK) => (
           <Card css={styles.card}>
-            <Typography variant='h6' component='div'>
-              {task.task_name}
-            </Typography>
-            <Typography variant='body1' component='div'>
-              {task.status}
-            </Typography>
-            <IconButton css={styles.dot} onClick={handleClick}>
-              <MoreHorizIcon fontSize='small' />
-            </IconButton>
+            <Box
+              css={styles.boxTitle}
+              component='div'
+              sx={{
+                textOverflow: "ellipsis",
+                my: 2,
+                overflow: "hidden",
+                bgcolor: "background.paper",
+              }}
+            >
+              <Typography variant='h6' component='div' noWrap>
+                {task.task_name}
+              </Typography>
+            </Box>
+            <Box css={styles.boxStatus}>
+              <Typography variant='body1' component='div'>
+                {task.status}
+              </Typography>
+            </Box>
+            <Box css={styles.boxDot}>
+              <IconButton onClick={handleClick}>
+                <MoreVertIcon fontSize='small' />
+              </IconButton>
+            </Box>
           </Card>
         ))}
       </Card>
       <Popover
-        css={styles.popver}
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={handleClose}

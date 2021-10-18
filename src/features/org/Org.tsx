@@ -75,9 +75,6 @@ const Org = () => {
       z-index: 800;
       color: ${theme.palette.divider};
     `,
-    popver: css`
-      box-shadow: none;
-    `,
     avatar: css`
       width: 80px;
       height: 80px;
@@ -157,7 +154,6 @@ const Org = () => {
         ))}
       </Box>
       <Popover
-        css={styles.popver}
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={handleClose}
