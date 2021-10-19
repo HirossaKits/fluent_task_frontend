@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
 import Popover from "@mui/material/Popover";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -31,13 +32,19 @@ const Kanban = () => {
       width: 30%;
       height: 90vh;
       margin-top: ${theme.spacing(1)};
-      padding: ${theme.spacing(1)};
+      padding-bottom+ ${theme.spacing(1)}
+    `,
+    divider: css`
+      margin-bottom: ${theme.spacing(1)};
     `,
     card: css`
       display: flex;
       justify-content: center;
       height: ${theme.spacing(7)};
-      margin: ${theme.spacing(1)};
+      margin-top: ${theme.spacing(1)};
+      margin-bottom: ${theme.spacing(1)};
+      margin-left: ${theme.spacing(2)};
+      margin-right: ${theme.spacing(2)};
     `,
     boxTitle: css`
       max-width: 200px;
@@ -47,14 +54,12 @@ const Kanban = () => {
       flex-direction: column;
       justify-content: center;
       align-items: start;
-      margin-left: 20px;
     `,
     boxStatus: css`
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: end;
-      background-color: blue;
       margin-left: 10px;
     `,
     boxDot: css`
@@ -67,11 +72,17 @@ const Kanban = () => {
   return (
     <>
       <Card css={styles.wrap}>
+        <Box>
+          <Typography gutterBottom variant="h6" component="div">
+            開始前
+          </Typography>
+        </Box>
+        <Divider css={styles.divider} />
         {demoData.map((task: TASK) => (
           <Card css={styles.card}>
             <Box
               css={styles.boxTitle}
-              component='div'
+              component="div"
               sx={{
                 textOverflow: "ellipsis",
                 my: 2,
@@ -79,18 +90,18 @@ const Kanban = () => {
                 bgcolor: "background.paper",
               }}
             >
-              <Typography variant='h6' component='div' noWrap>
+              <Typography variant="h6" component="div" noWrap>
                 {task.task_name}
               </Typography>
             </Box>
             <Box css={styles.boxStatus}>
-              <Typography variant='body1' component='div'>
+              <Typography variant="body1" component="div">
                 {task.status}
               </Typography>
             </Box>
             <Box css={styles.boxDot}>
               <IconButton onClick={handleClick}>
-                <MoreVertIcon fontSize='small' />
+                <MoreVertIcon fontSize="small" />
               </IconButton>
             </Box>
           </Card>
@@ -107,7 +118,7 @@ const Kanban = () => {
       >
         <MenuItem>
           <ListItemIcon>
-            <EditIcon fontSize='small' />
+            <EditIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>ユーザーを削除</ListItemText>
         </MenuItem>
