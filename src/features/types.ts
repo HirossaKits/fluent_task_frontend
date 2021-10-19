@@ -47,7 +47,7 @@ export interface PROFILE {
   description: string;
 }
 
-export type MAIN_COMPONENT = "Org" | "List" | "Kanban" | "Calendar";
+export type MAIN_COMPONENT = "Org" | "Proj" | "List" | "Kanban" | "Calendar";
 
 export interface NAV_STATE {
   mainComponent: MAIN_COMPONENT;

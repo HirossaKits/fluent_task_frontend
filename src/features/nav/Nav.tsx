@@ -14,14 +14,15 @@ import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import AppsIcon from "@mui/icons-material/Apps";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import SettingsIcon from "@mui/icons-material/Settings";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import GroupWorkIcon from "@mui/icons-material/GroupWork";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import ViewWeekIcon from "@mui/icons-material/ViewWeek";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import SettingsIcon from "@mui/icons-material/Settings";
 import {
   setSettingsMenuOpen,
   setProfileMenuOpen,
@@ -32,6 +33,7 @@ import {
 import SettingsMenu from "./SettingsMenu";
 import ProfileMenu from "./ProfileMenu";
 import Org from "../org/Org";
+import Proj from "../proj/Proj";
 import Task from "../task/Task";
 import Kanban from "../kanban/Kanban";
 import Calendar from "../calendar/Calendar";
@@ -233,6 +235,16 @@ const Nav = () => {
           <ListItem
             button
             css={styles.drawerIcon}
+            onClick={() => handleVirticalMenuClick("Proj")}
+          >
+            <ListItemIcon>
+              <GroupWorkIcon />
+            </ListItemIcon>
+            <ListItemText css={styles.drawerText} primary={"プロジェクト"} />
+          </ListItem>
+          <ListItem
+            button
+            css={styles.drawerIcon}
             onClick={() => handleVirticalMenuClick("List")}
           >
             <ListItemIcon>
@@ -265,6 +277,8 @@ const Nav = () => {
       <div css={drawerOpen ? styles.content : styles.contentShift}>
         {mainComponent === "Org" ? (
           <Org />
+        ) : mainComponent === "Proj" ? (
+          <Proj />
         ) : mainComponent === "List" ? (
           <Task />
         ) : mainComponent === "Kanban" ? (
