@@ -26,11 +26,11 @@ const Proj = () => {
           variant='scrollable'
           scrollButtons='auto'
         >
-          <Tab label='Item Oneeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' />
-          <Tab label='Item Twoooooooooooooooooooooooooooooooooooooooooooooooo' />
-          <Tab label='Item Threeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' />
-          <Tab label='Item Threeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' />
-          <Tab label='Item Threeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee' />
+          <Tab label='Item One' />
+          <Tab label='Item Two' />
+          <Tab label='Item Three' />
+          <Tab label='Item Three' />
+          <Tab label='Item Three' />
         </Tabs>
       </Box>
       <Box sx={{ p: 3 }}>

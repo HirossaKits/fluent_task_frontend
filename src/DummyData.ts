@@ -1,4 +1,4 @@
-import { TASK, USER_PROFILE } from "./features/types";
+import { TASK, USER_PROFILE, PROJECT } from "./features/types";
 
 export const dummyUsers: USER_PROFILE[] = [
   {
@@ -44,20 +44,39 @@ export const dummyUsers: USER_PROFILE[] = [
     comment: "Almost human",
   },
   {
-    user_id: "test2",
+    user_id: "test3",
     first_name: "Hirohisa",
     last_name: "Kitsuka",
     avatar_img: "https://picsum.photos/200",
     comment: "Almost human",
   },
   {
-    user_id: "test2",
+    user_id: "0909090",
     first_name: "Hirohisa",
     last_name: "Kitsuka",
     avatar_img: "https://picsum.photos/200",
     comment: "Almost human",
   },
 ];
+
+
+export const dummyProject: PROJECT[] = [{
+
+  project_id: "test001",
+  project_name: "テストタスク",
+  resp_id: [
+    "test3", "0909090",
+  ],
+  member_id: [
+    "test3", "0909090",
+  ],
+  description: "これは説明です",
+  startdate: "2021-10-20",
+  enddate: "2021-10-25",
+  created_at: "2021-10-20",
+  update_at: "2021-10-20",
+
+}];
 
 export const demoData = [
   createData(

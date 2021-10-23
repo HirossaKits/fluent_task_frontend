@@ -22,78 +22,31 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import TaskDialog from "./TaskDialog";
-import TaskFilter from "./TaskFilter";
-import {
-  selectTasks,
-  selectFilterTask,
-  setEditTaskOpen,
-  setFilterTaskOpen,
-} from "./taskSlice";
-import { TASK, COLUMN_NAME } from "../types";
+import TaskDialog from "../features/task/TaskDialog";
+// import TaskFilter from "./TaskFilter";
 
-export interface COLUMN_INFO {
-  name: COLUMN_NAME;
-  label: string;
-  type: "string" | "number" | "Date";
-  width: string;
-  related?: any;
+interface Props<T> {
+  data: T[];
 }
 
-export const columnsInfo: COLUMN_INFO[] = [
-  { name: "task_name", label: "タスク名", type: "string", width: "13%" },
-  { name: "category_name", label: "カテゴリー", type: "string", width: "10%" },
-  { name: "status", label: "ステータス", type: "string", width: "10%" },
-  {
-    name: "scheduled_startdate",
-    label: "開始予定日",
-    type: "Date",
-    width: "12%",
-  },
-  {
-    name: "scheduled_enddate",
-    label: "終了予定日",
-    type: "Date",
-    width: "12%",
-  },
-  {
-    name: "estimate_manhour",
-    label: "見積工数",
-    type: "number",
-    width: "10%",
-  },
-  { name: "assigned_name", label: "担当", type: "string", width: "10%" },
-  { name: "description", label: "備考", type: "string", width: "15%" },
-];
+type ListComponent = <T>(props: Props<T>) => React.ReactElement<Props<T>>;
 
 interface SORT_STATE {
   order: "asc" | "desc";
-  columnName: "" | COLUMN_NAME;
+  columnName: string;
 }
 
-const Task = () => {
-  const dispatch = useDispatch();
-  const tasks = useSelector(selectTasks);
-  const filterTask = useSelector(selectFilterTask);
+const CommonTable: ListComponent = (props) => {
+  const table = props.data.map((row, index) => ({ id: index, ...row }));
 
-  const [selected, setSelected] = useState<string[]>([]);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [selected, setSelected] = useState<number[]>([]);
   const [sortState, setSortState] = useState<SORT_STATE>({
     order: "asc",
     columnName: "",
   });
 
-  const filterAnchorEl = useRef(null);
-
-  const handleEditClick = () => {
-    dispatch(setEditTaskOpen(true));
-  };
-
-  const handleFilterClick = () => {
-    dispatch(setFilterTaskOpen(true));
-  };
-
-  const handleRowClick = (event: React.MouseEvent<unknown>, id: string) => {
-    console.log(id);
+  const handleRowClick = (event: React.MouseEvent<unknown>, id: number) => {
     let newSelected = selected.slice();
     const index = newSelected.indexOf(id);
     if (index === -1) {
@@ -101,19 +54,18 @@ const Task = () => {
     } else {
       newSelected.splice(index, 1);
     }
-    console.log(newSelected);
     setSelected(newSelected);
   };
 
   const handleSelectAllClic = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      setSelected(tasks.map((row) => row.task_id));
+      setSelected(data.map((row) => row.id));
     } else {
       setSelected([]);
     }
   };
 
-  const handleClickSortColumn = (colName: COLUMN_NAME) => {
+  const handleClickSortColumn = (colName: string) => {
     setSortState({
       order:
         sortState.columnName !== colName || sortState.order === "desc"
@@ -123,83 +75,10 @@ const Task = () => {
     });
   };
 
-  const sortRows = (ts: TASK[]): TASK[] => {
-    if (!sortState.columnName) return ts;
-    const sortedRows = ts.slice().sort((next, now) => {
-      const nextVal = next[sortState.columnName];
-      const nowVal = now[sortState.columnName as COLUMN_NAME];
-
-      if (nowVal === null && nextVal === null) {
-        return 1;
-      }
-      if (nextVal === null) {
-        return 1;
-      }
-      if (nowVal === null) {
-        return -1;
-      }
-      if (nextVal > nowVal) {
-        return sortState.order === "asc" ? 1 : -1;
-      }
-      if (nextVal < nowVal) {
-        return sortState.order === "desc" ? -1 : 1;
-      }
-      return 0;
-    });
-    return sortedRows;
+  const handleFilterClick = () => {
+    setFilterOpen(true);
   };
-
-  const filterTasks = (tsk: TASK[]): TASK[] => {
-    if (filterTask.length < 1) return tsk;
-
-    const filtered = tsk.filter((row, rowId) => {
-      let validity = true;
-
-      filterTask.forEach((filter, filterId) => {
-        if (!validity) return;
-        if (!filter.value) return;
-
-        const columnValue = row[filter.columnName];
-        const filterValue = filter.value;
-        const operator = filter.operator;
-        const type = columnsInfo.filter(
-          (col) => col.name === filter.columnName
-        )[0].type;
-
-        if (columnValue === null) {
-          validity = false;
-          return;
-        }
-
-        if (type === "string") {
-          if (operator === "=") {
-            validity = columnValue === filterValue;
-          } else if (operator === "start_from") {
-            validity = columnValue.toString().startsWith(filterValue);
-          } else if (operator === "include") {
-            validity =
-              columnValue.toString().indexOf(filterValue) === -1 ? false : true;
-          } else if (operator === "exclude") {
-            validity =
-              columnValue.toString().indexOf(filterValue) === -1 ? true : false;
-          }
-        }
-
-        if (type === "number" || type === "Date") {
-          if (operator === "=") {
-            validity = columnValue === filterValue;
-          } else if (operator === "<=") {
-            validity = columnValue <= filterValue;
-          } else if (operator === ">=") {
-            validity = columnValue >= filterValue;
-          }
-        }
-      });
-
-      return validity;
-    });
-    return filtered;
-  };
+  const filterAnchorEl = useRef(null);
 
   const theme = useTheme();
   const styles = {
@@ -236,7 +115,7 @@ const Task = () => {
             </IconButton>
           </Tooltip>
           <Tooltip title='編集'>
-            <IconButton aria-label='edit task' onClick={handleEditClick}>
+            <IconButton aria-label='edit task'>
               <EditIcon />
             </IconButton>
           </Tooltip>
@@ -345,4 +224,4 @@ const Task = () => {
   );
 };
 
-export default Task;
+export default CommonTable;

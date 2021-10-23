@@ -57,6 +57,26 @@ export interface NAV_STATE {
   profile: PROFILE;
 }
 
+/*Project*/
+type USER = {
+  user_id: string;
+  user_name: string;
+};
+
+
+export interface PROJECT {
+  project_id: string;
+  project_name: string;
+  resp_user: USER[];
+  member: USER[];
+  description: string;
+  start_date: null | string;
+  end_date: null | string;
+  created_at?: null | string;
+  update_at?: null | string;
+}
+
+
 /*Task*/
 
 export type COLUMN_NAME =
