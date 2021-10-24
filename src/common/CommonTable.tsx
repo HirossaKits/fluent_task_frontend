@@ -27,24 +27,49 @@ import TaskDialog from "../features/task/TaskDialog";
 
 interface Props<T> {
   data: T[];
+  columnInfo: {
+    name: keyof T;
+    label: string;
+    type: "string" | "number" | "Date";
+    width: string;
+  }[];
 }
 
 type ListComponent = <T>(props: Props<T>) => React.ReactElement<Props<T>>;
 
-interface SORT_STATE {
-  order: "asc" | "desc";
-  columnName: string;
-}
-
 const CommonTable: ListComponent = (props) => {
-  const table = props.data.map((row, index) => ({ id: index, ...row }));
+  type TABLE = typeof props.data;
+  type ROW = typeof props.data[0];
+  type ROW_ITEM = keyof typeof props.data[0];
+  const columnNames = Object.keys(props.data[0]);
 
+  interface SORT_STATE {
+    order: "asc" | "desc";
+    columnName: ROW_ITEM;
+  }
+
+  interface FILTER {
+    columnName: ROW_ITEM;
+    type: "string" | "number" | "Date";
+    operator: string;
+    value: string;
+  }
+
+  const table = props.data.map((row, index) => ({ id: index, ...row }));
   const [filterOpen, setFilterOpen] = useState(false);
   const [selected, setSelected] = useState<number[]>([]);
   const [sortState, setSortState] = useState<SORT_STATE>({
     order: "asc",
-    columnName: "",
+    columnName: columnNames[0] as ROW_ITEM,
   });
+  const [filters, setFilters] = useState<FILTER[]>([
+    {
+      columnName: props.columnInfo[0].name,
+      type: props.columnInfo[0].type,
+      operator: "=",
+      value: "",
+    },
+  ]);
 
   const handleRowClick = (event: React.MouseEvent<unknown>, id: number) => {
     let newSelected = selected.slice();
@@ -59,13 +84,39 @@ const CommonTable: ListComponent = (props) => {
 
   const handleSelectAllClic = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      setSelected(data.map((row) => row.id));
+      setSelected(table.map((row) => row.id));
     } else {
       setSelected([]);
     }
   };
 
-  const handleClickSortColumn = (colName: string) => {
+  const sortRows = (tbl: TABLE) => {
+    if (!sortState.columnName) return tbl;
+    const sortedRows = tbl.slice().sort((next, now) => {
+      const nextVal = next[sortState.columnName];
+      const nowVal = now[sortState.columnName];
+
+      if (nowVal === null && nextVal === null) {
+        return 1;
+      }
+      if (nextVal === null) {
+        return 1;
+      }
+      if (nowVal === null) {
+        return -1;
+      }
+      if (nextVal > nowVal) {
+        return sortState.order === "asc" ? 1 : -1;
+      }
+      if (nextVal < nowVal) {
+        return sortState.order === "desc" ? -1 : 1;
+      }
+      return 0;
+    });
+    return sortedRows;
+  };
+
+  const handleClickSortColumn = (colName: ROW_ITEM) => {
     setSortState({
       order:
         sortState.columnName !== colName || sortState.order === "desc"
@@ -73,6 +124,58 @@ const CommonTable: ListComponent = (props) => {
           : "desc",
       columnName: colName,
     });
+  };
+
+  const filterTasks = (tbl: TABLE): TABLE => {
+    if (filters.length < 1) return tbl;
+
+    const filtered = tbl.filter((row, rowId) => {
+      let validity = true;
+
+      filters.forEach((filter, filterId) => {
+        if (!validity) return;
+        if (!filter.value) return;
+
+        const columnValue = String(row[filter.columnName]);
+        const filterValue = filter.value;
+        const operator = filter.operator;
+        const type = props.columnInfo.filter(
+          (col) => col.name === filter.columnName
+        )[0].type;
+
+        if (columnValue === null) {
+          validity = false;
+          return;
+        }
+
+        if (type === "string") {
+          if (operator === "=") {
+            validity = columnValue === filterValue;
+          } else if (operator === "start_from") {
+            validity = columnValue.toString().startsWith(filterValue);
+          } else if (operator === "include") {
+            validity =
+              columnValue.toString().indexOf(filterValue) === -1 ? false : true;
+          } else if (operator === "exclude") {
+            validity =
+              columnValue.toString().indexOf(filterValue) === -1 ? true : false;
+          }
+        }
+
+        if (type === "number" || type === "Date") {
+          if (operator === "=") {
+            validity = columnValue === filterValue;
+          } else if (operator === "<=") {
+            validity = columnValue <= filterValue;
+          } else if (operator === ">=") {
+            validity = columnValue >= filterValue;
+          }
+        }
+      });
+
+      return validity;
+    });
+    return filtered;
   };
 
   const handleFilterClick = () => {
@@ -143,16 +246,16 @@ const CommonTable: ListComponent = (props) => {
                 <TableCell css={styles.tableCheckCell} padding='checkbox'>
                   <Checkbox
                     indeterminate={
-                      selected.length > 0 && selected.length < tasks.length
+                      selected.length > 0 && selected.length < data.length
                     }
                     checked={
-                      selected.length > 0 && selected.length === tasks.length
+                      selected.length > 0 && selected.length === data.length
                     }
                     onChange={handleSelectAllClic}
                     color='primary'
                   />
                 </TableCell>
-                {columnsInfo.map((col) => (
+                {props.columnInfo.map((col) => (
                   <TableCell css={styles.tableCell} key={col.name}>
                     <TableSortLabel
                       active={sortState.columnName === col.name}
@@ -220,6 +323,121 @@ const CommonTable: ListComponent = (props) => {
       </Box>
       <TaskDialog />
       <TaskFilter anchorEl={filterAnchorEl} />
+      <Popover
+        open={filterTaskOpen}
+        anchorEl={props.anchorEl.current}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        onClose={handleClose}
+        keepMounted
+      >
+        <Paper css={styles.paper}>
+          <Grid
+            container
+            direction='column'
+            justifyContent='center'
+            alignItems='center'
+          >
+            <form css={styles.form} noValidate autoComplete='off'>
+              {filterTask.map((filter, index) => (
+                <Grid
+                  item
+                  container
+                  direction='row'
+                  justifyContent='center'
+                  alignItems='center'
+                >
+                  <Grid css={styles.gridIcon} item xs={1}>
+                    {index === filterTask.length - 1 &&
+                      (filterTask[index].value === "" ? (
+                        <IconButton disabled>
+                          <AddIcon />
+                        </IconButton>
+                      ) : (
+                        <IconButton onClick={() => handleAddClick(index)}>
+                          <AddIcon />
+                        </IconButton>
+                      ))}
+                  </Grid>
+                  <Grid css={styles.gridItem} item xs={3}>
+                    <CommonSelect
+                      label='対象'
+                      name='columnName'
+                      options={ListColumns}
+                      value={filter.columnName}
+                      index={index}
+                      onChange={handleColumnSelectChange}
+                    />
+                  </Grid>
+
+                  <Grid css={styles.gridItem} item xs={3}>
+                    {filter.type === "string" ? (
+                      <CommonSelect
+                        label='演算子'
+                        name='operator'
+                        options={FilterOperatorOfString}
+                        value={filter.operator}
+                        index={index}
+                        onChange={handleInputChange}
+                      />
+                    ) : filter.type === "number" ? (
+                      <CommonSelect
+                        label='演算子'
+                        name='operator'
+                        options={FilterOperatorOfNumber}
+                        value={filter.operator}
+                        index={index}
+                        onChange={handleInputChange}
+                      />
+                    ) : (
+                      <CommonSelect
+                        label='演算子'
+                        name='operator'
+                        options={FilterOperatorOfDate}
+                        value={filter.operator}
+                        index={index}
+                        onChange={handleInputChange}
+                      />
+                    )}
+                  </Grid>
+                  <Grid css={styles.gridItem} item xs={3}>
+                    {filter.type === "string" || filter.type === "number" ? (
+                      <CommonTextField
+                        label='値'
+                        name='value'
+                        value={filter.value}
+                        index={index}
+                        onChange={handleInputChange}
+                      />
+                    ) : (
+                      <CommonDatePicker
+                        label='値'
+                        name='value'
+                        value={filter.value}
+                        index={index}
+                        onChange={handleInputChange}
+                      />
+                    )}
+                  </Grid>
+                  <Grid css={styles.gridIcon} item xs={1}>
+                    {(filterTask.length !== 1 || index !== 0) && (
+                      <IconButton onClick={() => handleClearClick(index)}>
+                        <ClearIcon color='action' />
+                      </IconButton>
+                    )}
+                  </Grid>
+                </Grid>
+              ))}
+            </form>
+          </Grid>
+        </Paper>
+      </Popover>
     </>
   );
 };
