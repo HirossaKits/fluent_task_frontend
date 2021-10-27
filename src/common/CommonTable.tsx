@@ -46,6 +46,7 @@ interface Props<T> {
     type: "string" | "number" | "Date";
     width: string;
   }[];
+  showToolBar: boolean;
 }
 
 type ListComponent = <T>(props: Props<T>) => React.ReactElement<Props<T>>;
@@ -155,12 +156,7 @@ const CommonTable: ListComponent = (props) => {
   };
 
   const handleColumnSelectChange = (target: TARGET) => {
-    console.log("DEBUG");
-    console.log(target);
-    console.log(target.index);
     if (target.index != null) {
-      console.log(target.name);
-      console.log(props.columnInfo);
       const newType = props.columnInfo.filter(
         (col) => col.name === target.value
       )[0].type;
@@ -312,33 +308,35 @@ const CommonTable: ListComponent = (props) => {
   return (
     <>
       <Box sx={{ width: "100%" }}>
-        <Toolbar disableGutters>
-          <Tooltip title='登録'>
-            <IconButton aria-label='filter list'>
-              <PlaylistAddIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title='編集'>
-            <IconButton aria-label='edit task'>
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title='削除'>
-            <IconButton aria-label='delete'>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title='フィルター'>
-            <IconButton
-              ref={filterAnchorEl}
-              css={styles.filterButton}
-              aria-label='filter list'
-              onClick={handleFilterClick}
-            >
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
-        </Toolbar>
+        {props.showToolBar && (
+          <Toolbar disableGutters>
+            <Tooltip title='登録'>
+              <IconButton aria-label='filter list'>
+                <PlaylistAddIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title='編集'>
+              <IconButton aria-label='edit task'>
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title='削除'>
+              <IconButton aria-label='delete'>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title='フィルター'>
+              <IconButton
+                ref={filterAnchorEl}
+                css={styles.filterButton}
+                aria-label='filter list'
+                onClick={handleFilterClick}
+              >
+                <FilterListIcon />
+              </IconButton>
+            </Tooltip>
+          </Toolbar>
+        )}
         <TableContainer css={styles.tableContainer}>
           <Table>
             <TableHead>
@@ -473,7 +471,6 @@ const CommonTable: ListComponent = (props) => {
                       onChange={handleColumnSelectChange}
                     />
                   </Grid>
-
                   <Grid css={styles.gridItem} item xs={3}>
                     {filter.type === "string" ? (
                       <CommonSelect

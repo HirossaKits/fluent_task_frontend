@@ -67,7 +67,7 @@ const Proj = () => {
         </Tabs>
       </Box>
       <Box sx={{ p: 3 }}>
-        <CommonTable data={task} columnInfo={columnInfo} />
+        <CommonTable data={task} columnInfo={columnInfo} showToolBar={true} />
       </Box>
     </Box>
   );

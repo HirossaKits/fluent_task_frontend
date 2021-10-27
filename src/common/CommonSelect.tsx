@@ -28,7 +28,6 @@ const CommonSelect: React.FC<Props> = (props) => {
     if ("index" in props) {
       target.index = props.index;
     }
-    console.log(target);
     props.onChange(target);
   };
 
@@ -45,6 +44,7 @@ const CommonSelect: React.FC<Props> = (props) => {
         disableClearable
         options={props.options}
         getOptionLabel={(option) => option.label.toString()}
+        value={props.options.find((opt) => opt.value === props.value)}
         onChange={(event, newItem) => handleSelectChange(event, newItem)}
         renderInput={(params) => (
           <TextField
