@@ -1,4 +1,15 @@
+/*Common*/
+
+export interface COLUMN_INFO {
+  name: COLUMN_NAME;
+  label: string;
+  type: "string" | "number" | "Date";
+  width: string;
+  related?: any;
+}
+
 /*authSlice*/
+
 export interface CRED {
   email: string;
   password: string;
@@ -67,11 +78,11 @@ type USER = {
 export interface PROJECT {
   project_id: string;
   project_name: string;
-  resp_user: USER[];
-  member: USER[];
+  resp_id: string[];
+  member_id: string[];
   description: string;
-  start_date: null | string;
-  end_date: null | string;
+  startdate: null | string;
+  enddate: null | string;
   created_at?: null | string;
   update_at?: null | string;
 }

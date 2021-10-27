@@ -4,7 +4,9 @@ import { css } from "@emotion/react";
 import { useTheme } from "@mui/material";
 import { alpha } from "@mui/material/styles";
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import Popover from "@mui/material/Popover";
 import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
@@ -22,8 +24,19 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import ClearIcon from "@mui/icons-material/Clear";
 import TaskDialog from "../features/task/TaskDialog";
-// import TaskFilter from "./TaskFilter";
+import CommonSelect from "../common/CommonSelect";
+import CommonTextField from "../common/CommonTextField";
+import CommonDatePicker from "../common/CommonDatePicker";
+import { TARGET } from "../features/types";
+import {
+  ListColumns,
+  FilterOperatorOfString,
+  FilterOperatorOfNumber,
+  FilterOperatorOfDate,
+} from "../selectionOptions";
 
 interface Props<T> {
   data: T[];
@@ -38,14 +51,12 @@ interface Props<T> {
 type ListComponent = <T>(props: Props<T>) => React.ReactElement<Props<T>>;
 
 const CommonTable: ListComponent = (props) => {
-  type TABLE = typeof props.data;
-  type ROW = typeof props.data[0];
-  type ROW_ITEM = keyof typeof props.data[0];
-  const columnNames = Object.keys(props.data[0]);
+  type ROW = { id: number } & typeof props.data[0];
+  type ROW_ITEM = keyof ROW;
 
   interface SORT_STATE {
     order: "asc" | "desc";
-    columnName: ROW_ITEM;
+    columnName: "" | ROW_ITEM;
   }
 
   interface FILTER {
@@ -56,15 +67,18 @@ const CommonTable: ListComponent = (props) => {
   }
 
   const table = props.data.map((row, index) => ({ id: index, ...row }));
-  const [filterOpen, setFilterOpen] = useState(false);
+
+  const filterAnchorEl = useRef(null);
+
   const [selected, setSelected] = useState<number[]>([]);
   const [sortState, setSortState] = useState<SORT_STATE>({
     order: "asc",
-    columnName: columnNames[0] as ROW_ITEM,
+    columnName: "",
   });
+  const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FILTER[]>([
     {
-      columnName: props.columnInfo[0].name,
+      columnName: props.columnInfo[0].name as ROW_ITEM,
       type: props.columnInfo[0].type,
       operator: "=",
       value: "",
@@ -90,11 +104,96 @@ const CommonTable: ListComponent = (props) => {
     }
   };
 
-  const sortRows = (tbl: TABLE) => {
-    if (!sortState.columnName) return tbl;
+  const handleClickSortColumn = (colName: ROW_ITEM) => {
+    setSortState({
+      order:
+        sortState.columnName !== colName || sortState.order === "desc"
+          ? "asc"
+          : "desc",
+      columnName: colName,
+    });
+  };
+
+  const handleFilterClick = () => {
+    setFilterOpen(true);
+  };
+
+  const handleFilterClose = () => {
+    setFilterOpen(false);
+  };
+
+  const handleAddClick = (index: number) => {
+    if (filters[index].value !== "") {
+      setFilters([
+        ...filters,
+        {
+          columnName: props.columnInfo[0].name as ROW_ITEM,
+          type: props.columnInfo[0].type,
+          operator: "=",
+          value: "",
+        },
+      ]);
+    }
+  };
+
+  const handleClearClick = (index: number) => {
+    const target = [...filters];
+    target.splice(index, 1);
+    if (index !== 1 || filters.length !== 1) {
+      setFilters(target);
+    }
+  };
+
+  const handleInputChange = (target: TARGET) => {
+    if (target.index != null) {
+      setFilters([
+        ...filters.slice(0, target.index),
+        { ...filters[target.index], [target.name]: target.value },
+        ...filters.slice(target.index + 1),
+      ]);
+    }
+  };
+
+  const handleColumnSelectChange = (target: TARGET) => {
+    console.log("DEBUG");
+    console.log(target);
+    console.log(target.index);
+    if (target.index != null) {
+      console.log(target.name);
+      console.log(props.columnInfo);
+      const newType = props.columnInfo.filter(
+        (col) => col.name === target.value
+      )[0].type;
+      if (newType !== filters[target.index].type) {
+        setFilters([
+          ...filters.slice(0, target.index),
+          {
+            ...filters[target.index],
+            [target.name]: target.value,
+            operator: "=",
+            value: "",
+            type: newType,
+          },
+          ...filters.slice(target.index + 1),
+        ]);
+      } else {
+        setFilters([
+          ...filters.slice(0, target.index),
+          {
+            ...filters[target.index],
+            [target.name]: target.value,
+          },
+          ...filters.slice(target.index + 1),
+        ]);
+      }
+    }
+  };
+
+  const sortRows = (tbl: ROW[]): ROW[] => {
+    if (sortState.columnName === "") return tbl;
     const sortedRows = tbl.slice().sort((next, now) => {
-      const nextVal = next[sortState.columnName];
-      const nowVal = now[sortState.columnName];
+      const nextVal = next[sortState.columnName as ROW_ITEM];
+      const nowVal = now[sortState.columnName as ROW_ITEM];
 
       if (nowVal === null && nextVal === null) {
         return 1;
@@ -116,17 +215,7 @@ const CommonTable: ListComponent = (props) => {
     return sortedRows;
   };
 
-  const handleClickSortColumn = (colName: ROW_ITEM) => {
-    setSortState({
-      order:
-        sortState.columnName !== colName || sortState.order === "desc"
-          ? "asc"
-          : "desc",
-      columnName: colName,
-    });
-  };
-
-  const filterTasks = (tbl: TABLE): TABLE => {
+  const filterTable = (tbl: ROW[]): ROW[] => {
     if (filters.length < 1) return tbl;
 
     const filtered = tbl.filter((row, rowId) => {
@@ -178,11 +267,6 @@ const CommonTable: ListComponent = (props) => {
     return filtered;
   };
 
-  const handleFilterClick = () => {
-    setFilterOpen(true);
-  };
-  const filterAnchorEl = useRef(null);
-
   const theme = useTheme();
   const styles = {
     filterButton: css`
@@ -205,8 +289,25 @@ const CommonTable: ListComponent = (props) => {
     tableNumericCell: css`
       padding-right: 5%;
     `,
-    link: css``,
+    paper: css`
+      width: 600px;
+      padding-right: ${theme.spacing(1)};
+      padding-bottom: ${theme.spacing(1)};
+    `,
+    form: css`
+      width: 100%;
+    `,
+    gridIcon: css`
+      padding-top: 20px;
+    `,
+    gridItem: css`
+      margin-left: ${theme.spacing(1)};
+      marginr-ight: ${theme.spacing(1)};
+    `,
   };
+
+  // for debug
+  console.log(filters);
 
   return (
     <>
@@ -227,7 +328,6 @@ const CommonTable: ListComponent = (props) => {
               <DeleteIcon />
             </IconButton>
           </Tooltip>
-
           <Tooltip title='フィルター'>
             <IconButton
               ref={filterAnchorEl}
@@ -246,17 +346,17 @@ const CommonTable: ListComponent = (props) => {
                 <TableCell css={styles.tableCheckCell} padding='checkbox'>
                   <Checkbox
                     indeterminate={
-                      selected.length > 0 && selected.length < data.length
+                      selected.length > 0 && selected.length < table.length
                     }
                     checked={
-                      selected.length > 0 && selected.length === data.length
+                      selected.length > 0 && selected.length === table.length
                     }
                     onChange={handleSelectAllClic}
                     color='primary'
                   />
                 </TableCell>
-                {props.columnInfo.map((col) => (
-                  <TableCell css={styles.tableCell} key={col.name}>
+                {props.columnInfo.map((col, idx) => (
+                  <TableCell css={styles.tableCell} key={idx}>
                     <TableSortLabel
                       active={sortState.columnName === col.name}
                       direction={
@@ -273,20 +373,20 @@ const CommonTable: ListComponent = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {sortRows(filterTasks(tasks)).map((row, rowIndex) => (
+              {sortRows(filterTable(table)).map((row, rowIndex) => (
                 <TableRow
                   css={styles.tableRow}
-                  onClick={(event) => handleRowClick(event, row.task_id)}
+                  onClick={(event) => handleRowClick(event, row.id)}
                   hover
-                  selected={selected.indexOf(row.task_id) !== -1}
+                  selected={selected.indexOf(row.id) !== -1}
                 >
                   <TableCell css={styles.tableCheckCell} padding='checkbox'>
                     <Checkbox
-                      checked={selected.indexOf(row.task_id) !== -1}
+                      checked={selected.indexOf(row.id) !== -1}
                       color='primary'
                     />
                   </TableCell>
-                  {columnsInfo.map((col) => (
+                  {props.columnInfo.map((col) => (
                     <TableCell
                       css={
                         col.type === "number"
@@ -299,12 +399,11 @@ const CommonTable: ListComponent = (props) => {
                       <Typography>
                         {col.name === "task_name" ? (
                           <Link
-                            css={styles.link}
                             underline='always'
                             color='textPrimary'
                             onClick={(event: any) => {
                               event.stopPropagation();
-                              setEditTaskOpen(true);
+                              // setEditTaskOpen(true);
                             }}
                           >
                             {row[col.name]}
@@ -322,10 +421,9 @@ const CommonTable: ListComponent = (props) => {
         </TableContainer>
       </Box>
       <TaskDialog />
-      <TaskFilter anchorEl={filterAnchorEl} />
       <Popover
-        open={filterTaskOpen}
-        anchorEl={props.anchorEl.current}
+        open={filterOpen}
+        anchorEl={filterAnchorEl.current}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "right",
@@ -334,7 +432,7 @@ const CommonTable: ListComponent = (props) => {
           vertical: "top",
           horizontal: "right",
         }}
-        onClose={handleClose}
+        onClose={handleFilterClose}
         keepMounted
       >
         <Paper css={styles.paper}>
@@ -345,7 +443,7 @@ const CommonTable: ListComponent = (props) => {
             alignItems='center'
           >
             <form css={styles.form} noValidate autoComplete='off'>
-              {filterTask.map((filter, index) => (
+              {filters.map((filter, index) => (
                 <Grid
                   item
                   container
@@ -354,8 +452,8 @@ const CommonTable: ListComponent = (props) => {
                   alignItems='center'
                 >
                   <Grid css={styles.gridIcon} item xs={1}>
-                    {index === filterTask.length - 1 &&
-                      (filterTask[index].value === "" ? (
+                    {index === filters.length - 1 &&
+                      (filters[index].value === "" ? (
                         <IconButton disabled>
                           <AddIcon />
                         </IconButton>
@@ -370,7 +468,7 @@ const CommonTable: ListComponent = (props) => {
                       label='対象'
                       name='columnName'
                       options={ListColumns}
-                      value={filter.columnName}
+                      value={filter.columnName as string}
                       index={index}
                       onChange={handleColumnSelectChange}
                     />
@@ -426,7 +524,7 @@ const CommonTable: ListComponent = (props) => {
                     )}
                   </Grid>
                   <Grid css={styles.gridIcon} item xs={1}>
-                    {(filterTask.length !== 1 || index !== 0) && (
+                    {(filters.length !== 1 || index !== 0) && (
                       <IconButton onClick={() => handleClearClick(index)}>
                         <ClearIcon color='action' />
                       </IconButton>

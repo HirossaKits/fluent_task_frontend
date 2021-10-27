@@ -61,7 +61,6 @@ export const dummyUsers: USER_PROFILE[] = [
 
 
 export const dummyProject: PROJECT[] = [{
-
   project_id: "test001",
   project_name: "テストタスク",
   resp_id: [
@@ -75,7 +74,6 @@ export const dummyProject: PROJECT[] = [{
   enddate: "2021-10-25",
   created_at: "2021-10-20",
   update_at: "2021-10-20",
-
 }];
 
 export const demoData = [

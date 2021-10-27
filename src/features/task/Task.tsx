@@ -126,7 +126,7 @@ const Task = () => {
   const sortRows = (ts: TASK[]): TASK[] => {
     if (!sortState.columnName) return ts;
     const sortedRows = ts.slice().sort((next, now) => {
-      const nextVal = next[sortState.columnName];
+      const nextVal = next[sortState.columnName as COLUMN_NAME];
       const nowVal = now[sortState.columnName as COLUMN_NAME];
 
       if (nowVal === null && nextVal === null) {

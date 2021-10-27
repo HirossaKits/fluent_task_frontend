@@ -23,12 +23,13 @@ const CommonSelect: React.FC<Props> = (props) => {
   const handleSelectChange = (event: any, newItem: Option) => {
     let target: TARGET = {
       name: props.name,
-      value: event.target.value,
+      value: newItem.value,
     };
     if ("index" in props) {
       target.index = props.index;
     }
-    props.onChange(newItem.value);
+    console.log(target);
+    props.onChange(target);
   };
 
   const styles = {
@@ -48,8 +49,8 @@ const CommonSelect: React.FC<Props> = (props) => {
         renderInput={(params) => (
           <TextField
             {...params}
-            variant="standard"
-            margin="normal"
+            variant='standard'
+            margin='normal'
             label={"label" in props && props.label}
             InputLabelProps={{
               shrink: true,
