@@ -12,6 +12,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditIcon from "@mui/icons-material/Edit";
+import CircleIcon from "@mui/icons-material/Circle";
 import { demoData } from "../../DummyData";
 import { TASK } from "../types";
 
@@ -36,21 +37,22 @@ const Kanban = () => {
       flex-wrap: nowrap;
       width: 29%;
       height: 83vh;
+      background-color: ${theme.palette.action.hover};
     `,
-    headerBeforStart: css`
-      padding: 3px;
-      background-color: ${theme.palette.warning.light};
-      color: white;
+    header: css`
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 8px;
     `,
-    headerOnGoing: css`
-      padding: 3px;
-      background-color: ${theme.palette.info.light};
-      color: white;
+    iconBeforStart: css`
+      color: ${theme.palette.warning.light};
     `,
-    headerDone: css`
-      padding: 3px;
-      background-color: ${theme.palette.success.light};
-      color: white;
+    iconOnGoing: css`
+      color: ${theme.palette.info.light};
+    `,
+    iconDone: css`
+      color: ${theme.palette.success.light};
     `,
     divider: css`
       margin-bottom: ${theme.spacing(1)};
@@ -92,7 +94,8 @@ const Kanban = () => {
     <>
       <Box css={styles.root}>
         <Card css={styles.column}>
-          <Box css={styles.headerBeforStart}>
+          <Box css={styles.header}>
+            <CircleIcon css={styles.iconBeforStart} />
             <Typography gutterBottom variant='h6' component='div'>
               開始前
             </Typography>
@@ -127,7 +130,8 @@ const Kanban = () => {
           ))}
         </Card>
         <Card css={styles.column}>
-          <Box css={styles.headerOnGoing}>
+          <Box css={styles.header}>
+            <CircleIcon css={styles.iconOnGoing} />
             <Typography gutterBottom variant='h6' component='div'>
               進行中
             </Typography>
@@ -162,7 +166,8 @@ const Kanban = () => {
           ))}
         </Card>
         <Card css={styles.column}>
-          <Box css={styles.headerDone}>
+          <Box css={styles.header}>
+            <CircleIcon css={styles.iconDone} />
             <Typography gutterBottom variant='h6' component='div'>
               完了
             </Typography>
