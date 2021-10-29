@@ -43,16 +43,20 @@ const Kanban = () => {
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 8px;
+      padding: 4px 12px 3px 0px;
+      box-shadow: 0px 0px 12px -5px #777777;
     `,
     iconBeforStart: css`
       color: ${theme.palette.warning.light};
+      margin: 0px 14px 2px 0px;
     `,
     iconOnGoing: css`
       color: ${theme.palette.info.light};
+      margin: 0px 14px 2px 0px;
     `,
     iconDone: css`
       color: ${theme.palette.success.light};
+      margin: 0px 14px 2px 0px;
     `,
     divider: css`
       margin-bottom: ${theme.spacing(1)};
