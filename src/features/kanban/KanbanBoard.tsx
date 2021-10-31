@@ -15,8 +15,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import CircleIcon from "@mui/icons-material/Circle";
 import { demoData } from "../../DummyData";
 import { TASK } from "../types";
+import KanbanColumn from "./KanbanColumn";
 
-const Kanban = () => {
+const KanbanBoard = () => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -26,7 +27,7 @@ const Kanban = () => {
     setAnchorEl(null);
   };
   const styles = {
-    root: css`
+    container: css`
       display: flex;
       justify-content: space-evenly;
       margin-top: ${theme.spacing(4)};
@@ -96,43 +97,13 @@ const Kanban = () => {
 
   return (
     <>
-      <Box css={styles.root}>
-        <Card css={styles.column}>
-          <Box css={styles.header}>
-            <CircleIcon css={styles.iconBeforStart} />
-            <Typography gutterBottom variant='h6' component='div'>
-              開始前
-            </Typography>
-          </Box>
-          <Divider css={styles.divider} />
-          {demoData.map((task: TASK) => (
-            <Card css={styles.card}>
-              <Box
-                css={styles.boxTitle}
-                component='div'
-                sx={{
-                  textOverflow: "ellipsis",
-                  my: 2,
-                  overflow: "hidden",
-                }}
-              >
-                <Typography variant='body1' component='div' noWrap>
-                  {task.task_name}
-                </Typography>
-              </Box>
-              <Box css={styles.boxStatus}>
-                <Typography variant='body1' component='div'>
-                  {task.status}
-                </Typography>
-              </Box>
-              <Box css={styles.boxDot}>
-                <IconButton onClick={handleClick}>
-                  <MoreVertIcon fontSize='small' />
-                </IconButton>
-              </Box>
-            </Card>
-          ))}
-        </Card>
+      <div css={styles.container}>
+        {/* Create Component here! */}
+        <KanbanColumn
+          themeColor={theme.palette.warning.light}
+          headerText='開始前'
+          status='Before Start'
+        />
         <Card css={styles.column}>
           <Box css={styles.header}>
             <CircleIcon css={styles.iconOnGoing} />
@@ -141,33 +112,9 @@ const Kanban = () => {
             </Typography>
           </Box>
           <Divider css={styles.divider} />
-          {demoData.map((task: TASK) => (
-            <Card css={styles.card}>
-              <Box
-                css={styles.boxTitle}
-                component='div'
-                sx={{
-                  textOverflow: "ellipsis",
-                  my: 2,
-                  overflow: "hidden",
-                }}
-              >
-                <Typography variant='body1' component='div' noWrap>
-                  {task.task_name}
-                </Typography>
-              </Box>
-              <Box css={styles.boxStatus}>
-                <Typography variant='body1' component='div'>
-                  {task.status}
-                </Typography>
-              </Box>
-              <Box css={styles.boxDot}>
-                <IconButton onClick={handleClick}>
-                  <MoreVertIcon fontSize='small' />
-                </IconButton>
-              </Box>
-            </Card>
-          ))}
+          {/* {demoData.map((task: TASK) => (
+
+        )} */}
         </Card>
         <Card css={styles.column}>
           <Box css={styles.header}>
@@ -221,9 +168,9 @@ const Kanban = () => {
             <ListItemText>ユーザーを削除</ListItemText>
           </MenuItem>
         </Popover>
-      </Box>
+      </div>
     </>
   );
 };
 
-export default Kanban;
+export default KanbanBoard;

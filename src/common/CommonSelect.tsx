@@ -19,7 +19,7 @@ type Props = {
   onChange: Function;
 };
 
-const CommonSelect: React.FC<Props> = (props) => {
+const CommonSelect: React.FC<Props> = (props: Props) => {
   const handleSelectChange = (event: any, newItem: Option) => {
     let target: TARGET = {
       name: props.name,

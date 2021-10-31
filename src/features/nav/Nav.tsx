@@ -35,7 +35,7 @@ import ProfileMenu from "./ProfileMenu";
 import Org from "../org/Org";
 import Proj from "../proj/Proj";
 import Task from "../task/Task";
-import Kanban from "../kanban/Kanban";
+import Kanban from "../kanban/KanbanBoard";
 import Calendar from "../calendar/Calendar";
 import { MAIN_COMPONENT } from "../types";
 
