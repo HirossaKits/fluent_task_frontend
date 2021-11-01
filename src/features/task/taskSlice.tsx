@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { TASK_STATE } from "../types";
+import { JWT } from "../types";
 
 // Demo
 import { demoData } from "../../DummyData";
+import axios from "axios";
 
 const initialState: TASK_STATE = {
   tasks: demoData,
@@ -58,6 +60,23 @@ const initialState: TASK_STATE = {
     actual_enddate: null,
   },
 };
+
+// タスクの登録
+export const fetchAsyncRegister = createAsyncThunk(
+  "task/register",
+  async (editedTask) => {
+    const res = await axios.post<JWT>(
+      `${process.env.REACT_APP_API_URL}/api/task/create/`,
+      editedTask,
+      {
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+    return res.data;
+  }
+);
 
 export const taskSlice = createSlice({
   name: "task",

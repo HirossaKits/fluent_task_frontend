@@ -47,6 +47,10 @@ interface Props<T> {
     width: string;
   }[];
   showToolBar: boolean;
+  editDialog?: JSX.Element;
+  handleRegisterClick?: Function;
+  handleEditClick?: Function;
+  handleDeleteClick?: Function;
 }
 
 type ListComponent = <T>(props: Props<T>) => React.ReactElement<Props<T>>;
@@ -302,34 +306,42 @@ const CommonTable: ListComponent = (props) => {
     `,
   };
 
-  // for debug
-  console.log(filters);
-
   return (
     <>
       <Box sx={{ width: "100%" }}>
         {props.showToolBar && (
           <Toolbar disableGutters>
-            <Tooltip title='登録'>
-              <IconButton aria-label='filter list'>
+            <Tooltip title="登録">
+              <IconButton aria-label="filter list">
                 <PlaylistAddIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title='編集'>
-              <IconButton aria-label='edit task'>
-                <EditIcon />
-              </IconButton>
+            <Tooltip title="編集">
+              {"handleEditClick" in props ? (
+                <IconButton
+                  aria-label="edit task"
+                  onClick={() =>
+                    props.handleEditClick && props.handleEditClick()
+                  }
+                >
+                  <EditIcon />
+                </IconButton>
+              ) : (
+                <IconButton aria-label="edit task">
+                  <EditIcon />
+                </IconButton>
+              )}
             </Tooltip>
-            <Tooltip title='削除'>
-              <IconButton aria-label='delete'>
+            <Tooltip title="削除">
+              <IconButton aria-label="delete">
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
-            <Tooltip title='フィルター'>
+            <Tooltip title="フィルター">
               <IconButton
                 ref={filterAnchorEl}
                 css={styles.filterButton}
-                aria-label='filter list'
+                aria-label="filter list"
                 onClick={handleFilterClick}
               >
                 <FilterListIcon />
@@ -341,7 +353,7 @@ const CommonTable: ListComponent = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell css={styles.tableCheckCell} padding='checkbox'>
+                <TableCell css={styles.tableCheckCell} padding="checkbox">
                   <Checkbox
                     indeterminate={
                       selected.length > 0 && selected.length < table.length
@@ -350,7 +362,7 @@ const CommonTable: ListComponent = (props) => {
                       selected.length > 0 && selected.length === table.length
                     }
                     onChange={handleSelectAllClic}
-                    color='primary'
+                    color="primary"
                   />
                 </TableCell>
                 {props.columnInfo.map((col, idx) => (
@@ -378,10 +390,10 @@ const CommonTable: ListComponent = (props) => {
                   hover
                   selected={selected.indexOf(row.id) !== -1}
                 >
-                  <TableCell css={styles.tableCheckCell} padding='checkbox'>
+                  <TableCell css={styles.tableCheckCell} padding="checkbox">
                     <Checkbox
                       checked={selected.indexOf(row.id) !== -1}
-                      color='primary'
+                      color="primary"
                     />
                   </TableCell>
                   {props.columnInfo.map((col) => (
@@ -397,8 +409,8 @@ const CommonTable: ListComponent = (props) => {
                       <Typography>
                         {col.name === "task_name" ? (
                           <Link
-                            underline='always'
-                            color='textPrimary'
+                            underline="always"
+                            color="textPrimary"
                             onClick={(event: any) => {
                               event.stopPropagation();
                               // setEditTaskOpen(true);
@@ -436,18 +448,18 @@ const CommonTable: ListComponent = (props) => {
         <Paper css={styles.paper}>
           <Grid
             container
-            direction='column'
-            justifyContent='center'
-            alignItems='center'
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
           >
-            <form css={styles.form} noValidate autoComplete='off'>
+            <form css={styles.form} noValidate autoComplete="off">
               {filters.map((filter, index) => (
                 <Grid
                   item
                   container
-                  direction='row'
-                  justifyContent='center'
-                  alignItems='center'
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
                 >
                   <Grid css={styles.gridIcon} item xs={1}>
                     {index === filters.length - 1 &&
@@ -463,8 +475,8 @@ const CommonTable: ListComponent = (props) => {
                   </Grid>
                   <Grid css={styles.gridItem} item xs={3}>
                     <CommonSelect
-                      label='対象'
-                      name='columnName'
+                      label="対象"
+                      name="columnName"
                       options={ListColumns}
                       value={filter.columnName as string}
                       index={index}
@@ -474,8 +486,8 @@ const CommonTable: ListComponent = (props) => {
                   <Grid css={styles.gridItem} item xs={3}>
                     {filter.type === "string" ? (
                       <CommonSelect
-                        label='演算子'
-                        name='operator'
+                        label="演算子"
+                        name="operator"
                         options={FilterOperatorOfString}
                         value={filter.operator}
                         index={index}
@@ -483,8 +495,8 @@ const CommonTable: ListComponent = (props) => {
                       />
                     ) : filter.type === "number" ? (
                       <CommonSelect
-                        label='演算子'
-                        name='operator'
+                        label="演算子"
+                        name="operator"
                         options={FilterOperatorOfNumber}
                         value={filter.operator}
                         index={index}
@@ -492,8 +504,8 @@ const CommonTable: ListComponent = (props) => {
                       />
                     ) : (
                       <CommonSelect
-                        label='演算子'
-                        name='operator'
+                        label="演算子"
+                        name="operator"
                         options={FilterOperatorOfDate}
                         value={filter.operator}
                         index={index}
@@ -504,16 +516,16 @@ const CommonTable: ListComponent = (props) => {
                   <Grid css={styles.gridItem} item xs={3}>
                     {filter.type === "string" || filter.type === "number" ? (
                       <CommonTextField
-                        label='値'
-                        name='value'
+                        label="値"
+                        name="value"
                         value={filter.value}
                         index={index}
                         onChange={handleInputChange}
                       />
                     ) : (
                       <CommonDatePicker
-                        label='値'
-                        name='value'
+                        label="値"
+                        name="value"
                         value={filter.value}
                         index={index}
                         onChange={handleInputChange}
@@ -523,7 +535,7 @@ const CommonTable: ListComponent = (props) => {
                   <Grid css={styles.gridIcon} item xs={1}>
                     {(filters.length !== 1 || index !== 0) && (
                       <IconButton onClick={() => handleClearClick(index)}>
-                        <ClearIcon color='action' />
+                        <ClearIcon color="action" />
                       </IconButton>
                     )}
                   </Grid>
@@ -533,6 +545,7 @@ const CommonTable: ListComponent = (props) => {
           </Grid>
         </Paper>
       </Popover>
+      {props.editDialog}
     </>
   );
 };

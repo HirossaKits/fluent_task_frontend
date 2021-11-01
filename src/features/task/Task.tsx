@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { css } from "@emotion/react";
 import { selectTasks } from "./taskSlice";
 import CommonTable from "../../common/CommonTable";
+import TaskDialog from "./TaskDialog";
+import { setEditTaskOpen } from "./taskSlice";
 import { COLUMN_INFO } from "../types";
 
 const columnInfo: COLUMN_INFO[] = [
@@ -34,9 +36,18 @@ const columnInfo: COLUMN_INFO[] = [
 const Task = () => {
   const dispatch = useDispatch();
   const tasks = useSelector(selectTasks);
+  const hendleEditClick = () => {
+    dispatch(setEditTaskOpen(true));
+  };
 
   return (
-    <CommonTable data={tasks} columnInfo={columnInfo} showToolBar={true} />
+    <CommonTable
+      data={tasks}
+      columnInfo={columnInfo}
+      showToolBar={true}
+      editDialog={<TaskDialog />}
+      handleEditClick={hendleEditClick}
+    />
   );
 };
 
