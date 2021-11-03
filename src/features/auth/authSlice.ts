@@ -53,7 +53,7 @@ export const fetchAsyncRegister = createAsyncThunk(
 export const fetchAsyncGetLoginUser = createAsyncThunk(
   "auth/getLoginUser",
   async () => {
-    const res = await axios.get(
+    const res = await axios.get<LOGIN_USER>(
       `${process.env.REACT_APP_API_URL}/api/user/login/`,
       {
         headers: {
@@ -61,7 +61,6 @@ export const fetchAsyncGetLoginUser = createAsyncThunk(
         },
       }
     );
-    console.log(res.data);
     return res.data;
   }
 );
@@ -105,7 +104,8 @@ export const authSlice = createSlice({
     );
     builder.addCase(
       fetchAsyncGetLoginUser.fulfilled,
-      (state, action) => {
+      (state, action: PayloadAction<LOGIN_USER>) => {
+        console.log('fetchAsyncGetLoginUser.fulfilled');
         console.log(action.payload);
         return {
           ...state,

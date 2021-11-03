@@ -25,6 +25,7 @@ import GroupWorkIcon from "@mui/icons-material/GroupWork";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import ViewWeekIcon from "@mui/icons-material/ViewWeek";
+import { fetchAsyncGetLoginUser } from "../auth/authSlice";
 import {
   setSettingsMenuOpen,
   setProfileMenuOpen,
@@ -40,12 +41,30 @@ import Task from "../task/Task";
 import Kanban from "../kanban/Kanban";
 import Calendar from "../calendar/Calendar";
 import { MAIN_COMPONENT } from "../types";
+import { AppDispatch } from "../../app/store";
 
 const Main = () => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const mainComponent = useSelector(selectMainComponent);
-
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const settingsAnchorEl = useRef(null);
+  const profileAnchorEl = useRef(null);
+
+  useEffect(() => {
+    console.log("useEffect");
+    const fectchBootLoader = async () => {
+      const res = await dispatch(fetchAsyncGetLoginUser());
+      if (fetchAsyncGetLoginUser.fulfilled.match(res)) {
+        // GET PROFILE or TASKS
+      }
+    };
+    fectchBootLoader();
+  }, []);
+
+  useEffect(() => {
+    dispatch(fetchAsyncGetLoginUserProfile());
+  }, [dispatch]);
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -55,14 +74,9 @@ const Main = () => {
     setDrawerOpen(false);
   };
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
   const handleChange = (event: React.SyntheticEvent, newIndex: number) => {
     setSelectedIndex(newIndex);
   };
-
-  const settingsAnchorEl = useRef(null);
-  const profileAnchorEl = useRef(null);
 
   const handleSettingsOpen = (event: React.MouseEvent<HTMLElement>) => {
     dispatch(setSettingsMenuOpen(true));
@@ -75,10 +89,6 @@ const Main = () => {
   const handleVirticalMenuClick = (component: MAIN_COMPONENT) => {
     dispatch(setMainComponent(component));
   };
-
-  useEffect(() => {
-    dispatch(fetchAsyncGetLoginUserProfile());
-  }, [dispatch]);
 
   const theme = useTheme();
   const drawerWidth = 180;
