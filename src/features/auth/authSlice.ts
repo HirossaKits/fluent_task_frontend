@@ -1,8 +1,17 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import axios from "axios";
+import { AUTH, CRED, REG_INFO, JWT, LOGIN_USER } from "../types";
 
-import { CRED, REG_INFO, JWT } from "../types";
+const initialState: AUTH = {
+  loginUser: {
+    id: "",
+    email: "",
+    org: "",
+    is_activate: false,
+  },
+};
+
 
 // ログイン
 export const fetchAsyncLogin = createAsyncThunk(
@@ -21,11 +30,12 @@ export const fetchAsyncLogin = createAsyncThunk(
   }
 );
 
+
 // 新規登録
 export const fetchAsyncRegister = createAsyncThunk(
   "auth/register",
   async (auth: REG_INFO) => {
-    const res = await axios.post<JWT>(
+    const res = await axios.post<REG_INFO>(
       `${process.env.REACT_APP_API_URL}/api/user/create/`,
       auth,
       {
@@ -38,7 +48,26 @@ export const fetchAsyncRegister = createAsyncThunk(
   }
 );
 
-// プロフィールの取得
+
+// ログインユーザー情報の取得
+export const fetchAsyncGetLoginUser = createAsyncThunk(
+  "auth/getLoginUser",
+  async () => {
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/user/login/`,
+      {
+        headers: {
+          Authorization: `JWT ${localStorage.localJWT}`,
+        },
+      }
+    );
+    console.log(res.data);
+    return res.data;
+  }
+);
+
+
+// プロフィールの取得（不要？）
 export const fetchAsyncGetMyProf = createAsyncThunk(
   "auth/getMyProfile",
   async () => {
@@ -54,18 +83,19 @@ export const fetchAsyncGetMyProf = createAsyncThunk(
   }
 );
 
-const initialState = {
-  loginUser: {
-    id: 0,
-    username: "",
-  },
+// ログアウト
+export const logOut = () => {
+  localStorage.removeItem("localJWT");
+  window.location.href = "/";
 };
+
 
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    // ログイン時
     builder.addCase(
       fetchAsyncLogin.fulfilled,
       (state, action: PayloadAction<JWT>) => {
@@ -73,13 +103,21 @@ export const authSlice = createSlice({
         action.payload.access && (window.location.href = "/app");
       }
     );
-    builder.addCase(fetchAsyncGetMyProf.fulfilled, (state, action) => {
-      return {
-        ...state,
-        profile: action.payload,
-      };
-    });
+    builder.addCase(
+      fetchAsyncGetLoginUser.fulfilled,
+      (state, action) => {
+        console.log(action.payload);
+        return {
+          ...state,
+          loginUser: action.payload
+        };
+      });
+
+    builder.addCase(fetchAsyncRegister.fulfilled, () => { });
   },
 });
+
+
+// export const selectIsAuthentificated = (state: RootState) => state.auth.isAuthentificated;
 
 export default authSlice.reducer;

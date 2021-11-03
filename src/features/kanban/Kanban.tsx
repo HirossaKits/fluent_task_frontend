@@ -17,7 +17,7 @@ import { demoData } from "../../DummyData";
 import { TASK } from "../types";
 import KanbanColumn from "./KanbanColumn";
 
-const KanbanBoard = () => {
+const Kanban = () => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -173,4 +173,4 @@ const KanbanBoard = () => {
   );
 };
 
-export default KanbanBoard;
+export default Kanban;

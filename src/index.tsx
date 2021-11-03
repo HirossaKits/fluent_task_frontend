@@ -12,7 +12,7 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <Route exact path='/' component={Auth} />
+        <Route exact path='/login' component={Auth} />
         <Route exact path='/app' component={App} />
       </BrowserRouter>
     </Provider>

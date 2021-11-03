@@ -4,8 +4,8 @@ import "./App.css";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import Nav from "./features/nav/Nav";
-import { selectSettings } from "./features/nav/navSlice";
+import Main from "./features/nav/Main";
+import { selectSettings } from "./features/nav/mainSlice";
 
 function App() {
   const settings = useSelector(selectSettings);
@@ -37,7 +37,7 @@ function App() {
       <CssBaseline />
       <div className='App'>
         <header className='App-header'>
-          <Nav />
+          <Main />
         </header>
       </div>
     </ThemeProvider>

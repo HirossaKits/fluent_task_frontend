@@ -11,8 +11,8 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import EditIcon from "@mui/icons-material/Edit";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import { selectProfileMenuOpen, selectProfile } from "./navSlice";
-import { setProfileMenuOpen } from "./navSlice";
+import { selectProfileMenuOpen, selectProfile } from "./mainSlice";
+import { setProfileMenuOpen } from "./mainSlice";
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;
@@ -77,9 +77,9 @@ const ProfileMenu: React.FC<Props> = (props) => {
       <Paper>
         <Grid
           container
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="center"
+          direction='row'
+          justifyContent='flex-start'
+          alignItems='center'
         >
           <Grid css={styles.avatorWrapper} item xs={6}>
             <Avatar css={styles.avatorLarge} src={profile.avatar_img} />
@@ -87,9 +87,9 @@ const ProfileMenu: React.FC<Props> = (props) => {
           <Grid
             item
             container
-            direction="column"
-            justifyContent="center"
-            alignItems="stretch"
+            direction='column'
+            justifyContent='center'
+            alignItems='stretch'
             xs={6}
           >
             <Grid css={styles.nameWrapper} item>
@@ -100,19 +100,19 @@ const ProfileMenu: React.FC<Props> = (props) => {
             </Grid>
           </Grid>
         </Grid>
-        <Paper css="talk">
+        <Paper css='talk'>
           <Typography>sample</Typography>
         </Paper>
         <MenuList>
           <MenuItem css={styles.menuItem}>
             <div css={styles.iconWrapper}>
-              <EditIcon fontSize="small" />
+              <EditIcon fontSize='small' />
             </div>
             <Typography>プロフィール編集</Typography>
           </MenuItem>
           <MenuItem css={styles.menuItem} onClick={logout}>
             <div css={styles.iconWrapper}>
-              <ExitToAppIcon fontSize="small" />
+              <ExitToAppIcon fontSize='small' />
             </div>
             <Typography>ログアウト</Typography>
           </MenuItem>

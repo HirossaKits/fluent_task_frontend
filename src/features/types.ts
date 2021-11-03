@@ -10,6 +10,10 @@ export interface COLUMN_INFO {
 
 /*authSlice*/
 
+export interface AUTH {
+  loginUser: LOGIN_USER;
+}
+
 export interface CRED {
   email: string;
   password: string;
@@ -31,10 +35,10 @@ export interface USER_INFO {
 }
 
 export interface LOGIN_USER {
-  id: number;
+  id: string;
   email: string;
-  first_name: string;
-  last_name: string;
+  org: string;
+  is_activate: boolean;
 }
 
 export interface USER_PROFILE {
@@ -45,7 +49,7 @@ export interface USER_PROFILE {
   comment: null | string;
 }
 
-/*navSlice*/
+/*mainSlice*/
 
 export interface PERSONAL_SETTINGS {
   dark_mode: boolean;
@@ -60,7 +64,7 @@ export interface PROFILE {
 
 export type MAIN_COMPONENT = "Org" | "Proj" | "List" | "Kanban" | "Calendar";
 
-export interface NAV_STATE {
+export interface MAIN_STATE {
   mainComponent: MAIN_COMPONENT;
   settingsMenuOpen: boolean;
   profileMenuOpen: boolean;

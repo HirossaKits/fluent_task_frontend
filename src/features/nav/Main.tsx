@@ -13,6 +13,8 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 import AppsIcon from "@mui/icons-material/Apps";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -29,20 +31,21 @@ import {
   setMainComponent,
   selectMainComponent,
   fetchAsyncGetLoginUserProfile,
-} from "./navSlice";
+} from "./mainSlice";
 import SettingsMenu from "./SettingsMenu";
 import ProfileMenu from "./ProfileMenu";
 import Org from "../org/Org";
 import Proj from "../proj/Proj";
 import Task from "../task/Task";
-import Kanban from "../kanban/KanbanBoard";
+import Kanban from "../kanban/Kanban";
 import Calendar from "../calendar/Calendar";
 import { MAIN_COMPONENT } from "../types";
 
-const Nav = () => {
+const Main = () => {
   const dispatch = useDispatch();
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const mainComponent = useSelector(selectMainComponent);
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -50,6 +53,12 @@ const Nav = () => {
 
   const handleDrawerClose = () => {
     setDrawerOpen(false);
+  };
+
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newIndex: number) => {
+    setSelectedIndex(newIndex);
   };
 
   const settingsAnchorEl = useRef(null);
@@ -153,9 +162,9 @@ const Nav = () => {
     `,
     content: css`
       width: calc(100% - ${drawerWidth}px);
-      padding-top: ${theme.spacing(8)};
-      padding-left: ${theme.spacing(6)};
-      padding-right: ${theme.spacing(6)};
+      padding-top: ${theme.spacing(7)};
+      padding-left: ${theme.spacing(5)};
+      padding-right: ${theme.spacing(5)};
       transition: ${theme.transitions.create(["margin", "width"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -164,9 +173,9 @@ const Nav = () => {
     `,
     contentShift: css`
       width: calc(100% - ${drawerCloseWidth}px);
-      padding-top: ${theme.spacing(8)};
-      padding-left: ${theme.spacing(6)};
-      padding-right: ${theme.spacing(6)};
+      padding-top: ${theme.spacing(7)};
+      padding-left: ${theme.spacing(5)};
+      padding-right: ${theme.spacing(5)};
       transition: ${theme.transitions.create(["margin", "width"], {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
@@ -274,8 +283,32 @@ const Nav = () => {
           </ListItem>
         </List>
       </Drawer>
+
       <div css={drawerOpen ? styles.content : styles.contentShift}>
-        {mainComponent === "Org" ? (
+        <Box
+          sx={{
+            borderBottom: 1,
+            borderColor: "divider",
+            marginBottom: theme.spacing(2),
+          }}
+        >
+          <Tabs
+            value={selectedIndex}
+            onChange={handleChange}
+            variant='scrollable'
+            scrollButtons='auto'
+          >
+            <Tab label='テストプロジェクト1' />
+            <Tab label='テストプロジェクト2' />
+            <Tab label='テストプロジェクト3' />
+          </Tabs>
+        </Box>
+        {mainComponent === "Org" && <Org />}
+        {mainComponent === "Proj" && <Proj />}
+        {mainComponent === "List" && <Task />}
+        {mainComponent === "Kanban" && <Kanban />}
+        {mainComponent === "Calendar" && <Calendar />}
+        {/* {mainComponent === "Org" ? (
           <Org />
         ) : mainComponent === "Proj" ? (
           <Proj />
@@ -287,7 +320,7 @@ const Nav = () => {
           <Calendar />
         ) : (
           <div></div>
-        )}
+        )} */}
       </div>
       <SettingsMenu anchorEl={settingsAnchorEl} />
       <ProfileMenu anchorEl={profileAnchorEl} />
@@ -295,4 +328,4 @@ const Nav = () => {
   );
 };
 
-export default Nav;
+export default Main;

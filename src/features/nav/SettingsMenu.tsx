@@ -6,8 +6,8 @@ import Paper from "@mui/material/Paper";
 import CommonSwitch from "../../common/CommonSwitch";
 import { makeStyles } from "@mui/material/styles";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSettingsMenuOpen, selectSettings } from "./navSlice";
-import { setSettingsMenuOpen, setSettings } from "./navSlice";
+import { selectSettingsMenuOpen, selectSettings } from "./mainSlice";
+import { setSettingsMenuOpen, setSettings } from "./mainSlice";
 import { TARGET } from "../types";
 
 type Props = {
@@ -58,7 +58,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
         <CommonSwitch
           label={"ダークモード"}
           labelWidth={10}
-          name="dark_mode"
+          name='dark_mode'
           value={settings.dark_mode}
           onChange={handleInputChange}
         />

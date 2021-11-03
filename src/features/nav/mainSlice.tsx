@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../../app/store";
-import { NAV_STATE } from "../types";
+import { MAIN_STATE } from "../types";
 
-const initialState: NAV_STATE = {
+const initialState: MAIN_STATE = {
   mainComponent: "List",
   settingsMenuOpen: false,
   profileMenuOpen: false,
@@ -33,8 +33,8 @@ export const fetchAsyncGetLoginUserProfile = createAsyncThunk(
   }
 );
 
-export const navSlice = createSlice({
-  name: "nav",
+export const mainSlice = createSlice({
+  name: "main",
   initialState,
   reducers: {
     setMainComponent(state, action) {
@@ -69,14 +69,14 @@ export const {
   setProfileMenuOpen,
   setSettings,
   setProfile,
-} = navSlice.actions;
+} = mainSlice.actions;
 export const selectMainComponent = (state: RootState) =>
-  state.nav.mainComponent;
+  state.main.mainComponent;
 export const selectSettingsMenuOpen = (state: RootState) =>
-  state.nav.settingsMenuOpen;
+  state.main.settingsMenuOpen;
 export const selectProfileMenuOpen = (state: RootState) =>
-  state.nav.profileMenuOpen;
-export const selectSettings = (state: RootState) => state.nav.settings;
-export const selectProfile = (state: RootState) => state.nav.profile;
+  state.main.profileMenuOpen;
+export const selectSettings = (state: RootState) => state.main.settings;
+export const selectProfile = (state: RootState) => state.main.profile;
 
-export default navSlice.reducer;
+export default mainSlice.reducer;
