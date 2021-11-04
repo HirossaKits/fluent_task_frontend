@@ -52,14 +52,12 @@ const Auth: React.FC = () => {
   };
 
   const login = async (e: any) => {
-    console.log(regInfo);
     e.preventDefault();
     let cred: CRED = regInfo;
     await dispatch(fetchAsyncLogin(cred));
   };
 
   const register = async (e: any) => {
-    console.log(regInfo);
     e.preventDefault();
     const res = await dispatch(fetchAsyncRegister(regInfo));
     if (fetchAsyncRegister.fulfilled.match(res)) {

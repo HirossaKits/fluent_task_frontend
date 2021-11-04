@@ -25,13 +25,13 @@ import GroupWorkIcon from "@mui/icons-material/GroupWork";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import ViewWeekIcon from "@mui/icons-material/ViewWeek";
-import { fetchAsyncGetLoginUser } from "../auth/authSlice";
+import { fetchAsyncGetLoginUserCred } from "../auth/authSlice";
 import {
   setSettingsMenuOpen,
   setProfileMenuOpen,
   setMainComponent,
   selectMainComponent,
-  fetchAsyncGetLoginUserProfile,
+  fetchAsyncGetLoginUserCredProfile,
 } from "./mainSlice";
 import SettingsMenu from "./SettingsMenu";
 import ProfileMenu from "./ProfileMenu";
@@ -54,16 +54,20 @@ const Main = () => {
   useEffect(() => {
     console.log("useEffect");
     const fectchBootLoader = async () => {
-      const res = await dispatch(fetchAsyncGetLoginUser());
-      if (fetchAsyncGetLoginUser.fulfilled.match(res)) {
+      const res = await dispatch(fetchAsyncGetLoginUserCred());
+      if (fetchAsyncGetLoginUserCred.fulfilled.match(res)) {
         // GET PROFILE or TASKS
+        await dispatch(fetchAsyncGetMyProf);
+      } else {
+        localStorage.removeItem("localJWT");
+        window.location.href = "/login";
       }
     };
     fectchBootLoader();
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    dispatch(fetchAsyncGetLoginUserProfile());
+    dispatch(fetchAsyncGetLoginUserCredProfile());
   }, [dispatch]);
 
   const handleDrawerOpen = () => {

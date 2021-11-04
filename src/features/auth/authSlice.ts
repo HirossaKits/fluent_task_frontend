@@ -1,15 +1,23 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import axios from "axios";
-import { AUTH, CRED, REG_INFO, JWT, LOGIN_USER } from "../types";
+import { AUTH, CRED, REG_INFO, JWT, LOGIN_USER_CRED, LOGIN_USER_PROF } from "../types";
 
 const initialState: AUTH = {
-  loginUser: {
+  loginUserCred: {
     id: "",
     email: "",
     org: "",
     is_activate: false,
+    is_premium: false,
+    is_administrator: false,
   },
+  loginUserProf: {
+    first_name: "",
+    last_name: "",
+    avatar_img: '',
+    comment: ''
+  }
 };
 
 
@@ -49,11 +57,28 @@ export const fetchAsyncRegister = createAsyncThunk(
 );
 
 
-// ログインユーザー情報の取得
-export const fetchAsyncGetLoginUser = createAsyncThunk(
-  "auth/getLoginUser",
+// ログインユーザーの基本情報取得
+export const fetchAsyncGetLoginUserCred = createAsyncThunk(
+  "auth/getLoginUserCred",
   async () => {
-    const res = await axios.get<LOGIN_USER>(
+    const res = await axios.get<LOGIN_USER_CRED>(
+      `${process.env.REACT_APP_API_URL}/api/user/login/`,
+      {
+        headers: {
+          Authorization: `JWT ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+
+// ログインユーザーのプロフィール取得
+export const fetchAsyncGetLoginUserProf = createAsyncThunk(
+  "auth/getLoginUserProf",
+  async () => {
+    const res = await axios.get<LOGIN_USER_PROF>(
       `${process.env.REACT_APP_API_URL}/api/user/login/`,
       {
         headers: {
@@ -67,8 +92,8 @@ export const fetchAsyncGetLoginUser = createAsyncThunk(
 
 
 // プロフィールの取得（不要？）
-export const fetchAsyncGetMyProf = createAsyncThunk(
-  "auth/getMyProfile",
+export const fetchAsyncGetProfs = createAsyncThunk(
+  "auth/getProfile",
   async () => {
     const res = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/user/profile`,
@@ -85,7 +110,7 @@ export const fetchAsyncGetMyProf = createAsyncThunk(
 // ログアウト
 export const logOut = () => {
   localStorage.removeItem("localJWT");
-  window.location.href = "/";
+  window.location.href = "/login";
 };
 
 
@@ -103,9 +128,9 @@ export const authSlice = createSlice({
       }
     );
     builder.addCase(
-      fetchAsyncGetLoginUser.fulfilled,
-      (state, action: PayloadAction<LOGIN_USER>) => {
-        console.log('fetchAsyncGetLoginUser.fulfilled');
+      fetchAsyncGetLoginUserCred.fulfilled,
+      (state, action: PayloadAction<LOGIN_USER_CRED>) => {
+        console.log('fetchAsyncGetLoginUserCred.fulfilled');
         console.log(action.payload);
         return {
           ...state,

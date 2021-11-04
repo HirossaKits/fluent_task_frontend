@@ -10,8 +10,25 @@ export interface COLUMN_INFO {
 
 /*authSlice*/
 
+export interface LOGIN_USER_CRED {
+  id: string;
+  email: string;
+  org: string;
+  is_activate: boolean;
+  is_premium: boolean;
+  is_administrator: boolean;
+}
+
+export interface LOGIN_USER_PROFILE {
+  first_name: string;
+  last_name: string;
+  avatar_img: string;
+  comment: string;
+}
+
 export interface AUTH {
-  loginUser: LOGIN_USER;
+  loginUserCred: LOGIN_USER_CRED;
+  loginUserProf: LOGIN_USER_PROFILE;
 }
 
 export interface CRED {
@@ -32,21 +49,6 @@ export interface JWT {
 export interface USER_INFO {
   id: number;
   email: string;
-}
-
-export interface LOGIN_USER {
-  id: string;
-  email: string;
-  org: string;
-  is_activate: boolean;
-}
-
-export interface USER_PROFILE {
-  user_id: string;
-  first_name: string;
-  last_name: string;
-  avatar_img: null | string;
-  comment: null | string;
 }
 
 /*mainSlice*/
