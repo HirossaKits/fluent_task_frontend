@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { css } from "@emotion/react";
 import { useTheme } from "@mui/material";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
+import ToolTip from "@mui/material/Tooltip";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
+import Badge from "@mui/material/Badge";
 import Avatar from "@mui/material/Avatar";
 import CloseIcon from "@mui/icons-material/Close";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import {
   selectLoginUserProf,
   selectEditedProf,
@@ -25,6 +28,10 @@ const ProfileDialog = () => {
   const profileDialogOpen = useSelector(selectProfileDialogOpen);
   const loginUserProf = useSelector(selectLoginUserProf);
   const editedProf = useSelector(selectEditedProf);
+
+  useEffect(() => {
+    dispatch(setEditedProf(loginUserProf));
+  }, []);
 
   const handleInputChange = (target: TARGET) => {
     dispatch(setEditedProf({ ...editedProf, [target.name]: target.value }));
@@ -59,6 +66,10 @@ const ProfileDialog = () => {
       height: 160px;
       font-size: 36px;
     `,
+    badge: css`
+      margin-top: 30px;
+      margin-left: 30px;
+    `,
   };
 
   return (
@@ -80,25 +91,38 @@ const ProfileDialog = () => {
         </Grid>
         <form css={styles.form} noValidate autoComplete='off'>
           <Stack direction='column' justifyContent='center' alignItems='center'>
-            <Avatar css={styles.avatar} src={loginUserProf.avatar_img} />
+            <Badge
+              overlap='circular'
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              badgeContent={
+                <ToolTip title='画像をアップロード'>
+                  <IconButton css={styles.badge}>
+                    <CameraAltIcon />
+                  </IconButton>
+                </ToolTip>
+              }
+            >
+              <Avatar css={styles.avatar} src={loginUserProf.avatar_img} />
+            </Badge>
+
             <CommonTextField
               label='姓'
               name='last_name'
-              value={loginUserProf.last_name}
+              value={editedProf.last_name}
               onChange={handleInputChange}
               width='200px'
             />
             <CommonTextField
               label='名'
               name='first_name'
-              value={loginUserProf.first_name}
+              value={editedProf.first_name}
               onChange={handleInputChange}
               width='200px'
             />
             <CommonTextField
               label='コメント'
               name='comment'
-              value={loginUserProf.comment}
+              value={editedProf.comment}
               onChange={handleInputChange}
               width='200px'
             />
