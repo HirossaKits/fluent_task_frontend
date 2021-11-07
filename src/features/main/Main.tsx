@@ -25,13 +25,16 @@ import GroupWorkIcon from "@mui/icons-material/GroupWork";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import ViewWeekIcon from "@mui/icons-material/ViewWeek";
-import { fetchAsyncGetLoginUserCred } from "../auth/authSlice";
+import {
+  fetchAsyncGetLoginUser,
+  fetchAsyncGetLoginUserProf,
+  // selectLoginUserCred,
+} from "../auth/authSlice";
 import {
   setSettingsMenuOpen,
   setProfileMenuOpen,
-  setMainComponent,
-  selectMainComponent,
-  fetchAsyncGetLoginUserCredProfile,
+  setMainComponentName,
+  selectMainComponentName,
 } from "./mainSlice";
 import SettingsMenu from "./SettingsMenu";
 import ProfileMenu from "./ProfileMenu";
@@ -40,12 +43,13 @@ import Proj from "../proj/Proj";
 import Task from "../task/Task";
 import Kanban from "../kanban/Kanban";
 import Calendar from "../calendar/Calendar";
-import { MAIN_COMPONENT } from "../types";
+import { MAIN_COMPONENT_NAME } from "../types";
 import { AppDispatch } from "../../app/store";
 
 const Main = () => {
   const dispatch: AppDispatch = useDispatch();
-  const mainComponent = useSelector(selectMainComponent);
+  // const loginUserCred = useSelector(selectLoginUserCred);
+  const mainComponentName = useSelector(selectMainComponentName);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const settingsAnchorEl = useRef(null);
@@ -54,21 +58,23 @@ const Main = () => {
   useEffect(() => {
     console.log("useEffect");
     const fectchBootLoader = async () => {
-      const res = await dispatch(fetchAsyncGetLoginUserCred());
-      if (fetchAsyncGetLoginUserCred.fulfilled.match(res)) {
+      const res = await dispatch(fetchAsyncGetLoginUser());
+      if (fetchAsyncGetLoginUser.fulfilled.match(res)) {
         // GET PROFILE or TASKS
-        await dispatch(fetchAsyncGetMyProf);
+        await dispatch(fetchAsyncGetLoginUserProf());
+        console.log("GetProf is successeded");
       } else {
-        localStorage.removeItem("localJWT");
-        window.location.href = "/login";
+        console.log("Something is wrong");
+        // localStorage.removeItem("localJWT");
+        // window.location.href = "/login";
       }
     };
     fectchBootLoader();
   }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(fetchAsyncGetLoginUserCredProfile());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchAsyncGetLoginUserCredProfile());
+  // }, [dispatch]);
 
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
@@ -90,8 +96,8 @@ const Main = () => {
     dispatch(setProfileMenuOpen(true));
   };
 
-  const handleVirticalMenuClick = (component: MAIN_COMPONENT) => {
-    dispatch(setMainComponent(component));
+  const handleVirticalMenuClick = (component: MAIN_COMPONENT_NAME) => {
+    dispatch(setMainComponentName(component));
   };
 
   const theme = useTheme();
@@ -317,11 +323,11 @@ const Main = () => {
             <Tab label='テストプロジェクト3' />
           </Tabs>
         </Box>
-        {mainComponent === "Org" && <Org />}
-        {mainComponent === "Proj" && <Proj />}
-        {mainComponent === "List" && <Task />}
-        {mainComponent === "Kanban" && <Kanban />}
-        {mainComponent === "Calendar" && <Calendar />}
+        {mainComponentName === "Org" && <Org />}
+        {mainComponentName === "Proj" && <Proj />}
+        {mainComponentName === "List" && <Task />}
+        {mainComponentName === "Kanban" && <Kanban />}
+        {mainComponentName === "Calendar" && <Calendar />}
         {/* {mainComponent === "Org" ? (
           <Org />
         ) : mainComponent === "Proj" ? (

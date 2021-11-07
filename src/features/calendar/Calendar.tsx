@@ -142,11 +142,8 @@ const Calendar = () => {
           ~~(array.length / 2 / 12) +
           ~~((calendar.month + index - 1) / 12)
         }-${fillDigitsByZero(((calendar.month + index - 1) % 12) + 1, 2)}`;
-        console.log("ok");
         return ym;
       });
-
-  console.log("test", yearMonthOptions);
 
   const incrementlayerFactory = () => {
     let xEndDate: Date;

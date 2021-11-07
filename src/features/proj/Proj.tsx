@@ -52,20 +52,7 @@ const Proj = () => {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Box>
-        <Tabs
-          value={selectedIndex}
-          onChange={handleChange}
-          variant='scrollable'
-          scrollButtons='auto'
-        >
-          <Tab label='Item One' />
-          <Tab label='Item Two' />
-          <Tab label='Item Three' />
-          <Tab label='Item Three' />
-          <Tab label='Item Three' />
-        </Tabs>
-      </Box>
+      <Box></Box>
       <Box sx={{ p: 3 }}>
         <CommonTable data={task} columnInfo={columnInfo} showToolBar={true} />
       </Box>

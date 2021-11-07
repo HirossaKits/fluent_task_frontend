@@ -88,7 +88,6 @@ const Org = () => {
       flex-grow: 1;
       flex-direction: column;
       justify-content: center;
-      background-color: lgray;
     `,
     comment: css`
       margin-top: 9px;

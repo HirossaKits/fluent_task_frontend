@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import Lottie from "react-lottie";
 import { css } from "@emotion/react";
 import { useTheme } from "@mui/material/styles";
 import Container from "@mui/material/Container";
@@ -17,7 +18,7 @@ import {
   fetchAsyncLogin,
   fetchAsyncRegister,
 } from "./authSlice";
-import { deepStrictEqual } from "assert";
+import loginPageAnimation from "../../img/loginPageAnimation.json";
 
 enum MODE {
   Login = 0,
@@ -66,6 +67,15 @@ const Auth: React.FC = () => {
     }
   };
 
+  const lottieOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: loginPageAnimation,
+    rendererSettings: {
+      preserveAspectRatio: "xMidYMid slice",
+    },
+  };
+
   const theme = useTheme();
 
   const styles = {
@@ -77,10 +87,13 @@ const Auth: React.FC = () => {
       justify-content: center;
       text-align: center;
     `,
+    container: css`
+      margin-top: ${theme.spacing(20)};
+    `,
     title: css`
       font-family: "Oleo Script", cursive;
     `,
-    wrap: css`
+    form: css`
       margin-top: ${theme.spacing(2)};
     `,
     submit: css`
@@ -91,14 +104,13 @@ const Auth: React.FC = () => {
 
   return (
     <div css={styles.root}>
-      <Container component='main' maxWidth='xs'>
+      <Container css={styles.container} component='main' maxWidth='xs'>
         <CssBaseline />
-        <Typography css={styles.title} component='h1' variant='h2'>
+        <Typography css={styles.title} variant='h2'>
           Fluent Task
         </Typography>
-        <form>
+        <form css={styles.form}>
           <Grid
-            css={styles.wrap}
             container
             justifyContent='center'
             alignItems='center'
@@ -138,7 +150,6 @@ const Auth: React.FC = () => {
                 </Grid>
               </>
             )}
-
             {mode === MODE.Register && (
               <>
                 <Grid item xs={4}>
@@ -218,11 +229,13 @@ const Auth: React.FC = () => {
             </Grid>
           </Grid>
         </form>
+        <Lottie options={lottieOptions} />
         <Box mt={8}>
           <Typography variant='body2' color='textSecondary' align='center'>
-            {"Copyright © "}
+            {/* {"Copyright © "} */}
+            {"Copyright   "}
             <Link color='inherit' href=''>
-              KITS CREATE
+              Hirohisa Kitsuka
             </Link>{" "}
             {new Date().getFullYear()}
             {"."}

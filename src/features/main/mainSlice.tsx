@@ -4,9 +4,10 @@ import { RootState } from "../../app/store";
 import { MAIN_STATE } from "../types";
 
 const initialState: MAIN_STATE = {
-  mainComponent: "List",
+  mainComponentName: "List",
   settingsMenuOpen: false,
   profileMenuOpen: false,
+  profileDialogOpen: false,
   settings: {
     dark_mode: false,
     view_only_owned: false,
@@ -19,7 +20,7 @@ const initialState: MAIN_STATE = {
 };
 
 export const fetchAsyncGetLoginUserProfile = createAsyncThunk(
-  "nav/getetLoginUserProfile",
+  "main/getetLoginUserProfile",
   async () => {
     const res = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/user/profile/`,
@@ -37,14 +38,17 @@ export const mainSlice = createSlice({
   name: "main",
   initialState,
   reducers: {
-    setMainComponent(state, action) {
-      state.mainComponent = action.payload;
+    setMainComponentName(state, action) {
+      state.mainComponentName = action.payload;
     },
     setSettingsMenuOpen(state, action) {
       state.settingsMenuOpen = action.payload;
     },
     setProfileMenuOpen(state, action) {
       state.profileMenuOpen = action.payload;
+    },
+    setProfileDialogOpen(state, action) {
+      state.profileDialogOpen = action.payload;
     },
     setSettings(state, action) {
       state.settings = action.payload;
@@ -64,18 +68,21 @@ export const mainSlice = createSlice({
 });
 
 export const {
-  setMainComponent,
+  setMainComponentName,
   setSettingsMenuOpen,
   setProfileMenuOpen,
+  setProfileDialogOpen,
   setSettings,
   setProfile,
 } = mainSlice.actions;
-export const selectMainComponent = (state: RootState) =>
-  state.main.mainComponent;
+export const selectMainComponentName = (state: RootState) =>
+  state.main.mainComponentName;
 export const selectSettingsMenuOpen = (state: RootState) =>
   state.main.settingsMenuOpen;
 export const selectProfileMenuOpen = (state: RootState) =>
   state.main.profileMenuOpen;
+export const selectProfileDialogOpen = (state: RootState) =>
+  state.main.profileDialogOpen;
 export const selectSettings = (state: RootState) => state.main.settings;
 export const selectProfile = (state: RootState) => state.main.profile;
 

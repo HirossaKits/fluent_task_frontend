@@ -2,6 +2,7 @@ import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import axios from "axios";
 import { AUTH, CRED, REG_INFO, JWT, LOGIN_USER_CRED, LOGIN_USER_PROF } from "../types";
+import taskSlice from "../task/taskSlice";
 
 const initialState: AUTH = {
   loginUserCred: {
@@ -13,6 +14,12 @@ const initialState: AUTH = {
     is_administrator: false,
   },
   loginUserProf: {
+    first_name: "",
+    last_name: "",
+    avatar_img: '',
+    comment: ''
+  },
+  editedProf: {
     first_name: "",
     last_name: "",
     avatar_img: '',
@@ -58,9 +65,10 @@ export const fetchAsyncRegister = createAsyncThunk(
 
 
 // ログインユーザーの基本情報取得
-export const fetchAsyncGetLoginUserCred = createAsyncThunk(
+export const fetchAsyncGetLoginUser = createAsyncThunk(
   "auth/getLoginUserCred",
   async () => {
+    console.log(localStorage.localJWT);
     const res = await axios.get<LOGIN_USER_CRED>(
       `${process.env.REACT_APP_API_URL}/api/user/login/`,
       {
@@ -78,8 +86,8 @@ export const fetchAsyncGetLoginUserCred = createAsyncThunk(
 export const fetchAsyncGetLoginUserProf = createAsyncThunk(
   "auth/getLoginUserProf",
   async () => {
-    const res = await axios.get<LOGIN_USER_PROF>(
-      `${process.env.REACT_APP_API_URL}/api/user/login/`,
+    const res = await axios.get<LOGIN_USER_PROF[]>(
+      `${process.env.REACT_APP_API_URL}/api/user/profile/`,
       {
         headers: {
           Authorization: `JWT ${localStorage.localJWT}`,
@@ -117,32 +125,57 @@ export const logOut = () => {
 export const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    setEditedProf(state, action) {
+      state.editedProf = action.payload;
+    }
+
+  },
   extraReducers: (builder) => {
     // ログイン時
     builder.addCase(
       fetchAsyncLogin.fulfilled,
       (state, action: PayloadAction<JWT>) => {
+        console.log('fetchAsyncLogin.fulfilled');
+        console.log(action.payload);
         localStorage.setItem("localJWT", action.payload.access);
         action.payload.access && (window.location.href = "/app");
       }
     );
     builder.addCase(
-      fetchAsyncGetLoginUserCred.fulfilled,
+      fetchAsyncGetLoginUser.fulfilled,
       (state, action: PayloadAction<LOGIN_USER_CRED>) => {
         console.log('fetchAsyncGetLoginUserCred.fulfilled');
         console.log(action.payload);
         return {
           ...state,
-          loginUser: action.payload
+          loginUserCred: action.payload
         };
-      });
-
-    builder.addCase(fetchAsyncRegister.fulfilled, () => { });
+      }
+    );
+    builder.addCase(
+      fetchAsyncGetLoginUserProf.fulfilled,
+      (state, action: PayloadAction<LOGIN_USER_PROF[]>) => {
+        console.log('fetchAsyncGetLoginUserProf.fulfilled');
+        console.log(action.payload);
+        return {
+          ...state,
+          loginUserProf: action.payload[0]
+        };
+      }
+    );
   },
 });
 
 
 // export const selectIsAuthentificated = (state: RootState) => state.auth.isAuthentificated;
+// export const selectLoginUserCred = (state: RootState) => state.auth.loginUserCred;
+export const {
+  setEditedProf,
+} = authSlice.actions;
+
+export const selectLoginUserProf = (state: RootState) => state.auth.loginUserProf;
+export const selectEditedProf = (state: RootState) => state.auth.editedProf;
+
 
 export default authSlice.reducer;

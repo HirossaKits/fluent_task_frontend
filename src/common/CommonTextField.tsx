@@ -1,4 +1,5 @@
 import React from "react";
+import { css } from "@emotion/react";
 import TextField from "@mui/material/TextField";
 import { TARGET } from "../features/types";
 
@@ -10,6 +11,7 @@ type Props = {
   value: null | string | number;
   index?: number;
   onChange: Function;
+  width?: string;
 };
 
 const CommonTextField: React.FC<Props> = (props) => {
@@ -26,10 +28,14 @@ const CommonTextField: React.FC<Props> = (props) => {
     props.onChange(target);
   };
 
+  const widthStyle = css`
+    ${"width" in props && "width: " + props.width}
+  `;
+
   return (
     <TextField
-      variant="standard"
-      margin="normal"
+      variant='standard'
+      margin='normal'
       fullWidth
       id={"id" in props ? props.id : undefined}
       label={"label" in props ? props.label : undefined}
@@ -40,6 +46,7 @@ const CommonTextField: React.FC<Props> = (props) => {
         shrink: true,
       }}
       onChange={(event) => handleInputChange(event)}
+      css={widthStyle}
     />
   );
 };

@@ -10,6 +10,12 @@ export interface COLUMN_INFO {
 
 /*authSlice*/
 
+export interface AUTH {
+  loginUserCred: LOGIN_USER_CRED;
+  loginUserProf: LOGIN_USER_PROF;
+  editedProf: LOGIN_USER_PROF;
+}
+
 export interface LOGIN_USER_CRED {
   id: string;
   email: string;
@@ -19,16 +25,19 @@ export interface LOGIN_USER_CRED {
   is_administrator: boolean;
 }
 
-export interface LOGIN_USER_PROFILE {
+export interface LOGIN_USER_PROF {
   first_name: string;
   last_name: string;
   avatar_img: string;
   comment: string;
 }
 
-export interface AUTH {
-  loginUserCred: LOGIN_USER_CRED;
-  loginUserProf: LOGIN_USER_PROFILE;
+export interface USER_PROFILE {
+  user_id: string;
+  first_name: string;
+  last_name: string;
+  avatar_img: string;
+  comment: string;
 }
 
 export interface CRED {
@@ -53,6 +62,16 @@ export interface USER_INFO {
 
 /*mainSlice*/
 
+export interface MAIN_STATE {
+  mainComponentName: MAIN_COMPONENT_NAME;
+  settingsMenuOpen: boolean;
+  profileMenuOpen: boolean;
+  profileDialogOpen: boolean;
+  settings: PERSONAL_SETTINGS;
+  profile: PROFILE;
+}
+
+
 export interface PERSONAL_SETTINGS {
   dark_mode: boolean;
   view_only_owned: boolean;
@@ -64,15 +83,8 @@ export interface PROFILE {
   description: string;
 }
 
-export type MAIN_COMPONENT = "Org" | "Proj" | "List" | "Kanban" | "Calendar";
+export type MAIN_COMPONENT_NAME = "Org" | "Proj" | "List" | "Kanban" | "Calendar";
 
-export interface MAIN_STATE {
-  mainComponent: MAIN_COMPONENT;
-  settingsMenuOpen: boolean;
-  profileMenuOpen: boolean;
-  settings: PERSONAL_SETTINGS;
-  profile: PROFILE;
-}
 
 /*Project*/
 type USER = {

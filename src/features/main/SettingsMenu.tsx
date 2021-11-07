@@ -35,6 +35,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
     padding-top: ${theme.spacing(2)};
     padding-right: ${theme.spacing(4)};
     padding-bottom: ${theme.spacing(2)};
+    background-color: green;
   `,
   };
 

@@ -4,8 +4,8 @@ import "./App.css";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import Main from "./features/nav/Main";
-import { selectSettings } from "./features/nav/mainSlice";
+import Main from "./features/main/Main";
+import { selectSettings } from "./features/main/mainSlice";
 
 function App() {
   const settings = useSelector(selectSettings);
