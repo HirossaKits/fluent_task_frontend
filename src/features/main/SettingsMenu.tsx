@@ -6,8 +6,8 @@ import Paper from "@mui/material/Paper";
 import CommonSwitch from "../../common/CommonSwitch";
 import { makeStyles } from "@mui/material/styles";
 import { useSelector, useDispatch } from "react-redux";
-import { selectSettingsMenuOpen, selectSettings } from "./mainSlice";
-import { setSettingsMenuOpen, setSettings } from "./mainSlice";
+import { selectPersonalSettings, setPersonalSettings } from "../auth/authSlice";
+import { selectSettingsMenuOpen, setSettingsMenuOpen } from "./mainSlice";
 import { TARGET } from "../types";
 
 type Props = {
@@ -17,11 +17,11 @@ type Props = {
 const SettingsMenu: React.FC<Props> = (props) => {
   const theme = useTheme();
   const settingsMenuOpen = useSelector(selectSettingsMenuOpen);
-  const settings = useSelector(selectSettings);
+  const settings = useSelector(selectPersonalSettings);
   const dispatch = useDispatch();
 
   const handleInputChange = (target: TARGET) => {
-    dispatch(setSettings({ ...settings, [target.name]: target.value }));
+    dispatch(setPersonalSettings({ ...settings, [target.name]: target.value }));
   };
 
   const handleColse = () => {
@@ -30,13 +30,11 @@ const SettingsMenu: React.FC<Props> = (props) => {
 
   const styles = {
     paper: css`
-    width: 180px,
-    padding-left: ${theme.spacing(2)};
-    padding-top: ${theme.spacing(2)};
-    padding-right: ${theme.spacing(4)};
-    padding-bottom: ${theme.spacing(2)};
-    background-color: green;
-  `,
+      padding-left: ${theme.spacing(2)};
+      padding-top: ${theme.spacing(2)};
+      padding-right: ${theme.spacing(4)};
+      padding-bottom: ${theme.spacing(2)};
+    `,
   };
 
   return (

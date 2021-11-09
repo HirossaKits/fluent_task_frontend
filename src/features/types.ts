@@ -14,6 +14,7 @@ export interface AUTH {
   loginUserCred: LOGIN_USER_CRED;
   loginUserProf: LOGIN_USER_PROF;
   editedProf: EDITED_PROF;
+  personalSettings: PERSONAL_SETTINGS;
 }
 
 export interface LOGIN_USER_CRED {
@@ -40,6 +41,14 @@ export interface EDITED_PROF {
   upload_file: null | File;
   comment: string;
 }
+
+export interface PERSONAL_SETTINGS {
+  dark_mode: boolean;
+  show_own: boolean;
+  project: null | string;
+}
+
+
 
 export interface USER_PROFILE {
   user_id: string;
@@ -76,15 +85,6 @@ export interface MAIN_STATE {
   settingsMenuOpen: boolean;
   profileMenuOpen: boolean;
   profileDialogOpen: boolean;
-  settings: PERSONAL_SETTINGS;
-  profile: PROFILE;
-}
-
-
-export interface PERSONAL_SETTINGS {
-  dark_mode: boolean;
-  view_only_owned: boolean;
-  selected_project: string;
 }
 
 export interface PROFILE {

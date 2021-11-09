@@ -8,15 +8,6 @@ const initialState: MAIN_STATE = {
   settingsMenuOpen: false,
   profileMenuOpen: false,
   profileDialogOpen: false,
-  settings: {
-    dark_mode: false,
-    view_only_owned: false,
-    selected_project: "",
-  },
-  profile: {
-    avatar_img: "",
-    description: "",
-  },
 };
 
 export const fetchAsyncGetLoginUserProfile = createAsyncThunk(
@@ -50,21 +41,21 @@ export const mainSlice = createSlice({
     setProfileDialogOpen(state, action) {
       state.profileDialogOpen = action.payload;
     },
-    setSettings(state, action) {
-      state.settings = action.payload;
-    },
-    setProfile(state, action) {
-      state.settings = action.payload;
-    },
+    // setSettings(state, action) {
+    //   state.settings = action.payload;
+    // },
+    // setProfile(state, action) {
+    //   state.settings = action.payload;
+    // },
   },
-  extraReducers: (builder) => {
-    builder.addCase(
-      fetchAsyncGetLoginUserProfile.fulfilled,
-      (state, action) => {
-        state.profile = action.payload;
-      }
-    );
-  },
+  // extraReducers: (builder) => {
+  //   builder.addCase(
+  //     fetchAsyncGetLoginUserProfile.fulfilled,
+  //     (state, action) => {
+  //       state.profile = action.payload;
+  //     }
+  //   );
+  // },
 });
 
 export const {
@@ -72,8 +63,8 @@ export const {
   setSettingsMenuOpen,
   setProfileMenuOpen,
   setProfileDialogOpen,
-  setSettings,
-  setProfile,
+  // setSettings,
+  // setProfile,
 } = mainSlice.actions;
 export const selectMainComponentName = (state: RootState) =>
   state.main.mainComponentName;
@@ -83,7 +74,7 @@ export const selectProfileMenuOpen = (state: RootState) =>
   state.main.profileMenuOpen;
 export const selectProfileDialogOpen = (state: RootState) =>
   state.main.profileDialogOpen;
-export const selectSettings = (state: RootState) => state.main.settings;
-export const selectProfile = (state: RootState) => state.main.profile;
+// export const selectSettings = (state: RootState) => state.main.settings;
+// export const selectProfile = (state: RootState) => state.main.profile;
 
 export default mainSlice.reducer;

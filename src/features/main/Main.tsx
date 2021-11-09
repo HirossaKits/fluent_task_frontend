@@ -28,7 +28,7 @@ import ViewWeekIcon from "@mui/icons-material/ViewWeek";
 import {
   fetchAsyncGetLoginUser,
   fetchAsyncGetLoginUserProf,
-  // selectLoginUserCred,
+  fetchAsyncGetPersonalSettings,
 } from "../auth/authSlice";
 import {
   setSettingsMenuOpen,
@@ -56,12 +56,12 @@ const Main = () => {
   const profileAnchorEl = useRef(null);
 
   useEffect(() => {
-    console.log("useEffect");
     const fectchBootLoader = async () => {
       const res = await dispatch(fetchAsyncGetLoginUser());
       if (fetchAsyncGetLoginUser.fulfilled.match(res)) {
         // GET PROFILE or TASKS
         await dispatch(fetchAsyncGetLoginUserProf());
+        await dispatch(fetchAsyncGetPersonalSettings());
         console.log("GetProf is successeded");
       } else {
         console.log("Something is wrong");

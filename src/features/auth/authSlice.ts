@@ -1,9 +1,19 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import axios from "axios";
-import { AUTH, CRED, REG_INFO, JWT, LOGIN_USER_CRED, LOGIN_USER_PROF, EDITED_PROF } from "../types";
+import {
+  AUTH,
+  CRED,
+  REG_INFO,
+  JWT,
+  LOGIN_USER_CRED,
+  LOGIN_USER_PROF,
+  EDITED_PROF,
+  PERSONAL_SETTINGS
+} from "../types";
 import taskSlice from "../task/taskSlice";
 import { profile } from "console";
+import { setSettingsMenuOpen } from "../main/mainSlice";
 
 const initialState: AUTH = {
   loginUserCred: {
@@ -27,7 +37,12 @@ const initialState: AUTH = {
     avatar_img: '',
     upload_file: null,
     comment: ''
-  }
+  },
+  personalSettings: {
+    dark_mode: false,
+    show_own: false,
+    project: null,
+  },
 };
 
 
@@ -107,7 +122,6 @@ export const fetchAsyncUpdateProf = createAsyncThunk(
   "auth/updateProf",
   async (editedProf: EDITED_PROF) => {
     const uploadData = new FormData();
-    // const data = selectLoginUserCred.;
     uploadData.append("last_name", editedProf.last_name);
     uploadData.append("first_name", editedProf.first_name);
     uploadData.append("comment", editedProf.comment);
@@ -127,6 +141,23 @@ export const fetchAsyncUpdateProf = createAsyncThunk(
   }
 );
 
+// 個人設定の取得
+export const fetchAsyncGetPersonalSettings = createAsyncThunk(
+  "auth/getPersonalSettings",
+  async () => {
+    const res = await axios.get<PERSONAL_SETTINGS[]>(
+      `${process.env.REACT_APP_API_URL}/api/user/settings/`,
+      {
+        headers: {
+          Authorization: `JWT ${localStorage.localJWT}`
+        }
+      }
+    );
+    return res.data;
+  }
+);
+
+// 個人設定の更新
 
 // プロフィールの取得（不要？）
 export const fetchAsyncGetProfs = createAsyncThunk(
@@ -158,8 +189,10 @@ export const authSlice = createSlice({
     setEditedProf(state, action) {
       console.log(action.payload);
       state.editedProf = action.payload;
+    },
+    setPersonalSettings(state, action) {
+      state.personalSettings = action.payload;
     }
-
   },
   extraReducers: (builder) => {
     // ログイン時
@@ -203,6 +236,16 @@ export const authSlice = createSlice({
         };
       }
     );
+    builder.addCase(
+      fetchAsyncGetPersonalSettings.fulfilled,
+      (state, action: PayloadAction<PERSONAL_SETTINGS[]>) => {
+        console.log("fetchAsyncGetPersonalSettings.fulfilled");
+        return {
+          ...state,
+          personalSettings: action.payload[0]
+        };
+      }
+    );
   },
 });
 
@@ -211,11 +254,13 @@ export const authSlice = createSlice({
 // export const selectLoginUserCred = (state: RootState) => state.auth.loginUserCred;
 export const {
   setEditedProf,
+  setPersonalSettings
 } = authSlice.actions;
 
 export const selectLoginUserCred = (state: RootState) => state.auth.loginUserCred;
 export const selectLoginUserProf = (state: RootState) => state.auth.loginUserProf;
 export const selectEditedProf = (state: RootState) => state.auth.editedProf;
+export const selectPersonalSettings = (state: RootState) => state.auth.personalSettings;
 
 
 export default authSlice.reducer;

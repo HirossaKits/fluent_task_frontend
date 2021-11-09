@@ -5,10 +5,10 @@ import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Main from "./features/main/Main";
-import { selectSettings } from "./features/main/mainSlice";
+import { selectPersonalSettings } from "./features/auth/authSlice";
 
 function App() {
-  const settings = useSelector(selectSettings);
+  const settings = useSelector(selectPersonalSettings);
 
   const theme = createTheme({
     typography: {
