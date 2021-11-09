@@ -13,7 +13,7 @@ export interface COLUMN_INFO {
 export interface AUTH {
   loginUserCred: LOGIN_USER_CRED;
   loginUserProf: LOGIN_USER_PROF;
-  editedProf: LOGIN_USER_PROF;
+  editedProf: EDITED_PROF;
 }
 
 export interface LOGIN_USER_CRED {
@@ -29,6 +29,15 @@ export interface LOGIN_USER_PROF {
   first_name: string;
   last_name: string;
   avatar_img: string;
+  comment: string;
+}
+
+export interface EDITED_PROF {
+  user_id: string;
+  first_name: string;
+  last_name: string;
+  avatar_img: string;
+  upload_file: null | File;
   comment: string;
 }
 

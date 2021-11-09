@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { css } from "@emotion/react";
 import { useTheme } from "@mui/material";
@@ -15,9 +15,11 @@ import Avatar from "@mui/material/Avatar";
 import CloseIcon from "@mui/icons-material/Close";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import {
+  selectLoginUserCred,
   selectLoginUserProf,
   selectEditedProf,
   setEditedProf,
+  fetchAsyncUpdateProf,
 } from "../auth/authSlice";
 import { setProfileDialogOpen, selectProfileDialogOpen } from "./mainSlice";
 import CommonTextField from "../../common/CommonTextField";
@@ -25,20 +27,55 @@ import { TARGET } from "../types";
 
 const ProfileDialog = () => {
   const dispatch = useDispatch();
-  const profileDialogOpen = useSelector(selectProfileDialogOpen);
+  const loginUserCred = useSelector(selectLoginUserCred);
   const loginUserProf = useSelector(selectLoginUserProf);
   const editedProf = useSelector(selectEditedProf);
+  const profileDialogOpen = useSelector(selectProfileDialogOpen);
+  const [previewImg, setPreviewImg] = useState("");
 
   useEffect(() => {
-    dispatch(setEditedProf(loginUserProf));
-  }, []);
+    dispatch(
+      setEditedProf({
+        ...loginUserProf,
+        user_id: loginUserCred.id,
+        upload_file: null,
+      })
+    );
+  }, [profileDialogOpen]);
 
   const handleInputChange = (target: TARGET) => {
     dispatch(setEditedProf({ ...editedProf, [target.name]: target.value }));
   };
 
+  const handleRegisterClick = () => {
+    dispatch(fetchAsyncUpdateProf(editedProf));
+  };
+
   const handleClose = () => {
     dispatch(setProfileDialogOpen(false));
+    setTimeout(() => {
+      dispatch(setEditedProf({ ...editedProf, upload_file: null }));
+      setPreviewImg("");
+    }, 100);
+  };
+
+  const handlePictureClick = () => {
+    const fileInput = document.getElementById("imageInput");
+    console.log(fileInput);
+    fileInput?.click();
+  };
+
+  const handleOnFileChange = (e: any) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        dispatch(setEditedProf({ ...editedProf, upload_file: file }));
+        setPreviewImg(reader.result as string);
+      };
+      console.log(editedProf);
+    }
   };
 
   const theme = useTheme();
@@ -91,20 +128,28 @@ const ProfileDialog = () => {
         </Grid>
         <form css={styles.form} noValidate autoComplete='off'>
           <Stack direction='column' justifyContent='center' alignItems='center'>
+            <input
+              type='file'
+              id='imageInput'
+              hidden={true}
+              onChange={(e) => handleOnFileChange(e)}
+            />
             <Badge
               overlap='circular'
               anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
               badgeContent={
                 <ToolTip title='画像をアップロード'>
-                  <IconButton css={styles.badge}>
+                  <IconButton css={styles.badge} onClick={handlePictureClick}>
                     <CameraAltIcon />
                   </IconButton>
                 </ToolTip>
               }
             >
-              <Avatar css={styles.avatar} src={loginUserProf.avatar_img} />
+              <Avatar
+                css={styles.avatar}
+                src={previewImg ? previewImg : loginUserProf.avatar_img}
+              />
             </Badge>
-
             <CommonTextField
               label='姓'
               name='last_name'
@@ -131,7 +176,7 @@ const ProfileDialog = () => {
             <Button onClick={handleClose} color='primary'>
               キャンセル
             </Button>
-            <Button onClick={handleClose} color='primary'>
+            <Button onClick={handleRegisterClick} color='primary'>
               登録
             </Button>
           </DialogActions>

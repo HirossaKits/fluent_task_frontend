@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import axios from "axios";
-import { AUTH, CRED, REG_INFO, JWT, LOGIN_USER_CRED, LOGIN_USER_PROF } from "../types";
+import { AUTH, CRED, REG_INFO, JWT, LOGIN_USER_CRED, LOGIN_USER_PROF, EDITED_PROF } from "../types";
 import taskSlice from "../task/taskSlice";
+import { profile } from "console";
 
 const initialState: AUTH = {
   loginUserCred: {
@@ -20,9 +21,11 @@ const initialState: AUTH = {
     comment: ''
   },
   editedProf: {
+    user_id: "",
     first_name: "",
     last_name: "",
     avatar_img: '',
+    upload_file: null,
     comment: ''
   }
 };
@@ -38,6 +41,7 @@ export const fetchAsyncLogin = createAsyncThunk(
       {
         headers: {
           "Content-type": "application/json",
+          Authorization: `JWT ${localStorage.localJWT}`,
         },
       }
     );
@@ -98,6 +102,31 @@ export const fetchAsyncGetLoginUserProf = createAsyncThunk(
   }
 );
 
+// ログインユーザーのプロフィール更新
+export const fetchAsyncUpdateProf = createAsyncThunk(
+  "auth/updateProf",
+  async (editedProf: EDITED_PROF) => {
+    const uploadData = new FormData();
+    // const data = selectLoginUserCred.;
+    uploadData.append("last_name", editedProf.last_name);
+    uploadData.append("first_name", editedProf.first_name);
+    uploadData.append("comment", editedProf.comment);
+    editedProf.upload_file && uploadData.append("avatar_img", editedProf.upload_file, editedProf.upload_file.name);
+    const res = await axios.put<LOGIN_USER_PROF>(
+      `${process.env.REACT_APP_API_URL}/api/user/profile/${editedProf.user_id}/`,
+      uploadData,
+      {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `JWT ${localStorage.localJWT}`,
+        },
+      }
+    );
+    console.log(res);
+    return res.data;
+  }
+);
+
 
 // プロフィールの取得（不要？）
 export const fetchAsyncGetProfs = createAsyncThunk(
@@ -127,6 +156,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setEditedProf(state, action) {
+      console.log(action.payload);
       state.editedProf = action.payload;
     }
 
@@ -164,6 +194,15 @@ export const authSlice = createSlice({
         };
       }
     );
+    builder.addCase(
+      fetchAsyncUpdateProf.fulfilled, (state, action) => {
+        console.log('fetchAsyncUpdateProf.fulfilled');
+        return {
+          ...state,
+          loginUserProf: action.payload
+        };
+      }
+    );
   },
 });
 
@@ -174,6 +213,7 @@ export const {
   setEditedProf,
 } = authSlice.actions;
 
+export const selectLoginUserCred = (state: RootState) => state.auth.loginUserCred;
 export const selectLoginUserProf = (state: RootState) => state.auth.loginUserProf;
 export const selectEditedProf = (state: RootState) => state.auth.editedProf;
 
