@@ -26,6 +26,7 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 import ViewWeekIcon from "@mui/icons-material/ViewWeek";
 import {
+  selectLoginUserCred,
   fetchAsyncGetLoginUser,
   fetchAsyncGetLoginUserProf,
   fetchAsyncGetPersonalSettings,
@@ -48,7 +49,7 @@ import { AppDispatch } from "../../app/store";
 
 const Main = () => {
   const dispatch: AppDispatch = useDispatch();
-  // const loginUserCred = useSelector(selectLoginUserCred);
+  const loginUserCred = useSelector(selectLoginUserCred);
   const mainComponentName = useSelector(selectMainComponentName);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -59,9 +60,13 @@ const Main = () => {
     const fectchBootLoader = async () => {
       const res = await dispatch(fetchAsyncGetLoginUser());
       if (fetchAsyncGetLoginUser.fulfilled.match(res)) {
+        console.log(res);
         // GET PROFILE or TASKS
         await dispatch(fetchAsyncGetLoginUserProf());
-        await dispatch(fetchAsyncGetPersonalSettings());
+        console.log("OK");
+        console.log(loginUserCred);
+        console.log(loginUserCred.id);
+        await dispatch(fetchAsyncGetPersonalSettings(res.payload.id));
         console.log("GetProf is successeded");
       } else {
         console.log("Something is wrong");

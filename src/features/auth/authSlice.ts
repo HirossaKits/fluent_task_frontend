@@ -144,15 +144,16 @@ export const fetchAsyncUpdateProf = createAsyncThunk(
 // 個人設定の取得
 export const fetchAsyncGetPersonalSettings = createAsyncThunk(
   "auth/getPersonalSettings",
-  async () => {
-    const res = await axios.get<PERSONAL_SETTINGS[]>(
-      `${process.env.REACT_APP_API_URL}/api/user/settings/`,
+  async (user_id: string) => {
+    const res = await axios.get<PERSONAL_SETTINGS>(
+      `${process.env.REACT_APP_API_URL}/api/user/settings/${user_id}/`,
       {
         headers: {
           Authorization: `JWT ${localStorage.localJWT}`
         }
       }
     );
+    console.log(res.data);
     return res.data;
   }
 );
@@ -238,11 +239,11 @@ export const authSlice = createSlice({
     );
     builder.addCase(
       fetchAsyncGetPersonalSettings.fulfilled,
-      (state, action: PayloadAction<PERSONAL_SETTINGS[]>) => {
+      (state, action: PayloadAction<PERSONAL_SETTINGS>) => {
         console.log("fetchAsyncGetPersonalSettings.fulfilled");
         return {
           ...state,
-          personalSettings: action.payload[0]
+          personalSettings: action.payload
         };
       }
     );
