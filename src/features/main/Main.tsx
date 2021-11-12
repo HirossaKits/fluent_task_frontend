@@ -60,8 +60,6 @@ const Main = () => {
     const fectchBootLoader = async () => {
       const res = await dispatch(fetchAsyncGetLoginUser());
       if (fetchAsyncGetLoginUser.fulfilled.match(res)) {
-        console.log(res);
-        // GET PROFILE or TASKS
         await dispatch(fetchAsyncGetLoginUserProf());
         console.log("OK");
         console.log(loginUserCred);

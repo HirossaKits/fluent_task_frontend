@@ -6,7 +6,12 @@ import Paper from "@mui/material/Paper";
 import CommonSwitch from "../../common/CommonSwitch";
 import { makeStyles } from "@mui/material/styles";
 import { useSelector, useDispatch } from "react-redux";
-import { selectPersonalSettings, setPersonalSettings } from "../auth/authSlice";
+import {
+  selectLoginUserCred,
+  selectPersonalSettings,
+  setPersonalSettings,
+  fetchAsyncUpdateSettings,
+} from "../auth/authSlice";
 import { selectSettingsMenuOpen, setSettingsMenuOpen } from "./mainSlice";
 import { TARGET } from "../types";
 
@@ -16,12 +21,15 @@ type Props = {
 
 const SettingsMenu: React.FC<Props> = (props) => {
   const theme = useTheme();
+  const loginUserCred = useSelector(selectLoginUserCred);
   const settingsMenuOpen = useSelector(selectSettingsMenuOpen);
-  const settings = useSelector(selectPersonalSettings);
+  const personalSettings = useSelector(selectPersonalSettings);
   const dispatch = useDispatch();
 
   const handleInputChange = (target: TARGET) => {
-    dispatch(setPersonalSettings({ ...settings, [target.name]: target.value }));
+    const settings = { ...personalSettings, [target.name]: target.value };
+    dispatch(setPersonalSettings(settings));
+    dispatch(fetchAsyncUpdateSettings(settings));
   };
 
   const handleColse = () => {
@@ -58,7 +66,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
           label={"ダークモード"}
           labelWidth={10}
           name='dark_mode'
-          value={settings.dark_mode}
+          value={personalSettings.dark_mode}
           onChange={handleInputChange}
         />
         {/* <CommonSwitch label={"test"} labelWidth={10} />

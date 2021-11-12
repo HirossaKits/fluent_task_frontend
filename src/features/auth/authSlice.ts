@@ -146,19 +146,38 @@ export const fetchAsyncGetPersonalSettings = createAsyncThunk(
   "auth/getPersonalSettings",
   async (user_id: string) => {
     const res = await axios.get<PERSONAL_SETTINGS>(
-      `${process.env.REACT_APP_API_URL}/api/user/settings/${user_id}/`,
+      `${process.env.REACT_APP_API_URL}/api/user/setting/${user_id}/`,
       {
         headers: {
           Authorization: `JWT ${localStorage.localJWT}`
         }
       }
     );
-    console.log(res.data);
+    console.log(res);
     return res.data;
   }
 );
 
 // 個人設定の更新
+export const fetchAsyncUpdateSettings = createAsyncThunk(
+  "auth/updatePersonalSetting",
+  async (settings: PERSONAL_SETTINGS, thunkAPI) => {
+    const user_id = (thunkAPI.getState() as RootState).auth.loginUserCred.id;
+    const res = await axios.put<PERSONAL_SETTINGS>(
+      `${process.env.REACT_APP_API_URL}/api/user/setting/${user_id}/`,
+      settings,
+      {
+        headers: {
+          Authorization: `JWT ${localStorage.localJWT}`
+        }
+      }
+    );
+    return res.data;
+  }
+
+);
+
+
 
 // プロフィールの取得（不要？）
 export const fetchAsyncGetProfs = createAsyncThunk(
