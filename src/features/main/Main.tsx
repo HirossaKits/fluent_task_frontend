@@ -60,7 +60,7 @@ const Main = () => {
     const fectchBootLoader = async () => {
       const res = await dispatch(fetchAsyncGetLoginUser());
       if (fetchAsyncGetLoginUser.fulfilled.match(res)) {
-        await dispatch(fetchAsyncGetLoginUserProf());
+        await dispatch(fetchAsyncGetLoginUserProf(res.payload.id));
         console.log("OK");
         console.log(loginUserCred);
         console.log(loginUserCred.id);

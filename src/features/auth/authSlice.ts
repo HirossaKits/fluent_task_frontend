@@ -31,7 +31,6 @@ const initialState: AUTH = {
     comment: ''
   },
   editedProf: {
-    user_id: "",
     first_name: "",
     last_name: "",
     avatar_img: '',
@@ -104,9 +103,9 @@ export const fetchAsyncGetLoginUser = createAsyncThunk(
 // ログインユーザーのプロフィール取得
 export const fetchAsyncGetLoginUserProf = createAsyncThunk(
   "auth/getLoginUserProf",
-  async () => {
-    const res = await axios.get<LOGIN_USER_PROF[]>(
-      `${process.env.REACT_APP_API_URL}/api/user/profile/`,
+  async (user_id: string) => {
+    const res = await axios.get<LOGIN_USER_PROF>(
+      `${process.env.REACT_APP_API_URL}/api/user/profile/${user_id}/`,
       {
         headers: {
           Authorization: `JWT ${localStorage.localJWT}`,
@@ -120,14 +119,15 @@ export const fetchAsyncGetLoginUserProf = createAsyncThunk(
 // ログインユーザーのプロフィール更新
 export const fetchAsyncUpdateProf = createAsyncThunk(
   "auth/updateProf",
-  async (editedProf: EDITED_PROF) => {
+  async (editedProf: EDITED_PROF, thunkAPI) => {
+    const user_id = (thunkAPI.getState() as RootState).auth.loginUserCred.id;
     const uploadData = new FormData();
     uploadData.append("last_name", editedProf.last_name);
     uploadData.append("first_name", editedProf.first_name);
     uploadData.append("comment", editedProf.comment);
     editedProf.upload_file && uploadData.append("avatar_img", editedProf.upload_file, editedProf.upload_file.name);
     const res = await axios.put<LOGIN_USER_PROF>(
-      `${process.env.REACT_APP_API_URL}/api/user/profile/${editedProf.user_id}/`,
+      `${process.env.REACT_APP_API_URL}/api/user/profile/${user_id}/`,
       uploadData,
       {
         headers: {
@@ -238,12 +238,12 @@ export const authSlice = createSlice({
     );
     builder.addCase(
       fetchAsyncGetLoginUserProf.fulfilled,
-      (state, action: PayloadAction<LOGIN_USER_PROF[]>) => {
+      (state, action: PayloadAction<LOGIN_USER_PROF>) => {
         console.log('fetchAsyncGetLoginUserProf.fulfilled');
         console.log(action.payload);
         return {
           ...state,
-          loginUserProf: action.payload[0]
+          loginUserProf: action.payload
         };
       }
     );

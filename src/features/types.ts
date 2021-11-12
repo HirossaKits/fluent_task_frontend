@@ -34,7 +34,6 @@ export interface LOGIN_USER_PROF {
 }
 
 export interface EDITED_PROF {
-  user_id: string;
   first_name: string;
   last_name: string;
   avatar_img: string;
@@ -47,8 +46,6 @@ export interface PERSONAL_SETTINGS {
   show_own: boolean;
   project: null | string;
 }
-
-
 
 export interface USER_PROFILE {
   user_id: string;

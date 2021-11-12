@@ -27,7 +27,6 @@ import { TARGET } from "../types";
 
 const ProfileDialog = () => {
   const dispatch = useDispatch();
-  const loginUserCred = useSelector(selectLoginUserCred);
   const loginUserProf = useSelector(selectLoginUserProf);
   const editedProf = useSelector(selectEditedProf);
   const profileDialogOpen = useSelector(selectProfileDialogOpen);
@@ -37,7 +36,6 @@ const ProfileDialog = () => {
     dispatch(
       setEditedProf({
         ...loginUserProf,
-        user_id: loginUserCred.id,
         upload_file: null,
       })
     );
