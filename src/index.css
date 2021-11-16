@@ -26,11 +26,12 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-  /* border-radius: 10px; */
-  background-color: #aaa;
+  border-radius: 10px;
+  background-color: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #444;
+  /* background: #444; */
+  background: #aaa;
   border-radius: 10px;
 }

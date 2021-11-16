@@ -47,6 +47,7 @@ const ProfileDialog = () => {
 
   const handleRegisterClick = () => {
     dispatch(fetchAsyncUpdateProf(editedProf));
+    dispatch(setProfileDialogOpen(false));
   };
 
   const handleClose = () => {
@@ -72,7 +73,6 @@ const ProfileDialog = () => {
         dispatch(setEditedProf({ ...editedProf, upload_file: file }));
         setPreviewImg(reader.result as string);
       };
-      console.log(editedProf);
     }
   };
 

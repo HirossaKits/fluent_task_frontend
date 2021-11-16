@@ -4,12 +4,14 @@ import authReducer from "../features/auth/authSlice";
 import mainReducer from "../features/main/mainSlice";
 import taskReducer from "../features/task/taskSlice";
 import calendarReducer from "../features/calendar/calendarSlice";
+import projectReducer from "../features/proj/projectSlice";
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
     auth: authReducer,
     main: mainReducer,
+    project: projectReducer,
     task: taskReducer,
     calendar: calendarReducer,
   },

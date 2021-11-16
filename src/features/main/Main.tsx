@@ -37,10 +37,11 @@ import {
   setMainComponentName,
   selectMainComponentName,
 } from "./mainSlice";
+import { fetchAsyncGetProject } from "../proj/projectSlice";
 import SettingsMenu from "./SettingsMenu";
 import ProfileMenu from "./ProfileMenu";
 import Org from "../org/Org";
-import Proj from "../proj/Proj";
+import Proj from "../proj/Project";
 import Task from "../task/Task";
 import Kanban from "../kanban/Kanban";
 import Calendar from "../calendar/Calendar";
@@ -65,6 +66,7 @@ const Main = () => {
         console.log(loginUserCred);
         console.log(loginUserCred.id);
         await dispatch(fetchAsyncGetPersonalSettings(res.payload.id));
+        await dispatch(fetchAsyncGetProject());
         console.log("GetProf is successeded");
       } else {
         console.log("Something is wrong");
@@ -308,24 +310,26 @@ const Main = () => {
       </Drawer>
 
       <div css={drawerOpen ? styles.content : styles.contentShift}>
-        <Box
-          sx={{
-            borderBottom: 1,
-            borderColor: "divider",
-            marginBottom: theme.spacing(2),
-          }}
-        >
-          <Tabs
-            value={selectedIndex}
-            onChange={handleChange}
-            variant='scrollable'
-            scrollButtons='auto'
+        {mainComponentName !== "Org" && (
+          <Box
+            sx={{
+              borderBottom: 1,
+              borderColor: "divider",
+              marginBottom: theme.spacing(2),
+            }}
           >
-            <Tab label='テストプロジェクト1' />
-            <Tab label='テストプロジェクト2' />
-            <Tab label='テストプロジェクト3' />
-          </Tabs>
-        </Box>
+            <Tabs
+              value={selectedIndex}
+              onChange={handleChange}
+              variant='scrollable'
+              scrollButtons='auto'
+            >
+              <Tab label='テストプロジェクト1' />
+              <Tab label='テストプロジェクト2' />
+              <Tab label='テストプロジェクト3' />
+            </Tabs>
+          </Box>
+        )}
         {mainComponentName === "Org" && <Org />}
         {mainComponentName === "Proj" && <Proj />}
         {mainComponentName === "List" && <Task />}

@@ -102,6 +102,7 @@ type USER = {
 export interface PROJECT {
   project_id: string;
   project_name: string;
+  org_id: string;
   resp_id: string[];
   member_id: string[];
   description: string;

@@ -98,12 +98,20 @@ const Kanban = () => {
   return (
     <>
       <div css={styles.container}>
-        {/* Create Component here! */}
-        <KanbanColumn
+        {/* <KanbanColumn
           themeColor={theme.palette.warning.light}
           headerText='開始前'
           status='Before Start'
-        />
+        /> */}
+        <Card css={styles.column}>
+          <Box css={styles.header}>
+            <CircleIcon css={styles.iconBeforStart} />
+            <Typography gutterBottom variant='h6' component='div'>
+              開始前
+            </Typography>
+          </Box>
+          <Divider css={styles.divider} />
+        </Card>
         <Card css={styles.column}>
           <Box css={styles.header}>
             <CircleIcon css={styles.iconOnGoing} />
@@ -112,9 +120,6 @@ const Kanban = () => {
             </Typography>
           </Box>
           <Divider css={styles.divider} />
-          {/* {demoData.map((task: TASK) => (
-
-        )} */}
         </Card>
         <Card css={styles.column}>
           <Box css={styles.header}>
