@@ -12,9 +12,10 @@ export interface COLUMN_INFO {
 
 export interface AUTH {
   loginUserCred: LOGIN_USER_CRED;
-  loginUserProf: LOGIN_USER_PROF;
+  loginUserProf: PROF;
   editedProf: EDITED_PROF;
   personalSettings: PERSONAL_SETTINGS;
+  profiles: PROF[];
 }
 
 export interface LOGIN_USER_CRED {
@@ -26,7 +27,8 @@ export interface LOGIN_USER_CRED {
   is_administrator: boolean;
 }
 
-export interface LOGIN_USER_PROF {
+export interface PROF {
+  user_id: string;
   first_name: string;
   last_name: string;
   avatar_img: string;
@@ -34,6 +36,7 @@ export interface LOGIN_USER_PROF {
 }
 
 export interface EDITED_PROF {
+  user_id: string;
   first_name: string;
   last_name: string;
   avatar_img: string;

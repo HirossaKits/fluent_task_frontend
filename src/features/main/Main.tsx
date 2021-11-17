@@ -30,6 +30,7 @@ import {
   fetchAsyncGetLoginUser,
   fetchAsyncGetLoginUserProf,
   fetchAsyncGetPersonalSettings,
+  fetchAsyncGetProfiles,
 } from "../auth/authSlice";
 import {
   setSettingsMenuOpen,
@@ -37,7 +38,7 @@ import {
   setMainComponentName,
   selectMainComponentName,
 } from "./mainSlice";
-import { fetchAsyncGetProject } from "../proj/projectSlice";
+import { selectProjects, fetchAsyncGetProject } from "../proj/projectSlice";
 import SettingsMenu from "./SettingsMenu";
 import ProfileMenu from "./ProfileMenu";
 import Org from "../org/Org";
@@ -52,6 +53,7 @@ const Main = () => {
   const dispatch: AppDispatch = useDispatch();
   const loginUserCred = useSelector(selectLoginUserCred);
   const mainComponentName = useSelector(selectMainComponentName);
+  const projects = useSelector(selectProjects);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const settingsAnchorEl = useRef(null);
@@ -66,6 +68,7 @@ const Main = () => {
         console.log(loginUserCred);
         console.log(loginUserCred.id);
         await dispatch(fetchAsyncGetPersonalSettings(res.payload.id));
+        await dispatch(fetchAsyncGetProfiles());
         await dispatch(fetchAsyncGetProject());
         console.log("GetProf is successeded");
       } else {
@@ -324,9 +327,9 @@ const Main = () => {
               variant='scrollable'
               scrollButtons='auto'
             >
-              <Tab label='テストプロジェクト1' />
-              <Tab label='テストプロジェクト2' />
-              <Tab label='テストプロジェクト3' />
+              {projects.map((proj) => (
+                <Tab label={proj.project_name} />
+              ))}
             </Tabs>
           </Box>
         )}

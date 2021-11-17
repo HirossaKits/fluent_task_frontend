@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { RootState } from "../../app/store";
 
 const initialState = {
   projects: [
@@ -14,13 +15,14 @@ const initialState = {
       enddate: "",
     },
   ],
+  selectProjects: "",
 };
 
 export const fetchAsyncGetProject = createAsyncThunk(
   "project/getProject",
   async () => {
     const res = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/project`,
+      `${process.env.REACT_APP_API_URL}/api/project/`,
       {
         headers: {
           Authorization: `JWT ${localStorage.localJWT}`,
@@ -44,3 +46,7 @@ export const projectSlice = createSlice({
     });
   },
 });
+
+export const selectProjects = (state: RootState) => state.project.projects;
+
+export default projectSlice.reducer;

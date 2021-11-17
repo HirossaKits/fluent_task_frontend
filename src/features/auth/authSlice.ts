@@ -7,7 +7,7 @@ import {
   REG_INFO,
   JWT,
   LOGIN_USER_CRED,
-  LOGIN_USER_PROF,
+  PROF,
   EDITED_PROF,
   PERSONAL_SETTINGS
 } from "../types";
@@ -25,12 +25,14 @@ const initialState: AUTH = {
     is_administrator: false,
   },
   loginUserProf: {
+    user_id: "",
     first_name: "",
     last_name: "",
     avatar_img: '',
     comment: ''
   },
   editedProf: {
+    user_id: "",
     first_name: "",
     last_name: "",
     avatar_img: '',
@@ -42,6 +44,13 @@ const initialState: AUTH = {
     show_own: false,
     project: null,
   },
+  profiles: [{
+    user_id: "",
+    first_name: "",
+    last_name: "",
+    avatar_img: '',
+    comment: ''
+  }]
 };
 
 
@@ -104,7 +113,7 @@ export const fetchAsyncGetLoginUser = createAsyncThunk(
 export const fetchAsyncGetLoginUserProf = createAsyncThunk(
   "auth/getLoginUserProf",
   async (user_id: string) => {
-    const res = await axios.get<LOGIN_USER_PROF>(
+    const res = await axios.get<PROF>(
       `${process.env.REACT_APP_API_URL}/api/user/profile/${user_id}/`,
       {
         headers: {
@@ -120,14 +129,14 @@ export const fetchAsyncGetLoginUserProf = createAsyncThunk(
 export const fetchAsyncUpdateProf = createAsyncThunk(
   "auth/updateProf",
   async (editedProf: EDITED_PROF, thunkAPI) => {
-    const user_id = (thunkAPI.getState() as RootState).auth.loginUserCred.id;
+    // const user_id = (thunkAPI.getState() as RootState).auth.loginUserCred.id;
     const uploadData = new FormData();
     uploadData.append("last_name", editedProf.last_name);
     uploadData.append("first_name", editedProf.first_name);
     uploadData.append("comment", editedProf.comment);
     editedProf.upload_file && uploadData.append("avatar_img", editedProf.upload_file, editedProf.upload_file.name);
-    const res = await axios.put<LOGIN_USER_PROF>(
-      `${process.env.REACT_APP_API_URL}/api/user/profile/${user_id}/`,
+    const res = await axios.put<PROF>(
+      `${process.env.REACT_APP_API_URL}/api/user/profile/${editedProf.user_id}/`,
       uploadData,
       {
         headers: {
@@ -178,13 +187,12 @@ export const fetchAsyncUpdateSettings = createAsyncThunk(
 );
 
 
-
-// プロフィールの取得（不要？）
-export const fetchAsyncGetProfs = createAsyncThunk(
+// プロフィールの取得
+export const fetchAsyncGetProfiles = createAsyncThunk(
   "auth/getProfile",
   async () => {
-    const res = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/user/profile`,
+    const res = await axios.get<PROF[]>(
+      `${process.env.REACT_APP_API_URL}/api/user/profile/`,
       {
         headers: {
           Authorization: `JWT ${localStorage.localJWT}`,
@@ -238,7 +246,7 @@ export const authSlice = createSlice({
     );
     builder.addCase(
       fetchAsyncGetLoginUserProf.fulfilled,
-      (state, action: PayloadAction<LOGIN_USER_PROF>) => {
+      (state, action: PayloadAction<PROF>) => {
         console.log('fetchAsyncGetLoginUserProf.fulfilled');
         console.log(action.payload);
         return {
@@ -264,6 +272,12 @@ export const authSlice = createSlice({
           ...state,
           personalSettings: action.payload
         };
+      }
+    );
+    builder.addCase(
+      fetchAsyncGetProfiles.fulfilled,
+      (state, action: PayloadAction<PROF[]>) => {
+        return { ...state, profiles: action.payload };
       }
     );
   },
