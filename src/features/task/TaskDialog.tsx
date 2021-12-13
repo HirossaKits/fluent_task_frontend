@@ -1,37 +1,37 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { css } from "@emotion/react";
-import { useTheme } from "@mui/material";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogTitle from "@mui/material/DialogTitle";
-import Grid from "@mui/material/Grid";
-import CloseIcon from "@mui/icons-material/Close";
-import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
-import CommonTextField from "../../common/CommonTextField";
-import CommonDatePicker from "../../common/CommonDatePicker";
-import { selectEditedTask } from "../task/taskSlice";
-import { setEditedTask } from "../task/taskSlice";
-import { TARGET } from "../types";
-import CommonSelect from "../../common/CommonSelect";
-import { Status, DemoMember } from "../../selectionOptions";
-import { selectEditTaskOpen, setEditTaskOpen } from "./taskSlice";
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { css } from '@emotion/react'
+import { useTheme } from '@mui/material'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogTitle from '@mui/material/DialogTitle'
+import Grid from '@mui/material/Grid'
+import CloseIcon from '@mui/icons-material/Close'
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz'
+import CommonTextField from '../../components/CommonTextField'
+import CommonDatePicker from '../../components/CommonDatePicker'
+import { selectEditedTask } from '../task/taskSlice'
+import { setEditedTask } from '../task/taskSlice'
+import { TARGET } from '../types'
+import CommonSelect from '../../components/CommonSelect'
+import { Status, DemoMember } from '../../selectionOptions'
+import { selectEditTaskOpen, setEditTaskOpen } from './taskSlice'
 
 const TaskDialog: React.FC = (props) => {
-  const theme = useTheme();
-  const dispatch = useDispatch();
-  const editTaskOpen = useSelector(selectEditTaskOpen);
-  const editedTask = useSelector(selectEditedTask);
+  const theme = useTheme()
+  const dispatch = useDispatch()
+  const editTaskOpen = useSelector(selectEditTaskOpen)
+  const editedTask = useSelector(selectEditedTask)
 
   const handleInputChange = (target: TARGET) => {
-    dispatch(setEditedTask({ ...editedTask, [target.name]: target.value }));
-  };
+    dispatch(setEditedTask({ ...editedTask, [target.name]: target.value }))
+  }
 
   const handleClose = () => {
-    dispatch(setEditTaskOpen(false));
-  };
+    dispatch(setEditTaskOpen(false))
+  }
 
   const styles = {
     form: css`
@@ -51,7 +51,7 @@ const TaskDialog: React.FC = (props) => {
       margin-bottom: 10px;
       color: ${theme.palette.action.active};
     `,
-  };
+  }
 
   return (
     <>
@@ -237,7 +237,7 @@ const TaskDialog: React.FC = (props) => {
         </form>
       </Dialog>
     </>
-  );
-};
+  )
+}
 
-export default TaskDialog;
+export default TaskDialog

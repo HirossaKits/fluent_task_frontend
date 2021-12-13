@@ -1,36 +1,35 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { css } from "@emotion/react";
-import { useTheme } from "@mui/material";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import ToolTip from "@mui/material/Tooltip";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogTitle from "@mui/material/DialogTitle";
-import Grid from "@mui/material/Grid";
-import Stack from "@mui/material/Stack";
-import Badge from "@mui/material/Badge";
-import Avatar from "@mui/material/Avatar";
-import CloseIcon from "@mui/icons-material/Close";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { css } from '@emotion/react'
+import { useTheme } from '@mui/material'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import ToolTip from '@mui/material/Tooltip'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogTitle from '@mui/material/DialogTitle'
+import Grid from '@mui/material/Grid'
+import Stack from '@mui/material/Stack'
+import Badge from '@mui/material/Badge'
+import Avatar from '@mui/material/Avatar'
+import CloseIcon from '@mui/icons-material/Close'
+import CameraAltIcon from '@mui/icons-material/CameraAlt'
 import {
-  selectLoginUserCred,
   selectLoginUserProf,
   selectEditedProf,
   setEditedProf,
   fetchAsyncUpdateProf,
-} from "../auth/authSlice";
-import { setProfileDialogOpen, selectProfileDialogOpen } from "./mainSlice";
-import CommonTextField from "../../common/CommonTextField";
-import { TARGET } from "../types";
+} from '../auth/authSlice'
+import { setProfileDialogOpen, selectProfileDialogOpen } from './mainSlice'
+import CommonTextField from '../../components/CommonTextField'
+import { TARGET } from '../types'
 
 const ProfileDialog = () => {
-  const dispatch = useDispatch();
-  const loginUserProf = useSelector(selectLoginUserProf);
-  const editedProf = useSelector(selectEditedProf);
-  const profileDialogOpen = useSelector(selectProfileDialogOpen);
-  const [previewImg, setPreviewImg] = useState("");
+  const dispatch = useDispatch()
+  const loginUserProf = useSelector(selectLoginUserProf)
+  const editedProf = useSelector(selectEditedProf)
+  const profileDialogOpen = useSelector(selectProfileDialogOpen)
+  const [previewImg, setPreviewImg] = useState('')
 
   useEffect(() => {
     dispatch(
@@ -38,45 +37,45 @@ const ProfileDialog = () => {
         ...loginUserProf,
         upload_file: null,
       })
-    );
-  }, [profileDialogOpen]);
+    )
+  }, [profileDialogOpen])
 
   const handleInputChange = (target: TARGET) => {
-    dispatch(setEditedProf({ ...editedProf, [target.name]: target.value }));
-  };
+    dispatch(setEditedProf({ ...editedProf, [target.name]: target.value }))
+  }
 
   const handleRegisterClick = () => {
-    dispatch(fetchAsyncUpdateProf(editedProf));
-    dispatch(setProfileDialogOpen(false));
-  };
+    dispatch(fetchAsyncUpdateProf(editedProf))
+    dispatch(setProfileDialogOpen(false))
+  }
 
   const handleClose = () => {
-    dispatch(setProfileDialogOpen(false));
+    dispatch(setProfileDialogOpen(false))
     setTimeout(() => {
-      dispatch(setEditedProf({ ...editedProf, upload_file: null }));
-      setPreviewImg("");
-    }, 100);
-  };
+      dispatch(setEditedProf({ ...editedProf, upload_file: null }))
+      setPreviewImg('')
+    }, 100)
+  }
 
   const handlePictureClick = () => {
-    const fileInput = document.getElementById("imageInput");
-    console.log(fileInput);
-    fileInput?.click();
-  };
+    const fileInput = document.getElementById('imageInput')
+    console.log(fileInput)
+    fileInput?.click()
+  }
 
   const handleOnFileChange = (e: any) => {
     if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+      const file = e.target.files[0]
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
       reader.onload = () => {
-        dispatch(setEditedProf({ ...editedProf, upload_file: file }));
-        setPreviewImg(reader.result as string);
-      };
+        dispatch(setEditedProf({ ...editedProf, upload_file: file }))
+        setPreviewImg(reader.result as string)
+      }
     }
-  };
+  }
 
-  const theme = useTheme();
+  const theme = useTheme()
 
   const styles = {
     wrap: css`
@@ -105,7 +104,7 @@ const ProfileDialog = () => {
       margin-top: 30px;
       margin-left: 30px;
     `,
-  };
+  }
 
   return (
     <>
@@ -134,7 +133,7 @@ const ProfileDialog = () => {
             />
             <Badge
               overlap='circular'
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
               badgeContent={
                 <ToolTip title='画像をアップロード'>
                   <IconButton css={styles.badge} onClick={handlePictureClick}>
@@ -181,7 +180,7 @@ const ProfileDialog = () => {
         </form>
       </Dialog>
     </>
-  );
-};
+  )
+}
 
-export default ProfileDialog;
+export default ProfileDialog

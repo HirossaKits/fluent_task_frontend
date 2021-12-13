@@ -1,49 +1,50 @@
-import React from "react";
-import { css } from "@emotion/react";
-import Stack from "@mui/material/Stack";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Card from "@mui/material/Card";
-import List from "@mui/material/List";
-import ListSubheader from "@mui/material/ListSubheader";
-import ListItem from "@mui/material/ListItem";
-import Avatar from "@mui/material/Avatar";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import Divider from "@mui/material/Divider";
-import { Line, Doughnut } from "react-chartjs-2";
+import React from 'react'
+import { css } from '@emotion/react'
+import Stack from '@mui/material/Stack'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Card from '@mui/material/Card'
+import List from '@mui/material/List'
+import ListSubheader from '@mui/material/ListSubheader'
+import ListItem from '@mui/material/ListItem'
+import Avatar from '@mui/material/Avatar'
+import ListItemAvatar from '@mui/material/ListItemAvatar'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemText from '@mui/material/ListItemText'
+import Divider from '@mui/material/Divider'
+import { Line, Doughnut } from 'react-chartjs-2'
 
 const lineData = {
-  labels: ["2021-11", "2021-12", "2021-01", "2021-02", "2021-03", "2021-03"],
+  labels: ['2021-11', '2021-12', '2021-01', '2021-02', '2021-03', '2021-03'],
   datasets: [
     {
-      label: "進捗",
+      label: '進捗',
       data: [5, 7, 9, 10, 16, 20],
       lineTension: 0.2,
-      backgroundColor: "rgba(75,192,192,0.2)",
-      borderColor: "rgba(75,192,192,1)",
+      backgroundColor: 'rgba(75,192,192,0.2)',
+      borderColor: 'rgba(75,192,192,1)',
       fill: true,
     },
   ],
-};
+}
 
 const dataDoughnut = {
-  labels: ["完了", "未完了"],
+  labels: ['完了', '未完了'],
   datasets: [
     {
       data: [70, 30],
 
-      backgroundColor: ["rgba(75,192,192,0.2)", "rgba(192,192,192,0.2)"],
-      borderColor: ["rgba(75,192,192,1)", "rgba(192,192,192,1)"],
+      backgroundColor: ['rgba(75,192,192,0.2)', 'rgba(192,192,192,0.2)'],
+      borderColor: ['rgba(75,192,192,1)', 'rgba(192,192,192,1)'],
     },
   ],
-};
+}
 
 const Project = () => {
   const styles = {
     stack: css`
       margin-bottom: 24px;
+      margin-right: 20px;
     `,
     userCard: css`
       width: 320px;
@@ -64,18 +65,20 @@ const Project = () => {
       width: 100%;
     `,
     lineChart: css`
-      width: 75%;
-      margin-top: 50px;
+      width: 85%;
+      min-width: 580px;
+      margin-top: 30px;
       margin-left: auto;
       margin-right: auto;
     `,
     doughnut: css`
-      width: 40%;
-      margin-top: 40px;
+      width: 45%;
+      min-width: 290px;
+      margin-top: 50px;
       margin-left: auto;
       margin-right: auto;
     `,
-  };
+  }
 
   return (
     <>
@@ -117,7 +120,7 @@ const Project = () => {
                     <ListItemAvatar>
                       <Avatar />
                     </ListItemAvatar>
-                    <ListItemText primary={"HELLO!"} />
+                    <ListItemText primary={'HELLO!'} />
                   </ListItemButton>
                 </ListItem>
               ))}
@@ -141,7 +144,7 @@ const Project = () => {
                     <ListItemAvatar>
                       <Avatar />
                     </ListItemAvatar>
-                    <ListItemText primary={"HELLO!"} />
+                    <ListItemText primary={'HELLO!'} />
                   </ListItemButton>
                 </ListItem>
               ))}
@@ -163,7 +166,7 @@ const Project = () => {
         </Stack>
       </Stack>
     </>
-  );
-};
+  )
+}
 
-export default Project;
+export default Project
