@@ -1,85 +1,86 @@
-import React, { useState, useRef } from 'react'
-import { css } from '@emotion/react'
-import { useTheme } from '@mui/material'
-import { alpha } from '@mui/material/styles'
-import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
-import Paper from '@mui/material/Paper'
-import Popover from '@mui/material/Popover'
-import Typography from '@mui/material/Typography'
-import Toolbar from '@mui/material/Toolbar'
-import Tooltip from '@mui/material/Tooltip'
-import IconButton from '@mui/material/IconButton'
-import TableContainer from '@mui/material/TableContainer'
-import Table from '@mui/material/Table'
-import TableHead from '@mui/material/TableHead'
-import TableBody from '@mui/material/TableBody'
-import TableRow from '@mui/material/TableRow'
-import TableCell from '@mui/material/TableCell'
-import TableSortLabel from '@mui/material/TableSortLabel'
-import Checkbox from '@mui/material/Checkbox'
-import Link from '@mui/material/Link'
-import FilterListIcon from '@mui/icons-material/FilterList'
-import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd'
-import EditIcon from '@mui/icons-material/Edit'
-import DeleteIcon from '@mui/icons-material/Delete'
-import AddIcon from '@mui/icons-material/Add'
-import ClearIcon from '@mui/icons-material/Clear'
-import TaskDialog from '../features/task/TaskDialog'
-import CommonSelect from '../components/CommonSelect'
-import CommonTextField from '../components/CommonTextField'
-import CommonDatePicker from '../components/CommonDatePicker'
-import { TARGET } from '../features/types'
+import React, { useState, useRef } from 'react';
+import { css } from '@emotion/react';
+import { useTheme } from '@mui/material';
+import { alpha } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
+import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
+import TableContainer from '@mui/material/TableContainer';
+import Table from '@mui/material/Table';
+import TableHead from '@mui/material/TableHead';
+import TableBody from '@mui/material/TableBody';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import TableSortLabel from '@mui/material/TableSortLabel';
+import Checkbox from '@mui/material/Checkbox';
+import Link from '@mui/material/Link';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import ClearIcon from '@mui/icons-material/Clear';
+import TaskDialog from '../features/task/TaskDialog';
+import CommonSelect from '../components/CommonSelect';
+import CommonTextField from '../components/CommonTextField';
+import CommonDatePicker from '../components/CommonDatePicker';
+import CommonTooltip from './CommonTooltip';
+import { TARGET } from '../features/types';
 import {
   ListColumns,
   FilterOperatorOfString,
   FilterOperatorOfNumber,
   FilterOperatorOfDate,
-} from '../selectionOptions'
+} from '../selectionOptions';
 
 interface Props<T> {
-  data: T[]
+  data: T[];
   columnInfo: {
-    name: keyof T
-    label: string
-    type: 'string' | 'number' | 'Date'
-    width: string
-  }[]
-  showToolBar: boolean
-  editDialog?: JSX.Element
-  handleRegisterClick?: Function
-  handleEditClick?: Function
-  handleDeleteClick?: Function
+    name: keyof T;
+    label: string;
+    type: 'string' | 'number' | 'Date';
+    width: string;
+  }[];
+  showToolBar: boolean;
+  editDialog?: JSX.Element;
+  handleRegisterClick?: Function;
+  handleEditClick?: Function;
+  handleDeleteClick?: Function;
 }
 
-type ListComponent = <T>(props: Props<T>) => React.ReactElement<Props<T>>
+type ListComponent = <T>(props: Props<T>) => React.ReactElement<Props<T>>;
 
 const CommonTable: ListComponent = (props) => {
-  type ROW = { id: number } & typeof props.data[0]
-  type ROW_ITEM = keyof ROW
+  type ROW = { id: number } & typeof props.data[0];
+  type ROW_ITEM = keyof ROW;
 
   interface SORT_STATE {
-    order: 'asc' | 'desc'
-    columnName: '' | ROW_ITEM
+    order: 'asc' | 'desc';
+    columnName: '' | ROW_ITEM;
   }
 
   interface FILTER {
-    columnName: ROW_ITEM
-    type: 'string' | 'number' | 'Date'
-    operator: string
-    value: string
+    columnName: ROW_ITEM;
+    type: 'string' | 'number' | 'Date';
+    operator: string;
+    value: string;
   }
 
-  const table = props.data.map((row, index) => ({ id: index, ...row }))
+  const table = props.data.map((row, index) => ({ id: index, ...row }));
 
-  const filterAnchorEl = useRef(null)
+  const filterAnchorEl = useRef(null);
 
-  const [selected, setSelected] = useState<number[]>([])
+  const [selected, setSelected] = useState<number[]>([]);
   const [sortState, setSortState] = useState<SORT_STATE>({
     order: 'asc',
     columnName: '',
-  })
-  const [filterOpen, setFilterOpen] = useState(false)
+  });
+  const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FILTER[]>([
     {
       columnName: props.columnInfo[0].name as ROW_ITEM,
@@ -87,26 +88,26 @@ const CommonTable: ListComponent = (props) => {
       operator: '=',
       value: '',
     },
-  ])
+  ]);
 
   const handleRowClick = (event: React.MouseEvent<unknown>, id: number) => {
-    let newSelected = selected.slice()
-    const index = newSelected.indexOf(id)
+    let newSelected = selected.slice();
+    const index = newSelected.indexOf(id);
     if (index === -1) {
-      newSelected.push(id)
+      newSelected.push(id);
     } else {
-      newSelected.splice(index, 1)
+      newSelected.splice(index, 1);
     }
-    setSelected(newSelected)
-  }
+    setSelected(newSelected);
+  };
 
   const handleSelectAllClic = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      setSelected(table.map((row) => row.id))
+      setSelected(table.map((row) => row.id));
     } else {
-      setSelected([])
+      setSelected([]);
     }
-  }
+  };
 
   const handleClickSortColumn = (colName: ROW_ITEM) => {
     setSortState({
@@ -115,16 +116,16 @@ const CommonTable: ListComponent = (props) => {
           ? 'asc'
           : 'desc',
       columnName: colName,
-    })
-  }
+    });
+  };
 
   const handleFilterClick = () => {
-    setFilterOpen(true)
-  }
+    setFilterOpen(true);
+  };
 
   const handleFilterClose = () => {
-    setFilterOpen(false)
-  }
+    setFilterOpen(false);
+  };
 
   const handleAddClick = (index: number) => {
     if (filters[index].value !== '') {
@@ -136,17 +137,17 @@ const CommonTable: ListComponent = (props) => {
           operator: '=',
           value: '',
         },
-      ])
+      ]);
     }
-  }
+  };
 
   const handleClearClick = (index: number) => {
-    const target = [...filters]
-    target.splice(index, 1)
+    const target = [...filters];
+    target.splice(index, 1);
     if (index !== 1 || filters.length !== 1) {
-      setFilters(target)
+      setFilters(target);
     }
-  }
+  };
 
   const handleInputChange = (target: TARGET) => {
     if (target.index != null) {
@@ -154,15 +155,15 @@ const CommonTable: ListComponent = (props) => {
         ...filters.slice(0, target.index),
         { ...filters[target.index], [target.name]: target.value },
         ...filters.slice(target.index + 1),
-      ])
+      ]);
     }
-  }
+  };
 
   const handleColumnSelectChange = (target: TARGET) => {
     if (target.index != null) {
       const newType = props.columnInfo.filter(
         (col) => col.name === target.value
-      )[0].type
+      )[0].type;
       if (newType !== filters[target.index].type) {
         setFilters([
           ...filters.slice(0, target.index),
@@ -174,7 +175,7 @@ const CommonTable: ListComponent = (props) => {
             type: newType,
           },
           ...filters.slice(target.index + 1),
-        ])
+        ]);
       } else {
         setFilters([
           ...filters.slice(0, target.index),
@@ -183,90 +184,90 @@ const CommonTable: ListComponent = (props) => {
             [target.name]: target.value,
           },
           ...filters.slice(target.index + 1),
-        ])
+        ]);
       }
     }
-  }
+  };
 
   const sortRows = (tbl: ROW[]): ROW[] => {
-    if (sortState.columnName === '') return tbl
+    if (sortState.columnName === '') return tbl;
     const sortedRows = tbl.slice().sort((next, now) => {
-      const nextVal = next[sortState.columnName as ROW_ITEM]
-      const nowVal = now[sortState.columnName as ROW_ITEM]
+      const nextVal = next[sortState.columnName as ROW_ITEM];
+      const nowVal = now[sortState.columnName as ROW_ITEM];
 
       if (nowVal === null && nextVal === null) {
-        return 1
+        return 1;
       }
       if (nextVal === null) {
-        return 1
+        return 1;
       }
       if (nowVal === null) {
-        return -1
+        return -1;
       }
       if (nextVal > nowVal) {
-        return sortState.order === 'asc' ? 1 : -1
+        return sortState.order === 'asc' ? 1 : -1;
       }
       if (nextVal < nowVal) {
-        return sortState.order === 'desc' ? -1 : 1
+        return sortState.order === 'desc' ? -1 : 1;
       }
-      return 0
-    })
-    return sortedRows
-  }
+      return 0;
+    });
+    return sortedRows;
+  };
 
   const filterTable = (tbl: ROW[]): ROW[] => {
-    if (filters.length < 1) return tbl
+    if (filters.length < 1) return tbl;
 
     const filtered = tbl.filter((row, rowId) => {
-      let validity = true
+      let validity = true;
 
       filters.forEach((filter, filterId) => {
-        if (!validity) return
-        if (!filter.value) return
+        if (!validity) return;
+        if (!filter.value) return;
 
-        const columnValue = String(row[filter.columnName])
-        const filterValue = filter.value
-        const operator = filter.operator
+        const columnValue = String(row[filter.columnName]);
+        const filterValue = filter.value;
+        const operator = filter.operator;
         const type = props.columnInfo.filter(
           (col) => col.name === filter.columnName
-        )[0].type
+        )[0].type;
 
         if (columnValue === null) {
-          validity = false
-          return
+          validity = false;
+          return;
         }
 
         if (type === 'string') {
           if (operator === '=') {
-            validity = columnValue === filterValue
+            validity = columnValue === filterValue;
           } else if (operator === 'start_from') {
-            validity = columnValue.toString().startsWith(filterValue)
+            validity = columnValue.toString().startsWith(filterValue);
           } else if (operator === 'include') {
             validity =
-              columnValue.toString().indexOf(filterValue) === -1 ? false : true
+              columnValue.toString().indexOf(filterValue) === -1 ? false : true;
           } else if (operator === 'exclude') {
             validity =
-              columnValue.toString().indexOf(filterValue) === -1 ? true : false
+              columnValue.toString().indexOf(filterValue) === -1 ? true : false;
           }
         }
 
         if (type === 'number' || type === 'Date') {
           if (operator === '=') {
-            validity = columnValue === filterValue
+            validity = columnValue === filterValue;
           } else if (operator === '<=') {
-            validity = columnValue <= filterValue
+            validity = columnValue <= filterValue;
           } else if (operator === '>=') {
-            validity = columnValue >= filterValue
+            validity = columnValue >= filterValue;
           }
         }
-      })
+      });
 
-      return validity
-    })
-    return filtered
-  }
+      return validity;
+    });
+    return filtered;
+  };
 
-  const theme = useTheme()
+  const theme = useTheme();
   const styles = {
     filterButton: css`
       margin: 0 0 0 auto;
@@ -303,19 +304,19 @@ const CommonTable: ListComponent = (props) => {
       margin-left: ${theme.spacing(1)};
       marginr-ight: ${theme.spacing(1)};
     `,
-  }
+  };
 
   return (
     <>
       <Box sx={{ width: '100%' }}>
         {props.showToolBar && (
           <Toolbar disableGutters>
-            <Tooltip title='登録'>
+            <CommonTooltip title='登録'>
               <IconButton aria-label='filter list'>
                 <PlaylistAddIcon />
               </IconButton>
-            </Tooltip>
-            <Tooltip title='編集'>
+            </CommonTooltip>
+            <CommonTooltip title='編集'>
               {'handleEditClick' in props ? (
                 <IconButton
                   aria-label='edit task'
@@ -330,13 +331,13 @@ const CommonTable: ListComponent = (props) => {
                   <EditIcon />
                 </IconButton>
               )}
-            </Tooltip>
-            <Tooltip title='削除'>
+            </CommonTooltip>
+            <CommonTooltip title='削除'>
               <IconButton aria-label='delete'>
                 <DeleteIcon />
               </IconButton>
-            </Tooltip>
-            <Tooltip title='フィルター'>
+            </CommonTooltip>
+            <CommonTooltip title='フィルター'>
               <IconButton
                 ref={filterAnchorEl}
                 css={styles.filterButton}
@@ -345,7 +346,7 @@ const CommonTable: ListComponent = (props) => {
               >
                 <FilterListIcon />
               </IconButton>
-            </Tooltip>
+            </CommonTooltip>
           </Toolbar>
         )}
         <TableContainer css={styles.tableContainer}>
@@ -411,7 +412,7 @@ const CommonTable: ListComponent = (props) => {
                             underline='always'
                             color='textPrimary'
                             onClick={(event: any) => {
-                              event.stopPropagation()
+                              event.stopPropagation();
                               // setEditTaskOpen(true);
                             }}
                           >
@@ -546,7 +547,7 @@ const CommonTable: ListComponent = (props) => {
       </Popover>
       {props.editDialog}
     </>
-  )
-}
+  );
+};
 
-export default CommonTable
+export default CommonTable;

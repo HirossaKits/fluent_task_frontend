@@ -56,6 +56,8 @@ export interface USER_PROFILE {
   last_name: string;
   avatar_img: string;
   comment: string;
+  is_premium: boolean;
+  is_admin: boolean;
 }
 
 export interface CRED {

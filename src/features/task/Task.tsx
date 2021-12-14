@@ -1,11 +1,10 @@
-import React, { useState, useRef } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { css } from '@emotion/react'
-import { selectTasks } from './taskSlice'
-import CommonTable from '../../components/CommonTable'
-import TaskDialog from './TaskDialog'
-import { setEditTaskOpen } from './taskSlice'
-import { COLUMN_INFO } from '../types'
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectTasks } from './taskSlice';
+import CommonTable from '../../components/CommonTable';
+import TaskDialog from './TaskDialog';
+import { setEditTaskOpen } from './taskSlice';
+import { COLUMN_INFO } from '../types';
 
 const columnInfo: COLUMN_INFO[] = [
   { name: 'task_name', label: 'タスク名', type: 'string', width: '13%' },
@@ -31,14 +30,14 @@ const columnInfo: COLUMN_INFO[] = [
   },
   { name: 'assigned_name', label: '担当', type: 'string', width: '10%' },
   { name: 'description', label: '備考', type: 'string', width: '15%' },
-]
+];
 
 const Task = () => {
-  const dispatch = useDispatch()
-  const tasks = useSelector(selectTasks)
+  const dispatch = useDispatch();
+  const tasks = useSelector(selectTasks);
   const hendleEditClick = () => {
-    dispatch(setEditTaskOpen(true))
-  }
+    dispatch(setEditTaskOpen(true));
+  };
 
   return (
     <CommonTable
@@ -48,7 +47,7 @@ const Task = () => {
       editDialog={<TaskDialog />}
       handleEditClick={hendleEditClick}
     />
-  )
-}
+  );
+};
 
-export default Task
+export default Task;

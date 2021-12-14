@@ -1,46 +1,43 @@
-import React from "react";
-import { css } from "@emotion/react";
-import { useTheme } from "@mui/material/styles";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import Avatar from "@mui/material/Avatar";
-import Typography from "@mui/material/Typography";
-import Popover from "@mui/material/Popover";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import SendIcon from "@mui/icons-material/Send";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
-import { dummyUsers } from "../../DummyData";
-import { USER_PROFILE } from "../types";
+import React from 'react';
+import { css } from '@emotion/react';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
+import { useTheme } from '@mui/material/styles';
+import SendIcon from '@mui/icons-material/Send';
+import { dummyUsers } from '../../DummyData';
+import { USER_PROFILE } from '../types';
+import LongUserCard from './LongUserCard';
+import CommonTooltip from '../../components/CommonTooltip';
+import GppGoodIcon from '@mui/icons-material/GppGood';
+import GppBadIcon from '@mui/icons-material/GppBad';
+import SettingsIcon from '@mui/icons-material/Settings';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import GroupRemoveIcon from '@mui/icons-material/GroupRemove';
+import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 
 const Org = () => {
   const theme = useTheme();
-
-  const [focus, setFocus] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const handleOnFocus = () => {
-    setFocus(true);
-  };
-  const handleOnBlur = () => {
-    setFocus(false);
-  };
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   const styles = {
     invite: css`
       width: 100%;
       display: flex;
       align-content: center;
       justify-content: center;
+    `,
+    buttonArea: css`
+      width: 100%;
+      margin: 10px 0;
+      display: flex;
+      align-content: center;
+      justify-content: flex-start;
+    `,
+    button: css`
+      padding: 10px;
+      margin: 5px 20px;
+      color: ${theme.palette.primary.main};
     `,
     textfield: css`
       width: 17ch;
@@ -60,45 +57,21 @@ const Org = () => {
       height: 90vh;
       margin-top: ${theme.spacing(1)};
     `,
-    card: css`
-      display: flex;
-      flex-direction: column;
-      width: 210px;
-      height: 130px;
-      margin: 9px 20px;
-      position: relative;
-    `,
-    dot: css`
-      position: absolute;
-      top: 0px;
-      right: 5px;
-      z-index: 800;
-      color: ${theme.palette.divider};
-    `,
-    avatar: css`
-      width: 80px;
-      height: 80px;
-      margin-top: 10px;
-      margin-left: 10px;
-      font-size: 36px;
-    `,
-    name: css`
-      margin-top: 10px;
-      display: flex;
-      flex-grow: 1;
-      flex-direction: column;
-      justify-content: center;
-    `,
-    comment: css`
-      margin-top: 9px;
-      margin-left: 18px;
-      margin-right: 18px;
-    `,
   };
+
+  const [focus, setFocus] = React.useState(false);
+
+  const handleOnFocus = () => {
+    setFocus(true);
+  };
+  const handleOnBlur = () => {
+    setFocus(false);
+  };
+
   return (
     <>
       <Box css={styles.invite}>
-        <TextField
+        {/* <TextField
           css={styles.textfield}
           variant='standard'
           label='ユーザーを招待'
@@ -118,56 +91,44 @@ const Org = () => {
           }}
           onFocus={handleOnFocus}
           onBlur={handleOnBlur}
-        />
+        /> */}
       </Box>
+
+      <Box css={styles.buttonArea}>
+        {/* <CommonTooltip title='組織の設定'>
+          <IconButton>
+            <SettingsIcon sx={{ fontSize: 24 }} />
+          </IconButton>
+        </CommonTooltip>
+        <CommonTooltip title='ユーザーを招待'>
+          <IconButton>
+            <GroupAddIcon sx={{ fontSize: 24 }} />
+          </IconButton>
+        </CommonTooltip> */}
+        {/* <CommonTooltip title='組織を脱退'>
+          <IconButton>
+            <DirectionsRunIcon sx={{ fontSize: 24 }} />
+          </IconButton>
+        </CommonTooltip> */}
+        <Button
+          startIcon={<SettingsIcon sx={{ marginBottom: '1px' }} />}
+          css={styles.button}
+        >
+          組織の設定
+        </Button>
+        <Button
+          startIcon={<GroupAddIcon sx={{ marginBottom: '1px' }} />}
+          css={styles.button}
+        >
+          ユーザーを招待
+        </Button>
+      </Box>
+
       <Box css={styles.wrap}>
         {dummyUsers.map((user: USER_PROFILE) => (
-          <Card css={styles.card}>
-            <IconButton css={styles.dot} onClick={handleClick}>
-              <MoreHorizIcon fontSize='small' />
-            </IconButton>
-            <Box sx={{ display: "flex" }}>
-              {user.avatar_img ? (
-                <Avatar css={styles.avatar} src={user.avatar_img} />
-              ) : (
-                <Avatar css={styles.avatar}>
-                  {user.last_name.slice(0, 1).toUpperCase() +
-                    user.first_name.slice(0, 1).toUpperCase()}
-                </Avatar>
-              )}
-              <Box css={styles.name}>
-                <Typography variant='h5' component='div'>
-                  {user.last_name}
-                </Typography>
-                <Typography variant='h5' component='div'>
-                  {user.first_name}
-                </Typography>
-              </Box>
-            </Box>
-            <Box css={styles.comment}>
-              <Typography noWrap variant='body2' component='div'>
-                {`${user.comment}`}
-              </Typography>
-            </Box>
-          </Card>
+          <LongUserCard user={user} />
         ))}
       </Box>
-      <Popover
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-      >
-        <MenuItem>
-          <ListItemIcon>
-            <PersonRemoveIcon fontSize='small' />
-          </ListItemIcon>
-          <ListItemText>ユーザーを削除</ListItemText>
-        </MenuItem>
-      </Popover>
     </>
   );
 };

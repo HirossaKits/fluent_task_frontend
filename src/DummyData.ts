@@ -7,6 +7,8 @@ export const dummyUsers: USER_PROFILE[] = [
     last_name: "Kitsuka",
     avatar_img: "",
     comment: "Almost human",
+    is_premium: true,
+    is_admin: true,
   },
   {
     user_id: "test2",
@@ -14,6 +16,8 @@ export const dummyUsers: USER_PROFILE[] = [
     last_name: "木塚",
     avatar_img: "",
     comment: "Almost human",
+    is_premium: false,
+    is_admin: true,
   },
   {
     user_id: "test2",
@@ -21,6 +25,8 @@ export const dummyUsers: USER_PROFILE[] = [
     last_name: "Kitsuka",
     avatar_img: "https://picsum.photos/200",
     comment: "I'm Almost human. I will be human someday. Cause I'm going my best effort.",
+    is_premium: false,
+    is_admin: false,
   },
   {
     user_id: "test2",
@@ -28,6 +34,8 @@ export const dummyUsers: USER_PROFILE[] = [
     last_name: "Kitsuka",
     avatar_img: "https://picsum.photos/200",
     comment: "Almost human",
+    is_premium: false,
+    is_admin: false,
   },
   {
     user_id: "test2",
@@ -35,6 +43,8 @@ export const dummyUsers: USER_PROFILE[] = [
     last_name: "Kitsuka",
     avatar_img: "https://picsum.photos/200",
     comment: "Almost human",
+    is_premium: false,
+    is_admin: false,
   },
   {
     user_id: "test2",
@@ -42,6 +52,8 @@ export const dummyUsers: USER_PROFILE[] = [
     last_name: "Kitsuka",
     avatar_img: "https://picsum.photos/200",
     comment: "Almost human",
+    is_premium: false,
+    is_admin: false,
   },
   {
     user_id: "test3",
@@ -49,6 +61,8 @@ export const dummyUsers: USER_PROFILE[] = [
     last_name: "Kitsuka",
     avatar_img: "https://picsum.photos/200",
     comment: "Almost human",
+    is_premium: false,
+    is_admin: false,
   },
   {
     user_id: "0909090",
@@ -56,6 +70,8 @@ export const dummyUsers: USER_PROFILE[] = [
     last_name: "Kitsuka",
     avatar_img: "https://picsum.photos/200",
     comment: "Almost human",
+    is_premium: false,
+    is_admin: false,
   },
 ];
 
