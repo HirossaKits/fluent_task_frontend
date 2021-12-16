@@ -124,7 +124,7 @@ const LongUserCard = (props: Props) => {
             </CommonTooltip>
           )}
           {props.user.is_admin && (
-            <CommonTooltip title='組織管理者'>
+            <CommonTooltip title='グループ管理者'>
               <AdminPanelSettingsIcon css={styles.iconAdmin} />
             </CommonTooltip>
           )}

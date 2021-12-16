@@ -98,6 +98,7 @@ export type MAIN_COMPONENT_NAME = "Org" | "Proj" | "List" | "Kanban" | "Calendar
 
 
 /*Project*/
+
 type USER = {
   user_id: string;
   user_name: string;
@@ -184,8 +185,24 @@ export interface TARGET {
 
 /*calendarSlice*/
 
-export interface CALENDAR {
+export interface CALENDAR_YEAR_MONTH {
   year: number;
   month: number;
   year_month: string;
+}
+
+export interface CALENDAR_BAR {
+  task_name: string;
+  startDate: Date;
+  endDate: Date;
+  dateSpan: number;
+  top: string;
+  left: string;
+  width: string;
+  layer: number;
+  visible: boolean;
+  divided: boolean;
+  startEdge: boolean;
+  endEdge: boolean;
+  other: boolean;
 }
