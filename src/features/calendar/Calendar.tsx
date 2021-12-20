@@ -10,6 +10,7 @@ import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
 import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
@@ -19,10 +20,12 @@ import Typography from '@mui/material/Typography';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import * as dateHandler from '../../date/dateHandler';
-import { selectCalendar, setCalendar } from './calendarSlice';
+import { selectYearMonth, setYearMonth } from './calendarSlice';
 import { selectTasks } from '../task/taskSlice';
 import { fillDigitsByZero } from '../../date/dateHandler';
 import { CALENDAR_YEAR_MONTH } from '../types';
+import { useCalendarFactory } from '../../hooks/calendar';
+import { demoData } from '../../DummyData';
 
 const week = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -35,65 +38,25 @@ export interface DATE_CONTEXT {
   isToday: boolean;
 }
 
-interface TASK_OBJECT {
-  task_name: string;
-  startDate: Date;
-  endDate: Date;
-  dateSpan: number;
-  top: string;
-  left: string;
-  width: string;
-  layer: number;
-  visible: boolean;
-  divided: boolean;
-  startEdge: boolean;
-  endEdge: boolean;
-  other: boolean;
-}
-
-const initialCalendarState: CALENDAR_YEAR_MONTH = {
-  year: new Date().getFullYear(),
-  month: new Date().getMonth() + 1,
-  year_month: `${new Date().getFullYear()}-${fillDigitsByZero(
-    new Date().getMonth() + 1,
-    2
-  )}`,
-};
-
-// const createDates = (year: number, month: number): DATE_CONTEXT[] => {
-//   let dates: DATE_CONTEXT[] = [];
-//   let day = dateHandler.getFirstDateOfMonth(year, month).getDay();
-
-//   for (let i = 0; i < 35; i++) {
-//     const dt = new Date(year, month - 1, i - day + 1);
-//     const dc: DATE_CONTEXT = {
-//       index: i,
-//       dateStr: dateHandler.parseString(dt),
-//       year: dt.getFullYear(),
-//       month: dt.getMonth() + 1,
-//       date: dt.getDate(),
-//       isToday: dt.valueOf() === dateHandler.getToday().valueOf(),
-//     };
-//     dates.push(dc);
-//   }
-//   return dates;
-// };
-
 const Calendar = () => {
-  ////////////////////////////ToDO make bar design object
-
   const theme = useTheme();
-  const roundEdge = 6;
+
+  const calendarBarStyle = {
+    topPosition: 32,
+    height: 22,
+    span: 4,
+    roundEdge: 6,
+  };
+
   const styles = {
     test: css`
       background-color: transparent;
     `,
     header: css`
       width: 86%;
-      margin-top: 6px;
     `,
     select: css`
-      margin-top: 5px;
+      margin-top: 10px;
       width: 120px;
     `,
     gridList: css`
@@ -139,7 +102,7 @@ const Calendar = () => {
     `,
     texttask: css`
       display: block;
-      height: ${calendarBarHeight}px;
+      height: ${calendarBarStyle.height}px;
       padding-left: 10px;
       color: white;
       background: ${theme.palette.primary.main};
@@ -150,16 +113,26 @@ const Calendar = () => {
       fontsize: small;
       color: action;
     `,
+    remarks: css`
+      padding-bottom: 2px;
+    `,
   };
 
-  const calendar = useSelector(selectCalendar);
-  const tasks = useSelector(selectTasks);
   const dispatch = useDispatch();
+  const yearMonth = useSelector(selectYearMonth);
+  const tasks = useSelector(selectTasks);
+
+  const calendarFactory = useCalendarFactory();
+  const [calendarDates, calendarBars] = calendarFactory(
+    yearMonth,
+    demoData,
+    calendarBarStyle
+  );
 
   const handleSelectChange = (event: any, newItem: string) => {
     if (!newItem) return;
     dispatch(
-      setCalendar({
+      setYearMonth({
         year: parseInt(newItem.slice(0, 4)),
         month: parseInt(newItem.slice(5, 7)),
         year_month: newItem,
@@ -169,21 +142,21 @@ const Calendar = () => {
 
   // Button
   const incrementMonth = () => {
-    if (calendar.month === 12) {
+    if (yearMonth.month === 12) {
       dispatch(
-        setCalendar({
-          year: calendar.year + 1,
+        setYearMonth({
+          year: yearMonth.year + 1,
           month: 1,
-          year_month: `${calendar.year + 1}-01`,
+          year_month: `${yearMonth.year + 1}-01`,
         })
       );
     } else {
       dispatch(
-        setCalendar({
-          year: calendar.year,
-          month: calendar.month + 1,
-          year_month: `${calendar.year}-${fillDigitsByZero(
-            calendar.month + 1,
+        setYearMonth({
+          year: yearMonth.year,
+          month: yearMonth.month + 1,
+          year_month: `${yearMonth.year}-${fillDigitsByZero(
+            yearMonth.month + 1,
             2
           )}`,
         })
@@ -192,21 +165,21 @@ const Calendar = () => {
   };
 
   const decrementMonth = () => {
-    if (calendar.month === 1) {
+    if (yearMonth.month === 1) {
       dispatch(
-        setCalendar({
-          year: calendar.year - 1,
+        setYearMonth({
+          year: yearMonth.year - 1,
           month: 12,
-          year_month: `${calendar.year - 1}-12`,
+          year_month: `${yearMonth.year - 1}-12`,
         })
       );
     } else {
       dispatch(
-        setCalendar({
-          year: calendar.year,
-          month: calendar.month - 1,
-          year_month: `${calendar.year}-${fillDigitsByZero(
-            calendar.month - 1,
+        setYearMonth({
+          year: yearMonth.year,
+          month: yearMonth.month - 1,
+          year_month: `${yearMonth.year}-${fillDigitsByZero(
+            yearMonth.month - 1,
             2
           )}`,
         })
@@ -214,214 +187,16 @@ const Calendar = () => {
     }
   };
 
-  const yearMonthOptions = () =>
-    Array(24)
-      .fill('')
-      .map((_, index, array) => {
-        const ym = `${
-          calendar.year -
-          ~~(array.length / 2 / 12) +
-          ~~((calendar.month + index - 1) / 12)
-        }-${fillDigitsByZero(((calendar.month + index - 1) % 12) + 1, 2)}`;
-        return ym;
-      });
-
-  // const incrementlayerFactory = () => {
-  //   let xEndDate: Date;
-  //   let xLayer = 0;
-  //   const incrementlayer = (startDate: Date, endDate: Date) => {
-  //     let layer = 0;
-  //     if (xEndDate && startDate <= xEndDate) {
-  //       layer = xLayer + 1;
-  //     }
-  //     xEndDate = endDate;
-  //     xLayer = layer;
-  //     return layer;
-  //   };
-  //   return incrementlayer;
-  // };
-
-  // const initTaskObjects = (): TASK_OBJECT[] => {
-  //   const initialTaskObjects = tasks.map((taskObj, index) => {
-  //     // startDate
-  //     const startDate = dateHandler.parseDate(taskObj.scheduled_startdate);
-  //     // endDate
-  //     const endDate = dateHandler.parseDate(taskObj.scheduled_enddate);
-
-  //     return {
-  //       task_id: taskObj.task_id,
-  //       task_name: taskObj.task_name,
-  //       startDate: startDate,
-  //       endDate: endDate,
-  //       dateSpan: 0,
-  //       top: '',
-  //       left: '',
-  //       width: '',
-  //       layer: 0,
-  //       visible: true,
-  //       divided: false,
-  //       startEdge: true,
-  //       endEdge: true,
-  //       other: false,
-  //     };
-  //   });
-
-  //   // 開始日によってソート
-  //   initialTaskObjects.sort((a, b) => {
-  //     if (a.startDate.valueOf() < b.startDate.valueOf()) {
-  //       return -1;
-  //     } else {
-  //       return 1;
-  //     }
-  //   });
-
-  //   return initialTaskObjects;
-  // };
-
-  // const sortTaskObjects = (ts: TASK_OBJECT[]): TASK_OBJECT[] => {
-  //   const incrementlayer = incrementlayerFactory();
-
-  //   const sortedTasks = ts.map((taskObj, index) => {
-  //     // layer
-  //     const layer = incrementlayer(taskObj.startDate, taskObj.endDate);
-  //     // visible
-  //     const visible = layer < 5;
-  //     return { ...taskObj, layer: layer, visible: visible };
-  //   });
-
-  //   return sortedTasks;
-  // };
-
-  // const shapeTaskObjects = (ts: TASK_OBJECT[]): TASK_OBJECT[] => {
-  //   let shapedTasks: TASK_OBJECT[] = [];
-
-  //   for (let tIdx = 0; tIdx < ts.length; tIdx++) {
-  //     let firstDate = dateHandler.getFirstDateOfCalendar(
-  //       calendar.year,
-  //       calendar.month
-  //     );
-  //     let lastDate = dateHandler.getLastDateOfCalendar(
-  //       calendar.year,
-  //       calendar.month
-  //     );
-
-  //     // カレンダーに含まれないタスクを除外
-  //     if (
-  //       ts[tIdx].endDate.getTime() < firstDate.getTime() ||
-  //       lastDate.getTime() < ts[tIdx].startDate.getTime()
-  //     ) {
-  //       continue;
-  //     }
-
-  //     // カレンダーに含まれない日付をカット
-  //     if (ts[tIdx].startDate.getTime() < firstDate.getTime()) {
-  //       ts[tIdx].startDate = firstDate;
-  //       ts[tIdx].startEdge = false;
-  //     }
-  //     if (lastDate.getTime() < ts[tIdx].endDate.getTime()) {
-  //       ts[tIdx].endDate = lastDate;
-  //       ts[tIdx].endEdge = false;
-  //     }
-
-  //     // dateSpan
-  //     ts[tIdx].dateSpan =
-  //       (ts[tIdx].endDate.valueOf() - ts[tIdx].startDate.valueOf()) / 86400000 +
-  //       1;
-
-  //     // 週を跨ぐタスクを分割
-  //     let dayStart = ts[tIdx].startDate.getDay();
-  //     let divCount = Math.ceil((dayStart + ts[tIdx].dateSpan) / 7);
-
-  //     if (divCount === 1) {
-  //       shapedTasks.push(ts[tIdx]);
-  //     } else {
-  //       for (let dIdx = 0; dIdx < divCount; dIdx++) {
-  //         if (dIdx === 0) {
-  //           let newEndDate = new Date(ts[tIdx].startDate.getTime());
-  //           newEndDate.setDate(ts[tIdx].startDate.getDate() + 6 - dayStart);
-  //           shapedTasks.push({
-  //             ...ts[tIdx],
-  //             endDate: newEndDate,
-  //             endEdge: false,
-  //           });
-  //         } else if (dIdx !== divCount - 1) {
-  //           let newStartDate = new Date(ts[tIdx].startDate.getTime());
-  //           let newEndDate = new Date(ts[tIdx].endDate.getTime());
-  //           newStartDate.setDate(
-  //             ts[tIdx].startDate.getDate() + 7 * dIdx - dayStart
-  //           );
-
-  //           newEndDate.setDate(newStartDate.getDate() + 6);
-
-  //           shapedTasks.push({
-  //             ...ts[tIdx],
-  //             startDate: newStartDate,
-  //             endDate: newEndDate,
-  //             startEdge: false,
-  //             endEdge: false,
-  //           });
-  //         } else if (dIdx === divCount - 1) {
-  //           let newStartDate = new Date(ts[tIdx].startDate.getTime());
-  //           newStartDate.setDate(
-  //             ts[tIdx].startDate.getDate() + 7 * dIdx - dayStart
-  //           );
-
-  //           shapedTasks.push({
-  //             ...ts[tIdx],
-  //             startDate: newStartDate,
-  //             startEdge: false,
-  //           });
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return shapedTasks;
-  // };
-
-  // const setPositionTaskObjects = (ts: TASK_OBJECT[]): TASK_OBJECT[] => {
-  //   let positionedTaskObjects = ts.map((taskObject) => {
-  //     // span
-  //     let span =
-  //       (taskObject.endDate.valueOf() - taskObject.startDate.valueOf()) /
-  //         86400000 +
-  //       1;
-
-  //     // width
-  //     let width = Math.trunc((1000 * span) / 7) / 10;
-
-  //     // top
-  //     let row: number;
-  //     let month = taskObject.startDate.getMonth() + 1;
-  //     if (month < calendar.month) {
-  //       row = 0;
-  //     } else if (month > calendar.month) {
-  //       row = 4;
-  //     } else {
-  //       row = Math.ceil(
-  //         (new Date(calendar.year, calendar.month - 1, 1).getDay() +
-  //           taskObject.startDate.getDate()) /
-  //           7 -
-  //           1
-  //       );
-  //     }
-  //     let top =
-  //       row * 160 +
-  //       calendarBarTopPosition +
-  //       taskObject.layer * (calendarBarHeight + calendarBarSpan);
-
-  //     // left
-  //     let left = (100 / 7) * taskObject.startDate.getDay();
-
-  //     return {
-  //       ...taskObject,
-  //       width: `${width}%`,
-  //       top: `${top}px`,
-  //       left: `${left}%`,
-  //     };
-  //   });
-
-  //   return positionedTaskObjects;
-  // };
+  const yearMonthOptions = (optionCount: number): string[] =>
+    [...Array(optionCount)].map((_, index) => {
+      const ym = `${
+        yearMonth.year + ~~((yearMonth.month - optionCount / 2 + index) / 12)
+      }-${fillDigitsByZero(
+        ((yearMonth.month - Math.ceil(optionCount / 2) + index) % 12) + 1,
+        2
+      )}`;
+      return ym;
+    });
 
   return (
     <Grid
@@ -443,8 +218,8 @@ const Calendar = () => {
           <Autocomplete
             css={styles.select}
             disableClearable
-            options={yearMonthOptions()}
-            value={calendar.year_month}
+            options={yearMonthOptions(12)}
+            value={yearMonth.year_month}
             onChange={(event, newItem) => handleSelectChange(event, newItem)}
             renderInput={(params) => (
               <TextField {...params} variant='standard' />
@@ -461,59 +236,68 @@ const Calendar = () => {
         </Grid>
       </Grid>
       <ImageList css={styles.gridList} rowHeight={160} cols={7} gap={0}>
-        {createDates(calendar.year, calendar.month).map((dateCon, i) => (
+        {calendarDates.map((ctx, idx) => (
           <ImageListItem
-            key={dateCon.dateStr}
+            key={idx}
             css={
-              dateCon.month === calendar.month
+              ctx.month === yearMonth.month
                 ? styles.gridTile
                 : styles.gridTileGray
             }
           >
-            <Grid
-              xs={10}
-              css={styles.headerdate}
-              id={dateCon.dateStr}
-              container
-              direction='row'
-              justifyContent='flex-start'
-              alignItems='flex-start'
-              // onClick={handleDateHeaderClick}
-            >
-              <Grid item>
-                <Typography css={dateCon.isToday && styles.texttoday}>
-                  {dateCon.date === 1
-                    ? `${dateCon.month}月${dateCon.date}日`
-                    : dateCon.date}
-                </Typography>
+            <Stack height='100%' justifyContent='space-between'>
+              <Grid
+                xs={10}
+                css={styles.headerdate}
+                id={ctx.dateStr}
+                item
+                container
+                direction='row'
+                justifyContent='flex-start'
+                alignItems='flex-start'
+                // onClick={handleDateHeaderClick}
+              >
+                <Grid item>
+                  <Typography css={ctx.isToday && styles.texttoday}>
+                    {ctx.date === 1 ? `${ctx.month}月${ctx.date}日` : ctx.date}
+                  </Typography>
+                </Grid>
+                <Grid item>
+                  <Typography className='plus'>+</Typography>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Typography className='plus'>+</Typography>
-              </Grid>
-            </Grid>
+              {ctx.layer && Math.max(...ctx.layer) >= 4 && (
+                <Grid css={styles.remarks}>
+                  <Typography>{`その他${
+                    Math.max(...ctx.layer) - 3
+                  }件`}</Typography>
+                </Grid>
+              )}
+            </Stack>
           </ImageListItem>
         ))}
-        {setPositionTaskObjects(
-          shapeTaskObjects(sortTaskObjects(initTaskObjects()))
-        ).map((taskObject) => (
-          <Typography
-            css={css`
-              ${styles.texttask};
-              top: ${taskObject.top};
-              left: ${taskObject.left};
-              width: ${taskObject.width};
-              border-radius: ${!taskObject.startEdge && !taskObject.endEdge
-                ? '0px'
-                : taskObject.startEdge && !taskObject.endEdge
-                ? `${roundEdge}px 0px 0px ${roundEdge}px`
-                : !taskObject.startEdge && taskObject.endEdge
-                ? `0px ${roundEdge}px ${roundEdge}px 0px`
-                : `${roundEdge}px`};
-            `}
-          >
-            {taskObject.task_name}
-          </Typography>
-        ))}
+        {calendarBars.map(
+          (bar) =>
+            bar.visible && (
+              <Typography
+                css={css`
+                  ${styles.texttask};
+                  top: ${bar.top};
+                  left: ${bar.left};
+                  width: ${bar.width};
+                  border-radius: ${!bar.startEdge && !bar.endEdge
+                    ? '0px'
+                    : bar.startEdge && !bar.endEdge
+                    ? `${calendarBarStyle.roundEdge}px 0px 0px ${calendarBarStyle.roundEdge}px`
+                    : !bar.startEdge && bar.endEdge
+                    ? `0px ${calendarBarStyle.roundEdge}px ${calendarBarStyle.roundEdge}px 0px`
+                    : `${calendarBarStyle.roundEdge}px`};
+                `}
+              >
+                {bar.task_name}
+              </Typography>
+            )
+        )}
       </ImageList>
     </Grid>
   );

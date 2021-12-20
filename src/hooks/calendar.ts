@@ -1,41 +1,35 @@
 import { useCallback } from "react"
-import { TASK, CALENDAR_BAR, CALENDAR_YEAR_MONTH, CALENDAR_DATE } from "../features/types";
+import { TASK, CALENDAR_BAR, CALENDAR_YEAR_MONTH, CALENDAR_DATE, CALENDAR_BAR_STYLE } from "../features/types";
 import * as dateHandler from '../date/dateHandler';
-import { isYearAndMonthViews } from "@mui/lab/DatePicker/shared";
-import { Bar } from "react-chartjs-2";
 
-export const useCalendarBar = () => {
-  return useCallback((yearMonth: CALENDAR_YEAR_MONTH, tasks: TASK[]) => {
+export const useCalendarFactory = () => {
+  return useCallback((yearMonth: CALENDAR_YEAR_MONTH, tasks: TASK[], barStyle: CALENDAR_BAR_STYLE): [CALENDAR_DATE[], CALENDAR_BAR[]] => {
 
-    // Create calendar date 
-    const createCalendarDates = (year: number, month: number): CALENDAR_DATE[] => {
-      let dates: CALENDAR_DATE[] = [];
-      let day = dateHandler.getFirstDateOfMonth(year, month).getDay();
+    const firstDateOfCalendar = dateHandler.getFirstDateOfCalendar(yearMonth.year, yearMonth.month)
+    const lastDateOfCalendar = dateHandler.getLastDateOfCalendar(yearMonth.year, yearMonth.month)
 
-      for (let i = 0; i < 35; i++) {
-        const dt = new Date(year, month - 1, i - day + 1);
-        const dc: CALENDAR_DATE = {
-          index: i,
-          dateStr: dateHandler.parseString(dt),
-          year: dt.getFullYear(),
-          month: dt.getMonth() + 1,
-          date: dt.getDate(),
-          isToday: dt.valueOf() === dateHandler.getToday().valueOf(),
-          layer: 0
-        };
-        dates.push(dc);
+    const firstDayOfCalendar = dateHandler.getFirstDayOfCalendar(yearMonth.year, yearMonth.month)
+
+    // カレンダーの日付
+    const calendarDates: CALENDAR_DATE[] = [...Array(35)].map((_, idx) => {
+      const dt = new Date(yearMonth.year, yearMonth.month - 1, idx - firstDayOfCalendar + 1);
+      return {
+        index: idx,
+        dateStr: dateHandler.parseString(dt),
+        year: dt.getFullYear(),
+        month: dt.getMonth() + 1,
+        date: dt.getDate(),
+        isToday: dt.getTime() === dateHandler.getToday().getTime(),
+        layer: []
       }
-      return dates;
-    };
+    })
 
-    const calendarDates = createCalendarDates(yearMonth.year, yearMonth.month);
-
-    // Create calendar bar 
+    // カレンダーのバー 
     const calendarBars: CALENDAR_BAR[] = tasks.map((task) => {
 
       const startDate = dateHandler.parseDate(task.scheduled_startdate);
       const endDate = dateHandler.parseDate(task.scheduled_enddate);
-      const dateSpan = (endDate.valueOf() - startDate.valueOf()) / 86400000 + 1
+      const dateSpan = (endDate.getTime() - startDate.getTime()) / 86400000 + 1
 
       return {
         task_id: task.task_id,
@@ -43,6 +37,8 @@ export const useCalendarBar = () => {
         startDate: startDate,
         endDate: endDate,
         dateSpan: dateSpan,
+        startDateNum: startDate.getDate(),
+        startDayNum: startDate.getDay(),
         top: '',
         left: '',
         width: '',
@@ -55,11 +51,11 @@ export const useCalendarBar = () => {
       };
     });
 
-    // Sort calendar by startDate
+    // 開始日と期間でソート
     calendarBars.sort((a, b) => {
 
-      const numA = a.startDate.valueOf()
-      const numB = b.startDate.valueOf()
+      const numA = a.startDate.getTime()
+      const numB = b.startDate.getTime()
 
       if (numA < numB) {
         return -1;
@@ -76,30 +72,54 @@ export const useCalendarBar = () => {
       }
     });
 
-    // Set layer on calendar date and calendar bar
-    const layeredCalendarBars: CALENDAR_BAR[] = calendarBars.map((bar, idx) => {
+    // カレンダーに表示されない日付を除外、期間を再設定
+    const trimedCalendarBars: CALENDAR_BAR[] = calendarBars.filter((bar) => (
+      !(bar.endDate.getTime() < firstDateOfCalendar.getTime() || lastDateOfCalendar.getTime() < bar.startDate.getTime())
+    )).map((bar) => {
+      if (bar.startDate.getTime() < firstDateOfCalendar.getTime()) {
+        bar.startDate = firstDateOfCalendar;
+        bar.startEdge = false;
+      }
+      if (lastDateOfCalendar.getTime() < bar.endDate.getTime()) {
+        bar.endDate = lastDateOfCalendar;
+        bar.endEdge = false;
+      }
+      console.log('bar.startDate', bar.startDate)
+      console.log('bar.endDate', bar.endDate)
+      bar.dateSpan =
+        (bar.endDate.getTime() - bar.startDate.getTime()) / 86400000 +
+        1;
+      return bar
+    })
 
-      let layer = 0;
-      const exBar = calendarBars[idx - 1]
+    console.log('trimedCalendarBars', trimedCalendarBars)
 
-      for (let i = 0; i <= exBar.layer; i++) {
-        layer = i
-        const comparisonBar = calendarBars[idx - exBar.layer - 1 + i]
-        if (comparisonBar.endDate < bar.startDate) {
+    // レイヤーを設定
+    const layeredCalendarBars: CALENDAR_BAR[] = trimedCalendarBars.map((bar, idx) => {
+
+      const startDateStr = dateHandler.parseString(bar.startDate)
+      const startIndex = calendarDates.find((date) => date.dateStr === startDateStr)?.index ?? 0
+      const layerArray = calendarDates[startIndex].layer
+      const maxLayer = layerArray ? Math.max(...layerArray) : 0;
+
+      let newlayer = 0;
+      for (let i = 0; i <= maxLayer + 1; i++) {
+        newlayer = i
+        if (!calendarDates[startIndex].layer.includes(i)) {
           break
         }
       }
 
-      // set layer on calendar date
-      const startDateStr = dateHandler.parseString(bar.startDate)
-      const startIndex = calendarDates.find((date) => date.dateStr === startDateStr)?.index
+      // バーのレイヤーを設定
       for (let i = 0; i < bar.dateSpan; i++) {
-        startIndex && calendarDates[startIndex + i].layer = layer;
+        if (startIndex !== undefined && startIndex + i < 35) {
+          calendarDates[startIndex + i].layer.push(newlayer);
+        }
       }
 
-      // Set layer on calendar bar
-      const visible = layer < 5;
-      return { ...bar, layer: layer, visible: visible };
+      // カレンダーの日付にもレイヤーの情報を保持
+      const visible = newlayer < 4;
+      return { ...bar, layer: newlayer, visible: visible };
     });
 
     const shapeCalendarBars = (bars: CALENDAR_BAR[]): CALENDAR_BAR[] => {
@@ -107,37 +127,6 @@ export const useCalendarBar = () => {
       let shapedTasks: CALENDAR_BAR[] = [];
 
       for (let i = 0; i < bars.length; i++) {
-        let firstDate = dateHandler.getFirstDateOfCalendar(
-          yearMonth.year,
-          yearMonth.month
-        );
-        let lastDate = dateHandler.getLastDateOfCalendar(
-          yearMonth.year,
-          yearMonth.month
-        );
-
-        // カレンダーに含まれないタスクを除外
-        if (
-          bars[i].endDate.getTime() < firstDate.getTime() ||
-          lastDate.getTime() < bars[i].startDate.getTime()
-        ) {
-          continue;
-        }
-
-        // カレンダーに含まれない日付をカット
-        if (bars[i].startDate.getTime() < firstDate.getTime()) {
-          bars[i].startDate = firstDate;
-          bars[i].startEdge = false;
-        }
-        if (lastDate.getTime() < bars[i].endDate.getTime()) {
-          bars[i].endDate = lastDate;
-          bars[i].endEdge = false;
-        }
-
-        // dateSpan
-        bars[i].dateSpan =
-          (bars[i].endDate.valueOf() - bars[i].startDate.valueOf()) / 86400000 +
-          1;
 
         // 週を跨ぐタスクを分割
         let dayStart = bars[i].startDate.getDay();
@@ -191,14 +180,10 @@ export const useCalendarBar = () => {
 
     const shapenedCalendarBars = shapeCalendarBars(layeredCalendarBars)
 
-    const calendarBarTopPosition = 32;
-    const calendarBarHeight = 22;
-    const calendarBarSpan = 4;
-
     const positionedCalendarBars = shapenedCalendarBars.map((taskObject) => {
       // span
       let span =
-        (taskObject.endDate.valueOf() - taskObject.startDate.valueOf()) /
+        (taskObject.endDate.getTime() - taskObject.startDate.getTime()) /
         86400000 +
         1;
 
@@ -222,8 +207,8 @@ export const useCalendarBar = () => {
       }
       let top =
         row * 160 +
-        calendarBarTopPosition +
-        taskObject.layer * (calendarBarHeight + calendarBarSpan);
+        barStyle.topPosition +
+        taskObject.layer * (barStyle.height + barStyle.span);
 
       // left
       let left = (100 / 7) * taskObject.startDate.getDay();

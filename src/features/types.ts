@@ -185,10 +185,24 @@ export interface TARGET {
 
 /*calendarSlice*/
 
+export interface CALENDAR_STATE {
+  yearMonth: CALENDAR_YEAR_MONTH
+}
+
 export interface CALENDAR_YEAR_MONTH {
   year: number;
   month: number;
   year_month: string;
+}
+
+export interface CALENDAR_DATE {
+  index: number;
+  dateStr: string;
+  year: number;
+  month: number;
+  date: number;
+  isToday: boolean;
+  layer: number[];
 }
 
 export interface CALENDAR_BAR {
@@ -205,4 +219,10 @@ export interface CALENDAR_BAR {
   startEdge: boolean;
   endEdge: boolean;
   other: boolean;
+}
+
+export interface CALENDAR_BAR_STYLE {
+  topPosition: number;
+  height: number;
+  span: number;
 }
