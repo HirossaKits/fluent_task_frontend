@@ -1,18 +1,18 @@
-import React from 'react'
-import { css } from '@emotion/react'
-import Stack from '@mui/material/Stack'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import Card from '@mui/material/Card'
-import List from '@mui/material/List'
-import ListSubheader from '@mui/material/ListSubheader'
-import ListItem from '@mui/material/ListItem'
-import Avatar from '@mui/material/Avatar'
-import ListItemAvatar from '@mui/material/ListItemAvatar'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemText from '@mui/material/ListItemText'
-import Divider from '@mui/material/Divider'
-import { Line, Doughnut } from 'react-chartjs-2'
+import React from 'react';
+import { css } from '@emotion/react';
+import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Card from '@mui/material/Card';
+import List from '@mui/material/List';
+import ListSubheader from '@mui/material/ListSubheader';
+import ListItem from '@mui/material/ListItem';
+import Avatar from '@mui/material/Avatar';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import { Line, Doughnut } from 'react-chartjs-2';
 
 const lineData = {
   labels: ['2021-11', '2021-12', '2021-01', '2021-02', '2021-03', '2021-03'],
@@ -26,7 +26,7 @@ const lineData = {
       fill: true,
     },
   ],
-}
+};
 
 const dataDoughnut = {
   labels: ['完了', '未完了'],
@@ -38,7 +38,7 @@ const dataDoughnut = {
       borderColor: ['rgba(75,192,192,1)', 'rgba(192,192,192,1)'],
     },
   ],
-}
+};
 
 const Project = () => {
   const styles = {
@@ -78,7 +78,7 @@ const Project = () => {
       margin-left: auto;
       margin-right: auto;
     `,
-  }
+  };
 
   return (
     <>
@@ -104,7 +104,6 @@ const Project = () => {
           </Typography>
 
           <Card css={styles.userCard}>
-            {/* <ListSubheader>プロジェクト管理者</ListSubheader> */}
             <Typography
               css={styles.listTitle}
               variant='subtitle1'
@@ -126,9 +125,7 @@ const Project = () => {
               ))}
             </List>
           </Card>
-
           <Card css={styles.userCard}>
-            {/* <ListSubheader>プロジェクト管理者</ListSubheader> */}
             <Typography
               css={styles.listTitle}
               variant='subtitle1'
@@ -166,7 +163,7 @@ const Project = () => {
         </Stack>
       </Stack>
     </>
-  )
-}
+  );
+};
 
-export default Project
+export default Project;

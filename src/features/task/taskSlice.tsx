@@ -1,11 +1,11 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
-import { TASK_STATE } from "../types";
-import { JWT } from "../types";
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { RootState } from '../../app/store';
+import { TASK_STATE } from '../types';
+import { JWT } from '../types';
 
 // Demo
-import { demoData } from "../../DummyData";
-import axios from "axios";
+import { demoData } from '../../DummyData';
+import axios from 'axios';
 
 const initialState: TASK_STATE = {
   tasks: demoData,
@@ -13,49 +13,49 @@ const initialState: TASK_STATE = {
   filterTaskOpen: false,
   filterTask: [
     {
-      columnName: "task_name",
-      type: "string",
-      operator: "=",
-      value: "",
+      columnName: 'task_name',
+      type: 'string',
+      operator: '=',
+      value: '',
     },
   ],
   editedTask: {
-    task_id: "",
-    task_name: "",
-    project_id: "",
-    project_name: "",
-    category_id: "",
-    category_name: "",
-    assigned_id: "",
-    assigned_name: "",
-    author_id: "",
-    author_name: "",
-    status: "Not started",
-    description: "",
+    task_id: '',
+    task_name: '',
+    project_id: '',
+    project_name: '',
+    category_id: '',
+    category_name: '',
+    assigned_id: '',
+    assigned_name: '',
+    author_id: '',
+    author_name: '',
+    status: 'Not started',
+    description: '',
     estimate_manhour: null,
     actual_manhour: null,
-    scheduled_startdate: "",
-    scheduled_enddate: "",
+    scheduled_startdate: '',
+    scheduled_enddate: '',
     actual_startdate: null,
     actual_enddate: null,
   },
   selectedTask: {
-    task_id: "",
-    task_name: "",
-    project_id: "",
-    project_name: "",
-    category_id: "",
-    category_name: "",
-    assigned_id: "",
-    assigned_name: "",
-    author_id: "",
-    author_name: "",
-    status: "Not started",
-    description: "",
+    task_id: '',
+    task_name: '',
+    project_id: '',
+    project_name: '',
+    category_id: '',
+    category_name: '',
+    assigned_id: '',
+    assigned_name: '',
+    author_id: '',
+    author_name: '',
+    status: 'Not started',
+    description: '',
     estimate_manhour: null,
     actual_manhour: null,
-    scheduled_startdate: "",
-    scheduled_enddate: "",
+    scheduled_startdate: '',
+    scheduled_enddate: '',
     actual_startdate: null,
     actual_enddate: null,
   },
@@ -63,14 +63,14 @@ const initialState: TASK_STATE = {
 
 // タスクの登録
 export const fetchAsyncRegister = createAsyncThunk(
-  "task/register",
+  'task/register',
   async (editedTask) => {
     const res = await axios.post<JWT>(
       `${process.env.REACT_APP_API_URL}/api/task/create/`,
       editedTask,
       {
         headers: {
-          "Content-type": "application/json",
+          'Content-type': 'application/json',
         },
       }
     );
@@ -79,7 +79,7 @@ export const fetchAsyncRegister = createAsyncThunk(
 );
 
 export const taskSlice = createSlice({
-  name: "task",
+  name: 'task',
   initialState: initialState,
   reducers: {
     setEditTaskOpen(state, action) {
@@ -93,6 +93,9 @@ export const taskSlice = createSlice({
     },
     setEditedTask(state, action) {
       state.editedTask = action.payload;
+    },
+    setTasksStatus(state, action) {
+      state.tasks = action.payload;
     },
     // initEditedTask(state, action) {
     //   if (state.selectedTask.id !== "") {

@@ -1,21 +1,21 @@
-import React from "react";
-import { css } from "@emotion/react";
-import { useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import Popover from "@mui/material/Popover";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import EditIcon from "@mui/icons-material/Edit";
-import CircleIcon from "@mui/icons-material/Circle";
-import { demoData } from "../../DummyData";
-import { TASK } from "../types";
-import KanbanColumn from "./KanbanColumn";
+import React from 'react';
+import { css } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import Popover from '@mui/material/Popover';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import EditIcon from '@mui/icons-material/Edit';
+import CircleIcon from '@mui/icons-material/Circle';
+import { demoData } from '../../DummyData';
+import { TASK } from '../types';
+import KanbanColumn from './KanbanColumn';
 
 const Kanban = () => {
   const theme = useTheme();
@@ -44,20 +44,7 @@ const Kanban = () => {
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 4px 12px 3px 0px;
-      box-shadow: 0px 0px 12px -5px #777777;
-    `,
-    iconBeforStart: css`
-      color: ${theme.palette.warning.light};
-      margin: 0px 14px 2px 0px;
-    `,
-    iconOnGoing: css`
-      color: ${theme.palette.info.light};
-      margin: 0px 14px 2px 0px;
-    `,
-    iconDone: css`
-      color: ${theme.palette.success.light};
-      margin: 0px 14px 2px 0px;
+      padding: 6px 36px 4px 0px;
     `,
     divider: css`
       margin-bottom: ${theme.spacing(1)};
@@ -93,77 +80,37 @@ const Kanban = () => {
       flex-direction: column;
       justify-content: center;
     `,
+    userCard: css`
+      width: 320px;
+      text-align: left;
+    `,
+    listTitle: css`
+      margin: 10px 20px;
+    `,
   };
 
   return (
     <>
       <div css={styles.container}>
-        {/* <KanbanColumn
+        <KanbanColumn
           themeColor={theme.palette.warning.light}
           headerText='開始前'
-          status='Before Start'
-        /> */}
-        <Card css={styles.column}>
-          <Box css={styles.header}>
-            <CircleIcon css={styles.iconBeforStart} />
-            <Typography gutterBottom variant='h6' component='div'>
-              開始前
-            </Typography>
-          </Box>
-          <Divider css={styles.divider} />
-        </Card>
-        <Card css={styles.column}>
-          <Box css={styles.header}>
-            <CircleIcon css={styles.iconOnGoing} />
-            <Typography gutterBottom variant='h6' component='div'>
-              進行中
-            </Typography>
-          </Box>
-          <Divider css={styles.divider} />
-        </Card>
-        <Card css={styles.column}>
-          <Box css={styles.header}>
-            <CircleIcon css={styles.iconDone} />
-            <Typography gutterBottom variant='h6' component='div'>
-              完了
-            </Typography>
-          </Box>
-          <Divider css={styles.divider} />
-          {demoData.map((task: TASK) => (
-            <Card css={styles.card}>
-              <Box
-                css={styles.boxTitle}
-                component='div'
-                sx={{
-                  textOverflow: "ellipsis",
-                  my: 2,
-                  overflow: "hidden",
-                }}
-              >
-                <Typography variant='body1' component='div' noWrap>
-                  {task.task_name}
-                </Typography>
-              </Box>
-              <Box css={styles.boxStatus}>
-                <Typography variant='body1' component='div'>
-                  {task.status}
-                </Typography>
-              </Box>
-              <Box css={styles.boxDot}>
-                <IconButton onClick={handleClick}>
-                  <MoreVertIcon fontSize='small' />
-                </IconButton>
-              </Box>
-            </Card>
-          ))}
-        </Card>
+        />
+        <KanbanColumn
+          themeColor={theme.palette.info.light}
+          headerText='進行中'
+        />
+        <KanbanColumn
+          themeColor={theme.palette.success.light}
+          headerText='完了'
+        />
         <Popover
           open={Boolean(anchorEl)}
           anchorEl={anchorEl}
           onClose={handleClose}
           anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
+            vertical: 'bottom',
+            horizontal: 'left',
           }}
         >
           <MenuItem>

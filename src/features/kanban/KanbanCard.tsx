@@ -1,44 +1,45 @@
-import React, { useState, useRef } from "react";
-import { css } from "@emotion/react";
-import { useTheme } from "@mui/material/styles";
-import Card from "@mui/material/Card";
-import IconButton from "@mui/material/IconButton";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Popover from "@mui/material/Popover";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import EditIcon from "@mui/icons-material/Edit";
+import React, { useState, useRef } from 'react';
+import { css } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
+import Card from '@mui/material/Card';
+import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Popover from '@mui/material/Popover';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import EditIcon from '@mui/icons-material/Edit';
+import el from 'date-fns/esm/locale/el/index.js';
 
 type Props = {
   title: string;
-  status: string;
+  disabled?: boolean;
+  onDrop?(): void;
+  children?: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
 };
 
 const KanbanCard: React.FC<Props> = (props: Props) => {
   const theme = useTheme();
-  const [drag, setDrag] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
   const styles = {
     container: css`
       opacity: 1;
     `,
     card: css`
+      cursor: move;
       draggable: true;
       position: relative;
       display: flex;
       justify-content: space-between;
       min-height: 50px;
-      cursor: move;
+      justify-content: space-between;
+      height: ${theme.spacing(7)};
+      margin-top: ${theme.spacing(2)};
+      margin-left: ${theme.spacing(2)};
+      margin-right: ${theme.spacing(2)};
     `,
     title: css`
       display: flex;
@@ -64,96 +65,82 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
     `,
   };
 
-  const handleDragStart = (e: any) => {
-    e.target.classList.add("dragging");
-    e.dataTransfer.effectAllowed = "copyMove";
-    const { id } = e.target;
-    e.dataTransfer.setData("application/json", JSON.stringify({ id }));
-    console.log("------------Start------------");
+  const [drag, setDrag] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
-  const handleDragEnd = (e: any) => e.target.classList.remove("dragging");
-
-  const handleDragOver = (e: any) => {
-    // 要素が重なった際のブラウザ既定の処理を変更
-    e.preventDefault();
-
-    // 子要素へのドラッグを制限
-    if ([...e.target.classList].includes("item")) {
-      // ドラッグ不可のドロップ効果を設定
-      e.dataTransfer.dropEffect = "none";
-      return;
-    }
-  };
-
-  const handleDrop = (e: any) => {
-    // 要素がドロップされた際のブラウザ既定の処理を変更
-    e.preventDefault();
-    e.target.classList.remove("over");
-
-    // ブラウザ外からのファイルドロップを制限
-    if (e.dataTransfer.files.length > 0) {
-      return;
-    }
-
-    // 転送データの取得
-    const { id } = JSON.parse(e.dataTransfer.getData("application/json"));
-
-    // if (event.ctrlKey) {
-    //   // 要素の複製
-    //   const oldItem = document.getElementById(id);
-    //   const newItem = oldItem!.cloneNode(true);
-    //   const newId = `item${[...document.querySelectorAll(".item")].length + 1}`;
-    //   newItem!.id = newId;
-    //   newItem!.classList.remove("dragging");
-
-    //   // cloneNode() で引き継げない要素
-    //   newItem.addEventListener("dragstart", handleDragStart, false);
-    //   newItem.addEventListener("dragend", handleDragEnd, false);
-
-    //   // ドロップ先に要素を追加する
-    //   e.target.appendChild(newItem);
-    // } else {
-    //   // 要素の移動
-    //   // ドロップ先に要素を追加する
-    //   e.target.appendChild(document.getElementById(id));
-    // }
-  };
+  function useDragAutoLeave(timeout: number = 100) {
+    const dragOver = useRef(false);
+    const timer = useRef(0);
+    return [
+      dragOver,
+      (onDragLeave?: () => void) => {
+        clearTimeout(timer.current);
+        dragOver.current = true;
+        // timer.current = setTimeout(() => {
+        //   dragOver.current = false;
+        //   onDragLeave?.();
+        // }, timeout);
+      },
+    ] as const;
+  }
 
   return (
-    <div
-      draggable='true'
-      onDragStart={(e) => handleDragStart(e)}
-      onDragEnd={(e) => handleDragEnd(e)}
-      onDragOver={(e) => handleDragOver(e)}
-      onDrop={(e) => handleDrop(e)}
-    >
-      <Card css={styles.card}>
-        <Box
-          css={styles.title}
-          component='div'
-          sx={{
-            textOverflow: "ellipsis",
-            my: 2,
-            overflow: "hidden",
-          }}
-        >
-          <Typography variant='body1' component='div' noWrap>
-            {props.title}
-          </Typography>
-        </Box>
-        <Box css={styles.status}>
-          <Typography variant='body1' component='div'>
-            {props.status}
-          </Typography>
-        </Box>
-        <Box css={styles.dot}>
-          <IconButton onClick={handleClick}>
-            <MoreVertIcon fontSize='small' />
-          </IconButton>
-        </Box>
-      </Card>
-    </div>
+    <>
+      <div
+        draggable='true'
+        // onDragStart={(e) => handleDragStart(e)}
+        // onDragEnd={(e) => handleDragEnd(e)}
+        // onDragOver={(e) => handleDragOver(e)}
+        // onDrop={(e) => handleDrop(e)}
+      >
+        <Card css={styles.card}>
+          <Box
+            css={styles.title}
+            component='div'
+            sx={{
+              textOverflow: 'ellipsis',
+              my: 2,
+              overflow: 'hidden',
+            }}
+          >
+            <Typography variant='body1' component='div' noWrap>
+              {props.title}
+            </Typography>
+          </Box>
+          <Box css={styles.status}></Box>
+          <Box css={styles.dot}>
+            <IconButton onClick={handleClick}>
+              <MoreVertIcon fontSize='small' />
+            </IconButton>
+          </Box>
+        </Card>
+      </div>
+      {/* <div
+        onDragOver={(e) => {
+          if (disabled) return;
+          e.preventDefault();
+          onDragOver(() => setIsTarget(false));
+        }}
+        onDragEnter={() => {
+          if (disabled || dragOver.current) return;
+
+          setIsTarget(true);
+        }}
+        onDrop={() => {
+          if (disabled) return;
+
+          setIsTarget(false);
+          onDrop?.();
+        }}
+      ></div> */}
+    </>
+
     // <Popover
     //   open={Boolean(anchorEl)}
     //   anchorEl={anchorEl}
