@@ -16,6 +16,7 @@ import { TASK } from '../types';
 type Props = {
   themeColor: string;
   headerText: string;
+  tasks: TASK[];
 };
 
 const KanbanColumn: React.FC<Props> = (props: Props) => {
@@ -64,10 +65,12 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
   };
 
   const handleDragLeave = (e: any) => {
+    e.preventDefault();
     setDragOver(false);
   };
 
   const handleDrop = (e: any) => {
+    e.preventDefault();
     setDragOver(false);
   };
 
@@ -77,9 +80,10 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
   return (
     <div
       onDragOver={handleDragOver}
-      onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
+
+      // onDragEnter={handleDragEnter}
     >
       <Card css={styles.column}>
         <Box css={styles.header}>
@@ -89,14 +93,9 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
           </Typography>
         </Box>
         <Divider />
-        {/* <Stack spacing={2} css={styles.stack}>
-          {demoData.map((task: TASK) => (
-            <KanbanCard title={task.task_name} status={task.status} />
-          ))}
-        </Stack> */}
         <Box css={dragOver ? styles.dragOver : styles.dragLeave}>
-          {demoData.map((task) => (
-            <KanbanCard title={task.task_name} />
+          {props.tasks.map((task) => (
+            <KanbanCard task={task} />
           ))}
         </Box>
       </Card>

@@ -1,5 +1,7 @@
 import React from 'react';
 import { css } from '@emotion/react';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectTasks } from '../task/taskSlice';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -89,20 +91,25 @@ const Kanban = () => {
     `,
   };
 
+  const tasks = useSelector(selectTasks);
+
   return (
     <>
       <div css={styles.container}>
         <KanbanColumn
           themeColor={theme.palette.warning.light}
           headerText='開始前'
+          tasks={tasks.filter((task) => task.status === '開始前')}
         />
         <KanbanColumn
           themeColor={theme.palette.info.light}
           headerText='進行中'
+          tasks={tasks.filter((task) => task.status === '進行中')}
         />
         <KanbanColumn
           themeColor={theme.palette.success.light}
           headerText='完了'
+          tasks={tasks.filter((task) => task.status === '完了')}
         />
         <Popover
           open={Boolean(anchorEl)}

@@ -1,5 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, MouseEvent } from 'react';
 import { css } from '@emotion/react';
+
 import { useTheme } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import IconButton from '@mui/material/IconButton';
@@ -12,9 +13,10 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import EditIcon from '@mui/icons-material/Edit';
 import el from 'date-fns/esm/locale/el/index.js';
+import { TASK } from '../types';
 
 type Props = {
-  title: string;
+  task: TASK;
   disabled?: boolean;
   onDrop?(): void;
   children?: React.ReactNode;
@@ -22,15 +24,27 @@ type Props = {
   style?: React.CSSProperties;
 };
 
+interface Position {
+  left: number;
+  top: number;
+}
+
+type DnDRef = {
+  pointerPosition: Position;
+  elementPosition: Position;
+  element: HTMLElement | null;
+};
+
 const KanbanCard: React.FC<Props> = (props: Props) => {
   const theme = useTheme();
   const styles = {
-    container: css`
-      opacity: 1;
+    grab: css`
+      cursor: grab;
+    `,
+    grabbing: css`
+      cursor: grabing;
     `,
     card: css`
-      cursor: move;
-      draggable: true;
       position: relative;
       display: flex;
       justify-content: space-between;
@@ -67,39 +81,40 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
 
   const [drag, setDrag] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(e.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  function useDragAutoLeave(timeout: number = 100) {
-    const dragOver = useRef(false);
-    const timer = useRef(0);
-    return [
-      dragOver,
-      (onDragLeave?: () => void) => {
-        clearTimeout(timer.current);
-        dragOver.current = true;
-        // timer.current = setTimeout(() => {
-        //   dragOver.current = false;
-        //   onDragLeave?.();
-        // }, timeout);
-      },
-    ] as const;
-  }
+  const handleDragStart = (e: any) => {
+    setDrag(true);
+    e.dataTransfer.setData('text/html', e.target.current);
+    e.dataTransfer.effectAllowed = 'move';
+  };
 
   return (
     <>
       <div
+        id={`task-${props.task.task_id}`}
+        css={styles.grab}
         draggable='true'
-        // onDragStart={(e) => handleDragStart(e)}
-        // onDragEnd={(e) => handleDragEnd(e)}
-        // onDragOver={(e) => handleDragOver(e)}
-        // onDrop={(e) => handleDrop(e)}
+        // onMouseMove={handleOnMouseMove}
+        // onMouseDown={handleOnMouseDown}
+        // onMouseMove={handleOnMouseMove}
+        // onMouseUp={handleOnMouseUp}
+        onDragStart={handleDragStart}
       >
-        <Card css={styles.card}>
+        <Card
+          draggable='true'
+          // onMouseMove={handleOnMouseMove}
+          // onMouseDown={handleOnMouseDown}
+          // onMouseMove={handleOnMouseMove}
+          // onMouseUp={handleOnMouseUp}
+          onDragStart={handleDragStart}
+          css={styles.card}
+        >
           <Box
             css={styles.title}
             component='div'
@@ -110,7 +125,7 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
             }}
           >
             <Typography variant='body1' component='div' noWrap>
-              {props.title}
+              {props.task.task_name}
             </Typography>
           </Box>
           <Box css={styles.status}></Box>
@@ -124,7 +139,7 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
       {/* <div
         onDragOver={(e) => {
           if (disabled) return;
-          e.preventDefault();
+          e.preDefault();
           onDragOver(() => setIsTarget(false));
         }}
         onDragEnter={() => {
@@ -158,6 +173,48 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
     //     <ListItemText>タスクを削除</ListItemText>
     //   </MenuItem>
     // </Popover>
+
+    // const ref = useRef<DnDRef>({
+    //   pointerPosition: { left: 0, top: 0 },
+    //   elementPosition: { left: 0, top: 0 },
+    //   element: null,
+    // }).current;
+
+    // const onMouseMove = (e: MouseEvent) => {
+    //   if (!ref.element) return;
+    //   const { clientX, clientY } = e;
+    //   const left = clientX - ref.pointerPosition.left;
+    //   const top = clientY - ref.pointerPosition.top;
+
+    //   ref.element.style.zIndex = '10';
+    //   ref.element.style.cursor = 'grabbing';
+    //   ref.element.style.transform = `translate(${left}px,${top}px)`;
+    // };
+
+    // const onMouseDown = (e: MouseEvent<HTMLElement>) => {
+    //   ref.element = e.currentTarget;
+    //   ref.pointerPosition.left = e.clientX;
+    //   ref.pointerPosition.top = e.clientY;
+    //   ref.elementPosition = e.currentTarget.getBoundingClientRect();
+    //   ref.element.style.transition = '';
+    //   ref.element.style.cursor = 'grabbing';
+    //   // window.addEventListener('mouseup', onmouseup);
+    //   // window.addEventListener('mousemove', onMouseMove);
+    // };
+
+    // const onMouseUp = (e: MouseEvent) => {
+    //   if (!ref.element) return;
+
+    //   // ドラッグしてる要素に適用していたCSSを削除
+    //   ref.element.style.zIndex = '';
+    //   ref.element.style.cursor = '';
+    //   ref.element.style.transform = '';
+
+    //   ref.element = null;
+
+    //   // window.removeEventListener('mouseup', onMouseUp);
+    //   // window.removeEventListener('mousemove', onMouseMove);
+    // };
   );
 };
 
