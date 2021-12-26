@@ -94,7 +94,7 @@ export const taskSlice = createSlice({
     setEditedTask(state, action) {
       state.editedTask = action.payload;
     },
-    setTasksStatus(state, action) {
+    setTasks(state, action) {
       state.tasks = action.payload;
     },
     // initEditedTask(state, action) {
@@ -112,6 +112,7 @@ export const {
   setFilterTaskOpen,
   setFilterTask,
   setEditedTask,
+  setTasks,
 } = taskSlice.actions;
 
 export const selectTasks = (state: RootState) => state.task.tasks;

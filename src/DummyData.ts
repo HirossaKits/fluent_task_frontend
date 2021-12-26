@@ -1,4 +1,4 @@
-import { TASK, USER_PROFILE, PROJECT } from "./features/types";
+import { TASK, USER_PROFILE, PROJECT, TASK_STATUS } from "./features/types";
 
 export const dummyUsers: USER_PROFILE[] = [
   {
@@ -77,7 +77,7 @@ export const dummyUsers: USER_PROFILE[] = [
 
 export const demoData = [
   createData(
-    "task_dnafsdhnfailsudhfasuid",
+    "task_A",
     "A機能製造",
     "project_sdfnasidfuahs",
     "テストプロジェクトA",
@@ -87,7 +87,7 @@ export const demoData = [
     "木塚 寛久",
     "user_author",
     "木塚 寛久",
-    "開始前",
+    "Not started",
     "機能Aを製造します。",
     1,
     1,
@@ -99,7 +99,7 @@ export const demoData = [
     "2021-07-10 12:00"
   ),
   createData(
-    "task_dnafsdhnfailsudhfad",
+    "task_B",
     "B機能製造",
     "project_sdfnasidfuahssss",
     "テストプロジェクトB",
@@ -109,7 +109,7 @@ export const demoData = [
     "木塚 寛久",
     "user_author",
     "木塚 寛久",
-    "開始前",
+    "Not started",
     "機能Bを製造します。",
     2,
     2,
@@ -121,8 +121,8 @@ export const demoData = [
     "2021-07-10 12:00"
   ),
   createData(
-    "task_dnafsdhnfailsudhfad",
-    "B機能製造",
+    "task_C",
+    "C機能製造",
     "project_sdfnasidfuahssss",
     "テストプロジェクトB",
     "category_jdpoasirg1",
@@ -131,7 +131,7 @@ export const demoData = [
     "木塚 寛久",
     "user_author",
     "木塚 寛久",
-    "開始前",
+    "Not started",
     "機能Bを製造します。",
     2,
     2,
@@ -143,8 +143,8 @@ export const demoData = [
     "2021-07-10 12:00"
   ),
   createData(
-    "task_dnafsdhnfailsudhfad",
-    "B機能製造",
+    "task_D",
+    "D機能製造",
     "project_sdfnasidfuahssss",
     "テストプロジェクトB",
     "category_jdpoasirg1",
@@ -153,7 +153,7 @@ export const demoData = [
     "木塚 寛久",
     "user_author",
     "木塚 寛久",
-    "開始前",
+    "Not started",
     "機能Bを製造します。",
     2,
     2,
@@ -165,8 +165,8 @@ export const demoData = [
     "2021-07-10 12:00"
   ),
   createData(
-    "task_dnafsdhnfailsfasuid",
-    "D機能テスト",
+    "task_E",
+    "E機能テスト",
     "project_sdfnasidfuahsfff",
     "テストプロジェクトC",
     "category_jdpoasirg2",
@@ -175,7 +175,7 @@ export const demoData = [
     "木塚 寛久",
     "user_author",
     "木塚 寛久",
-    "開始前",
+    "Not started",
     "機能Aをテストします。",
     null,
     null,
@@ -187,8 +187,8 @@ export const demoData = [
     "2021-07-10 12:00"
   ),
   createData(
-    "task_dnafsdhnfailsfasuid",
-    "E機能テスト",
+    "task_F",
+    "F機能テスト",
     "project_sdfnasidfuahsfff",
     "テストプロジェクトD",
     "category_jdpoasirg2",
@@ -197,7 +197,7 @@ export const demoData = [
     "木塚 寛久",
     "user_author",
     "木塚 寛久",
-    "進行中",
+    "On going",
     "機能Aをテストします。",
     null,
     null,
@@ -209,8 +209,8 @@ export const demoData = [
     "2021-07-10 12:00"
   ),
   createData(
-    "task_dnafsdhnfailsfasuid",
-    "F機能テスト",
+    "task_G",
+    "G機能テスト",
     "project_sdfnasidfuahsfff",
     "テストプロジェクトE",
     "category_jdpoasirg2",
@@ -219,7 +219,7 @@ export const demoData = [
     "木塚 寛久",
     "user_author",
     "木塚 寛久",
-    "進行中",
+    "On going",
     "機能Aをテストします。",
     null,
     null,
@@ -231,8 +231,8 @@ export const demoData = [
     "2021-07-10 12:00"
   ),
   createData(
-    "task_dnafsdhnfailsfasuid",
-    "G機能テスト",
+    "task_H",
+    "H機能テスト",
     "project_sdfnasidfuahsfff",
     "テストプロジェクトF",
     "category_jdpoasirg2",
@@ -241,7 +241,7 @@ export const demoData = [
     "木塚 寛久",
     "user_author",
     "木塚 寛久",
-    "完了",
+    "Done",
     "機能Aをテストします。",
     null,
     null,
@@ -265,7 +265,7 @@ function createData(
   assigned_name: string,
   author_id: string,
   author_name: string,
-  status: string,
+  status: TASK_STATUS,
   description: string,
   estimate_manhour: null | number,
   actual_manhour: null | number,

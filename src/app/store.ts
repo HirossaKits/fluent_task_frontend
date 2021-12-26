@@ -4,6 +4,7 @@ import mainReducer from "../features/main/mainSlice";
 import taskReducer from "../features/task/taskSlice";
 import calendarReducer from "../features/calendar/calendarSlice";
 import projectReducer from "../features/proj/projectSlice";
+import kanbanReducer from '../features/kanban/kanbanSlice'
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     project: projectReducer,
     task: taskReducer,
     calendar: calendarReducer,
+    kanban: kanbanReducer,
   },
 });
 

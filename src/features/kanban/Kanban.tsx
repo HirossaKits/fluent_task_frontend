@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { css } from '@emotion/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectTasks } from '../task/taskSlice';
+import { setIsFirstRender } from './kanbanSlice';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -18,6 +19,11 @@ import CircleIcon from '@mui/icons-material/Circle';
 import { demoData } from '../../DummyData';
 import { TASK } from '../types';
 import KanbanColumn from './KanbanColumn';
+
+interface RefValue {
+  positions: { [key: string]: { x: number; y: number } };
+  isFirstRender: boolean;
+}
 
 const Kanban = () => {
   const theme = useTheme();
@@ -98,18 +104,21 @@ const Kanban = () => {
       <div css={styles.container}>
         <KanbanColumn
           themeColor={theme.palette.warning.light}
+          status='Not started'
           headerText='開始前'
-          tasks={tasks.filter((task) => task.status === '開始前')}
+          tasks={tasks.filter((task) => task.status === 'Not started')}
         />
         <KanbanColumn
           themeColor={theme.palette.info.light}
+          status='On going'
           headerText='進行中'
-          tasks={tasks.filter((task) => task.status === '進行中')}
+          tasks={tasks.filter((task) => task.status === 'On going')}
         />
         <KanbanColumn
           themeColor={theme.palette.success.light}
+          status='Done'
           headerText='完了'
-          tasks={tasks.filter((task) => task.status === '完了')}
+          tasks={tasks.filter((task) => task.status === 'Done')}
         />
         <Popover
           open={Boolean(anchorEl)}

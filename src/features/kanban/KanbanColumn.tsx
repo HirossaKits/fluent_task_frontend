@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, forwardRef } from 'react';
 import { css } from '@emotion/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectTasks } from '../task/taskSlice';
+import { selectTasks, setTasks } from '../task/taskSlice';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
 import CircleIcon from '@mui/icons-material/Circle';
 import KanbanCard from './KanbanCard';
-import { demoData } from '../../DummyData';
-import { TASK } from '../types';
+import { TASK, TASK_STATUS } from '../types';
+
+interface RefValue {
+  positions: { [key: string]: { x: number; y: number } };
+  isFirstRender: boolean;
+}
+
+const animation = (node: HTMLElement, x: number, y: number, delay: number) => {
+  node.style.transition = '';
+  node.style.transform = `translate(${x}px,${y}px)`;
+  setTimeout(() => {
+    node.style.transform = '';
+    node.style.transition = 'all 300ms';
+  }, delay);
+};
 
 type Props = {
+  status: TASK_STATUS;
   themeColor: string;
   headerText: string;
   tasks: TASK[];
@@ -55,13 +68,48 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
     `,
   };
 
+  const dispatch = useDispatch();
   const tasks = useSelector(selectTasks);
-
   const [dragOver, setDragOver] = useState(false);
+
+  const ref = useRef<RefValue>({
+    positions: Object.assign(
+      {},
+      ...tasks.map((task) => ({
+        [task.task_id]: { x: 0, y: 0 },
+      }))
+    ),
+    isFirstRender: true,
+  }).current;
+
+  const handleDragEnter = (e: any) => {
+    e.preventDefault();
+    ref.isFirstRender = false;
+    e.dataTransfer.dropEffect = 'move';
+    setDragOver(true);
+  };
 
   const handleDragOver = (e: any) => {
     e.preventDefault();
     setDragOver(true);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    const data = e.dataTransfer.getData('text/plain');
+    const [status, task_id] = data.split('/');
+    if (props.status !== status) {
+      const newTasks = tasks.map((task) => {
+        if (task.task_id === task_id) {
+          ref.positions[task_id] = { x: 0, y: 0 };
+          return { ...task, status: props.status };
+        } else {
+          return task;
+        }
+      });
+      dispatch(setTasks(newTasks));
+    }
+    setDragOver(false);
   };
 
   const handleDragLeave = (e: any) => {
@@ -69,21 +117,12 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
     setDragOver(false);
   };
 
-  const handleDrop = (e: any) => {
-    e.preventDefault();
-    setDragOver(false);
-  };
-
-  // 要素が重なった際のイベントを定義
-  const handleDragEnter = (e: any) => {};
-
   return (
     <div
+      onDragEnter={handleDragEnter}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-
-      // onDragEnter={handleDragEnter}
     >
       <Card css={styles.column}>
         <Box css={styles.header}>
@@ -94,8 +133,28 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
         </Box>
         <Divider />
         <Box css={dragOver ? styles.dragOver : styles.dragLeave}>
-          {props.tasks.map((task) => (
-            <KanbanCard task={task} />
+          {props.tasks.map((task, idx) => (
+            <div
+              ref={(ele) => {
+                if (!ele) return;
+                const position = ref.positions[task.task_id];
+                const rect = ele.getBoundingClientRect();
+                if (position.x && position.y) {
+                  const x = position.x - rect.left;
+                  const y = position.y - rect.top;
+                  animation(ele, x, y, 200 - 10 * idx);
+                } else {
+                  if (!ref.isFirstRender) {
+                    const x = position.x - rect.left;
+                    animation(ele, x, 0, 300);
+                  }
+                }
+                position.x = rect.left;
+                position.y = rect.top;
+              }}
+            >
+              <KanbanCard task={task} />
+            </div>
           ))}
         </Box>
       </Card>

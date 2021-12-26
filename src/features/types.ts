@@ -133,6 +133,8 @@ export type COLUMN_NAME =
 
 /*taskSlice*/
 
+export type TASK_STATUS = 'Not started' | 'On going' | 'Done'
+
 export interface TASK {
   task_id: string;
   task_name: string;
@@ -144,7 +146,7 @@ export interface TASK {
   assigned_name: string;
   author_id: null | string;
   author_name: string;
-  status: string;
+  status: TASK_STATUS;
   description: string;
   estimate_manhour: null | number;
   actual_manhour: null | number;

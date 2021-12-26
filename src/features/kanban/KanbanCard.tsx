@@ -1,4 +1,4 @@
-import React, { useState, useRef, MouseEvent } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { css } from '@emotion/react';
 
 import { useTheme } from '@mui/material/styles';
@@ -17,34 +17,13 @@ import { TASK } from '../types';
 
 type Props = {
   task: TASK;
-  disabled?: boolean;
-  onDrop?(): void;
-  children?: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-};
-
-interface Position {
-  left: number;
-  top: number;
-}
-
-type DnDRef = {
-  pointerPosition: Position;
-  elementPosition: Position;
-  element: HTMLElement | null;
 };
 
 const KanbanCard: React.FC<Props> = (props: Props) => {
   const theme = useTheme();
   const styles = {
-    grab: css`
-      cursor: grab;
-    `,
-    grabbing: css`
-      cursor: grabing;
-    `,
     card: css`
+      cursor: move;
       position: relative;
       display: flex;
       justify-content: space-between;
@@ -80,7 +59,13 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
   };
 
   const [drag, setDrag] = useState(false);
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  // useEffect(() => {
+  //   if(drag)
+  // }, [drag]);
+
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
@@ -88,133 +73,81 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
     setAnchorEl(null);
   };
 
-  const handleDragStart = (e: any) => {
+  const handleDragStart = (e: React.DragEvent<HTMLElement>) => {
     setDrag(true);
-    e.dataTransfer.setData('text/html', e.target.current);
+    e.dataTransfer.setData(
+      'text/plain',
+      `${props.task.status}/${props.task.task_id}`
+    );
     e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setDragImage(e.currentTarget, 0, 0);
+    e.currentTarget.style.opacity = '0.5';
   };
+
+  const handleDragEnd = (e: React.DragEvent<HTMLElement>) => {
+    setDrag(false);
+    e.currentTarget.style.opacity = '1';
+    e.dataTransfer.clearData('text/plain');
+  };
+
+  // const handleOnDrag = (e: React.DragEvent<HTMLElement>) => {
+  //   e.currentTarget.style.cursor = 'grabbing';
+  //   if (!drag) return;
+  //   console.log('drag');
+  // };
+
+  // const handleOnMouseDown = (e: React.MouseEvent<HTMLElement>) => {
+  //   console.log('mouseDown');
+  //   e.currentTarget.style.opacity = '0.5';
+  //   e.currentTarget.style.cursor = 'grabbing';
+  // };
+
+  // const handleOnMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+  //   if (!drag) return;
+  //   console.log('mouseMove');
+  // };
+
+  // const handleOnMouseLeave = (e: React.MouseEvent<HTMLElement>) => {
+  //   console.log('mouseLeave');
+  //   e.currentTarget.style.opacity = '1';
+  //   e.currentTarget.style.cursor = 'grab';
+  // };
+
+  // const handleOnMouseUp = (e: React.MouseEvent<HTMLElement>) => {
+  //   console.log('mouseUp');
+  //   e.currentTarget.style.opacity = '1';
+  //   e.currentTarget.style.cursor = 'grab';
+  // };
 
   return (
     <>
-      <div
-        id={`task-${props.task.task_id}`}
-        css={styles.grab}
+      <Card
+        css={styles.card}
         draggable='true'
-        // onMouseMove={handleOnMouseMove}
-        // onMouseDown={handleOnMouseDown}
-        // onMouseMove={handleOnMouseMove}
-        // onMouseUp={handleOnMouseUp}
         onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
       >
-        <Card
-          draggable='true'
-          // onMouseMove={handleOnMouseMove}
-          // onMouseDown={handleOnMouseDown}
-          // onMouseMove={handleOnMouseMove}
-          // onMouseUp={handleOnMouseUp}
-          onDragStart={handleDragStart}
-          css={styles.card}
+        <Box
+          css={styles.title}
+          component='div'
+          sx={{
+            textOverflow: 'ellipsis',
+            my: 2,
+            overflow: 'hidden',
+          }}
         >
-          <Box
-            css={styles.title}
-            component='div'
-            sx={{
-              textOverflow: 'ellipsis',
-              my: 2,
-              overflow: 'hidden',
-            }}
-          >
-            <Typography variant='body1' component='div' noWrap>
-              {props.task.task_name}
-            </Typography>
-          </Box>
-          <Box css={styles.status}></Box>
-          <Box css={styles.dot}>
-            <IconButton onClick={handleClick}>
-              <MoreVertIcon fontSize='small' />
-            </IconButton>
-          </Box>
-        </Card>
-      </div>
-      {/* <div
-        onDragOver={(e) => {
-          if (disabled) return;
-          e.preDefault();
-          onDragOver(() => setIsTarget(false));
-        }}
-        onDragEnter={() => {
-          if (disabled || dragOver.current) return;
-
-          setIsTarget(true);
-        }}
-        onDrop={() => {
-          if (disabled) return;
-
-          setIsTarget(false);
-          onDrop?.();
-        }}
-      ></div> */}
+          <Typography variant='body1' component='div' noWrap>
+            {props.task.task_name}
+          </Typography>
+        </Box>
+        <Box css={styles.status}></Box>
+        <Box css={styles.dot}>
+          <IconButton onClick={handleClick}>
+            <MoreVertIcon fontSize='small' />
+          </IconButton>
+        </Box>
+      </Card>
     </>
-
-    // <Popover
-    //   open={Boolean(anchorEl)}
-    //   anchorEl={anchorEl}
-    //   onClose={handleClose}
-    //   anchorOrigin={{
-    //     vertical: "bottom",
-    //     horizontal: "left",
-    //   }}
-    // >
-    //   <MenuItem>
-    //     <ListItemIcon>
-    //       <EditIcon fontSize='small' />
-    //     </ListItemIcon>
-    //     <ListItemText>タスクをを編集</ListItemText>
-    //     <ListItemText>タスクを削除</ListItemText>
-    //   </MenuItem>
-    // </Popover>
-
-    // const ref = useRef<DnDRef>({
-    //   pointerPosition: { left: 0, top: 0 },
-    //   elementPosition: { left: 0, top: 0 },
-    //   element: null,
-    // }).current;
-
-    // const onMouseMove = (e: MouseEvent) => {
-    //   if (!ref.element) return;
-    //   const { clientX, clientY } = e;
-    //   const left = clientX - ref.pointerPosition.left;
-    //   const top = clientY - ref.pointerPosition.top;
-
-    //   ref.element.style.zIndex = '10';
-    //   ref.element.style.cursor = 'grabbing';
-    //   ref.element.style.transform = `translate(${left}px,${top}px)`;
-    // };
-
-    // const onMouseDown = (e: MouseEvent<HTMLElement>) => {
-    //   ref.element = e.currentTarget;
-    //   ref.pointerPosition.left = e.clientX;
-    //   ref.pointerPosition.top = e.clientY;
-    //   ref.elementPosition = e.currentTarget.getBoundingClientRect();
-    //   ref.element.style.transition = '';
-    //   ref.element.style.cursor = 'grabbing';
-    //   // window.addEventListener('mouseup', onmouseup);
-    //   // window.addEventListener('mousemove', onMouseMove);
-    // };
-
-    // const onMouseUp = (e: MouseEvent) => {
-    //   if (!ref.element) return;
-
-    //   // ドラッグしてる要素に適用していたCSSを削除
-    //   ref.element.style.zIndex = '';
-    //   ref.element.style.cursor = '';
-    //   ref.element.style.transform = '';
-
-    //   ref.element = null;
-
-    //   // window.removeEventListener('mouseup', onMouseUp);
-    //   // window.removeEventListener('mousemove', onMouseMove);
-    // };
   );
 };
 
