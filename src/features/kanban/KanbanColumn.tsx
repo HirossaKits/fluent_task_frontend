@@ -91,7 +91,6 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
 
   const handleDragOver = (e: any) => {
     e.preventDefault();
-    setDragOver(true);
   };
 
   const handleDrop = (e: React.DragEvent) => {

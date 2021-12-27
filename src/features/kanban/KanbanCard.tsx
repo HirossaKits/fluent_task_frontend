@@ -80,14 +80,13 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
       `${props.task.status}/${props.task.task_id}`
     );
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setDragImage(e.currentTarget, 0, 0);
     e.currentTarget.style.opacity = '0.5';
   };
 
   const handleDragEnd = (e: React.DragEvent<HTMLElement>) => {
     setDrag(false);
     e.currentTarget.style.opacity = '1';
-    e.dataTransfer.clearData('text/plain');
+    e.dataTransfer.clearData();
   };
 
   // const handleOnDrag = (e: React.DragEvent<HTMLElement>) => {
@@ -120,34 +119,32 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
   // };
 
   return (
-    <>
-      <Card
-        css={styles.card}
-        draggable='true'
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
+    <Card
+      css={styles.card}
+      draggable
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
+      <Box
+        css={styles.title}
+        component='div'
+        sx={{
+          textOverflow: 'ellipsis',
+          my: 2,
+          overflow: 'hidden',
+        }}
       >
-        <Box
-          css={styles.title}
-          component='div'
-          sx={{
-            textOverflow: 'ellipsis',
-            my: 2,
-            overflow: 'hidden',
-          }}
-        >
-          <Typography variant='body1' component='div' noWrap>
-            {props.task.task_name}
-          </Typography>
-        </Box>
-        <Box css={styles.status}></Box>
-        <Box css={styles.dot}>
-          <IconButton onClick={handleClick}>
-            <MoreVertIcon fontSize='small' />
-          </IconButton>
-        </Box>
-      </Card>
-    </>
+        <Typography variant='body1' component='div' noWrap>
+          {props.task.task_name}
+        </Typography>
+      </Box>
+      <Box css={styles.status}></Box>
+      <Box css={styles.dot}>
+        <IconButton onClick={handleClick}>
+          <MoreVertIcon fontSize='small' />
+        </IconButton>
+      </Box>
+    </Card>
   );
 };
 
