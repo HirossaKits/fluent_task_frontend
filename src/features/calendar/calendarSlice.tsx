@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import { CALENDAR_STATE } from '../types';
-import { fillDigitsByZero } from '../../date/dateHandler';
+import { fillDigitsByZero } from '../../util/dateHandler';
 
 const initialState: CALENDAR_STATE = {
   yearMonth: {

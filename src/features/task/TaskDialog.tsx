@@ -1,38 +1,32 @@
-import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { css } from '@emotion/react'
-import { useTheme } from '@mui/material'
-import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogTitle from '@mui/material/DialogTitle'
-import Grid from '@mui/material/Grid'
-import CloseIcon from '@mui/icons-material/Close'
-import SwapHorizIcon from '@mui/icons-material/SwapHoriz'
-import CommonTextField from '../../components/CommonTextField'
-import CommonDatePicker from '../../components/CommonDatePicker'
-import { selectEditedTask } from '../task/taskSlice'
-import { setEditedTask } from '../task/taskSlice'
-import { TARGET } from '../types'
-import CommonSelect from '../../components/CommonSelect'
-import { Status, DemoMember } from '../../selectionOptions'
-import { selectEditTaskOpen, setEditTaskOpen } from './taskSlice'
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { css } from '@emotion/react';
+import { useTheme } from '@mui/material';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+import CloseIcon from '@mui/icons-material/Close';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import CommonTextField from '../../components/CommonTextField';
+import CommonDatePicker from '../../components/CommonDatePicker';
+import { selectEditedTask } from '../task/taskSlice';
+import { setEditedTask } from '../task/taskSlice';
+import { TARGET } from '../types';
+import CommonSelect from '../../components/CommonSelect';
+import { Status, DemoMember } from '../../selectionOptions';
+import { selectTaskDialogOpen, setTaskDialogOpen } from './taskSlice';
+import { selectTaskCategory, setTaskCategory } from '../proj/projectSlice';
 
-const TaskDialog: React.FC = (props) => {
-  const theme = useTheme()
-  const dispatch = useDispatch()
-  const editTaskOpen = useSelector(selectEditTaskOpen)
-  const editedTask = useSelector(selectEditedTask)
+type Props = {
+  mode: 'register' | 'edit';
+};
 
-  const handleInputChange = (target: TARGET) => {
-    dispatch(setEditedTask({ ...editedTask, [target.name]: target.value }))
-  }
-
-  const handleClose = () => {
-    dispatch(setEditTaskOpen(false))
-  }
-
+const TaskDialog: React.FC<Props> = (props: Props) => {
+  const theme = useTheme();
   const styles = {
     form: css`
       width: 100%;
@@ -47,16 +41,29 @@ const TaskDialog: React.FC = (props) => {
       textalign: center;
     `,
     arrowIcon: css`
-      margin-left: 32%;
+      margin-left: 35%;
       margin-bottom: 10px;
       color: ${theme.palette.action.active};
     `,
-  }
+  };
+
+  const dispatch = useDispatch();
+  const taskDialogOpen = useSelector(selectTaskDialogOpen);
+  const editedTask = useSelector(selectEditedTask);
+  const taskCategory = useSelector(selectTaskCategory);
+
+  const handleInputChange = (target: TARGET) => {
+    dispatch(setEditedTask({ ...editedTask, [target.name]: target.value }));
+  };
+
+  const handleClose = () => {
+    dispatch(setTaskDialogOpen(false));
+  };
 
   return (
     <>
       <Dialog
-        open={editTaskOpen}
+        open={taskDialogOpen}
         onClose={handleClose}
         aria-labelledby='form-dialog-title'
         maxWidth='sm'
@@ -69,7 +76,9 @@ const TaskDialog: React.FC = (props) => {
           alignItems='flex-start'
         >
           <Grid css={styles.title} item>
-            <DialogTitle>タスクを登録</DialogTitle>
+            <DialogTitle>
+              {props.mode === 'register' ? 'タスクを登録' : 'タスクを編集'}
+            </DialogTitle>
           </Grid>
           <Grid css={styles.close} item>
             <IconButton size='small' onClick={handleClose}>
@@ -111,7 +120,7 @@ const TaskDialog: React.FC = (props) => {
                   <CommonSelect
                     label='カテゴリー'
                     name='status'
-                    options={Status}
+                    options={taskCategory}
                     value={editedTask.status}
                     onChange={handleInputChange}
                   />
@@ -195,7 +204,6 @@ const TaskDialog: React.FC = (props) => {
                   />
                 </Grid>
               </Grid>
-
               <Grid
                 container
                 xs={12}
@@ -211,7 +219,6 @@ const TaskDialog: React.FC = (props) => {
                     onChange={handleInputChange}
                   />
                 </Grid>
-
                 <Grid item xs={2}>
                   <SwapHorizIcon css={styles.arrowIcon} />
                 </Grid>
@@ -237,7 +244,7 @@ const TaskDialog: React.FC = (props) => {
         </form>
       </Dialog>
     </>
-  )
-}
+  );
+};
 
-export default TaskDialog
+export default TaskDialog;

@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { TASK, CALENDAR_BAR, CALENDAR_YEAR_MONTH, CALENDAR_DATE, CALENDAR_BAR_STYLE } from "../features/types";
-import * as dateHandler from '../date/dateHandler';
+import * as dateHandler from '../util/dateHandler';
 
 export const useCalendarFactory = () => {
   return useCallback((yearMonth: CALENDAR_YEAR_MONTH, tasks: TASK[], barStyle: CALENDAR_BAR_STYLE): [CALENDAR_DATE[], CALENDAR_BAR[]] => {

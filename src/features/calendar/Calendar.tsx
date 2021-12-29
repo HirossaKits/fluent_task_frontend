@@ -3,13 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
-import ButtonGroup from '@mui/material/ButtonGroup';
 import TextField from '@mui/material/TextField';
-import Select from '@mui/material/Select';
-import FormControl from '@mui/material/FormControl';
-import MenuItem from '@mui/material/MenuItem';
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import ImageList from '@mui/material/ImageList';
@@ -19,10 +13,10 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Typography from '@mui/material/Typography';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import * as dateHandler from '../../date/dateHandler';
+import * as dateHandler from '../../util/dateHandler';
 import { selectYearMonth, setYearMonth } from './calendarSlice';
 import { selectTasks } from '../task/taskSlice';
-import { fillDigitsByZero } from '../../date/dateHandler';
+import { fillDigitsByZero } from '../../util/dateHandler';
 import { CALENDAR_YEAR_MONTH } from '../types';
 import { useCalendarFactory } from '../../hooks/calendar';
 import { demoData } from '../../DummyData';
@@ -268,7 +262,7 @@ const Calendar = () => {
               </Grid>
               {ctx.layer && Math.max(...ctx.layer) >= 4 && (
                 <Grid css={styles.remarks}>
-                  <Typography>{`その他${
+                  <Typography color={theme.palette.text.disabled}>{`その他${
                     Math.max(...ctx.layer) - 3
                   }件`}</Typography>
                 </Grid>

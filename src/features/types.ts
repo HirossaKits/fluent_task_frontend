@@ -1,11 +1,13 @@
 /*Common*/
 
+import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
+
 export interface COLUMN_INFO {
   name: COLUMN_NAME;
   label: string;
   type: "string" | "number" | "Date";
   width: string;
-  related?: any;
+  isJsxElement?: boolean;
 }
 
 /*authSlice*/
@@ -87,6 +89,8 @@ export interface MAIN_STATE {
   settingsMenuOpen: boolean;
   profileMenuOpen: boolean;
   profileDialogOpen: boolean;
+  messageOpen: boolean;
+  message: string;
 }
 
 export interface PROFILE {
@@ -104,7 +108,6 @@ type USER = {
   user_name: string;
 };
 
-
 export interface PROJECT {
   project_id: string;
   project_name: string;
@@ -119,6 +122,7 @@ export interface PROJECT {
 }
 
 
+
 /*Task*/
 
 export type COLUMN_NAME =
@@ -130,6 +134,12 @@ export type COLUMN_NAME =
   | "estimate_manhour"
   | "assigned_name"
   | "description";
+
+export const Status = {
+  'Not started': '開始前',
+  'On going': '進行中',
+  'Done': '完了'
+}
 
 /*taskSlice*/
 
@@ -172,7 +182,8 @@ export interface FILTER_TASK {
 
 export interface TASK_STATE {
   tasks: TASK[];
-  editTaskOpen: boolean;
+  taskDialogOpen: boolean,
+  taskDialogMode: 'register' | 'edit';
   filterTaskOpen: boolean;
   filterTask: FILTER_TASK[];
   editedTask: TASK;

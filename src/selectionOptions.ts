@@ -15,6 +15,21 @@ export const Status = [
   },
 ];
 
+export const Category = [
+  {
+    value: "category_id_1",
+    label: "設計",
+  },
+  {
+    value: "category_id_2",
+    label: "製造",
+  },
+  {
+    value: "category_id_3",
+    label: "テスト",
+  },
+];
+
 export const DemoMember = [
   {
     value: "aaaaaa",

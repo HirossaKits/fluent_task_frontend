@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
@@ -17,14 +16,13 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import ClearIcon from '@mui/icons-material/Clear';
-import TaskDialog from '../features/task/TaskDialog';
+import Typography from '@mui/material/Typography';
 import CommonSelect from '../components/CommonSelect';
 import CommonTextField from '../components/CommonTextField';
 import CommonDatePicker from '../components/CommonDatePicker';
@@ -44,7 +42,9 @@ interface Props<T> {
     label: string;
     type: 'string' | 'number' | 'Date';
     width: string;
+    isJsxElement?: boolean;
   }[];
+  idColumn: keyof T;
   showToolBar: boolean;
   editDialog?: JSX.Element;
   handleRegisterClick?: Function;
@@ -55,7 +55,47 @@ interface Props<T> {
 type ListComponent = <T>(props: Props<T>) => React.ReactElement<Props<T>>;
 
 const CommonTable: ListComponent = (props) => {
-  type ROW = { id: number } & typeof props.data[0];
+  const theme = useTheme();
+  const styles = {
+    filterButton: css`
+      margin: 0 0 0 auto;
+    `,
+    tableContainer: css`
+      maxheight: 440;
+    `,
+    tableRow: css`
+    "&.Mui-selected, &.Mui-selected:hover": {
+      backgroundColor: ${alpha(
+        theme.palette.primary.main,
+        theme.palette.action.selectedOpacity
+      )};
+  `,
+    tableCell: css``,
+    tableCheckCell: css`
+      width: 4%;
+    `,
+    tableNumericCell: css`
+      padding-right: 5%;
+    `,
+    paper: css`
+      width: 600px;
+      padding-right: ${theme.spacing(1)};
+      padding-bottom: ${theme.spacing(1)};
+    `,
+    form: css`
+      width: 100%;
+    `,
+    gridIcon: css`
+      padding-top: 20px;
+    `,
+    gridItem: css`
+      margin-left: ${theme.spacing(1)};
+      marginr-ight: ${theme.spacing(1)};
+    `,
+  };
+
+  type Data = typeof props.data[0];
+  type ROW = { id: number } & Data;
   type ROW_ITEM = keyof ROW;
 
   interface SORT_STATE {
@@ -266,44 +306,9 @@ const CommonTable: ListComponent = (props) => {
     return filtered;
   };
 
-  const theme = useTheme();
-  const styles = {
-    filterButton: css`
-      margin: 0 0 0 auto;
-    `,
-    tableContainer: css`
-      maxheight: 440;
-    `,
-    tableRow: css`
-    "&.Mui-selected, &.Mui-selected:hover": {
-      backgroundColor: ${alpha(
-        theme.palette.primary.main,
-        theme.palette.action.selectedOpacity
-      )};
-  `,
-    tableCell: css``,
-    tableCheckCell: css`
-      width: 4%;
-    `,
-    tableNumericCell: css`
-      padding-right: 5%;
-    `,
-    paper: css`
-      width: 600px;
-      padding-right: ${theme.spacing(1)};
-      padding-bottom: ${theme.spacing(1)};
-    `,
-    form: css`
-      width: 100%;
-    `,
-    gridIcon: css`
-      padding-top: 20px;
-    `,
-    gridItem: css`
-      margin-left: ${theme.spacing(1)};
-      marginr-ight: ${theme.spacing(1)};
-    `,
-  };
+  const displayContext = sortRows(filterTable(table));
+  console.log(displayContext);
+  console.log(selected);
 
   return (
     <>
@@ -311,28 +316,38 @@ const CommonTable: ListComponent = (props) => {
         {props.showToolBar && (
           <Toolbar disableGutters>
             <CommonTooltip title='登録'>
-              <IconButton aria-label='filter list'>
+              <IconButton
+                aria-label='register task'
+                onClick={() =>
+                  props.handleRegisterClick && props.handleRegisterClick()
+                }
+              >
                 <PlaylistAddIcon />
               </IconButton>
             </CommonTooltip>
             <CommonTooltip title='編集'>
-              {'handleEditClick' in props ? (
-                <IconButton
-                  aria-label='edit task'
-                  onClick={() =>
-                    props.handleEditClick && props.handleEditClick()
-                  }
-                >
-                  <EditIcon />
-                </IconButton>
-              ) : (
-                <IconButton aria-label='edit task'>
-                  <EditIcon />
-                </IconButton>
-              )}
+              <IconButton
+                aria-label='edit task'
+                onClick={() =>
+                  props.handleEditClick &&
+                  props.handleEditClick(
+                    table.filter((row) => selected.includes(row.id)) as Data[]
+                  )
+                }
+              >
+                <EditIcon />
+              </IconButton>
             </CommonTooltip>
             <CommonTooltip title='削除'>
-              <IconButton aria-label='delete'>
+              <IconButton
+                aria-label='delete task'
+                onClick={() =>
+                  props.handleDeleteClick &&
+                  props.handleDeleteClick(
+                    table.filter((row) => selected.includes(row.id)) as Data[]
+                  )
+                }
+              >
                 <DeleteIcon />
               </IconButton>
             </CommonTooltip>
@@ -382,7 +397,7 @@ const CommonTable: ListComponent = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {sortRows(filterTable(table)).map((row, rowIndex) => (
+              {displayContext.map((row, rowIndex) => (
                 <TableRow
                   css={styles.tableRow}
                   onClick={(event) => handleRowClick(event, row.id)}
@@ -405,22 +420,11 @@ const CommonTable: ListComponent = (props) => {
                       width={col.width}
                       align={col.type === 'number' ? 'right' : 'left'}
                     >
-                      <Typography>
-                        {col.name === 'task_name' ? (
-                          <Link
-                            underline='always'
-                            color='textPrimary'
-                            onClick={(event: any) => {
-                              event.stopPropagation();
-                              // setEditTaskOpen(true);
-                            }}
-                          >
-                            {row[col.name]}
-                          </Link>
-                        ) : (
-                          row[col.name]
-                        )}
-                      </Typography>
+                      {col.isJsxElement === true ? (
+                        <>{row[col.name]}</>
+                      ) : (
+                        <Typography>{row[col.name]}</Typography>
+                      )}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -429,7 +433,7 @@ const CommonTable: ListComponent = (props) => {
           </Table>
         </TableContainer>
       </Box>
-      <TaskDialog />
+      {props.editDialog && <>{props.editDialog}</>}
       <Popover
         open={filterOpen}
         anchorEl={filterAnchorEl.current}
@@ -544,7 +548,7 @@ const CommonTable: ListComponent = (props) => {
           </Grid>
         </Paper>
       </Popover>
-      {props.editDialog}
+      <>{props.editDialog}</>
     </>
   );
 };

@@ -1,13 +1,13 @@
-import React from "react";
-import TextField from "@mui/material/TextField";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import jaLocale from "date-fns/locale/ja";
-import enLocale from "date-fns/locale/en-US";
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
-import DatePicker from "@mui/lab/DatePicker";
-import { parseString, parseDate } from "../date/dateHandler";
-import { TARGET } from "../features/types";
+import React from 'react';
+import TextField from '@mui/material/TextField';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import jaLocale from 'date-fns/locale/ja';
+import enLocale from 'date-fns/locale/en-US';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import DatePicker from '@mui/lab/DatePicker';
+import { parseString, parseDate } from '../util/dateHandler';
+import { TARGET } from '../features/types';
 
 type Props = {
   id?: string;
@@ -29,7 +29,7 @@ const DatePickerDialog: React.FC<Props> = (props) => {
       name: props.name,
       value: parseString(date),
     };
-    if ("index" in props) {
+    if ('index' in props) {
       target.index = props.index;
     }
 
@@ -51,7 +51,7 @@ const DatePickerDialog: React.FC<Props> = (props) => {
               {...params}
               variant='standard'
               margin='normal'
-              label={"label" in props && props.label}
+              label={'label' in props && props.label}
               InputLabelProps={{
                 shrink: true,
               }}
