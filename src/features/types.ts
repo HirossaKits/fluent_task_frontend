@@ -114,6 +114,7 @@ export interface PROJECT {
   org_id: string;
   resp_id: string[];
   member_id: string[];
+  task_category: string[];
   description: string;
   startdate: null | string;
   enddate: null | string;
@@ -121,6 +122,12 @@ export interface PROJECT {
   update_at?: null | string;
 }
 
+export interface PROJECT_SATATE {
+  projects: PROJECT[]
+  selectedProjectId: string;
+  editedProject: PROJECT
+  projectDialogOpen: false
+}
 
 
 /*Task*/

@@ -26,7 +26,7 @@ const ShortUserCard = (props: Props) => {
       flex-direction: column;
       width: 210px;
       height: 130px;
-      margin: 9px 20px;
+      margin: 10px 20px;
       position: relative;
     `,
     avatar: css`

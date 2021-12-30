@@ -1,9 +1,12 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+
 import Card from '@mui/material/Card';
 import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
@@ -14,7 +17,11 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import { Line, Doughnut } from 'react-chartjs-2';
+import EditIcon from '@mui/icons-material/Edit';
+import CommonTooltip from '../../components/CommonTooltip';
 import * as colorHandler from '../../util/color';
+import { setProjectDialogOpen } from './projectSlice';
+import ProjectDialog from './ProjectDialog';
 
 const Project = () => {
   const theme = useTheme();
@@ -24,6 +31,16 @@ const Project = () => {
     stack: css`
       margin-bottom: 24px;
       margin-right: 20px;
+    `,
+    titleWrap: css`
+      display: flex;
+      align-items: center;
+    `,
+    titleText: css`
+      padding-bottom: 2px;
+    `,
+    editIcon: css`
+      margin-left: 16px;
     `,
     userCard: css`
       width: 320px;
@@ -103,6 +120,12 @@ const Project = () => {
     ],
   };
 
+  const dispatch = useDispatch();
+  const handleEditClick = () => {
+    dispatch(setProjectDialogOpen(true));
+    console.log('click!');
+  };
+
   return (
     <>
       <Stack
@@ -118,10 +141,17 @@ const Project = () => {
           alignItems='flex-start'
           spacing={3}
         >
-          <Typography variant='h5' component='div'>
-            This is a Sample Project
-          </Typography>
+          <Box css={styles.titleWrap}>
+            <Typography css={styles.titleText} variant='h5' component='div'>
+              サンプルプロジェクト
+            </Typography>
 
+            <CommonTooltip title='編集'>
+              <IconButton css={styles.editIcon} onClick={handleEditClick}>
+                <EditIcon fontSize='small' />
+              </IconButton>
+            </CommonTooltip>
+          </Box>
           <Typography variant='subtitle1' component='div'>
             サンプルプロジェクトです。
           </Typography>
@@ -185,6 +215,7 @@ const Project = () => {
           </div>
         </Stack>
       </Stack>
+      <ProjectDialog />
     </>
   );
 };

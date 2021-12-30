@@ -37,7 +37,8 @@ const LongUserCard = (props: Props) => {
       flex-direction: column;
       width: 280px;
       height: 110px;
-      margin: 9px 20px;
+      margin-bottom: 10px;
+      margin-right: 20px;
       position: relative;
     `,
     avatar: css`

@@ -2,6 +2,7 @@ import React from 'react';
 import { css } from '@emotion/react';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
+import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
@@ -11,6 +12,7 @@ import { dummyUsers } from '../../DummyData';
 import { USER_PROFILE } from '../types';
 import LongUserCard from './LongUserCard';
 import CommonTooltip from '../../components/CommonTooltip';
+import EditIcon from '@mui/icons-material/Edit';
 import GppGoodIcon from '@mui/icons-material/GppGood';
 import GppBadIcon from '@mui/icons-material/GppBad';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -21,18 +23,28 @@ import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 const Org = () => {
   const theme = useTheme();
   const styles = {
-    invite: css`
-      width: 100%;
-      display: flex;
-      align-content: center;
-      justify-content: center;
-    `,
-    buttonArea: css`
+    header: css`
       width: 100%;
       margin: 10px 0;
       display: flex;
-      align-content: center;
-      justify-content: flex-start;
+      align-items: center;
+      justify-content: space-between;
+    `,
+    titleWrap: css`
+      display: flex;
+      align-items: center;
+    `,
+    titleText: css`
+      padding-bottom: 2px;
+    `,
+    editIcon: css`
+      margin-left: 16px;
+    `,
+    invite: css`
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     `,
     button: css`
       padding: 10px;
@@ -94,34 +106,31 @@ const Org = () => {
         /> */}
       </Box>
 
-      <Box css={styles.buttonArea}>
-        {/* <CommonTooltip title='組織の設定'>
-          <IconButton>
-            <SettingsIcon sx={{ fontSize: 24 }} />
-          </IconButton>
-        </CommonTooltip>
-        <CommonTooltip title='ユーザーを招待'>
-          <IconButton>
-            <GroupAddIcon sx={{ fontSize: 24 }} />
-          </IconButton>
-        </CommonTooltip> */}
-        {/* <CommonTooltip title='組織を脱退'>
-          <IconButton>
-            <DirectionsRunIcon sx={{ fontSize: 24 }} />
-          </IconButton>
-        </CommonTooltip> */}
-        <Button
+      <Box css={styles.header}>
+        <Box css={styles.titleWrap}>
+          <Typography css={styles.titleText} variant='h5' component='div'>
+            サンプルグループ
+          </Typography>
+          <CommonTooltip title='編集'>
+            <IconButton css={styles.editIcon}>
+              <EditIcon fontSize='small' />
+            </IconButton>
+          </CommonTooltip>
+        </Box>
+        {/* <Button
           startIcon={<SettingsIcon sx={{ marginBottom: '1px' }} />}
           css={styles.button}
         >
           組織の設定
-        </Button>
-        <Button
-          startIcon={<GroupAddIcon sx={{ marginBottom: '1px' }} />}
-          css={styles.button}
-        >
-          ユーザーを招待
-        </Button>
+        </Button> */}
+        <div>
+          <Button
+            startIcon={<GroupAddIcon sx={{ marginBottom: '1px' }} />}
+            css={styles.button}
+          >
+            ユーザーを招待
+          </Button>
+        </div>
       </Box>
 
       <Box css={styles.wrap}>
