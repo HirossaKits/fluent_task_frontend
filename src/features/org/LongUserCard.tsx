@@ -23,10 +23,10 @@ import GppGoodIcon from '@mui/icons-material/GppGood';
 import GppBadIcon from '@mui/icons-material/GppBad';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import { USER_PROFILE } from '../types';
+import { ORG_USER } from '../types';
 
 type Props = {
-  user: USER_PROFILE;
+  user: ORG_USER;
 };
 
 const LongUserCard = (props: Props) => {
@@ -119,12 +119,12 @@ const LongUserCard = (props: Props) => {
           </Box>
         </Box>
         <Box css={styles.comment}>
-          {props.user.is_premium && (
+          {props.user.is_org_rep && (
             <CommonTooltip title='プレミアムユーザー'>
               <WorkspacePremiumIcon css={styles.iconPremium} />
             </CommonTooltip>
           )}
-          {props.user.is_admin && (
+          {props.user.is_org_admin && (
             <CommonTooltip title='グループ管理者'>
               <AdminPanelSettingsIcon css={styles.iconAdmin} />
             </CommonTooltip>

@@ -52,15 +52,15 @@ export interface PERSONAL_SETTINGS {
   project: null | string;
 }
 
-export interface USER_PROFILE {
-  user_id: string;
-  first_name: string;
-  last_name: string;
-  avatar_img: string;
-  comment: string;
-  is_premium: boolean;
-  is_admin: boolean;
-}
+// export interface USER_PROFILE {
+//   user_id: string;
+//   first_name: string;
+//   last_name: string;
+//   avatar_img: string;
+//   comment: string;
+//   is_premium: boolean;
+//   is_admin: boolean;
+// }
 
 export interface CRED {
   email: string;
@@ -80,6 +80,24 @@ export interface JWT {
 export interface USER_INFO {
   id: number;
   email: string;
+}
+
+/*orgSlise*/
+
+export interface ORG_USER {
+  user_id: string
+  first_name: string,
+  last_name: string,
+  avatar_img: string,
+  comment: string,
+  is_org_rep: boolean,
+  is_org_admin: boolean
+}
+
+export interface ORG_STATE {
+  org_id: string
+  org_name: string
+  org_user: ORG_USER[]
 }
 
 /*mainSlice*/
@@ -114,7 +132,7 @@ export interface PROJECT {
   org_id: string;
   resp_id: string[];
   member_id: string[];
-  task_category: string[];
+  task_category: TASK_CATEGORY[];
   description: string;
   startdate: null | string;
   enddate: null | string;
@@ -175,9 +193,9 @@ export interface TASK {
   update_at?: null | string;
 }
 
-export interface TASK_CATEGORY {
-  value: string;
-  title: string;
+type TASK_CATEGORY = {
+  task_category_id: string;
+  task_category_name: string;
 }
 
 export interface FILTER_TASK {

@@ -17,9 +17,16 @@ import { selectEditedTask } from '../task/taskSlice';
 import { setEditedTask } from '../task/taskSlice';
 import { TARGET } from '../types';
 import CommonSelect from '../../components/CommonSelect';
-import { Status, DemoMember } from '../../selectionOptions';
+import { Status } from '../../selectionOptions';
 import { selectTaskDialogOpen, setTaskDialogOpen } from './taskSlice';
-import { selectTaskCategory, setTaskCategory } from '../proj/projectSlice';
+import {
+  selectSelectedProject,
+  selectTaskCategory,
+  setTaskCategory,
+} from '../proj/projectSlice';
+import useProjectMember from '../../hooks/projectMember';
+// remove later
+import { dummyUsers } from '../../DummyData';
 
 type Props = {
   mode: 'register' | 'edit';
@@ -48,9 +55,16 @@ const TaskDialog: React.FC<Props> = (props: Props) => {
   };
 
   const dispatch = useDispatch();
+  const projectMember = useProjectMember();
   const taskDialogOpen = useSelector(selectTaskDialogOpen);
+  const selectedProject = useSelector(selectSelectedProject);
   const editedTask = useSelector(selectEditedTask);
   const taskCategory = useSelector(selectTaskCategory);
+
+  const projectMemberOptions = projectMember.map((user) => ({
+    value: user.user_id,
+    label: `${user.last_name} ${user.first_name}`,
+  }));
 
   const handleInputChange = (target: TARGET) => {
     dispatch(setEditedTask({ ...editedTask, [target.name]: target.value }));
@@ -120,7 +134,7 @@ const TaskDialog: React.FC<Props> = (props: Props) => {
                   <CommonSelect
                     label='カテゴリー'
                     name='status'
-                    options={taskCategory}
+                    options={projectMemberOptions}
                     value={editedTask.status}
                     onChange={handleInputChange}
                   />
@@ -142,7 +156,7 @@ const TaskDialog: React.FC<Props> = (props: Props) => {
                   <CommonSelect
                     label='担当者'
                     name='assigned'
-                    options={DemoMember}
+                    options={projectMemberOptions}
                     value={editedTask.assigned_name}
                     onChange={handleInputChange}
                   />

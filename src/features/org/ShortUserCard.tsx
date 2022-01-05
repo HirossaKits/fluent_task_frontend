@@ -12,10 +12,10 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import { USER_PROFILE } from '../types';
+import { ORG_USER } from '../types';
 
 type Props = {
-  user: USER_PROFILE;
+  user: ORG_USER;
 };
 
 const ShortUserCard = (props: Props) => {

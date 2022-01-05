@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import SendIcon from '@mui/icons-material/Send';
 import { dummyUsers } from '../../DummyData';
-import { USER_PROFILE } from '../types';
+import { ORG_USER } from '../types';
 import LongUserCard from './LongUserCard';
 import CommonTooltip from '../../components/CommonTooltip';
 import EditIcon from '@mui/icons-material/Edit';
@@ -134,7 +134,7 @@ const Org = () => {
       </Box>
 
       <Box css={styles.wrap}>
-        {dummyUsers.map((user: USER_PROFILE) => (
+        {dummyUsers.map((user) => (
           <LongUserCard user={user} />
         ))}
       </Box>

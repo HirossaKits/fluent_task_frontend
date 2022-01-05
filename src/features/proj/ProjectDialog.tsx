@@ -15,6 +15,7 @@ import {
   setProjectDialogOpen,
 } from '../proj/projectSlice';
 import CommonTextField from '../../components/CommonTextField';
+import { TARGET } from '../types';
 
 const ProjectDialog = () => {
   const theme = useTheme();
@@ -36,7 +37,9 @@ const ProjectDialog = () => {
   const dispatch = useDispatch();
   const projectDialogOpen = useSelector(selectProjectDialogOpen);
 
-  console.log(projectDialogOpen);
+  const handleInputChange = (target: TARGET) => {
+    // dispatch(setEditedTask({ ...editedTask, [target.name]: target.value }));
+  };
 
   const handleClose = () => {
     dispatch(setProjectDialogOpen(false));
@@ -63,8 +66,8 @@ const ProjectDialog = () => {
           <CommonTextField
             label='姓'
             name='last_name'
-            // value={editedProf.last_name}
-            // onChange={handleInputChange}
+            value={'no'}
+            onChange={handleInputChange}
             width='200px'
           />
           {/* <CommonTextField

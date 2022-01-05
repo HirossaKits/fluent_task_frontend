@@ -11,7 +11,7 @@ export const Status = [
   },
   {
     value: "Done",
-    label: "完了",
+    label: "完了　",
   },
 ];
 
@@ -27,21 +27,6 @@ export const Category = [
   {
     value: "category_id_3",
     label: "テスト",
-  },
-];
-
-export const DemoMember = [
-  {
-    value: "aaaaaa",
-    label: "デモ太郎",
-  },
-  {
-    value: "bbb",
-    label: "デモ子",
-  },
-  {
-    value: "Done",
-    label: "デーモン小暮",
   },
 ];
 

@@ -5,11 +5,13 @@ import taskReducer from "../features/task/taskSlice";
 import calendarReducer from "../features/calendar/calendarSlice";
 import projectReducer from "../features/proj/projectSlice";
 import kanbanReducer from '../features/kanban/kanbanSlice'
+import orgReducer from '../features/org/orgSliece'
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     main: mainReducer,
+    org: orgReducer,
     project: projectReducer,
     task: taskReducer,
     calendar: calendarReducer,

@@ -1,8 +1,8 @@
-import React from "react";
-import { css } from "@emotion/react";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
-import { TARGET } from "../features/types";
+import React from 'react';
+import { css } from '@emotion/react';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import { TARGET } from '../features/types';
 
 type Option = {
   value: string | number;
@@ -10,7 +10,7 @@ type Option = {
 };
 
 type Props = {
-  options: Option[];
+  options: Option[] | undefined;
   label?: string;
   width?: number;
   name: string;
@@ -25,7 +25,7 @@ const CommonSelect: React.FC<Props> = (props: Props) => {
       name: props.name,
       value: newItem.value,
     };
-    if ("index" in props) {
+    if ('index' in props) {
       target.index = props.index;
     }
     props.onChange(target);
@@ -33,7 +33,7 @@ const CommonSelect: React.FC<Props> = (props: Props) => {
 
   const styles = {
     autoComp: css`
-      ${"width" in props && `width: ${props.width}px`}
+      ${'width' in props && `width: ${props.width}px`}
     `,
   };
 
@@ -42,16 +42,16 @@ const CommonSelect: React.FC<Props> = (props: Props) => {
       <Autocomplete
         css={styles.autoComp}
         disableClearable
-        options={props.options}
+        options={props.options ?? []}
         getOptionLabel={(option) => option.label.toString()}
-        value={props.options.find((opt) => opt.value === props.value)}
+        value={props.options?.find((opt) => opt.value === props.value)}
         onChange={(event, newItem) => handleSelectChange(event, newItem)}
         renderInput={(params) => (
           <TextField
             {...params}
             variant='standard'
             margin='normal'
-            label={"label" in props && props.label}
+            label={'label' in props && props.label}
             InputLabelProps={{
               shrink: true,
             }}
