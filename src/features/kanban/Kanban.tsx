@@ -19,6 +19,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 import { demoData } from '../../DummyData';
 import { TASK } from '../types';
 import KanbanColumn from './KanbanColumn';
+import useProjectTask from '../../hooks/projectTask';
 
 interface RefValue {
   positions: { [key: string]: { x: number; y: number } };
@@ -97,7 +98,7 @@ const Kanban = () => {
     `,
   };
 
-  const tasks = useSelector(selectTasks);
+  const tasks = useProjectTask();
 
   return (
     <>

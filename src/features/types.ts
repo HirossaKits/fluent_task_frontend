@@ -163,7 +163,7 @@ export type COLUMN_NAME =
 export const Status = {
   'Not started': '開始前',
   'On going': '進行中',
-  'Done': '完了'
+  'Done': '完了　'
 }
 
 /*taskSlice*/
@@ -212,7 +212,6 @@ export interface TASK_STATE {
   filterTaskOpen: boolean;
   filterTask: FILTER_TASK[];
   editedTask: TASK;
-  selectedTask: TASK;
 }
 
 export interface TARGET {

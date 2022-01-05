@@ -1,4 +1,5 @@
-import { TASK, ORG_USER, PROJECT, TASK_STATUS } from "./features/types";
+import { TASK, ORG_STATE, ORG_USER, PROJECT, TASK_STATUS } from "./features/types";
+
 
 export const dummyUsers: ORG_USER[] = [
   {
@@ -56,7 +57,7 @@ export const dummyUsers: ORG_USER[] = [
     is_org_admin: false,
   },
   {
-    user_id: "test7",
+    user_id: "user7",
     first_name: "DEMO",
     last_name: "USER06",
     avatar_img: "https://picsum.photos/200",
@@ -65,9 +66,9 @@ export const dummyUsers: ORG_USER[] = [
     is_org_admin: false,
   },
   {
-    user_id: "test8",
-    first_name: "DEMO",
-    last_name: "USER07",
+    user_id: "user8",
+    first_name: "キンポー",
+    last_name: "サモハン",
     avatar_img: "https://picsum.photos/200",
     comment: "demo demo datte",
     is_org_rep: false,
@@ -75,10 +76,16 @@ export const dummyUsers: ORG_USER[] = [
   },
 ];
 
+export const dummyOrg: ORG_STATE = {
+  org_id: "org_demo",
+  org_name: "○○○○組織",
+  org_user: dummyUsers
+}
+
 export const demoProjects = [
   {
     project_id: 'project_A',
-    project_name: 'テストプロジェクトA',
+    project_name: 'プロジェクトA',
     org_id: 'org_demo',
     resp_id: ['user1', 'user2', 'user3'],
     member_id: ['user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7', 'user8'],
@@ -86,7 +93,7 @@ export const demoProjects = [
       { task_category_id: "1", task_category_name: '設計' },
       { task_category_id: "2", task_category_name: '製造' },
       { task_category_id: "3", task_category_name: 'テスト' },],
-    description: 'テスト用プロジェクトです',
+    description: 'これはデモプロジェクトです。',
     startdate: '2021-09-01',
     enddate: '2022-01-06',
   },
@@ -95,12 +102,12 @@ export const demoProjects = [
     project_name: 'テストプロジェクトB',
     org_id: 'org_demo',
     resp_id: ['user1', 'user2'],
-    member_id: ['user1', 'user2', 'user3', 'user4', 'user5', 'user6', 'user7'],
+    member_id: ['user1', 'user2', 'user3', 'user5', 'user6', 'user7'],
     task_category: [
       { task_category_id: "4", task_category_name: '設計' },
       { task_category_id: "5", task_category_name: '製造' },
       { task_category_id: "6", task_category_name: 'テスト' },],
-    description: 'テスト用プロジェクトです',
+    description: 'これはデモプロジェクトです。',
     startdate: '2021-09-01',
     enddate: '2022-01-06',
   },
@@ -242,7 +249,7 @@ export const demoData: TASK[] = [
   {
     task_id: "task_G",
     task_name: "G機能テスト",
-    project_id: "project_A",
+    project_id: "project_B",
     project_name: "テストプロジェクトA",
     category_id: "category_jdpoasirg2",
     category_name: "テスト",
@@ -264,7 +271,7 @@ export const demoData: TASK[] = [
   {
     task_id: "task_H",
     task_name: "H機能テスト",
-    project_id: "project_A",
+    project_id: "project_B",
     project_name: "テストプロジェクトA",
     category_id: "category_jdpoasirg2",
     category_name: "テスト",

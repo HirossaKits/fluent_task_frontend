@@ -19,7 +19,7 @@ import { selectTasks } from '../task/taskSlice';
 import { fillDigitsByZero } from '../../util/dateHandler';
 import { CALENDAR_YEAR_MONTH } from '../types';
 import { useCalendarFactory } from '../../hooks/calendar';
-import { demoData } from '../../DummyData';
+import useProjectTask from '../../hooks/projectTask';
 
 const week = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -114,12 +114,12 @@ const Calendar = () => {
 
   const dispatch = useDispatch();
   const yearMonth = useSelector(selectYearMonth);
-  const tasks = useSelector(selectTasks);
+  const tasks = useProjectTask();
 
   const calendarFactory = useCalendarFactory();
   const [calendarDates, calendarBars] = calendarFactory(
     yearMonth,
-    demoData,
+    tasks,
     calendarBarStyle
   );
 

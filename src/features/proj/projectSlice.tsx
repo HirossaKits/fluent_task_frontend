@@ -7,7 +7,7 @@ import { demoProjects } from '../../DummyData';
 
 const initialState: PROJECT_SATATE = {
   projects: demoProjects,
-  selectedProjectId: 'project_A',
+  selectedProjectId: demoProjects[0].project_id,
   editedProject: {
     project_id: '',
     project_name: '',
@@ -41,6 +41,12 @@ export const projectSlice = createSlice({
   name: 'project',
   initialState,
   reducers: {
+    setSelectedProjectId(state, action) {
+      state.selectedProjectId = action.payload;
+    },
+    setEditedProject(state, action) {
+      state.editedProject = action.payload;
+    },
     setTaskCategory(state, action) {
       const newProjects = state.projects.map((project) => {
         if (project.project_id === state.selectedProjectId) return project;
@@ -65,9 +71,19 @@ export const projectSlice = createSlice({
   },
 });
 
-export const { setProjectDialogOpen, setTaskCategory } = projectSlice.actions;
+export const {
+  setSelectedProjectId,
+  setEditedProject,
+  setTaskCategory,
+  setProjectDialogOpen,
+} = projectSlice.actions;
 
 export const selectProjects = (state: RootState) => state.project.projects;
+export const selectSelectedProjectId = (state: RootState) =>
+  state.project.selectedProjectId;
+export const selectEditedProject = (state: RootState) =>
+  state.project.editedProject;
+
 export const selectSelectedProject = (state: RootState) =>
   state.project.projects.find(
     (project) => project.project_id === state.project.selectedProjectId

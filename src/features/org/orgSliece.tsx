@@ -3,13 +3,14 @@ import { RootState } from '../../app/store';
 import { ORG_STATE, ORG_USER } from '../types';
 
 // remove later
-import { dummyUsers } from '../../DummyData';
+import { dummyOrg } from '../../DummyData';
 
-const initialState: ORG_STATE = {
-  org_id: '',
-  org_name: '',
-  org_user: dummyUsers,
-};
+const initialState: ORG_STATE = dummyOrg;
+// = {
+//   org_id: '',
+//   org_name: '',
+//   org_user: [],
+// };
 
 export const orgSlice = createSlice({
   name: 'org',

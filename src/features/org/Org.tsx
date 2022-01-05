@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { css } from '@emotion/react';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -7,18 +8,12 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
-import SendIcon from '@mui/icons-material/Send';
-import { dummyUsers } from '../../DummyData';
 import { ORG_USER } from '../types';
 import LongUserCard from './LongUserCard';
 import CommonTooltip from '../../components/CommonTooltip';
 import EditIcon from '@mui/icons-material/Edit';
-import GppGoodIcon from '@mui/icons-material/GppGood';
-import GppBadIcon from '@mui/icons-material/GppBad';
-import SettingsIcon from '@mui/icons-material/Settings';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import GroupRemoveIcon from '@mui/icons-material/GroupRemove';
-import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
+import { selectOrgName, selectOrgUser } from './orgSliece';
 
 const Org = () => {
   const theme = useTheme();
@@ -71,14 +66,17 @@ const Org = () => {
     `,
   };
 
-  const [focus, setFocus] = React.useState(false);
+  // const [focus, setFocus] = React.useState(false);
 
-  const handleOnFocus = () => {
-    setFocus(true);
-  };
-  const handleOnBlur = () => {
-    setFocus(false);
-  };
+  // const handleOnFocus = () => {
+  //   setFocus(true);
+  // };
+  // const handleOnBlur = () => {
+  //   setFocus(false);
+  // };
+
+  const orgName = useSelector(selectOrgName);
+  const users = useSelector(selectOrgUser);
 
   return (
     <>
@@ -109,7 +107,7 @@ const Org = () => {
       <Box css={styles.header}>
         <Box css={styles.titleWrap}>
           <Typography css={styles.titleText} variant='h5' component='div'>
-            サンプルグループ
+            {orgName}
           </Typography>
           <CommonTooltip title='編集'>
             <IconButton css={styles.editIcon}>
@@ -134,7 +132,7 @@ const Org = () => {
       </Box>
 
       <Box css={styles.wrap}>
-        {dummyUsers.map((user) => (
+        {users.map((user) => (
           <LongUserCard user={user} />
         ))}
       </Box>

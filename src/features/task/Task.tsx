@@ -19,6 +19,7 @@ import {
   setEditedTask,
 } from './taskSlice';
 import { TASK, Status, COLUMN_INFO } from '../types';
+import useProjectTask from '../../hooks/projectTask';
 
 const columnInfo: COLUMN_INFO[] = [
   {
@@ -65,15 +66,11 @@ const Task = () => {
   const styles = {
     taskStatus: css`
       display: flex;
-      // align-items: center;
-    `,
-    icon: css`
-      // margin: 0px 20px 2px 0px;
     `,
   };
 
   const dispatch = useDispatch();
-  const tasks = useSelector(selectTasks);
+  const tasks = useProjectTask();
   const mode = useSelector(selectTaskDialogMode);
 
   const handleRegisterClick = () => {
@@ -116,7 +113,6 @@ const Task = () => {
       <div css={styles.taskStatus}>
         <Typography>{Status[task.status]}</Typography>
         <CircleIcon
-          css={styles.icon}
           sx={{
             margin: '2px 0 0 5px;',
             fontSize: 10,

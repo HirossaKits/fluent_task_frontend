@@ -40,26 +40,6 @@ const initialState: TASK_STATE = {
     actual_startdate: null,
     actual_enddate: null,
   },
-  selectedTask: {
-    task_id: '',
-    task_name: '',
-    project_id: '',
-    project_name: '',
-    category_id: '',
-    category_name: '',
-    assigned_id: '',
-    assigned_name: '',
-    author_id: '',
-    author_name: '',
-    status: 'Not started',
-    description: '',
-    estimate_manhour: null,
-    actual_manhour: null,
-    scheduled_startdate: '',
-    scheduled_enddate: '',
-    actual_startdate: null,
-    actual_enddate: null,
-  },
 };
 
 // タスクの登録
@@ -101,13 +81,6 @@ export const taskSlice = createSlice({
     setTasks(state, action) {
       state.tasks = action.payload;
     },
-    // initEditedTask(state, action) {
-    //   if (state.selectedTask.id !== "") {
-    //     state.editedTask = {
-    //       ...initialState.selectedTask,
-    //     };
-    //   }
-    // },
   },
 });
 

@@ -1,15 +1,13 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-
 import Card from '@mui/material/Card';
 import List from '@mui/material/List';
-import ListSubheader from '@mui/material/ListSubheader';
 import ListItem from '@mui/material/ListItem';
 import Avatar from '@mui/material/Avatar';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
@@ -20,13 +18,16 @@ import { Line, Doughnut } from 'react-chartjs-2';
 import EditIcon from '@mui/icons-material/Edit';
 import CommonTooltip from '../../components/CommonTooltip';
 import * as colorHandler from '../../util/color';
-import { setProjectDialogOpen } from './projectSlice';
+import {
+  selectSelectedProject,
+  setEditedProject,
+  setProjectDialogOpen,
+} from './projectSlice';
 import ProjectDialog from './ProjectDialog';
+import useProjectMember from '../../hooks/projectMember';
 
 const Project = () => {
   const theme = useTheme();
-  console.log(theme.palette.primary.main);
-
   const styles = {
     stack: css`
       margin-bottom: 24px;
@@ -121,9 +122,11 @@ const Project = () => {
   };
 
   const dispatch = useDispatch();
+  const project = useSelector(selectSelectedProject);
+  const projectMember = useProjectMember();
   const handleEditClick = () => {
+    dispatch(setEditedProject(project));
     dispatch(setProjectDialogOpen(true));
-    console.log('click!');
   };
 
   return (
@@ -143,9 +146,8 @@ const Project = () => {
         >
           <Box css={styles.titleWrap}>
             <Typography css={styles.titleText} variant='h5' component='div'>
-              サンプルプロジェクト
+              {project?.project_name}
             </Typography>
-
             <CommonTooltip title='編集'>
               <IconButton css={styles.editIcon} onClick={handleEditClick}>
                 <EditIcon fontSize='small' />
@@ -153,9 +155,8 @@ const Project = () => {
             </CommonTooltip>
           </Box>
           <Typography variant='subtitle1' component='div'>
-            サンプルプロジェクトです。
+            {project?.description}
           </Typography>
-
           <Card css={styles.userCard}>
             <Typography
               css={styles.listTitle}
@@ -166,16 +167,27 @@ const Project = () => {
             </Typography>
             <Divider />
             <List css={styles.respList} dense>
-              {[...Array(10)].map(() => (
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemAvatar>
-                      <Avatar />
-                    </ListItemAvatar>
-                    <ListItemText primary={'HELLO!'} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
+              {projectMember
+                .filter((user) => user.is_org_admin)
+                .map((user) => (
+                  <ListItem disablePadding>
+                    <ListItemButton>
+                      <ListItemAvatar>
+                        {user.avatar_img ? (
+                          <Avatar src={user.avatar_img} />
+                        ) : (
+                          <Avatar>
+                            {user.last_name.slice(0, 1) +
+                              user.first_name.slice(0, 1)}
+                          </Avatar>
+                        )}
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={`${user.last_name} ${user.first_name}`}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
             </List>
           </Card>
           <Card css={styles.userCard}>
@@ -188,16 +200,27 @@ const Project = () => {
             </Typography>
             <Divider />
             <List css={styles.memberList} dense>
-              {[...Array(10)].map(() => (
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemAvatar>
-                      <Avatar />
-                    </ListItemAvatar>
-                    <ListItemText primary={'HELLO!'} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
+              {projectMember
+                .filter((user) => !user.is_org_admin)
+                .map((user) => (
+                  <ListItem disablePadding>
+                    <ListItemButton>
+                      <ListItemAvatar>
+                        {user.avatar_img ? (
+                          <Avatar src={user.avatar_img} />
+                        ) : (
+                          <Avatar>
+                            {user.last_name.slice(0, 1) +
+                              user.first_name.slice(0, 1)}
+                          </Avatar>
+                        )}
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={`${user.last_name} ${user.first_name}`}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
             </List>
           </Card>
         </Stack>

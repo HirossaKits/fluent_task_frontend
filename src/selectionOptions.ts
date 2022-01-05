@@ -11,7 +11,7 @@ export const Status = [
   },
   {
     value: "Done",
-    label: "完了　",
+    label: "完了",
   },
 ];
 

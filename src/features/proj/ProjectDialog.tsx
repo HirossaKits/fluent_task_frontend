@@ -11,7 +11,9 @@ import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import {
+  selectEditedProject,
   selectProjectDialogOpen,
+  setEditedProject,
   setProjectDialogOpen,
 } from '../proj/projectSlice';
 import CommonTextField from '../../components/CommonTextField';
@@ -24,7 +26,7 @@ const ProjectDialog = () => {
       display: ;
     `,
     form: css`
-      width: 100%;
+      margin: 0 ${theme.spacing(3)};
     `,
     title: css`
       margin-left: ${theme.spacing(3)};
@@ -36,9 +38,12 @@ const ProjectDialog = () => {
 
   const dispatch = useDispatch();
   const projectDialogOpen = useSelector(selectProjectDialogOpen);
-
+  const editedProject = useSelector(selectEditedProject);
   const handleInputChange = (target: TARGET) => {
-    // dispatch(setEditedTask({ ...editedTask, [target.name]: target.value }));
+    dispatch(
+      setEditedProject({ ...editedProject, [target.name]: target.value })
+    );
+    console.log('target', target);
   };
 
   const handleClose = () => {
@@ -62,11 +67,15 @@ const ProjectDialog = () => {
         </Grid>
       </Stack>
       <form css={styles.form} noValidate autoComplete='off'>
-        <Stack direction='column' justifyContent='center' alignItems='center'>
+        <Stack
+          direction='column'
+          justifyContent='flex-start'
+          alignItems='flex-start'
+        >
           <CommonTextField
-            label='姓'
-            name='last_name'
-            value={'no'}
+            label='プロジェクト名'
+            name='project_name'
+            value={editedProject.project_name}
             onChange={handleInputChange}
             width='200px'
           />
@@ -85,18 +94,18 @@ const ProjectDialog = () => {
             width='200px'
           /> */}
         </Stack>
-        <DialogActions>
-          <Button onClick={handleClose} color='primary'>
-            キャンセル
-          </Button>
-          <Button
-            //  onClick={handleRegisterClick}
-            color='primary'
-          >
-            登録
-          </Button>
-        </DialogActions>
       </form>
+      <DialogActions>
+        <Button onClick={handleClose} color='primary'>
+          キャンセル
+        </Button>
+        <Button
+          //  onClick={handleRegisterClick}
+          color='primary'
+        >
+          登録
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };

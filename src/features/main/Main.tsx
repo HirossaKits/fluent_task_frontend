@@ -25,6 +25,16 @@ import GroupWorkIcon from '@mui/icons-material/GroupWork';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import ViewWeekIcon from '@mui/icons-material/ViewWeek';
+import SettingsMenu from './SettingsMenu';
+import ProfileMenu from './ProfileMenu';
+import Org from '../org/Org';
+import Proj from '../proj/Project';
+import Task from '../task/Task';
+import Kanban from '../kanban/Kanban';
+import Calendar from '../calendar/Calendar';
+import CommonMessageBar from '../../components/CommonMessageBar';
+import { MAIN_COMPONENT_NAME } from '../types';
+import { AppDispatch } from '../../app/store';
 import {
   selectLoginUserCred,
   fetchAsyncGetLoginUser,
@@ -36,21 +46,15 @@ import {
   setSettingsMenuOpen,
   setProfileMenuOpen,
   setMainComponentName,
-  setMessage,
   selectMainComponentName,
   selectMessage,
 } from './mainSlice';
-import { selectProjects, fetchAsyncGetProject } from '../proj/projectSlice';
-import SettingsMenu from './SettingsMenu';
-import ProfileMenu from './ProfileMenu';
-import Org from '../org/Org';
-import Proj from '../proj/Project';
-import Task from '../task/Task';
-import Kanban from '../kanban/Kanban';
-import Calendar from '../calendar/Calendar';
-import CommonMessageBar from '../../components/CommonMessageBar';
-import { MAIN_COMPONENT_NAME } from '../types';
-import { AppDispatch } from '../../app/store';
+import {
+  selectProjects,
+  selectSelectedProjectId,
+  setSelectedProjectId,
+  fetchAsyncGetProject,
+} from '../proj/projectSlice';
 
 const Main = () => {
   const theme = useTheme();
@@ -161,9 +165,10 @@ const Main = () => {
   const loginUserCred = useSelector(selectLoginUserCred);
   const mainComponentName = useSelector(selectMainComponentName);
   const projects = useSelector(selectProjects);
+  const selectedProjectId = useSelector(selectSelectedProjectId);
   const message = useSelector(selectMessage);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  // const [selectedIndex, setSelectedIndex] = useState(0);
   const settingsAnchorEl = useRef(null);
   const profileAnchorEl = useRef(null);
 
@@ -200,8 +205,8 @@ const Main = () => {
     setDrawerOpen(false);
   };
 
-  const handleChange = (event: React.SyntheticEvent, newIndex: number) => {
-    setSelectedIndex(newIndex);
+  const handleTabChange = (event: React.SyntheticEvent, newId: number) => {
+    dispatch(setSelectedProjectId(newId));
   };
 
   const handleSettingsOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -324,13 +329,13 @@ const Main = () => {
             }}
           >
             <Tabs
-              value={selectedIndex}
-              onChange={handleChange}
+              value={selectedProjectId}
+              onChange={handleTabChange}
               variant='scrollable'
               scrollButtons='auto'
             >
               {projects.map((proj) => (
-                <Tab label={proj.project_name} />
+                <Tab label={proj.project_name} value={proj.project_id} />
               ))}
             </Tabs>
           </Box>
@@ -340,19 +345,6 @@ const Main = () => {
         {mainComponentName === 'List' && <Task />}
         {mainComponentName === 'Kanban' && <Kanban />}
         {mainComponentName === 'Calendar' && <Calendar />}
-        {/* {mainComponent === "Org" ? (
-          <Org />
-        ) : mainComponent === "Proj" ? (
-          <Proj />
-        ) : mainComponent === "List" ? (
-          <Task />
-        ) : mainComponent === "Kanban" ? (
-          <Kanban />
-        ) : mainComponent === "Calendar" ? (
-          <Calendar />
-        ) : (
-          <div></div>
-        )} */}
       </div>
       <SettingsMenu anchorEl={settingsAnchorEl} />
       <ProfileMenu anchorEl={profileAnchorEl} />
