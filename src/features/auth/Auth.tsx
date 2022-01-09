@@ -1,24 +1,24 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import Lottie from "react-lottie";
-import { css } from "@emotion/react";
-import { useTheme } from "@mui/material/styles";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import { CRED, REG_INFO } from "../types";
-import { AppDispatch } from "../../app/store";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import Lottie from 'react-lottie';
+import { css } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Link from '@mui/material/Link';
+import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
+import { CRED, REG_INFO } from '../types';
+import { AppDispatch } from '../../app/store';
 import {
   fetchAsyncGetLoginUser,
   fetchAsyncLogin,
   fetchAsyncRegister,
-} from "./authSlice";
-import loginPageAnimation from "../../img/loginPageAnimation.json";
+} from './authSlice';
+import loginPageAnimation from '../../img/loginPageAnimation.json';
 
 enum MODE {
   Login = 0,
@@ -26,10 +26,10 @@ enum MODE {
 }
 
 const initRegInfo: REG_INFO = {
-  first_name: "",
-  last_name: "",
-  email: "",
-  password: "",
+  first_name: '',
+  last_name: '',
+  email: '',
+  password: '',
 };
 
 const Auth: React.FC = () => {
@@ -72,7 +72,7 @@ const Auth: React.FC = () => {
     autoplay: true,
     animationData: loginPageAnimation,
     rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice",
+      preserveAspectRatio: 'xMidYMid slice',
     },
   };
 
@@ -91,10 +91,10 @@ const Auth: React.FC = () => {
       margin-top: ${theme.spacing(20)};
     `,
     title: css`
-      font-family: "Oleo Script", cursive;
+      font-family: 'Megrim', cursive;
     `,
     form: css`
-      margin-top: ${theme.spacing(2)};
+      margin-top: ${theme.spacing(3)};
     `,
     submit: css`
       margin-top: ${theme.spacing(3)};
@@ -219,12 +219,12 @@ const Auth: React.FC = () => {
                 css={styles.submit}
                 onClick={mode === MODE.Login ? login : register}
               >
-                {mode === MODE.Login ? "ログイン" : "サインアップ"}
+                {mode === MODE.Login ? 'ログイン' : 'サインアップ'}
               </Button>
             </Grid>
             <Grid item xs={12}>
               <Link variant='body2' onClick={toggleView}>
-                {mode === MODE.Login ? "アカウント作成" : "ログイン画面に戻る"}
+                {mode === MODE.Login ? 'アカウント作成' : 'ログイン画面に戻る'}
               </Link>
             </Grid>
           </Grid>
@@ -233,12 +233,12 @@ const Auth: React.FC = () => {
         <Box mt={8}>
           <Typography variant='body2' color='textSecondary' align='center'>
             {/* {"Copyright © "} */}
-            {"Copyright   "}
+            {'Copyright   '}
             <Link color='inherit' href=''>
               Hirohisa Kitsuka
-            </Link>{" "}
+            </Link>{' '}
             {new Date().getFullYear()}
-            {"."}
+            {'.'}
           </Typography>
         </Box>
       </Container>

@@ -216,7 +216,7 @@ export interface TASK_STATE {
 
 export interface TARGET {
   name: string;
-  value: string | number | Date | boolean;
+  value: string | string[] | number | Date | boolean;
   index?: number;
 }
 

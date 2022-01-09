@@ -25,6 +25,7 @@ import {
 } from './projectSlice';
 import ProjectDialog from './ProjectDialog';
 import useProjectMember from '../../hooks/projectMember';
+import useProjectResp from '../../hooks/projectResp';
 
 const Project = () => {
   const theme = useTheme();
@@ -48,7 +49,7 @@ const Project = () => {
       text-align: left;
     `,
     respList: css`
-      max-height: 156px;
+      max-height: 160px;
       overflow: hidden visible;
     `,
     memberList: css`
@@ -124,6 +125,7 @@ const Project = () => {
   const dispatch = useDispatch();
   const project = useSelector(selectSelectedProject);
   const projectMember = useProjectMember();
+  const projectResp = useProjectResp();
   const handleEditClick = () => {
     dispatch(setEditedProject(project));
     dispatch(setProjectDialogOpen(true));
@@ -167,27 +169,25 @@ const Project = () => {
             </Typography>
             <Divider />
             <List css={styles.respList} dense>
-              {projectMember
-                .filter((user) => user.is_org_admin)
-                .map((user) => (
-                  <ListItem disablePadding>
-                    <ListItemButton>
-                      <ListItemAvatar>
-                        {user.avatar_img ? (
-                          <Avatar src={user.avatar_img} />
-                        ) : (
-                          <Avatar>
-                            {user.last_name.slice(0, 1) +
-                              user.first_name.slice(0, 1)}
-                          </Avatar>
-                        )}
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={`${user.last_name} ${user.first_name}`}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
+              {projectResp.map((user) => (
+                <ListItem disablePadding>
+                  <ListItemButton>
+                    <ListItemAvatar>
+                      {user.avatar_img ? (
+                        <Avatar src={user.avatar_img} />
+                      ) : (
+                        <Avatar>
+                          {user.last_name.slice(0, 1) +
+                            user.first_name.slice(0, 1)}
+                        </Avatar>
+                      )}
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={`${user.last_name} ${user.first_name}`}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
             </List>
           </Card>
           <Card css={styles.userCard}>
@@ -200,27 +200,25 @@ const Project = () => {
             </Typography>
             <Divider />
             <List css={styles.memberList} dense>
-              {projectMember
-                .filter((user) => !user.is_org_admin)
-                .map((user) => (
-                  <ListItem disablePadding>
-                    <ListItemButton>
-                      <ListItemAvatar>
-                        {user.avatar_img ? (
-                          <Avatar src={user.avatar_img} />
-                        ) : (
-                          <Avatar>
-                            {user.last_name.slice(0, 1) +
-                              user.first_name.slice(0, 1)}
-                          </Avatar>
-                        )}
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={`${user.last_name} ${user.first_name}`}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
+              {projectMember.map((user) => (
+                <ListItem disablePadding>
+                  <ListItemButton>
+                    <ListItemAvatar>
+                      {user.avatar_img ? (
+                        <Avatar src={user.avatar_img} />
+                      ) : (
+                        <Avatar>
+                          {user.last_name.slice(0, 1) +
+                            user.first_name.slice(0, 1)}
+                        </Avatar>
+                      )}
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={`${user.last_name} ${user.first_name}`}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
             </List>
           </Card>
         </Stack>

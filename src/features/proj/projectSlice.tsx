@@ -47,6 +47,15 @@ export const projectSlice = createSlice({
     setEditedProject(state, action) {
       state.editedProject = action.payload;
     },
+    setProject(state, action) {
+      state.projects = state.projects.map((proj) => {
+        if (proj.project_id === action.payload.project_id) {
+          return action.payload;
+        } else {
+          return proj;
+        }
+      });
+    },
     setTaskCategory(state, action) {
       const newProjects = state.projects.map((project) => {
         if (project.project_id === state.selectedProjectId) return project;
@@ -74,6 +83,7 @@ export const projectSlice = createSlice({
 export const {
   setSelectedProjectId,
   setEditedProject,
+  setProject,
   setTaskCategory,
   setProjectDialogOpen,
 } = projectSlice.actions;
@@ -81,13 +91,14 @@ export const {
 export const selectProjects = (state: RootState) => state.project.projects;
 export const selectSelectedProjectId = (state: RootState) =>
   state.project.selectedProjectId;
-export const selectEditedProject = (state: RootState) =>
-  state.project.editedProject;
-
 export const selectSelectedProject = (state: RootState) =>
   state.project.projects.find(
     (project) => project.project_id === state.project.selectedProjectId
   );
+export const selectProjectRespId = (state: RootState) =>
+  state.project.projects.find(
+    (project) => project.project_id === state.project.selectedProjectId
+  )?.resp_id;
 export const selectProjectMemberId = (state: RootState) =>
   state.project.projects.find(
     (project) => project.project_id === state.project.selectedProjectId
@@ -96,6 +107,8 @@ export const selectTaskCategory = (state: RootState) =>
   state.project.projects.find(
     (project) => project.project_id === state.project.selectedProjectId
   )?.task_category;
+export const selectEditedProject = (state: RootState) =>
+  state.project.editedProject;
 
 export const selectProjectDialogOpen = (state: RootState) =>
   state.project.projectDialogOpen;

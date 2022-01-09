@@ -39,7 +39,7 @@ const DatePickerDialog: React.FC<Props> = (props) => {
 
   return (
     <>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <LocalizationProvider dateAdapter={AdapterDateFns} locale={jaLocale}>
         <DatePicker
           // mask='__-__-____'
           inputFormat='yyyy-MM-dd'
