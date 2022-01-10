@@ -10,6 +10,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import CommonTextField from '../../components/CommonTextField';
 import CommonMultiSelect from '../../components/CommonMultiSelect';
 import CommonDatePicker from '../../components/CommonDatePicker';
@@ -31,13 +32,17 @@ const ProjectDialog = () => {
       display: ;
     `,
     form: css`
-      margin: 0 ${theme.spacing(4)};
+      margin: 0 ${theme.spacing(5)};
     `,
     title: css`
       margin-left: ${theme.spacing(3)};
     `,
     close: css`
       margin: 10px;
+    `,
+    arrow: css`
+      margin: 20px 28px 0 36px;
+      color: ${theme.palette.action.active};
     `,
   };
 
@@ -106,7 +111,7 @@ const ProjectDialog = () => {
             name='project_name'
             value={editedProject.project_name}
             onChange={handleInputChange}
-            width='200px'
+            width='50%'
           />
           <CommonTextField
             label='説明'
@@ -129,18 +134,25 @@ const ProjectDialog = () => {
             value={editedMemberOptions}
             onChange={handleInputChange}
           />
-          <CommonDatePicker
-            label='開始日'
-            name='scheduled_endate'
-            value={editedProject.startdate}
-            onChange={handleInputChange}
-          />
-          <CommonDatePicker
-            label='終了日'
-            name='scheduled_endate'
-            value={editedProject.enddate}
-            onChange={handleInputChange}
-          />
+          <Stack
+            direction='row'
+            justifyContent='flex-start'
+            alignItems='center'
+          >
+            <CommonDatePicker
+              label='開始日'
+              name='scheduled_endate'
+              value={editedProject.startdate}
+              onChange={handleInputChange}
+            />
+            <SwapHorizIcon css={styles.arrow} />
+            <CommonDatePicker
+              label='終了日'
+              name='scheduled_endate'
+              value={editedProject.enddate}
+              onChange={handleInputChange}
+            />
+          </Stack>
         </Stack>
       </form>
       <DialogActions>

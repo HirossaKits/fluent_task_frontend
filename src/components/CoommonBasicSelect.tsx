@@ -27,9 +27,6 @@ const CoommonBasicSelect = (props: Props) => {
       name: props.name,
       value: event.target.value,
     };
-    // if ('index' in props) {
-    //   target.index = props.index;
-    // }
     props.onChange(target);
   };
 

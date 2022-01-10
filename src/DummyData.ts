@@ -78,7 +78,7 @@ export const dummyUsers: ORG_USER[] = [
 
 export const dummyOrg: ORG_STATE = {
   org_id: "org_demo",
-  org_name: "株式会社AAABBBCCC",
+  org_name: "組織ABCDEFG",
   org_user: dummyUsers
 }
 
