@@ -102,6 +102,8 @@ export interface ORG_STATE {
 
 /*mainSlice*/
 
+export type MAIN_COMPONENT_NAME = "Org" | "Proj" | "List" | "Kanban" | "Calendar";
+
 export interface MAIN_STATE {
   mainComponentName: MAIN_COMPONENT_NAME;
   settingsMenuOpen: boolean;
@@ -115,8 +117,6 @@ export interface PROFILE {
   avatar_img: string;
   description: string;
 }
-
-export type MAIN_COMPONENT_NAME = "Org" | "Proj" | "List" | "Kanban" | "Calendar";
 
 
 /*Project*/
@@ -134,10 +134,10 @@ export interface PROJECT {
   member_id: string[];
   task_category: TASK_CATEGORY[];
   description: string;
-  startdate: null | string;
-  enddate: null | string;
-  created_at?: null | string;
-  update_at?: null | string;
+  startdate: string;
+  enddate: string;
+  created_at?: string;
+  update_at?: string;
 }
 
 export interface PROJECT_SATATE {
@@ -148,7 +148,7 @@ export interface PROJECT_SATATE {
 }
 
 
-/*Task*/
+/*taskSlice*/
 
 export type COLUMN_NAME =
   | "task_name"
@@ -161,14 +161,13 @@ export type COLUMN_NAME =
   | "description";
 
 export const Status = {
+  'Suspended': '保留　',
   'Not started': '開始前',
   'On going': '進行中',
   'Done': '完了　'
 }
 
-/*taskSlice*/
-
-export type TASK_STATUS = 'Not started' | 'On going' | 'Done'
+export type TASK_STATUS = keyof typeof Status
 
 export interface TASK {
   task_id: string;

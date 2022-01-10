@@ -13,13 +13,13 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Typography from '@mui/material/Typography';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import * as dateHandler from '../../util/dateHandler';
 import { selectYearMonth, setYearMonth } from './calendarSlice';
 import { selectTasks } from '../task/taskSlice';
 import { fillDigitsByZero } from '../../util/dateHandler';
 import { CALENDAR_YEAR_MONTH } from '../types';
 import { useCalendarFactory } from '../../hooks/calendar';
 import useProjectTask from '../../hooks/projectTask';
+import { parseString } from '../../util/dateHandler';
 
 const week = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -181,16 +181,14 @@ const Calendar = () => {
     }
   };
 
-  const yearMonthOptions = (optionCount: number): string[] =>
-    [...Array(optionCount)].map((_, index) => {
-      const ym = `${
-        yearMonth.year + ~~((yearMonth.month - optionCount / 2 + index) / 12)
-      }-${fillDigitsByZero(
-        ((yearMonth.month - Math.ceil(optionCount / 2) + index) % 12) + 1,
-        2
-      )}`;
-      return ym;
+  const yearMonthOptions = (optionCount: number): string[] => {
+    const options = [...Array(optionCount)].map((_, idx) => {
+      let date = new Date(yearMonth.year, yearMonth.month, 1);
+      date.setMonth(date.getMonth() - 1 + idx - Math.floor(optionCount / 2));
+      return parseString(date).slice(0, 7);
     });
+    return options;
+  };
 
   return (
     <Grid
@@ -212,7 +210,7 @@ const Calendar = () => {
           <Autocomplete
             css={styles.select}
             disableClearable
-            options={yearMonthOptions(12)}
+            options={yearMonthOptions(13)}
             value={yearMonth.year_month}
             onChange={(event, newItem) => handleSelectChange(event, newItem)}
             renderInput={(params) => (

@@ -5,20 +5,22 @@ import { PROJECT, PROJECT_SATATE } from '../types';
 import { Category } from '../../selectionOptions';
 import { demoProjects } from '../../DummyData';
 
+const emptyProject = {
+  project_id: '',
+  project_name: '',
+  org_id: '',
+  resp_id: [''],
+  member_id: [''],
+  task_category: [],
+  description: '',
+  startdate: '',
+  enddate: '',
+};
+
 const initialState: PROJECT_SATATE = {
   projects: demoProjects,
   selectedProjectId: demoProjects[0].project_id,
-  editedProject: {
-    project_id: '',
-    project_name: '',
-    org_id: '',
-    resp_id: [''],
-    member_id: [''],
-    task_category: [],
-    description: '',
-    startdate: '',
-    enddate: '',
-  },
+  editedProject: emptyProject,
   projectDialogOpen: false,
 };
 
@@ -94,19 +96,19 @@ export const selectSelectedProjectId = (state: RootState) =>
 export const selectSelectedProject = (state: RootState) =>
   state.project.projects.find(
     (project) => project.project_id === state.project.selectedProjectId
-  );
+  ) ?? emptyProject;
 export const selectProjectRespId = (state: RootState) =>
   state.project.projects.find(
     (project) => project.project_id === state.project.selectedProjectId
-  )?.resp_id;
+  )?.resp_id ?? emptyProject.resp_id;
 export const selectProjectMemberId = (state: RootState) =>
   state.project.projects.find(
     (project) => project.project_id === state.project.selectedProjectId
-  )?.member_id;
+  )?.member_id ?? emptyProject.member_id;
 export const selectTaskCategory = (state: RootState) =>
   state.project.projects.find(
     (project) => project.project_id === state.project.selectedProjectId
-  )?.task_category;
+  )?.task_category ?? emptyProject.task_category;
 export const selectEditedProject = (state: RootState) =>
   state.project.editedProject;
 

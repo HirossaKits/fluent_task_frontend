@@ -10,6 +10,7 @@ import Divider from '@mui/material/Divider';
 import CircleIcon from '@mui/icons-material/Circle';
 import KanbanCard from './KanbanCard';
 import { TASK, TASK_STATUS } from '../types';
+import useProjectMember from '../../hooks/projectMember';
 
 interface RefValue {
   positions: { [key: string]: { x: number; y: number } };
@@ -43,9 +44,12 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
       display: flex;
       flex-direction: column;
       flex-wrap: nowrap;
-      width: 27vw;
+      width: 20vw;
       height: 83vh;
-      background-color: ${theme.palette.action.hover};
+      background-color: ${theme.palette.action.hover
+        .split(',')
+        .map((_, idx) => (idx !== 3 ? _ : ' 0.03)'))
+        .join(',')};
     `,
     header: css`
       display: flex;
@@ -70,6 +74,8 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
 
   const dispatch = useDispatch();
   const tasks = useSelector(selectTasks);
+  const projectMember = useProjectMember();
+  console.log('projectMember', projectMember);
   const [dragOver, setDragOver] = useState(false);
 
   const ref = useRef<RefValue>({
@@ -152,7 +158,12 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
                 position.y = rect.top;
               }}
             >
-              <KanbanCard task={task} />
+              <KanbanCard
+                task={task}
+                user={projectMember.find(
+                  (user) => task.assigned_id === user.user_id
+                )}
+              />
             </div>
           ))}
         </Box>

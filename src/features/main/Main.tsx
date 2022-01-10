@@ -274,7 +274,7 @@ const Main = () => {
             <ListItemIcon>
               <PeopleAltIcon />
             </ListItemIcon>
-            <ListItemText css={styles.drawerText} primary={'組織'} />
+            <ListItemText css={styles.drawerText} primary={'グループ'} />
           </ListItem>
           <ListItem
             button

@@ -1,25 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { css } from '@emotion/react';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectTasks } from '../task/taskSlice';
-import { setIsFirstRender } from './kanbanSlice';
 import { useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import Popover from '@mui/material/Popover';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
-import CircleIcon from '@mui/icons-material/Circle';
-import { demoData } from '../../DummyData';
-import { TASK } from '../types';
 import KanbanColumn from './KanbanColumn';
 import useProjectTask from '../../hooks/projectTask';
+import { Status, TASK_STATUS } from '../types';
 
 interface RefValue {
   positions: { [key: string]: { x: number; y: number } };
@@ -103,6 +92,12 @@ const Kanban = () => {
   return (
     <>
       <div css={styles.container}>
+        <KanbanColumn
+          themeColor={theme.palette.text.disabled}
+          status='Suspended'
+          headerText='保留'
+          tasks={tasks.filter((task) => task.status === 'Suspended')}
+        />
         <KanbanColumn
           themeColor={theme.palette.warning.light}
           status='Not started'

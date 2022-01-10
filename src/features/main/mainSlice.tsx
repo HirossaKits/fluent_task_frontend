@@ -4,7 +4,7 @@ import { RootState } from '../../app/store';
 import { MAIN_STATE } from '../types';
 
 const initialState: MAIN_STATE = {
-  mainComponentName: 'List',
+  mainComponentName: 'Proj',
   settingsMenuOpen: false,
   profileMenuOpen: false,
   profileDialogOpen: false,

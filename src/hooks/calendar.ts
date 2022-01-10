@@ -7,7 +7,6 @@ export const useCalendarFactory = () => {
 
     const firstDateOfCalendar = dateHandler.getFirstDateOfCalendar(yearMonth.year, yearMonth.month)
     const lastDateOfCalendar = dateHandler.getLastDateOfCalendar(yearMonth.year, yearMonth.month)
-
     const firstDayOfCalendar = dateHandler.getFirstDayOfCalendar(yearMonth.year, yearMonth.month)
 
     // カレンダーの日付

@@ -7,16 +7,14 @@ import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Popover from '@mui/material/Popover';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import EditIcon from '@mui/icons-material/Edit';
-import el from 'date-fns/esm/locale/el/index.js';
-import { TASK } from '../types';
+import CommonAvatar from '../../components/CommonAvatar';
+import CommonTooltip from '../../components/CommonTooltip';
+
+import { ORG_USER, TASK } from '../types';
 
 type Props = {
   task: TASK;
+  user: ORG_USER | undefined;
 };
 
 const KanbanCard: React.FC<Props> = (props: Props) => {
@@ -27,8 +25,8 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
       position: relative;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       min-height: 50px;
-      justify-content: space-between;
       height: ${theme.spacing(7)};
       margin-top: ${theme.spacing(2)};
       margin-left: ${theme.spacing(2)};
@@ -43,12 +41,10 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
       align-items: start;
       margin-left: 15px;
     `,
-    status: css`
-      min-width: 45px;
+    user: css`
       display: flex;
-      flex-direction: column;
       justify-content: center;
-      align-items: end;
+      align-items: center;
       margin-left: 10px;
     `,
     dot: css`
@@ -58,23 +54,15 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
     `,
   };
 
-  const [drag, setDrag] = useState(false);
-
+  // const [drag, setDrag] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-  // useEffect(() => {
-  //   if(drag)
-  // }, [drag]);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   const handleDragStart = (e: React.DragEvent<HTMLElement>) => {
-    setDrag(true);
+    // setDrag(true);
     e.dataTransfer.setData(
       'text/plain',
       `${props.task.status}/${props.task.task_id}`
@@ -84,7 +72,7 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
   };
 
   const handleDragEnd = (e: React.DragEvent<HTMLElement>) => {
-    setDrag(false);
+    // setDrag(false);
     e.currentTarget.style.opacity = '1';
     e.dataTransfer.clearData();
   };
@@ -118,6 +106,10 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
   //   e.currentTarget.style.cursor = 'grab';
   // };
 
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Card
       css={styles.card}
@@ -134,11 +126,13 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
           overflow: 'hidden',
         }}
       >
-        <Typography variant='body1' component='div' noWrap>
+        <Typography component='div' noWrap>
           {props.task.task_name}
         </Typography>
       </Box>
-      <Box css={styles.status}></Box>
+      <Box css={styles.user}>
+        <CommonAvatar user={props.user} />
+      </Box>
       <Box css={styles.dot}>
         <IconButton onClick={handleClick}>
           <MoreVertIcon fontSize='small' />

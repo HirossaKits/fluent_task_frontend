@@ -17,7 +17,7 @@ import Divider from '@mui/material/Divider';
 import { Line, Doughnut } from 'react-chartjs-2';
 import EditIcon from '@mui/icons-material/Edit';
 import CommonTooltip from '../../components/CommonTooltip';
-import * as colorHandler from '../../util/color';
+import * as colorHandler from '../../util/colorHandler';
 import {
   selectSelectedProject,
   setEditedProject,
@@ -26,6 +26,9 @@ import {
 import ProjectDialog from './ProjectDialog';
 import useProjectMember from '../../hooks/projectMember';
 import useProjectResp from '../../hooks/projectResp';
+import useProjectTask from '../../hooks/projectTask';
+import useCreateLineChartData from '../../hooks/lineChartData';
+import useCreateDoughnutData from '../../hooks/doughnutData';
 
 const Project = () => {
   const theme = useTheme();
@@ -85,13 +88,29 @@ const Project = () => {
     `,
   };
 
+  const dispatch = useDispatch();
+  const createLineChartData = useCreateLineChartData();
+  const createDoughnutData = useCreateDoughnutData();
+  const tasks = useProjectTask();
+  const project = useSelector(selectSelectedProject);
+  const projectMember = useProjectMember();
+  const projectResp = useProjectResp();
+  const lineChartData = createLineChartData(
+    tasks,
+    project.startdate,
+    project.enddate,
+    'daily'
+  );
+  const doughnutData = createDoughnutData(tasks);
+  console.log('lineData', lineChartData);
+
   const lineData = {
-    labels: ['2021-11', '2021-12', '2021-01', '2021-02', '2021-03', '2021-03'],
+    labels: lineChartData.map((data) => data.label),
     datasets: [
       {
-        label: '進捗',
-        data: [5, 7, 9, 10, 16, 20],
-        lineTension: 0.2,
+        label: '進捗(%)',
+        data: lineChartData.map((data) => data.percent),
+        lineTension: 0,
         backgroundColor: colorHandler.convertColorCodeToRGBA(
           theme.palette.primary.main,
           0.2
@@ -104,28 +123,40 @@ const Project = () => {
     ],
   };
 
+  const lineOption = {
+    scales: {
+      y: {
+        max: 100,
+        min: 0,
+        ticks: {
+          stepSize: 10,
+        },
+      },
+    },
+  };
+
   const dataDoughnut = {
-    labels: ['完了', '未完了'],
+    labels: doughnutData.map((data) => data.label),
     datasets: [
       {
-        data: [70, 30],
+        data: doughnutData.map((data) => data.value),
 
         backgroundColor: [
-          colorHandler.convertColorCodeToRGBA(theme.palette.primary.main, 0.2),
-          colorHandler.convertColorCodeToRGBA(theme.palette.grey[400], 0.2),
+          colorHandler.convertColorCodeToRGBA(theme.palette.success.light, 0.4),
+          colorHandler.convertColorCodeToRGBA(theme.palette.info.light, 0.4),
+          colorHandler.convertColorCodeToRGBA(theme.palette.warning.light, 0.4),
+          colorHandler.convertColorCodeToRGBA(theme.palette.grey[400], 0.4),
         ],
         borderColor: [
-          colorHandler.convertColorCodeToRGBA(theme.palette.primary.main),
+          colorHandler.convertColorCodeToRGBA(theme.palette.success.light),
+          colorHandler.convertColorCodeToRGBA(theme.palette.info.light),
+          colorHandler.convertColorCodeToRGBA(theme.palette.warning.light),
           colorHandler.convertColorCodeToRGBA(theme.palette.grey[400]),
         ],
       },
     ],
   };
 
-  const dispatch = useDispatch();
-  const project = useSelector(selectSelectedProject);
-  const projectMember = useProjectMember();
-  const projectResp = useProjectResp();
   const handleEditClick = () => {
     dispatch(setEditedProject(project));
     dispatch(setProjectDialogOpen(true));
@@ -229,7 +260,7 @@ const Project = () => {
           alignItems='flex-start'
         >
           <div css={styles.lineChartWrapper}>
-            <Line css={styles.lineChart} data={lineData} />
+            <Line css={styles.lineChart} data={lineData} options={lineOption} />
           </div>
           <div css={styles.doughnutWrapper}>
             <Doughnut css={styles.doughnut} data={dataDoughnut} />
