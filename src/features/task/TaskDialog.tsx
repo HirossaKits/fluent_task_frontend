@@ -3,8 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material';
 import Stack from '@mui/material/Stack';
-import TextField from '@mui/material/TextField';
-
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import CommonTextField from '../../components/CommonTextField';
 import CommonDatePicker from '../../components/CommonDatePicker';
@@ -79,14 +77,14 @@ const TaskDialog: React.FC<Props> = (props: Props) => {
       >
         <CommonTextField
           label='タスク名'
-          name='title'
+          name='task_name'
           value={editedTask.task_name}
           onChange={handleInputChange}
           width='350px'
         />
         <CommonSelect
           label='カテゴリー'
-          name='status'
+          name='task_category'
           options={taskCategoryOption}
           value={editedTask.status}
           onChange={handleInputChange}

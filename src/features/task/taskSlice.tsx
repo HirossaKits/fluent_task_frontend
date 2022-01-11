@@ -1,11 +1,32 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import { TASK_STATE } from '../types';
+import { TASK, TASK_STATE } from '../types';
 import { JWT } from '../types';
 
 // Demo
 import { demoData } from '../../DummyData';
 import axios from 'axios';
+
+export const initialTask: TASK = {
+  task_id: '',
+  task_name: '',
+  project_id: '',
+  project_name: '',
+  category_id: '',
+  category_name: '',
+  assigned_id: '',
+  assigned_name: '',
+  author_id: '',
+  author_name: '',
+  status: 'Not started',
+  description: '',
+  estimate_manhour: null,
+  actual_manhour: null,
+  scheduled_startdate: '',
+  scheduled_enddate: '',
+  actual_startdate: null,
+  actual_enddate: null,
+};
 
 const initialState: TASK_STATE = {
   tasks: demoData,
@@ -20,26 +41,7 @@ const initialState: TASK_STATE = {
       value: '',
     },
   ],
-  editedTask: {
-    task_id: '',
-    task_name: '',
-    project_id: '',
-    project_name: '',
-    category_id: '',
-    category_name: '',
-    assigned_id: '',
-    assigned_name: '',
-    author_id: '',
-    author_name: '',
-    status: 'Not started',
-    description: '',
-    estimate_manhour: null,
-    actual_manhour: null,
-    scheduled_startdate: '',
-    scheduled_enddate: '',
-    actual_startdate: null,
-    actual_enddate: null,
-  },
+  editedTask: initialTask,
 };
 
 // タスクの登録

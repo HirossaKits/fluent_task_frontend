@@ -13,6 +13,7 @@ import SouthEastIcon from '@mui/icons-material/SouthEast';
 import EastIcon from '@mui/icons-material/East';
 import { setMessageOpen, setMessage } from '../main/mainSlice';
 import {
+  initialTask,
   selectTaskDialogMode,
   setTaskDialogOpen,
   setTaskDialogMode,
@@ -20,6 +21,7 @@ import {
 } from './taskSlice';
 import { TASK, Status, COLUMN_INFO } from '../types';
 import useProjectTask from '../../hooks/projectTask';
+import { display } from '@mui/system';
 
 const columnInfo: COLUMN_INFO[] = [
   {
@@ -53,7 +55,7 @@ const columnInfo: COLUMN_INFO[] = [
   },
   {
     name: 'estimate_manhour',
-    label: '見積工数',
+    label: '予定工数(H)',
     type: 'number',
     width: '10%',
   },
@@ -75,9 +77,11 @@ const Task = () => {
 
   const handleRegisterClick = () => {
     dispatch(setTaskDialogMode('register'));
+    dispatch(setEditedTask(initialTask));
     dispatch(setTaskDialogOpen(true));
   };
   const hendleEditClick = (tasks: TASK[]) => {
+    console.log('res', tasks[0]);
     dispatch(setTaskDialogMode('edit'));
     if (tasks.length < 1) {
       dispatch(setMessage('一覧から編集するタスクを選択してください。'));
@@ -93,9 +97,8 @@ const Task = () => {
     dispatch(setTaskDialogOpen(true));
   };
 
-  const tasksForTable = tasks.map((task) => ({
-    ...task,
-    task_name: (
+  const elementFactory = {
+    task_name: (task: TASK) => (
       <Typography>
         <Link
           href='#'
@@ -109,7 +112,7 @@ const Task = () => {
         </Link>
       </Typography>
     ),
-    status: (
+    status: (task: TASK) => (
       <div css={styles.taskStatus}>
         <Typography>{Status[task.status]}</Typography>
         <CircleIcon
@@ -126,86 +129,105 @@ const Task = () => {
         />
       </div>
     ),
-    scheduled_startdate:
-      !task.actual_startdate || !task.scheduled_startdate ? (
-        <Typography>{Status[task.status]}</Typography>
-      ) : task.actual_startdate < task.scheduled_startdate ? (
-        <div css={styles.taskStatus}>
-          <Typography>{task.scheduled_startdate}</Typography>
-          <NorthEastIcon
-            sx={{
-              margin: '0 0 0 8px;',
-              fontSize: 'small',
-              color: theme.palette.success.light,
-            }}
-          />
-        </div>
-      ) : task.actual_startdate > task.scheduled_startdate ? (
-        <div css={styles.taskStatus}>
-          <Typography>{task.scheduled_startdate}</Typography>
-          <SouthEastIcon
-            sx={{
-              margin: '0 0 0 8px;',
-              fontSize: 'small',
-              color: theme.palette.error.light,
-            }}
-          />
-        </div>
-      ) : (
-        <div css={styles.taskStatus}>
-          <Typography>{task.scheduled_startdate}</Typography>
-          <EastIcon
-            sx={{
-              margin: '0 0 0 8px;',
-              fontSize: 'small',
-              color: theme.palette.info.light,
-            }}
-          />
-        </div>
-      ),
-    scheduled_enddate:
-      !task.actual_enddate || !task.scheduled_enddate ? (
-        <Typography>{Status[task.status]}</Typography>
-      ) : task.actual_enddate < task.scheduled_enddate ? (
-        <div css={styles.taskStatus}>
-          <Typography>{task.scheduled_enddate}</Typography>
-          <NorthEastIcon
-            sx={{
-              margin: '0 0 0 8px;',
-              fontSize: 'small',
-              color: theme.palette.success.light,
-            }}
-          />
-        </div>
-      ) : task.actual_enddate > task.scheduled_enddate ? (
-        <div css={styles.taskStatus}>
-          <Typography>{task.scheduled_enddate}</Typography>
-          <SouthEastIcon
-            sx={{
-              margin: '0 0 0 8px;',
-              fontSize: 'small',
-              color: theme.palette.error.light,
-            }}
-          />
-        </div>
-      ) : (
-        <div css={styles.taskStatus}>
-          <Typography>{task.scheduled_enddate}</Typography>
-          <EastIcon
-            sx={{
-              margin: '0 0 0 8px;',
-              fontSize: 'small',
-              color: theme.palette.info.light,
-            }}
-          />
-        </div>
-      ),
-  }));
+    scheduled_startdate: (task: TASK) => {
+      if (!task.actual_startdate || !task.scheduled_startdate) {
+        return <Typography>{task.scheduled_startdate}</Typography>;
+      } else {
+        if (task.actual_startdate < task.scheduled_startdate) {
+          return (
+            <div style={{ display: 'flex' }}>
+              <Typography>{task.scheduled_startdate}</Typography>
+              <NorthEastIcon
+                sx={{
+                  margin: '0 0 0 8px;',
+                  fontSize: 'small',
+                  color: theme.palette.success.light,
+                }}
+              />
+            </div>
+          );
+        } else if (task.actual_startdate > task.scheduled_startdate) {
+          return (
+            <div css={styles.taskStatus}>
+              <Typography>{task.scheduled_startdate}</Typography>
+              <SouthEastIcon
+                sx={{
+                  margin: '0 0 0 8px;',
+                  fontSize: 'small',
+                  color: theme.palette.error.light,
+                }}
+              />
+            </div>
+          );
+        } else {
+          return (
+            <div css={styles.taskStatus}>
+              <Typography>{task.scheduled_startdate}</Typography>
+              <EastIcon
+                sx={{
+                  margin: '0 0 0 8px;',
+                  fontSize: 'small',
+                  color: theme.palette.info.light,
+                }}
+              />
+            </div>
+          );
+        }
+      }
+    },
+    scheduled_enddate: (task: TASK) => {
+      if (!task.actual_enddate || !task.scheduled_enddate) {
+        return <Typography>{task.scheduled_enddate}</Typography>;
+      } else {
+        if (task.actual_enddate < task.scheduled_enddate) {
+          return (
+            <div style={{ display: 'flex' }}>
+              <Typography>{task.scheduled_enddate}</Typography>
+              <NorthEastIcon
+                sx={{
+                  margin: '0 0 0 8px;',
+                  fontSize: 'small',
+                  color: theme.palette.success.light,
+                }}
+              />
+            </div>
+          );
+        } else if (task.actual_enddate > task.scheduled_enddate) {
+          return (
+            <div css={styles.taskStatus}>
+              <Typography>{task.scheduled_enddate}</Typography>
+              <SouthEastIcon
+                sx={{
+                  margin: '0 0 0 8px;',
+                  fontSize: 'small',
+                  color: theme.palette.error.light,
+                }}
+              />
+            </div>
+          );
+        } else {
+          return (
+            <div css={styles.taskStatus}>
+              <Typography>{task.scheduled_enddate}</Typography>
+              <EastIcon
+                sx={{
+                  margin: '0 0 0 8px;',
+                  fontSize: 'small',
+                  color: theme.palette.info.light,
+                }}
+              />
+            </div>
+          );
+        }
+      }
+    },
+  };
 
   return (
     <>
       <CommonTable
-        data={tasksForTable}
+        data={tasks}
+        elementFactory={elementFactory}
         columnInfo={columnInfo}
         showToolBar={true}
         editDialog={<TaskDialog mode={mode} />}

@@ -35,8 +35,9 @@ import {
   FilterOperatorOfDate,
 } from '../selectionOptions';
 
-interface Props<T> {
+interface Props<T, K extends keyof T> {
   data: T[];
+  elementFactory: { [key in K]: (param: T) => JSX.Element };
   columnInfo: {
     name: keyof T;
     label: string;
@@ -52,7 +53,9 @@ interface Props<T> {
   handleDeleteClick?: Function;
 }
 
-type ListComponent = <T>(props: Props<T>) => React.ReactElement<Props<T>>;
+type ListComponent = <T, K extends keyof T>(
+  props: Props<T, K>
+) => React.ReactElement<T>;
 
 const CommonTable: ListComponent = (props) => {
   const theme = useTheme();
@@ -94,8 +97,9 @@ const CommonTable: ListComponent = (props) => {
     `,
   };
 
-  type Data = typeof props.data[0];
-  type ROW = { id: number } & Data;
+  type FACTORY = keyof typeof props.elementFactory;
+  type DATA = typeof props.data[0];
+  type ROW = { id: number } & DATA;
   type ROW_ITEM = keyof ROW;
 
   interface SORT_STATE {
@@ -110,7 +114,7 @@ const CommonTable: ListComponent = (props) => {
     value: string;
   }
 
-  const table = props.data.map((row, index) => ({ id: index, ...row }));
+  const table = props.data.map((row, index) => ({ ...row, id: index }));
 
   const filterAnchorEl = useRef(null);
 
@@ -128,6 +132,21 @@ const CommonTable: ListComponent = (props) => {
       value: '',
     },
   ]);
+
+  const handleRegisterClick = () => {
+    props.handleRegisterClick && props.handleRegisterClick();
+  };
+
+  const handleEditClick = () => {
+    console.log(
+      'test',
+      table.filter((row) => selected.includes(row.id)) as DATA[]
+    );
+    props.handleEditClick &&
+      props.handleEditClick(
+        table.filter((row) => selected.includes(row.id)) as DATA[]
+      );
+  };
 
   const handleRowClick = (event: React.MouseEvent<unknown>, id: number) => {
     let newSelected = selected.slice();
@@ -318,23 +337,13 @@ const CommonTable: ListComponent = (props) => {
             <CommonTooltip title='登録'>
               <IconButton
                 aria-label='register task'
-                onClick={() =>
-                  props.handleRegisterClick && props.handleRegisterClick()
-                }
+                onClick={handleRegisterClick}
               >
                 <PlaylistAddIcon />
               </IconButton>
             </CommonTooltip>
             <CommonTooltip title='編集'>
-              <IconButton
-                aria-label='edit task'
-                onClick={() =>
-                  props.handleEditClick &&
-                  props.handleEditClick(
-                    table.filter((row) => selected.includes(row.id)) as Data[]
-                  )
-                }
-              >
+              <IconButton aria-label='edit task' onClick={handleEditClick}>
                 <EditIcon />
               </IconButton>
             </CommonTooltip>
@@ -344,7 +353,7 @@ const CommonTable: ListComponent = (props) => {
                 onClick={() =>
                   props.handleDeleteClick &&
                   props.handleDeleteClick(
-                    table.filter((row) => selected.includes(row.id)) as Data[]
+                    table.filter((row) => selected.includes(row.id)) as DATA[]
                   )
                 }
               >
@@ -421,7 +430,12 @@ const CommonTable: ListComponent = (props) => {
                       align={col.type === 'number' ? 'right' : 'left'}
                     >
                       {col.isJsxElement === true ? (
-                        <>{row[col.name]}</>
+                        <>
+                          {props.elementFactory &&
+                            props.elementFactory[col.name as FACTORY](
+                              row as DATA
+                            )}
+                        </>
                       ) : (
                         <Typography>{row[col.name]}</Typography>
                       )}
