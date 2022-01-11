@@ -14,6 +14,7 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import CommonTextField from '../../components/CommonTextField';
 import CommonMultiSelect from '../../components/CommonMultiSelect';
 import CommonDatePicker from '../../components/CommonDatePicker';
+import CommonDialog from '../../components/CommonDialog';
 import { selectOrgUser } from '../org/orgSliece';
 import {
   selectEditedProject,
@@ -28,9 +29,6 @@ import { TARGET } from '../types';
 const ProjectDialog = () => {
   const theme = useTheme();
   const styles = {
-    header: css`
-      display: ;
-    `,
     form: css`
       margin: 0 ${theme.spacing(5)};
     `,
@@ -85,85 +83,63 @@ const ProjectDialog = () => {
   };
 
   return (
-    <Dialog
+    <CommonDialog
       open={projectDialogOpen}
+      title='プロジェクトを編集'
       onClose={handleClose}
-      aria-labelledby='form-dialog-title'
       maxWidth='sm'
-      fullWidth
+      type='input'
     >
-      <Stack direction='row' justifyContent='space-between'>
-        <DialogTitle>プロジェクトを編集</DialogTitle>
-        <Grid css={styles.close} item>
-          <IconButton size='small' onClick={handleClose}>
-            <CloseIcon />
-          </IconButton>
-        </Grid>
-      </Stack>
-      <form css={styles.form} noValidate autoComplete='off'>
-        <Stack
-          direction='column'
-          justifyContent='flex-start'
-          alignItems='flex-start'
-        >
-          <CommonTextField
-            label='プロジェクト名'
-            name='project_name'
-            value={editedProject.project_name}
-            onChange={handleInputChange}
-            width='50%'
-          />
-          <CommonTextField
-            label='説明'
-            name='description'
-            value={editedProject.description}
-            onChange={handleInputChange}
-            width='100%'
-          />
-          <CommonMultiSelect
-            label='プロジェクト管理者'
-            name='resp_id'
-            options={userOptions}
-            value={editedRespOptions}
-            onChange={handleInputChange}
-          />
-          <CommonMultiSelect
-            label='プロジェクトメンバー'
-            name='member_id'
-            options={userOptions}
-            value={editedMemberOptions}
+      <Stack
+        direction='column'
+        justifyContent='flex-start'
+        alignItems='flex-start'
+      >
+        <CommonTextField
+          label='プロジェクト名'
+          name='project_name'
+          value={editedProject.project_name}
+          onChange={handleInputChange}
+          width='50%'
+        />
+        <CommonTextField
+          label='説明'
+          name='description'
+          value={editedProject.description}
+          onChange={handleInputChange}
+          width='100%'
+        />
+        <CommonMultiSelect
+          label='プロジェクト管理者'
+          name='resp_id'
+          options={userOptions}
+          value={editedRespOptions}
+          onChange={handleInputChange}
+        />
+        <CommonMultiSelect
+          label='プロジェクトメンバー'
+          name='member_id'
+          options={userOptions}
+          value={editedMemberOptions}
+          onChange={handleInputChange}
+        />
+        <Stack direction='row' justifyContent='flex-start' alignItems='center'>
+          <CommonDatePicker
+            label='開始日'
+            name='scheduled_endate'
+            value={editedProject.startdate}
             onChange={handleInputChange}
           />
-          <Stack
-            direction='row'
-            justifyContent='flex-start'
-            alignItems='center'
-          >
-            <CommonDatePicker
-              label='開始日'
-              name='scheduled_endate'
-              value={editedProject.startdate}
-              onChange={handleInputChange}
-            />
-            <SwapHorizIcon css={styles.arrow} />
-            <CommonDatePicker
-              label='終了日'
-              name='scheduled_endate'
-              value={editedProject.enddate}
-              onChange={handleInputChange}
-            />
-          </Stack>
+          <SwapHorizIcon css={styles.arrow} />
+          <CommonDatePicker
+            label='終了日'
+            name='scheduled_endate'
+            value={editedProject.enddate}
+            onChange={handleInputChange}
+          />
         </Stack>
-      </form>
-      <DialogActions>
-        <Button onClick={handleClose} color='primary'>
-          キャンセル
-        </Button>
-        <Button onClick={handleRegisterClick} color='primary'>
-          登録
-        </Button>
-      </DialogActions>
-    </Dialog>
+      </Stack>
+    </CommonDialog>
   );
 };
 

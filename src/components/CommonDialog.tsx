@@ -1,6 +1,6 @@
 import React from 'react';
 import { css } from '@emotion/react';
-import { useTheme } from '@mui/material';
+import { Breakpoint, useTheme } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -11,23 +11,26 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
 type Props = {
+  children?: JSX.Element;
   open: boolean;
   title: string;
   onClose: () => void;
   onRegisterClick?: () => void;
+  maxWidth?: Breakpoint;
+  type: 'input' | 'display';
 };
 
 const CommonDialog = (props: Props) => {
   const theme = useTheme();
   const styles = {
-    form: css`
-      margin: 0 ${theme.spacing(5)};
-    `,
     title: css`
-      margin-left: ${theme.spacing(3)};
+      margin-left: ${theme.spacing(1)};
     `,
     close: css`
       margin: 10px;
+    `,
+    form: css`
+      margin: 0 ${theme.spacing(5)};
     `,
   };
 
@@ -36,26 +39,30 @@ const CommonDialog = (props: Props) => {
       open={props.open}
       onClose={props.onClose}
       aria-labelledby='form-dialog-title'
-      maxWidth='sm'
+      maxWidth={'maxWidth' in props && props.maxWidth}
       fullWidth
     >
       <Stack direction='row' justifyContent='space-between'>
-        <DialogTitle>{props.title}</DialogTitle>
+        <DialogTitle css={styles.title}>{props.title}</DialogTitle>
         <Box css={styles.close}>
           <IconButton size='small' onClick={props.onClose}>
             <CloseIcon />
           </IconButton>
         </Box>
       </Stack>
-      <form css={styles.form} noValidate autoComplete='off'></form>
-      <DialogActions>
-        <Button onClick={props.onClose} color='primary'>
-          キャンセル
-        </Button>
-        <Button onClick={props.onRegisterClick} color='primary'>
-          登録
-        </Button>
-      </DialogActions>
+      <form css={styles.form} noValidate autoComplete='off'>
+        {props.children}
+      </form>
+      {props.type === 'input' && (
+        <DialogActions>
+          <Button onClick={props.onClose} color='primary'>
+            キャンセル
+          </Button>
+          <Button onClick={props.onRegisterClick} color='primary'>
+            登録
+          </Button>
+        </DialogActions>
+      )}
     </Dialog>
   );
 };

@@ -33,7 +33,8 @@ const CommonSelect: React.FC<Props> = (props: Props) => {
 
   const styles = {
     autoComp: css`
-      ${'width' in props && `width: ${props.width}px`}
+      min-width: 196px;
+      ${'width' in props ? `width: ${props.width}px` : 'width: 196px'}
     `,
   };
 
