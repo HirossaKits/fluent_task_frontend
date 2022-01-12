@@ -30,8 +30,6 @@ export default function CommonMultiSelect(props: Props) {
   const handleSelectedChange = (
     event: React.SyntheticEvent<Element, Event>,
     value: Option[]
-    // reason: AutocompleteChangeReason
-    // details?: AutocompleteChangeDetails<Option>
   ) => {
     let target: TARGET = {
       name: props.name,
@@ -51,6 +49,9 @@ export default function CommonMultiSelect(props: Props) {
     props.onChange(target);
   };
 
+  // attr
+  // https://codesandbox.io/s/material-demo-kznv3?file=/demo.js:866-881-999
+
   return (
     <Autocomplete
       multiple
@@ -60,17 +61,20 @@ export default function CommonMultiSelect(props: Props) {
       onChange={handleSelectedChange}
       // onChange={(event, value) => test(event, value)}
       getOptionLabel={(option) => option.label}
-      renderOption={(props, option, { selected }) => (
-        <li {...props}>
-          <Checkbox
-            icon={<CheckBoxOutlineBlankIcon fontSize='small' />}
-            checkedIcon={<CheckBoxIcon fontSize='small' />}
-            style={{ marginRight: 8 }}
-            checked={selected}
-          />
-          {option.label}
-        </li>
-      )}
+      renderOption={(option, state) => {
+        const selected = props.value.findIndex((val) => val);
+        return (
+          <li {...props}>
+            <Checkbox
+              icon={<CheckBoxOutlineBlankIcon fontSize='small' />}
+              checkedIcon={<CheckBoxIcon fontSize='small' />}
+              style={{ marginRight: 8 }}
+              checked={selected}
+            />
+            {option.label}
+          </li>
+        );
+      }}
       style={{ width: props.width ?? '100%' }}
       renderInput={(params) =>
         props.readOnly ? (
