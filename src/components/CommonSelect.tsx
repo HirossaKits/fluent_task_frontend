@@ -47,20 +47,32 @@ const CommonSelect: React.FC<Props> = (props: Props) => {
         getOptionLabel={(option) => option.label.toString()}
         value={props.options?.find((opt) => opt.value === props.value)}
         onChange={(event, newItem) => handleSelectChange(event, newItem)}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            variant='standard'
-            margin='normal'
-            label={'label' in props && props.label}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            InputProps={{
-              readOnly: props.readOnly,
-            }}
-          />
-        )}
+        renderInput={(params) =>
+          props.readOnly ? (
+            <TextField
+              {...params}
+              variant='standard'
+              margin='normal'
+              label={'label' in props && props.label}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                readOnly: true,
+              }}
+            />
+          ) : (
+            <TextField
+              {...params}
+              variant='standard'
+              margin='normal'
+              label={'label' in props && props.label}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          )
+        }
       />
     </>
   );
