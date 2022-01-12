@@ -17,6 +17,7 @@ type Props = {
   title: string;
   onClose: () => void;
   onRegisterClick?: () => void;
+  onEditClick?: () => void;
   maxWidth?: Breakpoint;
   mode: DIALOG_MODE;
 };
@@ -61,6 +62,13 @@ const CommonDialog = (props: Props) => {
           </Button>
           <Button onClick={props.onRegisterClick} color='primary'>
             登録
+          </Button>
+        </DialogActions>
+      )}
+      {props.mode === 'display' && (
+        <DialogActions>
+          <Button onClick={props.onEditClick} color='primary'>
+            編集
           </Button>
         </DialogActions>
       )}

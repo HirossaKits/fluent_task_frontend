@@ -188,8 +188,8 @@ export interface TASK {
   scheduled_enddate: string;
   actual_startdate: null | string;
   actual_enddate: null | string;
-  created_at?: null | string;
-  update_at?: null | string;
+  created_at: null | string;
+  update_at: null | string;
 }
 
 type TASK_CATEGORY = {

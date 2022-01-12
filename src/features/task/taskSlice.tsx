@@ -26,6 +26,8 @@ export const initialTask: TASK = {
   scheduled_enddate: '',
   actual_startdate: null,
   actual_enddate: null,
+  created_at: null,
+  update_at: null,
 };
 
 const initialState: TASK_STATE = {
