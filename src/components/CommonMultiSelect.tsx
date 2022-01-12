@@ -23,14 +23,26 @@ type Props = {
   name: string;
   index?: number;
   onChange: Function;
+  readOnly?: boolean;
 };
 
 export default function CommonMultiSelect(props: Props) {
   const handleSelectedChange = (
     event: React.SyntheticEvent<Element, Event>,
-    value: Option[],
-    reason: AutocompleteChangeReason,
-    details?: AutocompleteChangeDetails<Option>
+    value: Option[]
+    // reason: AutocompleteChangeReason
+    // details?: AutocompleteChangeDetails<Option>
+  ) => {
+    let target: TARGET = {
+      name: props.name,
+      value: value.map((option) => option.value),
+    };
+    props.onChange(target);
+  };
+
+  const test = (
+    event: React.SyntheticEvent<Element, Event>,
+    value: Option[]
   ) => {
     let target: TARGET = {
       name: props.name,
@@ -43,9 +55,10 @@ export default function CommonMultiSelect(props: Props) {
     <Autocomplete
       multiple
       options={props.options}
-      value={props.value}
+      // value={props.value}
       disableCloseOnSelect
       onChange={handleSelectedChange}
+      // onChange={(event, value) => test(event, value)}
       getOptionLabel={(option) => option.label}
       renderOption={(props, option, { selected }) => (
         <li {...props}>
@@ -59,49 +72,28 @@ export default function CommonMultiSelect(props: Props) {
         </li>
       )}
       style={{ width: props.width ?? '100%' }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label={props.label ?? ''}
-          placeholder={props.placeholder ?? ''}
-          variant='standard'
-          margin='normal'
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-      )}
+      renderInput={(params) =>
+        props.readOnly ? (
+          <TextField
+            {...params}
+            label={props.label ?? ''}
+            placeholder={props.placeholder ?? ''}
+            variant='standard'
+            margin='normal'
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+        ) : (
+          <TextField
+            {...params}
+            label={props.label ?? ''}
+            placeholder={props.placeholder ?? ''}
+            variant='standard'
+            margin='normal'
+          />
+        )
+      }
     />
   );
 }
-
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const top100Films = [
-  { value: '1994 ', label: 'The Shawshank Redemption' },
-  { value: '1972 ', label: 'The Godfather' },
-  { value: '1974 ', label: 'The Godfather: Part II' },
-  { value: '2008 ', label: 'The Dark Knight' },
-  { value: '1957 ', label: '12 Angry Men' },
-  { value: '1993 ', label: "Schindler's List" },
-  { value: '1994 ', label: 'Pulp Fiction' },
-  { value: '1966 ', label: 'The Good' },
-  { value: '1999 ', label: 'Fight Club' },
-  { value: '1994 ', label: 'Forrest Gump' },
-  { value: '2010 ', label: 'Inception' },
-  { value: '1975 ', label: "One Flew Over the Cuckoo's Nest" },
-  { value: '1990 ', label: 'Goodfellas' },
-  { value: '1999 ', label: 'The Matrix' },
-  { value: '1954 ', label: 'Seven Samurai' },
-  { value: '2002 ', label: 'City of God' },
-  { value: '1995 ', label: 'Se7en' },
-  { value: '1991 ', label: 'The Silence of the Lambs' },
-  { value: '1946 ', label: "It's a Wonderful Life" },
-  { value: '1997 ', label: 'Life Is Beautiful' },
-  { value: '1995 ', label: 'The Usual Suspects' },
-  { value: '1994 ', label: 'Léon: The Professional' },
-  { value: '2001 ', label: 'Spirited Away' },
-  { value: '1998 ', label: 'Saving Private Ryan' },
-  { value: '1968 ', label: 'Once Upon a Time in the West' },
-  { value: '1998 ', label: 'American History X' },
-  { value: '2014 ', label: 'Interstellar' },
-];

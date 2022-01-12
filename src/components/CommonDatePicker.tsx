@@ -22,18 +22,11 @@ type Props = {
 };
 
 const DatePickerDialog: React.FC<Props> = (props) => {
-  const styles = {
-    text: css`
-      ${props.width ? `width: ${props.width}` : 'width: 196px;'}
-    `,
-  };
+  const widthStyles = css`
+    ${props.width ? `width: ${props.width}` : 'width: 125px;'}
+  `;
 
   const handleDateChange = (date: any) => {
-    if (props.value) {
-      console.log(new Date(props.value));
-      console.log(parseDate(props.value));
-    }
-
     let target: TARGET = {
       name: props.name,
       value: parseString(date),
@@ -42,7 +35,6 @@ const DatePickerDialog: React.FC<Props> = (props) => {
       target.index = props.index;
     }
 
-    console.log(props);
     props.onChange(target);
   };
 
@@ -55,21 +47,34 @@ const DatePickerDialog: React.FC<Props> = (props) => {
           value={props.value ? parseDate(props.value) : null}
           // value={new Date()}
           onChange={(date) => handleDateChange(date)}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              css={styles.text}
-              variant='standard'
-              margin='normal'
-              label={'label' in props && props.label}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              InputProps={{
-                readOnly: props.readOnly,
-              }}
-            />
-          )}
+          renderInput={(params) =>
+            props.readOnly ? (
+              <TextField
+                {...params}
+                css={widthStyles}
+                variant='standard'
+                margin='normal'
+                label={'label' in props && props.label}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                InputProps={{
+                  readOnly: props.readOnly,
+                }}
+              />
+            ) : (
+              <TextField
+                {...params}
+                css={widthStyles}
+                variant='standard'
+                margin='normal'
+                label={'label' in props && props.label}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            )
+          }
         />
       </LocalizationProvider>
     </>
