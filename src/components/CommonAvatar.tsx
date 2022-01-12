@@ -11,6 +11,8 @@ const CommonAvatar = (props: Props) => {
   console.log(props.user);
 
   const style = css`
+    width: 100%;
+    height: 100%;
     user-drag: none;
     -webkit-user-drag: none;
     -moz-user-select: none;
