@@ -88,7 +88,7 @@ const ProjectDialog = () => {
       title='プロジェクトを編集'
       onClose={handleClose}
       maxWidth='sm'
-      type='input'
+      mode='edit'
     >
       <Stack
         direction='column'

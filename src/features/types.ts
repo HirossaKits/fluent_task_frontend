@@ -204,10 +204,12 @@ export interface FILTER_TASK {
   value: string;
 }
 
+export type DIALOG_MODE = 'register' | 'edit' | 'display';
+
 export interface TASK_STATE {
   tasks: TASK[];
   taskDialogOpen: boolean,
-  taskDialogMode: 'register' | 'edit';
+  taskDialogMode: DIALOG_MODE,
   filterTaskOpen: boolean;
   filterTask: FILTER_TASK[];
   editedTask: TASK;

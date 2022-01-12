@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { DIALOG_MODE } from '../features/types';
 
 type Props = {
   children?: JSX.Element;
@@ -17,7 +18,7 @@ type Props = {
   onClose: () => void;
   onRegisterClick?: () => void;
   maxWidth?: Breakpoint;
-  type: 'input' | 'display';
+  mode: DIALOG_MODE;
 };
 
 const CommonDialog = (props: Props) => {
@@ -53,7 +54,7 @@ const CommonDialog = (props: Props) => {
       <form css={styles.form} noValidate autoComplete='off'>
         {props.children}
       </form>
-      {props.type === 'input' && (
+      {props.mode !== 'display' && (
         <DialogActions>
           <Button onClick={props.onClose} color='primary'>
             キャンセル

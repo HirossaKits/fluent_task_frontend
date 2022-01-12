@@ -1,65 +1,65 @@
-import React from "react";
-import { css } from "@emotion/react";
-import { useSelector, useDispatch } from "react-redux";
-import { useTheme } from "@mui/material/styles";
-import { selectTasks } from "./taskSlice";
-import CommonTable from "../../components/CommonTable";
-import TaskDialog from "./TaskDialog";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import CircleIcon from "@mui/icons-material/Circle";
-import NorthEastIcon from "@mui/icons-material/NorthEast";
-import SouthEastIcon from "@mui/icons-material/SouthEast";
-import EastIcon from "@mui/icons-material/East";
-import { setMessageOpen, setMessage } from "../main/mainSlice";
+import React from 'react';
+import { css } from '@emotion/react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTheme } from '@mui/material/styles';
+import { selectTasks } from './taskSlice';
+import CommonTable from '../../components/CommonTable';
+import TaskDialog from './TaskDialog';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import CircleIcon from '@mui/icons-material/Circle';
+import NorthEastIcon from '@mui/icons-material/NorthEast';
+import SouthEastIcon from '@mui/icons-material/SouthEast';
+import EastIcon from '@mui/icons-material/East';
+import { setMessageOpen, setMessage } from '../main/mainSlice';
 import {
   initialTask,
   selectTaskDialogMode,
   setTaskDialogOpen,
   setTaskDialogMode,
   setEditedTask,
-} from "./taskSlice";
-import { TASK, Status, COLUMN_INFO } from "../types";
-import useProjectTask from "../../hooks/projectTask";
+} from './taskSlice';
+import { TASK, Status, COLUMN_INFO } from '../types';
+import useProjectTask from '../../hooks/projectTask';
 
 const columnInfo: COLUMN_INFO[] = [
   {
-    name: "task_name",
-    label: "タスク名",
-    type: "string",
-    width: "13%",
+    name: 'task_name',
+    label: 'タスク名',
+    type: 'string',
+    width: '13%',
     isJsxElement: true,
   },
-  { name: "category_name", label: "カテゴリー", type: "string", width: "10%" },
+  { name: 'category_name', label: 'カテゴリー', type: 'string', width: '10%' },
   {
-    name: "status",
-    label: "ステータス",
-    type: "string",
-    width: "10%",
-    isJsxElement: true,
-  },
-  {
-    name: "scheduled_startdate",
-    label: "開始予定日",
-    type: "Date",
-    width: "12%",
+    name: 'status',
+    label: 'ステータス',
+    type: 'string',
+    width: '10%',
     isJsxElement: true,
   },
   {
-    name: "scheduled_enddate",
-    label: "終了予定日",
-    type: "Date",
-    width: "12%",
+    name: 'scheduled_startdate',
+    label: '開始予定日',
+    type: 'Date',
+    width: '12%',
     isJsxElement: true,
   },
   {
-    name: "estimate_manhour",
-    label: "予定工数(H)",
-    type: "number",
-    width: "10%",
+    name: 'scheduled_enddate',
+    label: '終了予定日',
+    type: 'Date',
+    width: '12%',
+    isJsxElement: true,
   },
-  { name: "assigned_name", label: "担当", type: "string", width: "10%" },
-  { name: "description", label: "備考", type: "string", width: "15%" },
+  {
+    name: 'estimate_manhour',
+    label: '予定工数(H)',
+    type: 'number',
+    width: '10%',
+  },
+  { name: 'assigned_name', label: '担当', type: 'string', width: '10%' },
+  { name: 'description', label: '備考', type: 'string', width: '15%' },
 ];
 
 const Task = () => {
@@ -75,20 +75,21 @@ const Task = () => {
   const mode = useSelector(selectTaskDialogMode);
 
   const handleRegisterClick = () => {
-    dispatch(setTaskDialogMode("register"));
+    dispatch(setTaskDialogMode('register'));
     dispatch(setEditedTask(initialTask));
     dispatch(setTaskDialogOpen(true));
   };
+
   const hendleEditClick = (tasks: TASK[]) => {
-    console.log("res", tasks[0]);
-    dispatch(setTaskDialogMode("edit"));
+    console.log('res', tasks[0]);
+    dispatch(setTaskDialogMode('edit'));
     if (tasks.length < 1) {
-      dispatch(setMessage("一覧から編集するタスクを選択してください。"));
+      dispatch(setMessage('一覧から編集するタスクを選択してください。'));
       dispatch(setMessageOpen(true));
       return;
     }
     if (tasks.length > 1) {
-      dispatch(setMessage("編集するタスクを一つに絞ってください。"));
+      dispatch(setMessage('編集するタスクを一つに絞ってください。'));
       dispatch(setMessageOpen(true));
       return;
     }
@@ -100,11 +101,12 @@ const Task = () => {
     task_name: (task: TASK) => (
       <Typography>
         <Link
-          href="#"
-          underline="always"
+          href='#'
+          underline='always'
           onClick={(event: any) => {
             event.stopPropagation();
-            // setEditTaskOpen(true);
+            dispatch(setTaskDialogMode('display'));
+            dispatch(setTaskDialogOpen(true));
           }}
         >
           {task.task_name}
@@ -116,12 +118,12 @@ const Task = () => {
         <Typography>{Status[task.status]}</Typography>
         <CircleIcon
           sx={{
-            margin: "2px 0 0 5px;",
+            margin: '2px 0 0 5px;',
             fontSize: 10,
             color:
-              task.status === "Not started"
+              task.status === 'Not started'
                 ? theme.palette.warning.light
-                : task.status === "On going"
+                : task.status === 'On going'
                 ? theme.palette.info.light
                 : theme.palette.success.light,
           }}
@@ -134,12 +136,12 @@ const Task = () => {
       } else {
         if (task.actual_startdate < task.scheduled_startdate) {
           return (
-            <div style={{ display: "flex" }}>
+            <div style={{ display: 'flex' }}>
               <Typography>{task.scheduled_startdate}</Typography>
               <NorthEastIcon
                 sx={{
-                  margin: "0 0 0 8px;",
-                  fontSize: "small",
+                  margin: '0 0 0 8px;',
+                  fontSize: 'small',
                   color: theme.palette.success.light,
                 }}
               />
@@ -151,8 +153,8 @@ const Task = () => {
               <Typography>{task.scheduled_startdate}</Typography>
               <SouthEastIcon
                 sx={{
-                  margin: "0 0 0 8px;",
-                  fontSize: "small",
+                  margin: '0 0 0 8px;',
+                  fontSize: 'small',
                   color: theme.palette.error.light,
                 }}
               />
@@ -164,8 +166,8 @@ const Task = () => {
               <Typography>{task.scheduled_startdate}</Typography>
               <EastIcon
                 sx={{
-                  margin: "0 0 0 8px;",
-                  fontSize: "small",
+                  margin: '0 0 0 8px;',
+                  fontSize: 'small',
                   color: theme.palette.info.light,
                 }}
               />
@@ -180,12 +182,12 @@ const Task = () => {
       } else {
         if (task.actual_enddate < task.scheduled_enddate) {
           return (
-            <div style={{ display: "flex" }}>
+            <div style={{ display: 'flex' }}>
               <Typography>{task.scheduled_enddate}</Typography>
               <NorthEastIcon
                 sx={{
-                  margin: "0 0 0 8px;",
-                  fontSize: "small",
+                  margin: '0 0 0 8px;',
+                  fontSize: 'small',
                   color: theme.palette.success.light,
                 }}
               />
@@ -197,8 +199,8 @@ const Task = () => {
               <Typography>{task.scheduled_enddate}</Typography>
               <SouthEastIcon
                 sx={{
-                  margin: "0 0 0 8px;",
-                  fontSize: "small",
+                  margin: '0 0 0 8px;',
+                  fontSize: 'small',
                   color: theme.palette.error.light,
                 }}
               />
@@ -210,8 +212,8 @@ const Task = () => {
               <Typography>{task.scheduled_enddate}</Typography>
               <EastIcon
                 sx={{
-                  margin: "0 0 0 8px;",
-                  fontSize: "small",
+                  margin: '0 0 0 8px;',
+                  fontSize: 'small',
                   color: theme.palette.info.light,
                 }}
               />
@@ -229,14 +231,14 @@ const Task = () => {
         elementFactory={elementFactory}
         columnInfo={columnInfo}
         showToolBar={true}
-        editDialog={<TaskDialog mode={mode} />}
-        idColumn="task_id"
+        idColumn='task_id'
         handleEditClick={hendleEditClick}
         handleRegisterClick={handleRegisterClick}
         handleDeleteClick={handleRegisterClick}
         // selectedIds={selectedIds}
         // setSelectedIds={setSelectedIds}
       />
+      <TaskDialog mode={mode} />
     </>
   );
 };
