@@ -70,84 +70,96 @@ const TaskDialog: React.FC<Props> = (props: Props) => {
       maxWidth="sm"
       type="input"
     >
-      <Stack
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-      >
-        <CommonTextField
-          label="タスク名"
-          name="task_name"
-          value={editedTask.task_name}
-          onChange={handleInputChange}
-          width="350px"
-        />
-        <CommonSelect
-          label="カテゴリー"
-          name="task_category"
-          options={taskCategoryOption}
-          value={editedTask.category_id ?? ""}
-          onChange={handleInputChange}
-        />
-        <CommonSelect
-          label="ステータス"
-          name="status"
-          options={Status}
-          value={editedTask.status}
-          onChange={handleInputChange}
-        />
-        <CommonSelect
-          label="担当者"
-          name="assigned"
-          options={projectMemberOptions}
-          value={editedTask.assigned_id ?? ""}
-          onChange={handleInputChange}
-        />
-        <CommonTextField
-          label="予定工数(H)"
-          name="estimate_manhour"
-          type="number"
-          value={editedTask.estimate_manhour}
-          onChange={handleInputChange}
-        />
-        <CommonTextField
-          label="実工数(H)"
-          name="actual_manhour"
-          type="number"
-          value={editedTask.actual_manhour}
-          onChange={handleInputChange}
-        />
-        <Stack direction="row" justifyContent="flex-start" alignItems="center">
-          <CommonDatePicker
-            label="開始予定日"
-            name="scheduled_startdate"
-            value={editedTask.scheduled_startdate}
+      {props.mode === "register" ? (
+        <Stack
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="flex-start"
+        >
+          <CommonTextField
+            label="タスク名"
+            name="task_name"
+            value={editedTask.task_name}
+            onChange={handleInputChange}
+            width="350px"
+          />
+          <CommonSelect
+            label="カテゴリー"
+            name="task_category"
+            options={taskCategoryOption}
+            value={editedTask.category_id ?? ""}
             onChange={handleInputChange}
           />
-          <SwapHorizIcon css={styles.arrow} />
-          <CommonDatePicker
-            label="終了予定日"
-            name="scheduled_enddate"
-            value={editedTask.scheduled_enddate}
+          <CommonSelect
+            label="ステータス"
+            name="status"
+            options={Status}
+            value={editedTask.status}
             onChange={handleInputChange}
           />
+          <CommonSelect
+            label="担当者"
+            name="assigned"
+            options={projectMemberOptions}
+            value={editedTask.assigned_id ?? ""}
+            onChange={handleInputChange}
+          />
+          <CommonTextField
+            label="予定工数(H)"
+            name="estimate_manhour"
+            type="number"
+            value={editedTask.estimate_manhour}
+            onChange={handleInputChange}
+          />
+          <CommonTextField
+            label="実工数(H)"
+            name="actual_manhour"
+            type="number"
+            value={editedTask.actual_manhour}
+            onChange={handleInputChange}
+          />
+          <Stack
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
+          >
+            <CommonDatePicker
+              label="開始予定日"
+              name="scheduled_startdate"
+              value={editedTask.scheduled_startdate}
+              onChange={handleInputChange}
+            />
+            <SwapHorizIcon css={styles.arrow} />
+            <CommonDatePicker
+              label="終了予定日"
+              name="scheduled_enddate"
+              value={editedTask.scheduled_enddate}
+              onChange={handleInputChange}
+            />
+          </Stack>
+          <Stack
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
+          >
+            <CommonDatePicker
+              label="開始日"
+              name="actual_startdate"
+              value={editedTask.actual_startdate}
+              onChange={handleInputChange}
+            />
+            <SwapHorizIcon css={styles.arrow} />
+            <CommonDatePicker
+              label="終了日"
+              name="actual_enddate"
+              value={editedTask.actual_enddate}
+              onChange={handleInputChange}
+            />
+          </Stack>
         </Stack>
-        <Stack direction="row" justifyContent="flex-start" alignItems="center">
-          <CommonDatePicker
-            label="開始日"
-            name="actual_startdate"
-            value={editedTask.actual_startdate}
-            onChange={handleInputChange}
-          />
-          <SwapHorizIcon css={styles.arrow} />
-          <CommonDatePicker
-            label="終了日"
-            name="actual_enddate"
-            value={editedTask.actual_enddate}
-            onChange={handleInputChange}
-          />
-        </Stack>
-      </Stack>
+      ) : (
+        <></>
+      )}
     </CommonDialog>
   );
 };
