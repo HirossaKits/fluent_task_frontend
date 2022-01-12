@@ -71,6 +71,8 @@ const TaskDialog: React.FC<Props> = (props: Props) => {
     dispatch(setTaskDialogMode('edit'));
   };
 
+  const handleDeleteClick = () => {};
+
   const isReadOnly = props.mode === 'display';
 
   return (
@@ -85,10 +87,10 @@ const TaskDialog: React.FC<Props> = (props: Props) => {
       }
       onClose={handleClose}
       onEditClick={handleEditClick}
+      onDeleteClick={handleDeleteClick}
       maxWidth='sm'
       mode={props.mode}
     >
-      {/* <> */}
       <Stack
         direction='column'
         justifyContent='flex-start'
