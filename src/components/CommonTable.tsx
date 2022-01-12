@@ -1,39 +1,39 @@
-import React, { useState, useRef } from 'react';
-import { css } from '@emotion/react';
-import { useTheme } from '@mui/material';
-import { alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Popover from '@mui/material/Popover';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import TableContainer from '@mui/material/TableContainer';
-import Table from '@mui/material/Table';
-import TableHead from '@mui/material/TableHead';
-import TableBody from '@mui/material/TableBody';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Checkbox from '@mui/material/Checkbox';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AddIcon from '@mui/icons-material/Add';
-import ClearIcon from '@mui/icons-material/Clear';
-import Typography from '@mui/material/Typography';
-import CommonSelect from '../components/CommonSelect';
-import CommonTextField from '../components/CommonTextField';
-import CommonDatePicker from '../components/CommonDatePicker';
-import CommonTooltip from './CommonTooltip';
-import { TARGET } from '../features/types';
+import React, { useState, useRef } from "react";
+import { css } from "@emotion/react";
+import { useTheme } from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
+import Popover from "@mui/material/Popover";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import TableContainer from "@mui/material/TableContainer";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import TableSortLabel from "@mui/material/TableSortLabel";
+import Checkbox from "@mui/material/Checkbox";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
+import ClearIcon from "@mui/icons-material/Clear";
+import Typography from "@mui/material/Typography";
+import CommonSelect from "../components/CommonSelect";
+import CommonTextField from "../components/CommonTextField";
+import CommonDatePicker from "../components/CommonDatePicker";
+import CommonTooltip from "./CommonTooltip";
+import { TARGET } from "../features/types";
 import {
   ListColumns,
   FilterOperatorOfString,
   FilterOperatorOfNumber,
   FilterOperatorOfDate,
-} from '../selectionOptions';
+} from "../selectionOptions";
 
 interface Props<T, K extends keyof T> {
   data: T[];
@@ -41,7 +41,7 @@ interface Props<T, K extends keyof T> {
   columnInfo: {
     name: keyof T;
     label: string;
-    type: 'string' | 'number' | 'Date';
+    type: "string" | "number" | "Date";
     width: string;
     isJsxElement?: boolean;
   }[];
@@ -82,7 +82,6 @@ const CommonTable: ListComponent = (props) => {
     `,
     paper: css`
       width: 600px;
-      padding-right: ${theme.spacing(1)};
       padding-bottom: ${theme.spacing(1)};
     `,
     form: css`
@@ -93,7 +92,7 @@ const CommonTable: ListComponent = (props) => {
     `,
     gridItem: css`
       margin-left: ${theme.spacing(1)};
-      marginr-ight: ${theme.spacing(1)};
+      marginr-right: ${theme.spacing(1)};
     `,
   };
 
@@ -103,13 +102,13 @@ const CommonTable: ListComponent = (props) => {
   type ROW_ITEM = keyof ROW;
 
   interface SORT_STATE {
-    order: 'asc' | 'desc';
-    columnName: '' | ROW_ITEM;
+    order: "asc" | "desc";
+    columnName: "" | ROW_ITEM;
   }
 
   interface FILTER {
     columnName: ROW_ITEM;
-    type: 'string' | 'number' | 'Date';
+    type: "string" | "number" | "Date";
     operator: string;
     value: string;
   }
@@ -120,16 +119,16 @@ const CommonTable: ListComponent = (props) => {
 
   const [selected, setSelected] = useState<number[]>([]);
   const [sortState, setSortState] = useState<SORT_STATE>({
-    order: 'asc',
-    columnName: '',
+    order: "asc",
+    columnName: "",
   });
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<FILTER[]>([
     {
       columnName: props.columnInfo[0].name as ROW_ITEM,
       type: props.columnInfo[0].type,
-      operator: '=',
-      value: '',
+      operator: "=",
+      value: "",
     },
   ]);
 
@@ -139,7 +138,7 @@ const CommonTable: ListComponent = (props) => {
 
   const handleEditClick = () => {
     console.log(
-      'test',
+      "test",
       table.filter((row) => selected.includes(row.id)) as DATA[]
     );
     props.handleEditClick &&
@@ -170,9 +169,9 @@ const CommonTable: ListComponent = (props) => {
   const handleClickSortColumn = (colName: ROW_ITEM) => {
     setSortState({
       order:
-        sortState.columnName !== colName || sortState.order === 'desc'
-          ? 'asc'
-          : 'desc',
+        sortState.columnName !== colName || sortState.order === "desc"
+          ? "asc"
+          : "desc",
       columnName: colName,
     });
   };
@@ -186,14 +185,14 @@ const CommonTable: ListComponent = (props) => {
   };
 
   const handleAddClick = (index: number) => {
-    if (filters[index].value !== '') {
+    if (filters[index].value !== "") {
       setFilters([
         ...filters,
         {
           columnName: props.columnInfo[0].name as ROW_ITEM,
           type: props.columnInfo[0].type,
-          operator: '=',
-          value: '',
+          operator: "=",
+          value: "",
         },
       ]);
     }
@@ -228,8 +227,8 @@ const CommonTable: ListComponent = (props) => {
           {
             ...filters[target.index],
             [target.name]: target.value,
-            operator: '=',
-            value: '',
+            operator: "=",
+            value: "",
             type: newType,
           },
           ...filters.slice(target.index + 1),
@@ -248,7 +247,7 @@ const CommonTable: ListComponent = (props) => {
   };
 
   const sortRows = (tbl: ROW[]): ROW[] => {
-    if (sortState.columnName === '') return tbl;
+    if (sortState.columnName === "") return tbl;
     const sortedRows = tbl.slice().sort((next, now) => {
       const nextVal = next[sortState.columnName as ROW_ITEM];
       const nowVal = now[sortState.columnName as ROW_ITEM];
@@ -263,10 +262,10 @@ const CommonTable: ListComponent = (props) => {
         return -1;
       }
       if (nextVal > nowVal) {
-        return sortState.order === 'asc' ? 1 : -1;
+        return sortState.order === "asc" ? 1 : -1;
       }
       if (nextVal < nowVal) {
-        return sortState.order === 'desc' ? -1 : 1;
+        return sortState.order === "desc" ? -1 : 1;
       }
       return 0;
     });
@@ -295,26 +294,26 @@ const CommonTable: ListComponent = (props) => {
           return;
         }
 
-        if (type === 'string') {
-          if (operator === '=') {
+        if (type === "string") {
+          if (operator === "=") {
             validity = columnValue === filterValue;
-          } else if (operator === 'start_from') {
+          } else if (operator === "start_from") {
             validity = columnValue.toString().startsWith(filterValue);
-          } else if (operator === 'include') {
+          } else if (operator === "include") {
             validity =
               columnValue.toString().indexOf(filterValue) === -1 ? false : true;
-          } else if (operator === 'exclude') {
+          } else if (operator === "exclude") {
             validity =
               columnValue.toString().indexOf(filterValue) === -1 ? true : false;
           }
         }
 
-        if (type === 'number' || type === 'Date') {
-          if (operator === '=') {
+        if (type === "number" || type === "Date") {
+          if (operator === "=") {
             validity = columnValue === filterValue;
-          } else if (operator === '<=') {
+          } else if (operator === "<=") {
             validity = columnValue <= filterValue;
-          } else if (operator === '>=') {
+          } else if (operator === ">=") {
             validity = columnValue >= filterValue;
           }
         }
@@ -331,25 +330,25 @@ const CommonTable: ListComponent = (props) => {
 
   return (
     <>
-      <Box sx={{ width: '100%' }}>
+      <Box sx={{ width: "100%" }}>
         {props.showToolBar && (
           <Toolbar disableGutters>
-            <CommonTooltip title='登録'>
+            <CommonTooltip title="登録">
               <IconButton
-                aria-label='register task'
+                aria-label="register task"
                 onClick={handleRegisterClick}
               >
                 <PlaylistAddIcon />
               </IconButton>
             </CommonTooltip>
-            <CommonTooltip title='編集'>
-              <IconButton aria-label='edit task' onClick={handleEditClick}>
+            <CommonTooltip title="編集">
+              <IconButton aria-label="edit task" onClick={handleEditClick}>
                 <EditIcon />
               </IconButton>
             </CommonTooltip>
-            <CommonTooltip title='削除'>
+            <CommonTooltip title="削除">
               <IconButton
-                aria-label='delete task'
+                aria-label="delete task"
                 onClick={() =>
                   props.handleDeleteClick &&
                   props.handleDeleteClick(
@@ -360,11 +359,11 @@ const CommonTable: ListComponent = (props) => {
                 <DeleteIcon />
               </IconButton>
             </CommonTooltip>
-            <CommonTooltip title='フィルター'>
+            <CommonTooltip title="フィルター">
               <IconButton
                 ref={filterAnchorEl}
                 css={styles.filterButton}
-                aria-label='filter list'
+                aria-label="filter list"
                 onClick={handleFilterClick}
               >
                 <FilterListIcon />
@@ -376,7 +375,7 @@ const CommonTable: ListComponent = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell css={styles.tableCheckCell} padding='checkbox'>
+                <TableCell css={styles.tableCheckCell} padding="checkbox">
                   <Checkbox
                     indeterminate={
                       selected.length > 0 && selected.length < table.length
@@ -385,7 +384,7 @@ const CommonTable: ListComponent = (props) => {
                       selected.length > 0 && selected.length === table.length
                     }
                     onChange={handleSelectAllClic}
-                    color='primary'
+                    color="primary"
                   />
                 </TableCell>
                 {props.columnInfo.map((col, idx) => (
@@ -395,7 +394,7 @@ const CommonTable: ListComponent = (props) => {
                       direction={
                         sortState.columnName === col.name
                           ? sortState.order
-                          : 'asc'
+                          : "asc"
                       }
                       onClick={() => handleClickSortColumn(col.name)}
                     >
@@ -413,21 +412,21 @@ const CommonTable: ListComponent = (props) => {
                   hover
                   selected={selected.indexOf(row.id) !== -1}
                 >
-                  <TableCell css={styles.tableCheckCell} padding='checkbox'>
+                  <TableCell css={styles.tableCheckCell} padding="checkbox">
                     <Checkbox
                       checked={selected.indexOf(row.id) !== -1}
-                      color='primary'
+                      color="primary"
                     />
                   </TableCell>
                   {props.columnInfo.map((col) => (
                     <TableCell
                       css={
-                        col.type === 'number'
+                        col.type === "number"
                           ? styles.tableNumericCell
                           : styles.tableCell
                       }
                       width={col.width}
-                      align={col.type === 'number' ? 'right' : 'left'}
+                      align={col.type === "number" ? "right" : "left"}
                     >
                       {col.isJsxElement === true ? (
                         <>
@@ -452,12 +451,12 @@ const CommonTable: ListComponent = (props) => {
         open={filterOpen}
         anchorEl={filterAnchorEl.current}
         anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
+          vertical: "bottom",
+          horizontal: "right",
         }}
         transformOrigin={{
-          vertical: 'top',
-          horizontal: 'right',
+          vertical: "top",
+          horizontal: "right",
         }}
         onClose={handleFilterClose}
         keepMounted
@@ -465,22 +464,22 @@ const CommonTable: ListComponent = (props) => {
         <Paper css={styles.paper}>
           <Grid
             container
-            direction='column'
-            justifyContent='center'
-            alignItems='center'
+            direction="column"
+            justifyContent="center"
+            alignItems="center"
           >
-            <form css={styles.form} noValidate autoComplete='off'>
+            <form css={styles.form} noValidate autoComplete="off">
               {filters.map((filter, index) => (
                 <Grid
                   item
                   container
-                  direction='row'
-                  justifyContent='center'
-                  alignItems='center'
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
                 >
                   <Grid css={styles.gridIcon} item xs={1}>
                     {index === filters.length - 1 &&
-                      (filters[index].value === '' ? (
+                      (filters[index].value === "" ? (
                         <IconButton disabled>
                           <AddIcon />
                         </IconButton>
@@ -492,67 +491,73 @@ const CommonTable: ListComponent = (props) => {
                   </Grid>
                   <Grid css={styles.gridItem} item xs={3}>
                     <CommonSelect
-                      label='対象'
-                      name='columnName'
+                      label="対象"
+                      name="columnName"
                       options={ListColumns}
                       value={filter.columnName as string}
                       index={index}
                       onChange={handleColumnSelectChange}
+                      width="140px"
                     />
                   </Grid>
                   <Grid css={styles.gridItem} item xs={3}>
-                    {filter.type === 'string' ? (
+                    {filter.type === "string" ? (
                       <CommonSelect
-                        label='演算子'
-                        name='operator'
+                        label="演算子"
+                        name="operator"
                         options={FilterOperatorOfString}
                         value={filter.operator}
                         index={index}
                         onChange={handleInputChange}
+                        width="140px"
                       />
-                    ) : filter.type === 'number' ? (
+                    ) : filter.type === "number" ? (
                       <CommonSelect
-                        label='演算子'
-                        name='operator'
+                        label="演算子"
+                        name="operator"
                         options={FilterOperatorOfNumber}
                         value={filter.operator}
                         index={index}
                         onChange={handleInputChange}
+                        width="140px"
                       />
                     ) : (
                       <CommonSelect
-                        label='演算子'
-                        name='operator'
+                        label="演算子"
+                        name="operator"
                         options={FilterOperatorOfDate}
                         value={filter.operator}
                         index={index}
                         onChange={handleInputChange}
+                        width="140px"
                       />
                     )}
                   </Grid>
                   <Grid css={styles.gridItem} item xs={3}>
-                    {filter.type === 'string' || filter.type === 'number' ? (
+                    {filter.type === "string" || filter.type === "number" ? (
                       <CommonTextField
-                        label='値'
-                        name='value'
+                        label="値"
+                        name="value"
                         value={filter.value}
                         index={index}
                         onChange={handleInputChange}
+                        width="140px"
                       />
                     ) : (
                       <CommonDatePicker
-                        label='値'
-                        name='value'
+                        label="値"
+                        name="value"
                         value={filter.value}
                         index={index}
                         onChange={handleInputChange}
+                        width="140px"
                       />
                     )}
                   </Grid>
                   <Grid css={styles.gridIcon} item xs={1}>
                     {(filters.length !== 1 || index !== 0) && (
                       <IconButton onClick={() => handleClearClick(index)}>
-                        <ClearIcon color='action' />
+                        <ClearIcon color="action" />
                       </IconButton>
                     )}
                   </Grid>

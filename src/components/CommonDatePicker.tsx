@@ -1,14 +1,14 @@
-import React from 'react';
-import css from '@emotion/react';
-import TextField from '@mui/material/TextField';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import jaLocale from 'date-fns/locale/ja';
-import enLocale from 'date-fns/locale/en-US';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import DatePicker from '@mui/lab/DatePicker';
-import { parseString, parseDate } from '../util/dateHandler';
-import { TARGET } from '../features/types';
+import React from "react";
+import { css } from "@emotion/react";
+import TextField from "@mui/material/TextField";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import jaLocale from "date-fns/locale/ja";
+import enLocale from "date-fns/locale/en-US";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
+import DatePicker from "@mui/lab/DatePicker";
+import { parseString, parseDate } from "../util/dateHandler";
+import { TARGET } from "../features/types";
 
 type Props = {
   id?: string;
@@ -17,9 +17,16 @@ type Props = {
   value: null | string;
   onChange: Function;
   index?: number;
+  width?: string | number;
 };
 
 const DatePickerDialog: React.FC<Props> = (props) => {
+  const styles = {
+    text: css`
+      ${props.width ? `width: ${props.width}` : "width: 196px;"}
+    `,
+  };
+
   const handleDateChange = (date: any) => {
     if (props.value) {
       console.log(new Date(props.value));
@@ -30,7 +37,7 @@ const DatePickerDialog: React.FC<Props> = (props) => {
       name: props.name,
       value: parseString(date),
     };
-    if ('index' in props) {
+    if ("index" in props) {
       target.index = props.index;
     }
 
@@ -43,20 +50,20 @@ const DatePickerDialog: React.FC<Props> = (props) => {
       <LocalizationProvider dateAdapter={AdapterDateFns} locale={jaLocale}>
         <DatePicker
           // mask='__-__-____'
-          inputFormat='yyyy-MM-dd'
+          inputFormat="yyyy-MM-dd"
           value={props.value ? parseDate(props.value) : null}
           // value={new Date()}
           onChange={(date) => handleDateChange(date)}
           renderInput={(params) => (
             <TextField
               {...params}
-              variant='standard'
-              margin='normal'
-              label={'label' in props && props.label}
+              css={styles.text}
+              variant="standard"
+              margin="normal"
+              label={"label" in props && props.label}
               InputLabelProps={{
                 shrink: true,
               }}
-              sx={{ width: 120 }}
             />
           )}
         />

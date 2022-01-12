@@ -1,8 +1,8 @@
-import React from 'react';
-import { css } from '@emotion/react';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import { TARGET } from '../features/types';
+import React from "react";
+import { css } from "@emotion/react";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import { TARGET } from "../features/types";
 
 type Option = {
   value: string | number;
@@ -12,7 +12,7 @@ type Option = {
 type Props = {
   options: Option[] | undefined;
   label?: string;
-  width?: number;
+  width?: string | number;
   name: string;
   value: string | number;
   index?: number;
@@ -25,7 +25,7 @@ const CommonSelect: React.FC<Props> = (props: Props) => {
       name: props.name,
       value: newItem.value,
     };
-    if ('index' in props) {
+    if ("index" in props) {
       target.index = props.index;
     }
     props.onChange(target);
@@ -33,8 +33,7 @@ const CommonSelect: React.FC<Props> = (props: Props) => {
 
   const styles = {
     autoComp: css`
-      min-width: 196px;
-      ${'width' in props ? `width: ${props.width}px` : 'width: 196px'}
+      ${"width" in props ? `width: ${props.width};` : "width: 196px;"}
     `,
   };
 
@@ -50,9 +49,9 @@ const CommonSelect: React.FC<Props> = (props: Props) => {
         renderInput={(params) => (
           <TextField
             {...params}
-            variant='standard'
-            margin='normal'
-            label={'label' in props && props.label}
+            variant="standard"
+            margin="normal"
+            label={"label" in props && props.label}
             InputLabelProps={{
               shrink: true,
             }}
