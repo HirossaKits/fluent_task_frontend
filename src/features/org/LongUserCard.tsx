@@ -120,12 +120,12 @@ const LongUserCard = (props: Props) => {
         </Box>
         <Box css={styles.comment}>
           {props.user.is_org_rep && (
-            <CommonTooltip title='組織所有者'>
+            <CommonTooltip title='グループ所有者'>
               <WorkspacePremiumIcon css={styles.iconPremium} />
             </CommonTooltip>
           )}
           {props.user.is_org_admin && (
-            <CommonTooltip title='組織管理者'>
+            <CommonTooltip title='グループ管理者'>
               <AdminPanelSettingsIcon css={styles.iconAdmin} />
             </CommonTooltip>
           )}

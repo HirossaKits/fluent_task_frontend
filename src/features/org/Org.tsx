@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -10,10 +10,18 @@ import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import { ORG_USER } from '../types';
 import LongUserCard from './LongUserCard';
-import CommonTooltip from '../../components/CommonTooltip';
 import EditIcon from '@mui/icons-material/Edit';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import { selectOrgName, selectOrgUser } from './orgSliece';
+import OrgDialog from './OrgDialog';
+import InviteDialog from './InviteDialog';
+import CommonTooltip from '../../components/CommonTooltip';
+import {
+  selectOrgName,
+  selectOrgUser,
+  setEditedOrgName,
+  setOrgDialogOpen,
+  setInviteDialogOpen,
+} from './orgSliece';
 
 const Org = () => {
   const theme = useTheme();
@@ -66,22 +74,23 @@ const Org = () => {
     `,
   };
 
-  // const [focus, setFocus] = React.useState(false);
-
-  // const handleOnFocus = () => {
-  //   setFocus(true);
-  // };
-  // const handleOnBlur = () => {
-  //   setFocus(false);
-  // };
-
+  const dispatch = useDispatch();
   const orgName = useSelector(selectOrgName);
   const users = useSelector(selectOrgUser);
 
+  const handleEditClick = () => {
+    dispatch(setEditedOrgName(orgName));
+    dispatch(setOrgDialogOpen(true));
+  };
+
+  const handleInviteClick = () => {
+    dispatch(setInviteDialogOpen(true));
+  };
+
   return (
     <>
-      <Box css={styles.invite}>
-        {/* <TextField
+      {/* <Box css={styles.invite}>
+        <TextField
           css={styles.textfield}
           variant='standard'
           label='ユーザーを招待'
@@ -101,8 +110,8 @@ const Org = () => {
           }}
           onFocus={handleOnFocus}
           onBlur={handleOnBlur}
-        /> */}
-      </Box>
+        />
+      </Box> */}
 
       <Box css={styles.header}>
         <Box css={styles.titleWrap}>
@@ -110,7 +119,7 @@ const Org = () => {
             {orgName}
           </Typography>
           <CommonTooltip title='編集'>
-            <IconButton css={styles.editIcon}>
+            <IconButton css={styles.editIcon} onClick={handleEditClick}>
               <EditIcon fontSize='small' />
             </IconButton>
           </CommonTooltip>
@@ -123,8 +132,9 @@ const Org = () => {
         </Button> */}
         <div>
           <Button
-            startIcon={<GroupAddIcon sx={{ marginBottom: '1px' }} />}
             css={styles.button}
+            startIcon={<GroupAddIcon sx={{ marginBottom: '1px' }} />}
+            onClick={handleInviteClick}
           >
             ユーザーを招待
           </Button>
@@ -136,6 +146,8 @@ const Org = () => {
           <LongUserCard user={user} />
         ))}
       </Box>
+      <OrgDialog />
+      <InviteDialog />
     </>
   );
 };

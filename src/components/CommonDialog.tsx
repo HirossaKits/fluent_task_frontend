@@ -56,7 +56,7 @@ const CommonDialog = (props: Props) => {
       <form css={styles.form} noValidate autoComplete='off'>
         {props.children}
       </form>
-      {props.mode !== 'display' && (
+      {props.mode in ['register', 'edit'] && (
         <DialogActions>
           <Button onClick={props.onClose} color='primary'>
             キャンセル
@@ -66,7 +66,7 @@ const CommonDialog = (props: Props) => {
           </Button>
         </DialogActions>
       )}
-      {props.mode === 'display' && (
+      {props.mode === 'detail' && (
         <DialogActions>
           <Button onClick={props.onDeleteClick} color='primary'>
             削除
@@ -75,6 +75,9 @@ const CommonDialog = (props: Props) => {
             編集
           </Button>
         </DialogActions>
+      )}
+      {props.mode === 'display' && (
+        <DialogActions sx={{ marginTop: theme.spacing(1) }}></DialogActions>
       )}
     </Dialog>
   );

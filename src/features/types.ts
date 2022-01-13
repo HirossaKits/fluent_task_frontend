@@ -84,12 +84,6 @@ export interface USER_INFO {
 
 /*orgSlise*/
 
-export interface ORG {
-  org_id: string;
-  org_name: string;
-  org_user: ORG_USER[];
-}
-
 export interface ORG_USER {
   user_id: string;
   first_name: string;
@@ -100,9 +94,16 @@ export interface ORG_USER {
   is_org_admin: boolean;
 }
 
+export interface ORG {
+  org_id: string;
+  org_name: string;
+  org_user: ORG_USER[];
+}
+
 export interface ORG_STATE {
   org: ORG;
   editedOrgName: string;
+  editedInviteMail: string;
   orgDialogOpen: boolean;
   inviteDialogOpen: boolean;
 }
@@ -214,7 +215,7 @@ export interface FILTER_TASK {
   value: string;
 }
 
-export type DIALOG_MODE = "register" | "edit" | "display";
+export type DIALOG_MODE = "register" | "edit" | "detail" | "display";
 
 export interface TASK_STATE {
   tasks: TASK[];

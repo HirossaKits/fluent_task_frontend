@@ -87,6 +87,7 @@ const ProjectDialog = () => {
       open={projectDialogOpen}
       title='プロジェクトを編集'
       onClose={handleClose}
+      onRegisterClick={handleRegisterClick}
       maxWidth='sm'
       mode='edit'
     >
