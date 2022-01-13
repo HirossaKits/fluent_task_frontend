@@ -1,10 +1,4 @@
-import {
-  TASK,
-  ORG_STATE,
-  ORG_USER,
-  PROJECT,
-  TASK_STATUS,
-} from "./features/types";
+import { TASK, ORG, ORG_USER, PROJECT, TASK_STATUS } from "./features/types";
 
 export const dummyUsers: ORG_USER[] = [
   {
@@ -81,7 +75,7 @@ export const dummyUsers: ORG_USER[] = [
   },
 ];
 
-export const dummyOrg: ORG_STATE = {
+export const dummyOrg: ORG = {
   org_id: "org_demo",
   org_name: "組織ABCDEFG",
   org_user: dummyUsers,

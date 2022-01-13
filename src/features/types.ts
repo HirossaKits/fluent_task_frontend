@@ -84,25 +84,37 @@ export interface USER_INFO {
 
 /*orgSlise*/
 
+export interface ORG {
+  org_id: string;
+  org_name: string;
+  org_user: ORG_USER[];
+}
+
 export interface ORG_USER {
-  user_id: string
-  first_name: string,
-  last_name: string,
-  avatar_img: string,
-  comment: string,
-  is_org_rep: boolean,
-  is_org_admin: boolean
+  user_id: string;
+  first_name: string;
+  last_name: string;
+  avatar_img: string;
+  comment: string;
+  is_org_rep: boolean;
+  is_org_admin: boolean;
 }
 
 export interface ORG_STATE {
-  org_id: string
-  org_name: string
-  org_user: ORG_USER[]
+  org: ORG;
+  editedOrgName: string;
+  orgDialogOpen: boolean;
+  inviteDialogOpen: boolean;
 }
 
 /*mainSlice*/
 
-export type MAIN_COMPONENT_NAME = "Org" | "Proj" | "List" | "Kanban" | "Calendar";
+export type MAIN_COMPONENT_NAME =
+  | "Org"
+  | "Proj"
+  | "List"
+  | "Kanban"
+  | "Calendar";
 
 export interface MAIN_STATE {
   mainComponentName: MAIN_COMPONENT_NAME;
@@ -117,7 +129,6 @@ export interface PROFILE {
   avatar_img: string;
   description: string;
 }
-
 
 /*Project*/
 
@@ -141,12 +152,11 @@ export interface PROJECT {
 }
 
 export interface PROJECT_SATATE {
-  projects: PROJECT[]
+  projects: PROJECT[];
   selectedProjectId: string;
-  editedProject: PROJECT
-  projectDialogOpen: false
+  editedProject: PROJECT;
+  projectDialogOpen: false;
 }
-
 
 /*taskSlice*/
 
@@ -161,13 +171,13 @@ export type COLUMN_NAME =
   | "description";
 
 export const Status = {
-  'Suspended': '保留　',
-  'Not started': '開始前',
-  'On going': '進行中',
-  'Done': '完了　'
-}
+  Suspended: "保留　",
+  "Not started": "開始前",
+  "On going": "進行中",
+  Done: "完了　",
+};
 
-export type TASK_STATUS = keyof typeof Status
+export type TASK_STATUS = keyof typeof Status;
 
 export interface TASK {
   task_id: string;
@@ -195,7 +205,7 @@ export interface TASK {
 type TASK_CATEGORY = {
   task_category_id: string;
   task_category_name: string;
-}
+};
 
 export interface FILTER_TASK {
   columnName: COLUMN_NAME;
@@ -204,12 +214,12 @@ export interface FILTER_TASK {
   value: string;
 }
 
-export type DIALOG_MODE = 'register' | 'edit' | 'display';
+export type DIALOG_MODE = "register" | "edit" | "display";
 
 export interface TASK_STATE {
   tasks: TASK[];
-  taskDialogOpen: boolean,
-  taskDialogMode: DIALOG_MODE,
+  taskDialogOpen: boolean;
+  taskDialogMode: DIALOG_MODE;
   filterTaskOpen: boolean;
   filterTask: FILTER_TASK[];
   editedTask: TASK;
@@ -224,7 +234,7 @@ export interface TARGET {
 /*calendarSlice*/
 
 export interface CALENDAR_STATE {
-  yearMonth: CALENDAR_YEAR_MONTH
+  yearMonth: CALENDAR_YEAR_MONTH;
 }
 
 export interface CALENDAR_YEAR_MONTH {
