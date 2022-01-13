@@ -1,23 +1,24 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { css } from "@emotion/react";
-import { useTheme } from "@mui/material";
-import Popover from "@mui/material/Popover";
-import Paper from "@mui/material/Paper";
-import Avatar from "@mui/material/Avatar";
-import MenuList from "@mui/material/MenuList";
-import MenuItem from "@mui/material/MenuItem";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import EditIcon from "@mui/icons-material/Edit";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import { selectLoginUserProf } from "../auth/authSlice";
-import { selectProfileMenuOpen } from "./mainSlice";
-import { setProfileMenuOpen, setProfileDialogOpen } from "./mainSlice";
-import { logOut } from "../auth/authSlice";
-import ProfileDialog from "./ProfileDialog";
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { css } from '@emotion/react';
+import { useTheme } from '@mui/material';
+import Popover from '@mui/material/Popover';
+import Paper from '@mui/material/Paper';
+import Avatar from '@mui/material/Avatar';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import EditIcon from '@mui/icons-material/Edit';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import GroupRemoveIcon from '@mui/icons-material/GroupRemove';
+import { selectLoginUserProf } from '../auth/authSlice';
+import { selectProfileMenuOpen } from './mainSlice';
+import { setProfileMenuOpen, setProfileDialogOpen } from './mainSlice';
+import { logOut } from '../auth/authSlice';
+import ProfileDialog from './ProfileDialog';
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;
@@ -82,18 +83,18 @@ const ProfileMenu: React.FC<Props> = (props) => {
         open={profileMenuOpen}
         anchorEl={props.anchorEl.current}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
+          vertical: 'bottom',
+          horizontal: 'right',
         }}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
         onClose={handleClose}
         keepMounted
       >
         <Box css={styles.wrap}>
-          <Box sx={{ display: "flex" }}>
+          <Box sx={{ display: 'flex' }}>
             {loginUserProf.avatar_img ? (
               <Avatar css={styles.avatar} src={loginUserProf.avatar_img} />
             ) : (
@@ -124,6 +125,10 @@ const ProfileMenu: React.FC<Props> = (props) => {
           <MenuItem css={styles.menuItem} onClick={handleLogoutClick}>
             <ExitToAppIcon css={styles.icon} fontSize='small' />
             <Typography>ログアウト</Typography>
+          </MenuItem>
+          <MenuItem css={styles.menuItem} onClick={handleLogoutClick}>
+            <GroupRemoveIcon css={styles.icon} fontSize='small' />
+            <Typography>組織を脱退</Typography>
           </MenuItem>
         </MenuList>
       </Popover>
