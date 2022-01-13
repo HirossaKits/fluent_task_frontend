@@ -2,27 +2,28 @@
 /* @import url("https://fonts.googleapis.com/css2?family=Sawarabi+Gothic&display=swap"); */
 
 /* 'Noto Sans JP' */
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400&display=swap');
 /* 'M PLUS Rounded 1c' */
 /* @import url("https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400&display=swap"); */
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Noto Sans JP", "Segoe UI",
-    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-    "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Noto Sans JP', 'Segoe UI',
+    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
 /*Scroller*/
 ::-webkit-scrollbar {
   width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
