@@ -20,6 +20,13 @@ import { CALENDAR_YEAR_MONTH } from '../types';
 import { useCalendarFactory } from '../../hooks/calendar';
 import useProjectTask from '../../hooks/projectTask';
 import { parseString } from '../../util/dateHandler';
+import { TASK, CALENDAR_BAR } from '../types';
+import {
+  setEditedTask,
+  setTaskDialogMode,
+  setTaskDialogOpen,
+} from '../task/taskSlice';
+import TaskDialog from '../task/TaskDialog';
 
 const week = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -123,6 +130,15 @@ const Calendar = () => {
     calendarBarStyle
   );
 
+  const yearMonthOptions = (optionCount: number): string[] => {
+    const options = [...Array(optionCount)].map((_, idx) => {
+      let date = new Date(yearMonth.year, yearMonth.month, 1);
+      date.setMonth(date.getMonth() - 1 + idx - Math.floor(optionCount / 2));
+      return parseString(date).slice(0, 7);
+    });
+    return options;
+  };
+
   const handleSelectChange = (event: any, newItem: string) => {
     if (!newItem) return;
     dispatch(
@@ -134,7 +150,6 @@ const Calendar = () => {
     );
   };
 
-  // Button
   const incrementMonth = () => {
     if (yearMonth.month === 12) {
       dispatch(
@@ -181,117 +196,138 @@ const Calendar = () => {
     }
   };
 
-  const yearMonthOptions = (optionCount: number): string[] => {
-    const options = [...Array(optionCount)].map((_, idx) => {
-      let date = new Date(yearMonth.year, yearMonth.month, 1);
-      date.setMonth(date.getMonth() - 1 + idx - Math.floor(optionCount / 2));
-      return parseString(date).slice(0, 7);
-    });
-    return options;
+  // const handleBarClick = (
+  //   e: MouseEvent<HTMLSpanElement, MouseEvent>,
+  //   bar: CALENDAR_BAR
+  // ) => {
+  //   console.log(bar as TASK);
+  // };
+  const handleBarClick = (
+    e: React.MouseEvent<HTMLElement>,
+    task_id: string
+  ) => {
+    console.log('-----------------------------');
+
+    const selectedTask = tasks.find((task) => task.task_id === task_id);
+
+    console.log(selectedTask);
+
+    if (selectedTask) {
+      dispatch(setEditedTask(selectedTask));
+      dispatch(setTaskDialogMode('detail'));
+      dispatch(setTaskDialogOpen(true));
+    }
   };
 
   return (
-    <Grid
-      xs={12}
-      container
-      direction='column'
-      justifyContent='center'
-      alignItems='center'
-      css={styles.test}
-    >
+    <>
       <Grid
-        css={styles.header}
+        xs={12}
         container
-        direction='row'
-        justifyContent='space-between'
+        direction='column'
+        justifyContent='center'
         alignItems='center'
+        css={styles.test}
       >
-        <Grid item>
-          <Autocomplete
-            css={styles.select}
-            disableClearable
-            options={yearMonthOptions(13)}
-            value={yearMonth.year_month}
-            onChange={(event, newItem) => handleSelectChange(event, newItem)}
-            renderInput={(params) => (
-              <TextField {...params} variant='standard' />
-            )}
-          />
-        </Grid>
-        <Grid item>
-          <IconButton onClick={decrementMonth}>
-            <NavigateBeforeIcon />
-          </IconButton>
-          <IconButton onClick={incrementMonth}>
-            <NavigateNextIcon />
-          </IconButton>
-        </Grid>
-      </Grid>
-      <ImageList css={styles.gridList} rowHeight={160} cols={7} gap={0}>
-        {calendarDates.map((ctx, idx) => (
-          <ImageListItem
-            key={idx}
-            css={
-              ctx.month === yearMonth.month
-                ? styles.gridTile
-                : styles.gridTileGray
-            }
-          >
-            <Stack height='100%' justifyContent='space-between'>
-              <Grid
-                xs={10}
-                css={styles.headerdate}
-                id={ctx.dateStr}
-                item
-                container
-                direction='row'
-                justifyContent='flex-start'
-                alignItems='flex-start'
-                // onClick={handleDateHeaderClick}
-              >
-                <Grid item>
-                  <Typography css={ctx.isToday && styles.texttoday}>
-                    {ctx.date === 1 ? `${ctx.month}月${ctx.date}日` : ctx.date}
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Typography className='plus'>+</Typography>
-                </Grid>
-              </Grid>
-              {ctx.layer && Math.max(...ctx.layer) >= 4 && (
-                <Grid css={styles.remarks}>
-                  <Typography color={theme.palette.text.disabled}>{`その他${
-                    Math.max(...ctx.layer) - 3
-                  }件`}</Typography>
-                </Grid>
+        <Grid
+          css={styles.header}
+          container
+          direction='row'
+          justifyContent='space-between'
+          alignItems='center'
+        >
+          <Grid item>
+            <Autocomplete
+              css={styles.select}
+              disableClearable
+              options={yearMonthOptions(13)}
+              value={yearMonth.year_month}
+              onChange={(event, newItem) => handleSelectChange(event, newItem)}
+              renderInput={(params) => (
+                <TextField {...params} variant='standard' />
               )}
-            </Stack>
-          </ImageListItem>
-        ))}
-        {calendarBars.map(
-          (bar) =>
-            bar.visible && (
-              <Typography
-                css={css`
-                  ${styles.texttask};
-                  top: ${bar.top};
-                  left: ${bar.left};
-                  width: ${bar.width};
-                  border-radius: ${!bar.startEdge && !bar.endEdge
-                    ? '0px'
-                    : bar.startEdge && !bar.endEdge
-                    ? `${calendarBarStyle.roundEdge}px 0px 0px ${calendarBarStyle.roundEdge}px`
-                    : !bar.startEdge && bar.endEdge
-                    ? `0px ${calendarBarStyle.roundEdge}px ${calendarBarStyle.roundEdge}px 0px`
-                    : `${calendarBarStyle.roundEdge}px`};
-                `}
-              >
-                {bar.task_name}
-              </Typography>
-            )
-        )}
-      </ImageList>
-    </Grid>
+            />
+          </Grid>
+          <Grid item>
+            <IconButton onClick={decrementMonth}>
+              <NavigateBeforeIcon />
+            </IconButton>
+            <IconButton onClick={incrementMonth}>
+              <NavigateNextIcon />
+            </IconButton>
+          </Grid>
+        </Grid>
+        <ImageList css={styles.gridList} rowHeight={160} cols={7} gap={0}>
+          {calendarDates.map((ctx, idx) => (
+            <ImageListItem
+              key={idx}
+              css={
+                ctx.month === yearMonth.month
+                  ? styles.gridTile
+                  : styles.gridTileGray
+              }
+            >
+              <Stack height='100%' justifyContent='space-between'>
+                <Grid
+                  xs={10}
+                  css={styles.headerdate}
+                  id={ctx.dateStr}
+                  item
+                  container
+                  direction='row'
+                  justifyContent='flex-start'
+                  alignItems='flex-start'
+                  // onClick={(ctx.task_id) =>handleBarClick(ctx.task_id)}
+                >
+                  <Grid item>
+                    <Typography css={ctx.isToday && styles.texttoday}>
+                      {ctx.date === 1
+                        ? `${ctx.month}月${ctx.date}日`
+                        : ctx.date}
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Typography className='plus'>+</Typography>
+                  </Grid>
+                </Grid>
+                {ctx.layer && Math.max(...ctx.layer) >= 4 && (
+                  <Grid css={styles.remarks}>
+                    <Typography color={theme.palette.text.disabled}>{`その他${
+                      Math.max(...ctx.layer) - 3
+                    }件`}</Typography>
+                  </Grid>
+                )}
+              </Stack>
+            </ImageListItem>
+          ))}
+          {calendarBars.map(
+            (bar) =>
+              bar.visible && (
+                <Typography
+                  css={css`
+                    ${styles.texttask};
+                    top: ${bar.top};
+                    left: ${bar.left};
+                    width: ${bar.width};
+                    border-radius: ${!bar.startEdge && !bar.endEdge
+                      ? '0px'
+                      : bar.startEdge && !bar.endEdge
+                      ? `${calendarBarStyle.roundEdge}px 0px 0px ${calendarBarStyle.roundEdge}px`
+                      : !bar.startEdge && bar.endEdge
+                      ? `0px ${calendarBarStyle.roundEdge}px ${calendarBarStyle.roundEdge}px 0px`
+                      : `${calendarBarStyle.roundEdge}px`};
+                    cursor: pointer;
+                  `}
+                  onClick={(e) => handleBarClick(e, bar.task_id)}
+                >
+                  {bar.task_name}
+                </Typography>
+              )
+          )}
+        </ImageList>
+      </Grid>
+      <TaskDialog />
+    </>
   );
 };
 

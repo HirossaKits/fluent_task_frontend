@@ -68,7 +68,7 @@ const LongUserCard = (props: Props) => {
       top: 0px;
       right: 5px;
       z-index: 800;
-      color: ${theme.palette.divider};
+      color: ${theme.palette.text.secondary};
     `,
     iconPremium: css`
       color: ${theme.palette.text.secondary};
@@ -129,9 +129,6 @@ const LongUserCard = (props: Props) => {
               <AdminPanelSettingsIcon css={styles.iconAdmin} />
             </CommonTooltip>
           )}
-          {/* {!props.user.is_premium && !props.user.is_admin && (
-            <BadgeIcon css={styles.iconMember} />
-          )} */}
         </Box>
       </Card>
       <Popover

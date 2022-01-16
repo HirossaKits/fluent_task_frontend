@@ -15,6 +15,7 @@ import CommonSelect from '../../components/CommonSelect';
 import { Status } from '../../selectionOptions';
 import {
   selectTaskDialogOpen,
+  selectTaskDialogMode,
   setTaskDialogOpen,
   setTaskDialogMode,
 } from './taskSlice';
@@ -29,11 +30,11 @@ import { DIALOG_MODE } from '../types';
 // remove later
 import useCreateOption from '../../hooks/optionCreater';
 
-type Props = {
-  mode: DIALOG_MODE;
-};
+// type Props = {
+//   mode: DIALOG_MODE;
+// };
 
-const TaskDialog: React.FC<Props> = (props: Props) => {
+const TaskDialog: React.FC = () => {
   const theme = useTheme();
   const styles = {
     arrow: css`
@@ -45,6 +46,7 @@ const TaskDialog: React.FC<Props> = (props: Props) => {
   const dispatch = useDispatch();
   const createOption = useCreateOption();
   const taskDialogOpen = useSelector(selectTaskDialogOpen);
+  const taskDialogMode = useSelector(selectTaskDialogMode);
   const projectMember = useProjectMember();
   const taskCategory = useSelector(selectTaskCategory);
   const taskCategoryOption = createOption(
@@ -73,15 +75,15 @@ const TaskDialog: React.FC<Props> = (props: Props) => {
 
   const handleDeleteClick = () => {};
 
-  const isReadOnly = props.mode === 'display';
+  const isReadOnly = taskDialogMode === 'display';
 
   return (
     <CommonDialog
       open={taskDialogOpen}
       title={
-        props.mode === 'register'
+        taskDialogMode === 'register'
           ? 'タスクを登録'
-          : props.mode === 'edit'
+          : taskDialogMode === 'edit'
           ? 'タスクを編集'
           : 'タスク詳細'
       }
@@ -89,7 +91,7 @@ const TaskDialog: React.FC<Props> = (props: Props) => {
       onEditClick={handleEditClick}
       onDeleteClick={handleDeleteClick}
       maxWidth='sm'
-      mode={props.mode}
+      mode={taskDialogMode}
     >
       <Stack
         direction='column'
@@ -178,7 +180,7 @@ const TaskDialog: React.FC<Props> = (props: Props) => {
             readOnly={isReadOnly}
           />
         </Stack>
-        {props.mode === 'display' ? (
+        {taskDialogMode === 'display' ? (
           <>
             <CommonSelect
               label='作成者'

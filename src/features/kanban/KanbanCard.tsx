@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
-
 import { useTheme } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import IconButton from '@mui/material/IconButton';
@@ -8,7 +8,19 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CommonAvatar from '../../components/CommonAvatar';
-import CommonTooltip from '../../components/CommonTooltip';
+import Popover from '@mui/material/Popover';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import PreviewIcon from '@mui/icons-material/Preview';
+import FeedIcon from '@mui/icons-material/Feed';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import {
+  setEditedTask,
+  setTaskDialogOpen,
+  setTaskDialogMode,
+} from '../task/taskSlice';
 
 import { ORG_USER, TASK } from '../types';
 
@@ -55,11 +67,25 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
   };
 
   // const [drag, setDrag] = useState(false);
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleDotClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
+
+  const handleDetailClick = () => {
+    dispatch(setEditedTask(props.task));
+    dispatch(setTaskDialogMode('detail'));
+    dispatch(setTaskDialogOpen(true));
+    console.log('why?');
+  };
+  const handleEditClick = () => {
+    dispatch(setEditedTask(props.task));
+    dispatch(setTaskDialogMode('edit'));
+    dispatch(setTaskDialogOpen(true));
+  };
+  const handleDeleteClick = () => {};
 
   const handleDragStart = (e: React.DragEvent<HTMLElement>) => {
     // setDrag(true);
@@ -111,34 +137,64 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <Card
-      css={styles.card}
-      draggable
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      <Box
-        css={styles.title}
-        component='div'
-        sx={{
-          textOverflow: 'ellipsis',
-          my: 2,
-          overflow: 'hidden',
+    <>
+      <Card
+        css={styles.card}
+        draggable
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+      >
+        <Box
+          css={styles.title}
+          component='div'
+          sx={{
+            textOverflow: 'ellipsis',
+            my: 2,
+            overflow: 'hidden',
+          }}
+        >
+          <Typography component='div' noWrap>
+            {props.task.task_name}
+          </Typography>
+        </Box>
+        <Box css={styles.user}>
+          <CommonAvatar user={props.user} />
+        </Box>
+        <Box css={styles.dot}>
+          <IconButton onClick={handleDotClick}>
+            <MoreVertIcon fontSize='small' />
+          </IconButton>
+        </Box>
+      </Card>
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
         }}
       >
-        <Typography component='div' noWrap>
-          {props.task.task_name}
-        </Typography>
-      </Box>
-      <Box css={styles.user}>
-        <CommonAvatar user={props.user} />
-      </Box>
-      <Box css={styles.dot}>
-        <IconButton onClick={handleClick}>
-          <MoreVertIcon fontSize='small' />
-        </IconButton>
-      </Box>
-    </Card>
+        <MenuItem onClick={handleDetailClick}>
+          <ListItemIcon>
+            <FeedIcon fontSize='small' />
+          </ListItemIcon>
+          <ListItemText>詳細</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={handleEditClick}>
+          <ListItemIcon>
+            <EditIcon fontSize='small' />
+          </ListItemIcon>
+          <ListItemText>編集</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={handleDeleteClick}>
+          <ListItemIcon>
+            <DeleteIcon fontSize='small' />
+          </ListItemIcon>
+          <ListItemText>削除</ListItemText>
+        </MenuItem>
+      </Popover>
+    </>
   );
 };
 

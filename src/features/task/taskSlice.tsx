@@ -11,7 +11,6 @@ export const initialTask: TASK = {
   task_id: '',
   task_name: '',
   project_id: '',
-  project_name: '',
   category_id: '',
   category_name: '',
   assigned_id: '',

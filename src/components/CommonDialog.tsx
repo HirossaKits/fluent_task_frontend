@@ -1,6 +1,6 @@
 import React from 'react';
 import { css } from '@emotion/react';
-import { Breakpoint, useTheme } from '@mui/material';
+import { Breakpoint, Paper, useTheme } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -26,6 +26,12 @@ type Props = {
 const CommonDialog = (props: Props) => {
   const theme = useTheme();
   const styles = {
+    dialog: css`
+      background-color: ${theme.palette.action.hover
+        .split(',')
+        .map((_, idx) => (idx !== 3 ? _ : ' 0.03)'))
+        .join(',')};
+    `,
     title: css`
       margin-left: ${theme.spacing(1)};
     `,
@@ -45,40 +51,42 @@ const CommonDialog = (props: Props) => {
       maxWidth={'maxWidth' in props && props.maxWidth}
       fullWidth
     >
-      <Stack direction='row' justifyContent='space-between'>
-        <DialogTitle css={styles.title}>{props.title}</DialogTitle>
-        <Box css={styles.close}>
-          <IconButton size='small' onClick={props.onClose}>
-            <CloseIcon />
-          </IconButton>
-        </Box>
-      </Stack>
-      <form css={styles.form} noValidate autoComplete='off'>
-        {props.children}
-      </form>
-      {props.mode in ['register', 'edit'] && (
-        <DialogActions>
-          <Button onClick={props.onClose} color='primary'>
-            キャンセル
-          </Button>
-          <Button onClick={props.onRegisterClick} color='primary'>
-            登録
-          </Button>
-        </DialogActions>
-      )}
-      {props.mode === 'detail' && (
-        <DialogActions>
-          <Button onClick={props.onDeleteClick} color='primary'>
-            削除
-          </Button>
-          <Button onClick={props.onEditClick} color='primary'>
-            編集
-          </Button>
-        </DialogActions>
-      )}
-      {props.mode === 'display' && (
-        <DialogActions sx={{ marginTop: theme.spacing(1) }}></DialogActions>
-      )}
+      <Paper css={props.mode === 'detail' && styles.dialog}>
+        <Stack direction='row' justifyContent='space-between'>
+          <DialogTitle css={styles.title}>{props.title}</DialogTitle>
+          <Box css={styles.close}>
+            <IconButton size='small' onClick={props.onClose}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </Stack>
+        <form css={styles.form} noValidate autoComplete='off'>
+          {props.children}
+        </form>
+        {(props.mode === 'register' || props.mode === 'edit') && (
+          <DialogActions>
+            <Button onClick={props.onClose} color='primary'>
+              キャンセル
+            </Button>
+            <Button onClick={props.onRegisterClick} color='primary'>
+              登録
+            </Button>
+          </DialogActions>
+        )}
+        {props.mode === 'detail' && (
+          <DialogActions>
+            <Button onClick={props.onDeleteClick} color='primary'>
+              削除
+            </Button>
+            <Button onClick={props.onEditClick} color='primary'>
+              編集
+            </Button>
+          </DialogActions>
+        )}
+        {props.mode === 'display' && (
+          <DialogActions sx={{ marginTop: theme.spacing(1) }}></DialogActions>
+        )}
+      </Paper>
     </Dialog>
   );
 };

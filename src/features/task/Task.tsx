@@ -105,7 +105,7 @@ const Task = () => {
           underline='always'
           onClick={(event: any) => {
             event.stopPropagation();
-            dispatch(setTaskDialogMode('display'));
+            dispatch(setTaskDialogMode('detail'));
             dispatch(setTaskDialogOpen(true));
           }}
         >
@@ -238,7 +238,7 @@ const Task = () => {
         // selectedIds={selectedIds}
         // setSelectedIds={setSelectedIds}
       />
-      <TaskDialog mode={mode} />
+      <TaskDialog />
     </>
   );
 };

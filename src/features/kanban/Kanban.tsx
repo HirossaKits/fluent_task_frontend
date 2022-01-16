@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material/styles';
 import Popover from '@mui/material/Popover';
@@ -8,6 +9,8 @@ import ListItemText from '@mui/material/ListItemText';
 import EditIcon from '@mui/icons-material/Edit';
 import KanbanColumn from './KanbanColumn';
 import useProjectTask from '../../hooks/projectTask';
+import TaskDialog from '../task/TaskDialog';
+import { selectTaskDialogMode } from '../task/taskSlice';
 import { Status, TASK_STATUS } from '../types';
 
 interface RefValue {
@@ -116,7 +119,7 @@ const Kanban = () => {
           headerText='完了'
           tasks={tasks.filter((task) => task.status === 'Done')}
         />
-        <Popover
+        {/* <Popover
           open={Boolean(anchorEl)}
           anchorEl={anchorEl}
           onClose={handleClose}
@@ -131,7 +134,8 @@ const Kanban = () => {
             </ListItemIcon>
             <ListItemText>ユーザーを削除</ListItemText>
           </MenuItem>
-        </Popover>
+        </Popover> */}
+        <TaskDialog />
       </div>
     </>
   );

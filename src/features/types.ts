@@ -1,7 +1,5 @@
 /*Common*/
 
-import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
-
 export interface COLUMN_INFO {
   name: COLUMN_NAME;
   label: string;
@@ -184,7 +182,7 @@ export interface TASK {
   task_id: string;
   task_name: string;
   project_id: string;
-  project_name: string;
+  // project_name: string;
   category_id: null | string;
   category_name: string;
   assigned_id: null | string;
@@ -254,7 +252,7 @@ export interface CALENDAR_DATE {
   layer: number[];
 }
 
-export interface CALENDAR_BAR {
+export interface CALENDAR_BAR extends TASK {
   task_name: string;
   startDate: Date;
   endDate: Date;
@@ -269,6 +267,26 @@ export interface CALENDAR_BAR {
   endEdge: boolean;
   other: boolean;
 }
+
+// task_id: string;
+// task_name: string;
+// project_id: string;
+// category_id: null | string;
+// category_name: string;
+// assigned_id: null | string;
+// assigned_name: string;
+// author_id: null | string;
+// author_name: string;
+// status: TASK_STATUS;
+// description: string;
+// estimate_manhour: null | number;
+// actual_manhour: null | number;
+// scheduled_startdate: string;
+// scheduled_enddate: string;
+// actual_startdate: null | string;
+// actual_enddate: null | string;
+// created_at: null | string;
+// update_at: null | string;
 
 export interface CALENDAR_BAR_STYLE {
   topPosition: number;

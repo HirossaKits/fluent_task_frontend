@@ -31,6 +31,7 @@ export const useCalendarFactory = () => {
       const dateSpan = (endDate.getTime() - startDate.getTime()) / 86400000 + 1
 
       return {
+        ...task,
         task_id: task.task_id,
         task_name: task.task_name,
         startDate: startDate,
