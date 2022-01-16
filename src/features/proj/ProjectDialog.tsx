@@ -127,14 +127,14 @@ const ProjectDialog = () => {
         <Stack direction='row' justifyContent='flex-start' alignItems='center'>
           <CommonDatePicker
             label='開始日'
-            name='scheduled_endate'
+            name='startdate'
             value={editedProject.startdate}
             onChange={handleInputChange}
           />
           <SwapHorizIcon css={styles.arrow} />
           <CommonDatePicker
             label='終了日'
-            name='scheduled_endate'
+            name='enddate'
             value={editedProject.enddate}
             onChange={handleInputChange}
           />

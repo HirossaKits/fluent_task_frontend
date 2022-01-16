@@ -75,7 +75,7 @@ const TaskDialog: React.FC = () => {
 
   const handleDeleteClick = () => {};
 
-  const isReadOnly = taskDialogMode === 'display';
+  const isReadOnly = taskDialogMode === 'detail';
 
   return (
     <CommonDialog
@@ -108,7 +108,7 @@ const TaskDialog: React.FC = () => {
         />
         <CommonSelect
           label='カテゴリー'
-          name='task_category'
+          name='category_id'
           options={taskCategoryOption}
           value={editedTask.category_id ?? ''}
           onChange={handleInputChange}
@@ -124,7 +124,7 @@ const TaskDialog: React.FC = () => {
         />
         <CommonSelect
           label='担当者'
-          name='assigned'
+          name='assigned_id'
           options={projectMemberOptions}
           value={editedTask.assigned_id ?? ''}
           onChange={handleInputChange}
@@ -180,7 +180,7 @@ const TaskDialog: React.FC = () => {
             readOnly={isReadOnly}
           />
         </Stack>
-        {taskDialogMode === 'display' ? (
+        {taskDialogMode === 'detail' ? (
           <>
             <CommonSelect
               label='作成者'

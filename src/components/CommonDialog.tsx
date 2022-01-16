@@ -26,12 +26,12 @@ type Props = {
 const CommonDialog = (props: Props) => {
   const theme = useTheme();
   const styles = {
-    dialog: css`
-      background-color: ${theme.palette.action.hover
-        .split(',')
-        .map((_, idx) => (idx !== 3 ? _ : ' 0.03)'))
-        .join(',')};
-    `,
+    // dialog: css`
+    //   background-color: ${theme.palette.action.hover
+    //     .split(',')
+    //     .map((_, idx) => (idx !== 3 ? _ : ' 0.06)'))
+    //     .join(',')};
+    // `,
     title: css`
       margin-left: ${theme.spacing(1)};
     `,
@@ -51,7 +51,8 @@ const CommonDialog = (props: Props) => {
       maxWidth={'maxWidth' in props && props.maxWidth}
       fullWidth
     >
-      <Paper css={props.mode === 'detail' && styles.dialog}>
+      {/* <Paper css={props.mode === 'detail' && styles.dialog}> */}
+      <Paper>
         <Stack direction='row' justifyContent='space-between'>
           <DialogTitle css={styles.title}>{props.title}</DialogTitle>
           <Box css={styles.close}>

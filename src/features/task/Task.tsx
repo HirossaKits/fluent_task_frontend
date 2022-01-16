@@ -106,6 +106,7 @@ const Task = () => {
           onClick={(event: any) => {
             event.stopPropagation();
             dispatch(setTaskDialogMode('detail'));
+            dispatch(setEditedTask(task));
             dispatch(setTaskDialogOpen(true));
           }}
         >

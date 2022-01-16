@@ -21,7 +21,9 @@ import { useCalendarFactory } from '../../hooks/calendar';
 import useProjectTask from '../../hooks/projectTask';
 import { parseString } from '../../util/dateHandler';
 import { TASK, CALENDAR_BAR } from '../types';
+import { selectSelectedProjectId } from '../proj/projectSlice';
 import {
+  initialTask,
   setEditedTask,
   setTaskDialogMode,
   setTaskDialogOpen,
@@ -120,6 +122,7 @@ const Calendar = () => {
   };
 
   const dispatch = useDispatch();
+  const projectId = useSelector(selectSelectedProjectId);
   const yearMonth = useSelector(selectYearMonth);
   const tasks = useProjectTask();
 
@@ -196,21 +199,26 @@ const Calendar = () => {
     }
   };
 
-  // const handleBarClick = (
-  //   e: MouseEvent<HTMLSpanElement, MouseEvent>,
-  //   bar: CALENDAR_BAR
-  // ) => {
-  //   console.log(bar as TASK);
-  // };
+  const handleDateClick = (
+    e: React.MouseEvent<HTMLElement>,
+    dateStr: string
+  ) => {
+    dispatch(
+      setEditedTask({
+        ...initialTask,
+        project_id: projectId,
+        scheduled_startdate: dateStr,
+      })
+    );
+    dispatch(setTaskDialogMode('register'));
+    dispatch(setTaskDialogOpen(true));
+  };
+
   const handleBarClick = (
     e: React.MouseEvent<HTMLElement>,
     task_id: string
   ) => {
-    console.log('-----------------------------');
-
     const selectedTask = tasks.find((task) => task.task_id === task_id);
-
-    console.log(selectedTask);
 
     if (selectedTask) {
       dispatch(setEditedTask(selectedTask));
@@ -277,7 +285,7 @@ const Calendar = () => {
                   direction='row'
                   justifyContent='flex-start'
                   alignItems='flex-start'
-                  // onClick={(ctx.task_id) =>handleBarClick(ctx.task_id)}
+                  onClick={(e) => handleDateClick(e, ctx.dateStr)}
                 >
                   <Grid item>
                     <Typography css={ctx.isToday && styles.texttoday}>

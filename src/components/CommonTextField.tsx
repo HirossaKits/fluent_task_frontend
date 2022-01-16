@@ -31,10 +31,11 @@ const CommonTextField: React.FC<Props> = (props) => {
 
   const widthStyle = css`
     ${'width' in props
-      ? `width: ${props.width}`
+      ? `width: ${props.width};`
       : 'type' in props && props.type === 'number'
-      ? 'width: 98px'
+      ? 'width: 98px;'
       : ''}
+    background-color: lite-gray;
   `;
 
   return (
