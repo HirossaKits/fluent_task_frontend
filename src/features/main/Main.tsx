@@ -200,10 +200,6 @@ const Main = () => {
     fectchBootLoader();
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   dispatch(fetchAsyncGetLoginUserCredProfile());
-  // }, [dispatch]);
-
   const handleDrawerOpen = () => {
     setDrawerOpen(true);
   };

@@ -91,7 +91,7 @@ const Auth: React.FC = () => {
       margin-top: ${theme.spacing(20)};
     `,
     title: css`
-      font-family: 'Megrim', cursive;
+      font-family: 'Oleo Script', cursive;
     `,
     form: css`
       margin-top: ${theme.spacing(3)};
