@@ -84,15 +84,11 @@ export const useCalendarFactory = () => {
         bar.endDate = lastDateOfCalendar;
         bar.endEdge = false;
       }
-      console.log('bar.startDate', bar.startDate)
-      console.log('bar.endDate', bar.endDate)
       bar.dateSpan =
         (bar.endDate.getTime() - bar.startDate.getTime()) / 86400000 +
         1;
       return bar
     })
-
-    console.log('trimedCalendarBars', trimedCalendarBars)
 
     // レイヤーを設定
     const layeredCalendarBars: CALENDAR_BAR[] = trimedCalendarBars.map((bar, idx) => {

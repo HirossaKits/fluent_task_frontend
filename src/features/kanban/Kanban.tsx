@@ -1,32 +1,12 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material/styles';
-import Popover from '@mui/material/Popover';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import EditIcon from '@mui/icons-material/Edit';
 import KanbanColumn from './KanbanColumn';
 import useProjectTask from '../../hooks/projectTask';
 import TaskDialog from '../task/TaskDialog';
-import { selectTaskDialogMode } from '../task/taskSlice';
-import { Status, TASK_STATUS } from '../types';
-
-interface RefValue {
-  positions: { [key: string]: { x: number; y: number } };
-  isFirstRender: boolean;
-}
 
 const Kanban = () => {
   const theme = useTheme();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   const styles = {
     container: css`
       display: flex;
@@ -119,22 +99,6 @@ const Kanban = () => {
           headerText='完了'
           tasks={tasks.filter((task) => task.status === 'Done')}
         />
-        {/* <Popover
-          open={Boolean(anchorEl)}
-          anchorEl={anchorEl}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-        >
-          <MenuItem>
-            <ListItemIcon>
-              <EditIcon fontSize='small' />
-            </ListItemIcon>
-            <ListItemText>ユーザーを削除</ListItemText>
-          </MenuItem>
-        </Popover> */}
         <TaskDialog />
       </div>
     </>

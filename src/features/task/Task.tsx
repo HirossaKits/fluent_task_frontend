@@ -81,7 +81,6 @@ const Task = () => {
   };
 
   const hendleEditClick = (tasks: TASK[]) => {
-    console.log('res', tasks[0]);
     dispatch(setTaskDialogMode('edit'));
     if (tasks.length < 1) {
       dispatch(setMessage('一覧から編集するタスクを選択してください。'));

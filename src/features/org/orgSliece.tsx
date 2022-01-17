@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import { ORG_STATE, ORG_USER } from '../types';
+import { ORG_STATE } from '../types';
 
 // remove later
 import { dummyOrg } from '../../DummyData';

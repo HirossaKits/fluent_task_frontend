@@ -1,7 +1,5 @@
 import React from 'react';
-import { css } from '@emotion/react';
 import { Typography } from '@mui/material';
-import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 
 type Props = {
   children: string | JSX.Element;

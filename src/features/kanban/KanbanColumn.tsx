@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, forwardRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { css } from '@emotion/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectTasks, setTasks } from '../task/taskSlice';
@@ -76,7 +76,6 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
   const tasks = useSelector(selectTasks);
   const projectMember = useProjectMember();
   const [dragOver, setDragOver] = useState(false);
-  const dragOverRef = useRef(false);
 
   const ref = useRef<RefValue>({
     positions: Object.assign(
@@ -92,7 +91,6 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
     e.preventDefault();
     ref.isFirstRender = false;
     e.dataTransfer.dropEffect = 'move';
-    console.log('enter');
     setDragOver(true);
   };
 
@@ -119,7 +117,6 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
   };
 
   const handleDragLeave = (e: any) => {
-    console.log(e);
     e.preventDefault();
     setDragOver(false);
   };

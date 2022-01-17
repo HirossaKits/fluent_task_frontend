@@ -9,18 +9,14 @@ import Grid from '@mui/material/Grid';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Autocomplete from '@mui/material/Autocomplete';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
 import Typography from '@mui/material/Typography';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { selectYearMonth, setYearMonth } from './calendarSlice';
-import { selectTasks } from '../task/taskSlice';
 import { fillDigitsByZero } from '../../util/dateHandler';
-import { CALENDAR_YEAR_MONTH } from '../types';
 import { useCalendarFactory } from '../../hooks/calendar';
 import useProjectTask from '../../hooks/projectTask';
 import { parseString } from '../../util/dateHandler';
-import { TASK, CALENDAR_BAR } from '../types';
 import { selectSelectedProjectId } from '../proj/projectSlice';
 import {
   initialTask,

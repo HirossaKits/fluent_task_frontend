@@ -2,14 +2,7 @@ import React from 'react';
 import { css } from '@emotion/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTheme } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogTitle from '@mui/material/DialogTitle';
-import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import CommonTextField from '../../components/CommonTextField';
 import CommonMultiSelect from '../../components/CommonMultiSelect';
@@ -72,7 +65,6 @@ const ProjectDialog = () => {
     dispatch(
       setEditedProject({ ...editedProject, [target.name]: target.value })
     );
-    console.log('target', target);
   };
 
   const handleClose = () => {

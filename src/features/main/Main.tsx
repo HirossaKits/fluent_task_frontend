@@ -189,15 +189,10 @@ const Main = () => {
       const res = await dispatch(fetchAsyncGetLoginUser());
       if (fetchAsyncGetLoginUser.fulfilled.match(res)) {
         await dispatch(fetchAsyncGetLoginUserProf(res.payload.id));
-        console.log('OK');
-        console.log(loginUserCred);
-        console.log(loginUserCred.id);
         await dispatch(fetchAsyncGetPersonalSettings(res.payload.id));
         await dispatch(fetchAsyncGetProfiles());
         await dispatch(fetchAsyncGetProject());
-        console.log('GetProf is successeded');
       } else {
-        console.log('Something is wrong');
         // localStorage.removeItem("localJWT");
         // window.location.href = "/login";
       }

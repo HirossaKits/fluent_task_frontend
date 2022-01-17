@@ -11,18 +11,12 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Tooltip from '@mui/material/Tooltip';
 import CommonTooltip from '../../components/CommonTooltip';
-import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import BadgeIcon from '@mui/icons-material/Badge';
-import AddModeratorIcon from '@mui/icons-material/AddModerator';
-import RemoveModeratorIcon from '@mui/icons-material/RemoveModerator';
 import GppGoodIcon from '@mui/icons-material/GppGood';
 import GppBadIcon from '@mui/icons-material/GppBad';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
-import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import { ORG_USER } from '../types';
 
 type Props = {

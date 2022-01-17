@@ -136,10 +136,6 @@ const CommonTable: ListComponent = (props) => {
   };
 
   const handleEditClick = () => {
-    console.log(
-      'test',
-      table.filter((row) => selected.includes(row.id)) as DATA[]
-    );
     props.handleEditClick &&
       props.handleEditClick(
         table.filter((row) => selected.includes(row.id)) as DATA[]
@@ -325,8 +321,6 @@ const CommonTable: ListComponent = (props) => {
   };
 
   const displayContext = sortRows(filterTable(table));
-  console.log(displayContext);
-  console.log(selected);
 
   return (
     <>

@@ -1,10 +1,7 @@
 import React from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
-import Autocomplete, {
-  AutocompleteChangeDetails,
-  AutocompleteChangeReason,
-} from '@mui/material/Autocomplete';
+import Autocomplete from '@mui/material/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { TARGET } from '../features/types';
@@ -49,8 +46,6 @@ export default function CommonMultiSelect(props: Props) {
       onChange={handleSelectedChange}
       getOptionLabel={(option) => option.label}
       renderOption={(props_ch, option, { selected }) => {
-        console.log('test', props);
-        console.log('test', option);
         const isChecked = selectedValues.includes(option.value);
 
         return (

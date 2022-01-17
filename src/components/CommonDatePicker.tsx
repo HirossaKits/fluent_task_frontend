@@ -4,8 +4,7 @@ import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import jaLocale from 'date-fns/locale/ja';
-import enLocale from 'date-fns/locale/en-US';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+// import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import DatePicker from '@mui/lab/DatePicker';
 import { parseString, parseDate } from '../util/dateHandler';
 import { TARGET } from '../features/types';
@@ -45,7 +44,6 @@ const DatePickerDialog: React.FC<Props> = (props) => {
           // mask='__-__-____'
           inputFormat='yyyy-MM-dd'
           value={props.value ? parseDate(props.value) : null}
-          // value={new Date()}
           readOnly={props.readOnly}
           onChange={(date) => handleDateChange(date)}
           renderInput={(params) => (

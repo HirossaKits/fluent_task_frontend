@@ -4,7 +4,6 @@ import { css } from '@emotion/react';
 import { useTheme } from '@mui/material';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import ToolTip from '@mui/material/Tooltip';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -60,7 +59,6 @@ const ProfileDialog = () => {
 
   const handlePictureClick = () => {
     const fileInput = document.getElementById('imageInput');
-    console.log(fileInput);
     fileInput?.click();
   };
 

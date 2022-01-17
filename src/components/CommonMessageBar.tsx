@@ -7,7 +7,6 @@ import {
   selectMessageOpen,
   selectMessage,
   setMessageOpen,
-  setMessage,
 } from '../features/main/mainSlice';
 
 const growTransition = (props: GrowProps) => {

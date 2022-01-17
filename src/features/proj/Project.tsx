@@ -103,7 +103,6 @@ const Project = () => {
     'daily'
   );
   const doughnutData = createDoughnutData(tasks);
-  console.log('lineData', lineChartData);
 
   const lineData = {
     labels: lineChartData.map((data) => data.label),

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material/styles';
 import Card from '@mui/material/Card';
@@ -12,7 +12,6 @@ import Popover from '@mui/material/Popover';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import PreviewIcon from '@mui/icons-material/Preview';
 import FeedIcon from '@mui/icons-material/Feed';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -81,7 +80,6 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
     dispatch(setEditedTask(props.task));
     dispatch(setTaskDialogMode('detail'));
     dispatch(setTaskDialogOpen(true));
-    console.log('why?');
   };
   const handleEditClick = () => {
     dispatch(setEditedTask(props.task));
