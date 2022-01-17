@@ -64,6 +64,9 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
       flex-direction: column;
       justify-content: center;
     `,
+    menuItem: css`
+      padding-right: ${theme.spacing(3)};
+    `,
   };
 
   // const [drag, setDrag] = useState(false);
@@ -179,19 +182,19 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
           <ListItemIcon>
             <FeedIcon fontSize='small' />
           </ListItemIcon>
-          <ListItemText>詳細</ListItemText>
+          <ListItemText css={styles.menuItem}>詳細</ListItemText>
         </MenuItem>
         <MenuItem onClick={handleEditClick}>
           <ListItemIcon>
             <EditIcon fontSize='small' />
           </ListItemIcon>
-          <ListItemText>編集</ListItemText>
+          <ListItemText css={styles.menuItem}>編集</ListItemText>
         </MenuItem>
         <MenuItem onClick={handleDeleteClick}>
           <ListItemIcon>
             <DeleteIcon fontSize='small' />
           </ListItemIcon>
-          <ListItemText>削除</ListItemText>
+          <ListItemText css={styles.menuItem}>削除</ListItemText>
         </MenuItem>
       </Popover>
     </>

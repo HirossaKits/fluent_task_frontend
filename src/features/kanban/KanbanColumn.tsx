@@ -75,8 +75,8 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
   const dispatch = useDispatch();
   const tasks = useSelector(selectTasks);
   const projectMember = useProjectMember();
-  console.log('projectMember', projectMember);
   const [dragOver, setDragOver] = useState(false);
+  const dragOverRef = useRef(false);
 
   const ref = useRef<RefValue>({
     positions: Object.assign(
@@ -92,6 +92,7 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
     e.preventDefault();
     ref.isFirstRender = false;
     e.dataTransfer.dropEffect = 'move';
+    console.log('enter');
     setDragOver(true);
   };
 
@@ -118,6 +119,7 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
   };
 
   const handleDragLeave = (e: any) => {
+    console.log(e);
     e.preventDefault();
     setDragOver(false);
   };

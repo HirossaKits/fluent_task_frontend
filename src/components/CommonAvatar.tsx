@@ -8,8 +8,6 @@ type Props = {
 };
 
 const CommonAvatar = (props: Props) => {
-  console.log(props.user);
-
   const style = css`
     width: 100%;
     height: 100%;
