@@ -247,23 +247,24 @@ const CommonTable: ListComponent = (props) => {
 
   const sortRows = (tbl: ROW[]): ROW[] => {
     if (sortState.columnName === '') return tbl;
-    const sortedRows = tbl.slice().sort((next, now) => {
-      const nextVal = next[sortState.columnName as ROW_ITEM];
-      const nowVal = now[sortState.columnName as ROW_ITEM];
-
-      if (nowVal === null && nextVal === null) {
+    console.log(sortState);
+    const sortedRows = tbl.slice().sort((a, b) => {
+      const valA = a[sortState.columnName as ROW_ITEM];
+      const valB = b[sortState.columnName as ROW_ITEM];
+      console.log(valA, valB);
+      if (valA === null && valB === null) {
+        return 0;
+      }
+      if (valA === null) {
         return 1;
       }
-      if (nextVal === null) {
-        return 1;
-      }
-      if (nowVal === null) {
+      if (valB === null) {
         return -1;
       }
-      if (nextVal > nowVal) {
+      if (valA > valB) {
         return sortState.order === 'asc' ? 1 : -1;
       }
-      if (nextVal < nowVal) {
+      if (valA < valB) {
         return sortState.order === 'desc' ? -1 : 1;
       }
       return 0;

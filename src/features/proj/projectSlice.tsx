@@ -1,20 +1,20 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { RootState } from "../../app/store";
-import { PROJECT, PROJECT_SATATE } from "../types";
-import { Category } from "../../selectionOptions";
-import { demoProjects } from "../../DummyData";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
+import { RootState } from '../../app/store';
+import { PROJECT, PROJECT_SATATE } from '../types';
+import { Category } from '../../selectionOptions';
+import { demoProjects } from '../../DummyData';
 
 export const emptyProject = {
-  project_id: "",
-  project_name: "",
-  org_id: "",
-  resp_id: [""],
-  member_id: [""],
+  project_id: '',
+  project_name: '',
+  org_id: '',
+  resp_id: [''],
+  member_id: [''],
   task_category: [],
-  description: "",
-  startdate: "",
-  enddate: "",
+  description: '',
+  startdate: '',
+  enddate: '',
 };
 
 const initialState: PROJECT_SATATE = {
@@ -22,10 +22,11 @@ const initialState: PROJECT_SATATE = {
   selectedProjectId: demoProjects[0].project_id,
   editedProject: emptyProject,
   projectDialogOpen: false,
+  projectDialogMode: 'register',
 };
 
 export const fetchAsyncGetProject = createAsyncThunk(
-  "project/getProject",
+  'project/getProject',
   async () => {
     const res = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/project/`,
@@ -40,7 +41,7 @@ export const fetchAsyncGetProject = createAsyncThunk(
 );
 
 export const projectSlice = createSlice({
-  name: "project",
+  name: 'project',
   initialState,
   reducers: {
     setSelectedProjectId(state, action) {
@@ -71,6 +72,9 @@ export const projectSlice = createSlice({
     setProjectDialogOpen(state, action) {
       state.projectDialogOpen = action.payload;
     },
+    setProjectDialogMode(state, action) {
+      state.projectDialogMode = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAsyncGetProject.fulfilled, (state, action) => {
@@ -88,6 +92,7 @@ export const {
   setProject,
   setTaskCategory,
   setProjectDialogOpen,
+  setProjectDialogMode,
 } = projectSlice.actions;
 
 export const selectProjects = (state: RootState) => state.project.projects;
@@ -111,8 +116,9 @@ export const selectTaskCategory = (state: RootState) =>
   )?.task_category ?? emptyProject.task_category;
 export const selectEditedProject = (state: RootState) =>
   state.project.editedProject;
-
 export const selectProjectDialogOpen = (state: RootState) =>
   state.project.projectDialogOpen;
+export const selectProjectDialogMode = (state: RootState) =>
+  state.project.projectDialogMode;
 
 export default projectSlice.reducer;

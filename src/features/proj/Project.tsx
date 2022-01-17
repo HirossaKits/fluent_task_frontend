@@ -22,6 +22,7 @@ import {
   selectSelectedProject,
   setEditedProject,
   setProjectDialogOpen,
+  setProjectDialogMode,
 } from './projectSlice';
 import ProjectDialog from './ProjectDialog';
 import useProjectMember from '../../hooks/projectMember';
@@ -158,6 +159,7 @@ const Project = () => {
   };
 
   const handleEditClick = () => {
+    dispatch(setProjectDialogMode('edit'));
     dispatch(setEditedProject(project));
     dispatch(setProjectDialogOpen(true));
   };

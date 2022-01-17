@@ -19,6 +19,7 @@ import { selectOrgUser } from '../org/orgSliece';
 import {
   selectEditedProject,
   selectProjectDialogOpen,
+  selectProjectDialogMode,
   setProject,
   setEditedProject,
   setProjectDialogOpen,
@@ -47,6 +48,7 @@ const ProjectDialog = () => {
   const dispatch = useDispatch();
   const createOption = useCreateOption();
   const projectDialogOpen = useSelector(selectProjectDialogOpen);
+  const projectDialogMode = useSelector(selectProjectDialogMode);
   const orgUser = useSelector(selectOrgUser);
   const userOptions = createOption(orgUser, 'user_id', [
     'last_name',
@@ -85,7 +87,9 @@ const ProjectDialog = () => {
   return (
     <CommonDialog
       open={projectDialogOpen}
-      title='プロジェクトを編集'
+      title={
+        'プロジェクトを' + (projectDialogMode === 'register' ? '登録' : '編集')
+      }
       onClose={handleClose}
       onRegisterClick={handleRegisterClick}
       maxWidth='sm'
