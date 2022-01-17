@@ -125,7 +125,9 @@ const Task = () => {
                 ? theme.palette.warning.light
                 : task.status === 'On going'
                 ? theme.palette.info.light
-                : theme.palette.success.light,
+                : task.status === 'Done'
+                ? theme.palette.success.light
+                : theme.palette.text.disabled,
           }}
         />
       </div>
