@@ -1,20 +1,20 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
-import { RootState } from '../../app/store';
-import { PROJECT, PROJECT_SATATE } from '../types';
-import { Category } from '../../selectionOptions';
-import { demoProjects } from '../../DummyData';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { RootState } from "../../app/store";
+import { PROJECT, PROJECT_SATATE } from "../types";
+import { Category } from "../../selectionOptions";
+import { demoProjects } from "../../DummyData";
 
-const emptyProject = {
-  project_id: '',
-  project_name: '',
-  org_id: '',
-  resp_id: [''],
-  member_id: [''],
+export const emptyProject = {
+  project_id: "",
+  project_name: "",
+  org_id: "",
+  resp_id: [""],
+  member_id: [""],
   task_category: [],
-  description: '',
-  startdate: '',
-  enddate: '',
+  description: "",
+  startdate: "",
+  enddate: "",
 };
 
 const initialState: PROJECT_SATATE = {
@@ -25,7 +25,7 @@ const initialState: PROJECT_SATATE = {
 };
 
 export const fetchAsyncGetProject = createAsyncThunk(
-  'project/getProject',
+  "project/getProject",
   async () => {
     const res = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/project/`,
@@ -40,7 +40,7 @@ export const fetchAsyncGetProject = createAsyncThunk(
 );
 
 export const projectSlice = createSlice({
-  name: 'project',
+  name: "project",
   initialState,
   reducers: {
     setSelectedProjectId(state, action) {
