@@ -46,35 +46,20 @@ const DatePickerDialog: React.FC<Props> = (props) => {
           inputFormat='yyyy-MM-dd'
           value={props.value ? parseDate(props.value) : null}
           // value={new Date()}
+          readOnly={props.readOnly}
           onChange={(date) => handleDateChange(date)}
-          renderInput={(params) =>
-            props.readOnly ? (
-              <TextField
-                {...params}
-                css={widthStyles}
-                variant='standard'
-                margin='normal'
-                label={'label' in props && props.label}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                InputProps={{
-                  readOnly: props.readOnly,
-                }}
-              />
-            ) : (
-              <TextField
-                {...params}
-                css={widthStyles}
-                variant='standard'
-                margin='normal'
-                label={'label' in props && props.label}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-            )
-          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              css={widthStyles}
+              variant='standard'
+              margin='normal'
+              label={'label' in props && props.label}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          )}
         />
       </LocalizationProvider>
     </>

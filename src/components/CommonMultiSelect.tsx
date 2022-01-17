@@ -1,13 +1,13 @@
-import React from "react";
-import Checkbox from "@mui/material/Checkbox";
-import TextField from "@mui/material/TextField";
+import React from 'react';
+import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
 import Autocomplete, {
   AutocompleteChangeDetails,
   AutocompleteChangeReason,
-} from "@mui/material/Autocomplete";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
-import { TARGET } from "../features/types";
+} from '@mui/material/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { TARGET } from '../features/types';
 
 type Option = {
   value: string;
@@ -49,15 +49,15 @@ export default function CommonMultiSelect(props: Props) {
       onChange={handleSelectedChange}
       getOptionLabel={(option) => option.label}
       renderOption={(props_ch, option, { selected }) => {
-        console.log("test", props);
-        console.log("test", option);
+        console.log('test', props);
+        console.log('test', option);
         const isChecked = selectedValues.includes(option.value);
 
         return (
           <li {...props_ch}>
             <Checkbox
-              icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-              checkedIcon={<CheckBoxIcon fontSize="small" />}
+              icon={<CheckBoxOutlineBlankIcon fontSize='small' />}
+              checkedIcon={<CheckBoxIcon fontSize='small' />}
               style={{ marginRight: 8 }}
               checked={isChecked}
             />
@@ -65,26 +65,28 @@ export default function CommonMultiSelect(props: Props) {
           </li>
         );
       }}
-      style={{ width: props.width ?? "100%" }}
+      style={{ width: props.width ?? '100%' }}
       renderInput={(params) =>
         props.readOnly ? (
           <TextField
             {...params}
-            label={props.label ?? ""}
-            placeholder={props.placeholder ?? ""}
-            variant="standard"
-            margin="normal"
+            label={props.label ?? ''}
+            placeholder={props.placeholder ?? ''}
+            margin='normal'
             InputLabelProps={{
               shrink: true,
+            }}
+            InputProps={{
+              readOnly: true,
             }}
           />
         ) : (
           <TextField
             {...params}
-            label={props.label ?? ""}
-            placeholder={props.placeholder ?? ""}
-            variant="standard"
-            margin="normal"
+            label={props.label ?? ''}
+            placeholder={props.placeholder ?? ''}
+            variant='standard'
+            margin='normal'
           />
         )
       }

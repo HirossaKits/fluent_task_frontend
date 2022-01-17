@@ -1,5 +1,6 @@
 import React from 'react';
 import { css } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { TARGET } from '../features/types';
 
@@ -16,6 +17,15 @@ type Props = {
 };
 
 const CommonTextField: React.FC<Props> = (props) => {
+  const theme = useTheme();
+  const widthStyle = css`
+    ${'width' in props
+      ? `width: ${props.width};`
+      : 'type' in props && props.type === 'number'
+      ? 'width: 98px;'
+      : ''}
+  `;
+
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -28,15 +38,6 @@ const CommonTextField: React.FC<Props> = (props) => {
     }
     props.onChange && props.onChange(target);
   };
-
-  const widthStyle = css`
-    ${'width' in props
-      ? `width: ${props.width};`
-      : 'type' in props && props.type === 'number'
-      ? 'width: 98px;'
-      : ''}
-    background-color: lite-gray;
-  `;
 
   return (
     <TextField
