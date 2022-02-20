@@ -14,7 +14,7 @@ import Avatar from '@mui/material/Avatar';
 import CloseIcon from '@mui/icons-material/Close';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import {
-  selectLoginUserProf,
+  selectLoginUserInfo,
   selectEditedProf,
   setEditedProf,
   fetchAsyncUpdateProf,
@@ -22,22 +22,21 @@ import {
 import { setProfileDialogOpen, selectProfileDialogOpen } from './mainSlice';
 import CommonTextField from '../../components/CommonTextField';
 import CommonToolTip from '../../components/CommonTooltip';
-import { TARGET } from '../types';
+import { TARGET, EDITED_PROF } from '../types';
 
 const ProfileDialog = () => {
   const dispatch = useDispatch();
-  const loginUserProf = useSelector(selectLoginUserProf);
+  const loginUserInfo = useSelector(selectLoginUserInfo);
   const editedProf = useSelector(selectEditedProf);
   const profileDialogOpen = useSelector(selectProfileDialogOpen);
   const [previewImg, setPreviewImg] = useState('');
+  const [uploadFile, setUploadFile] = useState(null);
 
   useEffect(() => {
-    dispatch(
-      setEditedProf({
-        ...loginUserProf,
-        upload_file: null,
-      })
-    );
+    const { first_name, last_name, comment } = loginUserInfo;
+    dispatch(setEditedProf({ first_name, last_name, comment }));
+    setPreviewImg('');
+    setUploadFile(null);
   }, [profileDialogOpen]);
 
   const handleInputChange = (target: TARGET) => {
@@ -45,7 +44,7 @@ const ProfileDialog = () => {
   };
 
   const handleRegisterClick = () => {
-    dispatch(fetchAsyncUpdateProf(editedProf));
+    dispatch(fetchAsyncUpdateProf(uploadFile));
     dispatch(setProfileDialogOpen(false));
   };
 
@@ -68,7 +67,8 @@ const ProfileDialog = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        dispatch(setEditedProf({ ...editedProf, upload_file: file }));
+        // dispatch(setEditedProf({ ...editedProf, upload_file: file }));
+        setUploadFile(file);
         setPreviewImg(reader.result as string);
       };
     }
@@ -110,31 +110,31 @@ const ProfileDialog = () => {
       <Dialog
         open={profileDialogOpen}
         onClose={handleClose}
-        aria-labelledby='form-dialog-title'
-        maxWidth='xs'
+        aria-labelledby="form-dialog-title"
+        maxWidth="xs"
         fullWidth
       >
         <Grid css={styles.title} item>
           <DialogTitle>プロフィールを編集</DialogTitle>
         </Grid>
         <Grid css={styles.close} item>
-          <IconButton size='small' onClick={handleClose}>
+          <IconButton size="small" onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </Grid>
-        <form css={styles.form} noValidate autoComplete='off'>
-          <Stack direction='column' justifyContent='center' alignItems='center'>
+        <form css={styles.form} noValidate autoComplete="off">
+          <Stack direction="column" justifyContent="center" alignItems="center">
             <input
-              type='file'
-              id='imageInput'
+              type="file"
+              id="imageInput"
               hidden={true}
               onChange={(e) => handleOnFileChange(e)}
             />
             <Badge
-              overlap='circular'
+              overlap="circular"
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
               badgeContent={
-                <CommonToolTip title='画像をアップロード'>
+                <CommonToolTip title="画像をアップロード">
                   <IconButton css={styles.badge} onClick={handlePictureClick}>
                     <CameraAltIcon />
                   </IconButton>
@@ -143,36 +143,36 @@ const ProfileDialog = () => {
             >
               <Avatar
                 css={styles.avatar}
-                src={previewImg ? previewImg : loginUserProf.avatar_img}
+                src={previewImg ? previewImg : loginUserInfo.avatar_img}
               />
             </Badge>
             <CommonTextField
-              label='姓'
-              name='last_name'
+              label="姓"
+              name="last_name"
               value={editedProf.last_name}
               onChange={handleInputChange}
-              width='200px'
+              width="200px"
             />
             <CommonTextField
-              label='名'
-              name='first_name'
+              label="名"
+              name="first_name"
               value={editedProf.first_name}
               onChange={handleInputChange}
-              width='200px'
+              width="200px"
             />
             <CommonTextField
-              label='コメント'
-              name='comment'
+              label="コメント"
+              name="comment"
               value={editedProf.comment}
               onChange={handleInputChange}
-              width='200px'
+              width="200px"
             />
           </Stack>
           <DialogActions>
-            <Button onClick={handleClose} color='primary'>
+            <Button onClick={handleClose} color="primary">
               キャンセル
             </Button>
-            <Button onClick={handleRegisterClick} color='primary'>
+            <Button onClick={handleRegisterClick} color="primary">
               登録
             </Button>
           </DialogActions>

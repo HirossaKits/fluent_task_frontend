@@ -1,12 +1,13 @@
-import { TASK, ORG, ORG_USER, PROJECT, TASK_STATUS } from './features/types';
+import { TASK, ORG, USER_INFO, PROJECT, TASK_STATUS } from './features/types';
 
-export const dummyUsers: ORG_USER[] = [
+export const dummyUsers: USER_INFO[] = [
   {
     user_id: 'user1',
     first_name: 'Hirohisa',
     last_name: 'Kitsuka',
     avatar_img: '',
     comment: 'Almost engineer',
+    org_id: null,
     is_org_rep: true,
     is_org_admin: true,
   },
@@ -16,6 +17,7 @@ export const dummyUsers: ORG_USER[] = [
     last_name: 'USER01',
     avatar_img: '',
     comment: 'demo demo datte',
+    org_id: null,
     is_org_rep: false,
     is_org_admin: true,
   },
@@ -25,6 +27,7 @@ export const dummyUsers: ORG_USER[] = [
     last_name: 'USER02',
     avatar_img: 'https://picsum.photos/200',
     comment: 'demo demo datte',
+    org_id: null,
     is_org_rep: false,
     is_org_admin: false,
   },
@@ -34,6 +37,7 @@ export const dummyUsers: ORG_USER[] = [
     last_name: 'USER03',
     avatar_img: 'https://picsum.photos/200',
     comment: 'demo demo datte',
+    org_id: null,
     is_org_rep: false,
     is_org_admin: false,
   },
@@ -43,6 +47,7 @@ export const dummyUsers: ORG_USER[] = [
     last_name: 'USER04',
     avatar_img: 'https://picsum.photos/200',
     comment: 'demo demo datte',
+    org_id: null,
     is_org_rep: false,
     is_org_admin: false,
   },
@@ -52,6 +57,7 @@ export const dummyUsers: ORG_USER[] = [
     last_name: 'USER05',
     avatar_img: 'https://picsum.photos/200',
     comment: 'demo demo datte',
+    org_id: null,
     is_org_rep: false,
     is_org_admin: false,
   },
@@ -61,6 +67,7 @@ export const dummyUsers: ORG_USER[] = [
     last_name: 'USER06',
     avatar_img: 'https://picsum.photos/200',
     comment: 'demo demo datte',
+    org_id: null,
     is_org_rep: false,
     is_org_admin: false,
   },
@@ -70,6 +77,7 @@ export const dummyUsers: ORG_USER[] = [
     last_name: 'USER07',
     avatar_img: 'https://picsum.photos/200',
     comment: 'demo demo datte',
+    org_id: null,
     is_org_rep: false,
     is_org_admin: false,
   },

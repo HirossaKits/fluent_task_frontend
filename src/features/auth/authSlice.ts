@@ -1,70 +1,54 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
-import axios from "axios";
+import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { RootState } from '../../app/store';
+import axios from 'axios';
 import {
   AUTH,
-  CRED,
-  REG_INFO,
+  SIGNIN_INFO,
+  SIGNUP_INFO,
   JWT,
-  LOGIN_USER_CRED,
-  PROF,
+  USER_INFO,
+  // PROF,
   EDITED_PROF,
-  PERSONAL_SETTINGS
-} from "../types";
-import taskSlice from "../task/taskSlice";
-import { profile } from "console";
-import { setSettingsMenuOpen } from "../main/mainSlice";
+  PERSONAL_SETTINGS,
+} from '../types';
 
-const initialState: AUTH = {
-  loginUserCred: {
-    id: "",
-    email: "",
-    org: "",
-    is_activate: false,
-    is_premium: false,
-    is_administrator: false,
-  },
-  loginUserProf: {
-    user_id: "",
-    first_name: "",
-    last_name: "",
-    avatar_img: '',
-    comment: ''
-  },
-  editedProf: {
-    user_id: "",
-    first_name: "",
-    last_name: "",
-    avatar_img: '',
-    upload_file: null,
-    comment: ''
-  },
-  personalSettings: {
-    dark_mode: false,
-    show_own: false,
-    project: null,
-  },
-  profiles: [{
-    user_id: "",
-    first_name: "",
-    last_name: "",
-    avatar_img: '',
-    comment: ''
-  }]
+const userInfo = {
+  user_id: '',
+  email: '',
+  password: '',
+  first_name: '',
+  last_name: '',
+  avatar_img: '',
+  comment: '',
+  org_id: null,
+  is_org_rep: false,
+  is_org_admin: false,
 };
 
+const initialState: AUTH = {
+  loginUserInfo: userInfo,
+  editedProf: {
+    first_name: '',
+    last_name: '',
+    comment: '',
+  },
+  personalSettings: {
+    darkmode: false,
+    tooltip: true,
+  },
+  profiles: [userInfo],
+};
 
-// ログイン
-export const fetchAsyncLogin = createAsyncThunk(
-  "auth/login",
-  async (auth: CRED) => {
+// サインアップ
+export const fetchAsyncSignup = createAsyncThunk(
+  'auth/register',
+  async (auth: SIGNUP_INFO) => {
     const res = await axios.post<JWT>(
-      `${process.env.REACT_APP_API_URL}/authen/jwt/create`,
+      `${process.env.REACT_APP_API_URL}/api/auth/signup`,
       auth,
       {
         headers: {
-          "Content-type": "application/json",
-          Authorization: `JWT ${localStorage.localJWT}`,
+          'Content-type': 'application/json',
         },
       }
     );
@@ -72,35 +56,27 @@ export const fetchAsyncLogin = createAsyncThunk(
   }
 );
 
-
-// 新規登録
-export const fetchAsyncRegister = createAsyncThunk(
-  "auth/register",
-  async (auth: REG_INFO) => {
-    const res = await axios.post<REG_INFO>(
-      `${process.env.REACT_APP_API_URL}/api/user/create/`,
-      auth,
-      {
-        headers: {
-          "Content-type": "application/json",
-        },
-      }
+// サインイン
+export const fetchAsyncSignin = createAsyncThunk(
+  'auth/login',
+  async (auth: SIGNIN_INFO) => {
+    const res = await axios.post<JWT>(
+      `${process.env.REACT_APP_API_URL}/api/auth/signin`,
+      auth
     );
     return res.data;
   }
 );
-
 
 // ログインユーザーの基本情報取得
 export const fetchAsyncGetLoginUser = createAsyncThunk(
-  "auth/getLoginUserCred",
-  async () => {
-    console.log(localStorage.localJWT);
-    const res = await axios.get<LOGIN_USER_CRED>(
-      `${process.env.REACT_APP_API_URL}/api/user/login/`,
+  'auth/getLoginUserCred',
+  async (_, thunkAPI) => {
+    const res = await axios.get<USER_INFO>(
+      `${process.env.REACT_APP_API_URL}/api/user`,
       {
         headers: {
-          Authorization: `JWT ${localStorage.localJWT}`,
+          Authorization: `Bearer ${localStorage.localJWT}`,
         },
       }
     );
@@ -108,94 +84,73 @@ export const fetchAsyncGetLoginUser = createAsyncThunk(
   }
 );
 
-
-// ログインユーザーのプロフィール取得
-export const fetchAsyncGetLoginUserProf = createAsyncThunk(
-  "auth/getLoginUserProf",
-  async (user_id: string) => {
-    const res = await axios.get<PROF>(
-      `${process.env.REACT_APP_API_URL}/api/user/profile/${user_id}/`,
-      {
-        headers: {
-          Authorization: `JWT ${localStorage.localJWT}`,
-        },
-      }
-    );
-    return res.data;
-  }
-);
-
-// ログインユーザーのプロフィール更新
+// プロフィール更新
 export const fetchAsyncUpdateProf = createAsyncThunk(
-  "auth/updateProf",
-  async (editedProf: EDITED_PROF, thunkAPI) => {
-    // const user_id = (thunkAPI.getState() as RootState).auth.loginUserCred.id;
-    const uploadData = new FormData();
-    uploadData.append("last_name", editedProf.last_name);
-    uploadData.append("first_name", editedProf.first_name);
-    uploadData.append("comment", editedProf.comment);
-    editedProf.upload_file && uploadData.append("avatar_img", editedProf.upload_file, editedProf.upload_file.name);
-    const res = await axios.put<PROF>(
-      `${process.env.REACT_APP_API_URL}/api/user/profile/${editedProf.user_id}/`,
-      uploadData,
+  'auth/updateProf',
+  async (upload_file: null | File, thunkAPI) => {
+    const user_id = (thunkAPI.getState() as RootState).auth.loginUserInfo
+      .user_id;
+    const editedProf = (thunkAPI.getState() as RootState).auth.editedProf;
+    const res = await axios.put<USER_INFO>(
+      `${process.env.REACT_APP_API_URL}/api/user/${user_id}`,
+      editedProf,
       {
         headers: {
-          "Content-type": "application/json",
-          Authorization: `JWT ${localStorage.localJWT}`,
+          Authorization: `Bearer ${localStorage.localJWT}`,
         },
       }
     );
-    console.log(res);
+
+    if (upload_file) {
+      const uploadData = new FormData();
+      uploadData.append('upload_file', upload_file, upload_file.name);
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/avatar/${user_id}`,
+        uploadData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${localStorage.localJWT}`,
+          },
+        }
+      );
+      return res.data;
+    }
+
     return res.data;
   }
 );
 
 // 個人設定の取得
 export const fetchAsyncGetPersonalSettings = createAsyncThunk(
-  "auth/getPersonalSettings",
-  async (user_id: string) => {
+  'auth/getPersonalSettings',
+  async (_, thunkAPI) => {
+    const user_id = (thunkAPI.getState() as RootState).auth.loginUserInfo
+      .user_id;
     const res = await axios.get<PERSONAL_SETTINGS>(
-      `${process.env.REACT_APP_API_URL}/api/user/setting/${user_id}/`,
+      `${process.env.REACT_APP_API_URL}/api/settings/${user_id}`,
       {
         headers: {
-          Authorization: `JWT ${localStorage.localJWT}`
-        }
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
       }
     );
-    console.log(res);
     return res.data;
   }
 );
 
 // 個人設定の更新
 export const fetchAsyncUpdateSettings = createAsyncThunk(
-  "auth/updatePersonalSetting",
+  'auth/updatePersonalSetting',
   async (settings: PERSONAL_SETTINGS, thunkAPI) => {
-    const user_id = (thunkAPI.getState() as RootState).auth.loginUserCred.id;
+    const user_id = (thunkAPI.getState() as RootState).auth.loginUserInfo
+      .user_id;
     const res = await axios.put<PERSONAL_SETTINGS>(
-      `${process.env.REACT_APP_API_URL}/api/user/setting/${user_id}/`,
+      `${process.env.REACT_APP_API_URL}/api/settings/${user_id}`,
       settings,
       {
         headers: {
-          Authorization: `JWT ${localStorage.localJWT}`
-        }
-      }
-    );
-    return res.data;
-  }
-
-);
-
-
-// プロフィールの取得
-export const fetchAsyncGetProfiles = createAsyncThunk(
-  "auth/getProfile",
-  async () => {
-    const res = await axios.get<PROF[]>(
-      `${process.env.REACT_APP_API_URL}/api/user/profile/`,
-      {
-        headers: {
-          Authorization: `JWT ${localStorage.localJWT}`,
+          Authorization: `Bearer ${localStorage.localJWT}`,
         },
       }
     );
@@ -205,96 +160,71 @@ export const fetchAsyncGetProfiles = createAsyncThunk(
 
 // ログアウト
 export const logOut = () => {
-  localStorage.removeItem("localJWT");
-  window.location.href = "/login";
+  localStorage.removeItem('localJWT');
+  window.location.href = '/login';
 };
 
-
 export const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     setEditedProf(state, action) {
-      console.log(action.payload);
       state.editedProf = action.payload;
     },
     setPersonalSettings(state, action) {
       state.personalSettings = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
-    // ログイン時
+    // サインアップ
     builder.addCase(
-      fetchAsyncLogin.fulfilled,
+      fetchAsyncSignup.fulfilled,
       (state, action: PayloadAction<JWT>) => {
-        console.log('fetchAsyncLogin.fulfilled');
-        console.log(action.payload);
-        localStorage.setItem("localJWT", action.payload.access);
-        action.payload.access && (window.location.href = "/app");
+        localStorage.setItem('localJWT', action.payload.access);
+        action.payload.access && (window.location.href = '/app');
+      }
+    );
+    // サインイン
+    builder.addCase(
+      fetchAsyncSignin.fulfilled,
+      (state, action: PayloadAction<JWT>) => {
+        localStorage.setItem('localJWT', action.payload.access);
+        action.payload.access && (window.location.href = '/app');
       }
     );
     builder.addCase(
       fetchAsyncGetLoginUser.fulfilled,
-      (state, action: PayloadAction<LOGIN_USER_CRED>) => {
-        console.log('fetchAsyncGetLoginUserCred.fulfilled');
-        console.log(action.payload);
+      (state, action: PayloadAction<USER_INFO>) => {
         return {
           ...state,
-          loginUserCred: action.payload
+          loginUserInfo: action.payload,
         };
       }
     );
-    builder.addCase(
-      fetchAsyncGetLoginUserProf.fulfilled,
-      (state, action: PayloadAction<PROF>) => {
-        console.log('fetchAsyncGetLoginUserProf.fulfilled');
-        console.log(action.payload);
-        return {
-          ...state,
-          loginUserProf: action.payload
-        };
-      }
-    );
-    builder.addCase(
-      fetchAsyncUpdateProf.fulfilled, (state, action) => {
-        console.log('fetchAsyncUpdateProf.fulfilled');
-        return {
-          ...state,
-          loginUserProf: action.payload
-        };
-      }
-    );
+    builder.addCase(fetchAsyncUpdateProf.fulfilled, (state, action) => {
+      return {
+        ...state,
+        loginUserInfo: action.payload,
+      };
+    });
     builder.addCase(
       fetchAsyncGetPersonalSettings.fulfilled,
       (state, action: PayloadAction<PERSONAL_SETTINGS>) => {
-        console.log("fetchAsyncGetPersonalSettings.fulfilled");
         return {
           ...state,
-          personalSettings: action.payload
+          personalSettings: action.payload,
         };
-      }
-    );
-    builder.addCase(
-      fetchAsyncGetProfiles.fulfilled,
-      (state, action: PayloadAction<PROF[]>) => {
-        return { ...state, profiles: action.payload };
       }
     );
   },
 });
 
+export const { setEditedProf, setPersonalSettings } = authSlice.actions;
 
-// export const selectIsAuthentificated = (state: RootState) => state.auth.isAuthentificated;
-// export const selectLoginUserCred = (state: RootState) => state.auth.loginUserCred;
-export const {
-  setEditedProf,
-  setPersonalSettings
-} = authSlice.actions;
-
-export const selectLoginUserCred = (state: RootState) => state.auth.loginUserCred;
-export const selectLoginUserProf = (state: RootState) => state.auth.loginUserProf;
+export const selectLoginUserInfo = (state: RootState) =>
+  state.auth.loginUserInfo;
 export const selectEditedProf = (state: RootState) => state.auth.editedProf;
-export const selectPersonalSettings = (state: RootState) => state.auth.personalSettings;
-
+export const selectPersonalSettings = (state: RootState) =>
+  state.auth.personalSettings;
 
 export default authSlice.reducer;

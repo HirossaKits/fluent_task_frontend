@@ -11,11 +11,13 @@ import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import GroupRemoveIcon from '@mui/icons-material/GroupRemove';
-import { selectLoginUserProf } from '../auth/authSlice';
+import { selectLoginUserInfo } from '../auth/authSlice';
 import { selectProfileMenuOpen } from './mainSlice';
 import { setProfileMenuOpen, setProfileDialogOpen } from './mainSlice';
 import { logOut } from '../auth/authSlice';
 import ProfileDialog from './ProfileDialog';
+import CommonAvatar from '../../components/CommonAvatar';
+import { cpuUsage } from 'process';
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;
@@ -25,7 +27,7 @@ const ProfileMenu: React.FC<Props> = (props) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const profileMenuOpen = useSelector(selectProfileMenuOpen);
-  const loginUserProf = useSelector(selectLoginUserProf);
+  const loginUserInfo = useSelector(selectLoginUserInfo);
 
   const handleEditProfileClick = () => {
     dispatch(setProfileDialogOpen(true));
@@ -45,11 +47,6 @@ const ProfileMenu: React.FC<Props> = (props) => {
       flex-direction: column;
       min-width: 210px;
       padding: 10px 10px 0 10px;
-    `,
-    avatar: css`
-      width: 100px;
-      height: 100px;
-      font-size: 36px;
     `,
     name: css`
       display: flex;
@@ -92,39 +89,33 @@ const ProfileMenu: React.FC<Props> = (props) => {
       >
         <Box css={styles.wrap}>
           <Box sx={{ display: 'flex' }}>
-            {loginUserProf.avatar_img ? (
-              <Avatar css={styles.avatar} src={loginUserProf.avatar_img} />
-            ) : (
-              <Avatar css={styles.avatar}>
-                {loginUserProf.last_name + loginUserProf.first_name}
-              </Avatar>
-            )}
+            <CommonAvatar user={loginUserInfo} width="100px" fontSize="45px" />
             <Box css={styles.name}>
-              <Typography variant='h5' component='div'>
-                {loginUserProf.last_name}
+              <Typography variant="h5" component="div">
+                {loginUserInfo.last_name}
               </Typography>
-              <Typography variant='h5' component='div'>
-                {loginUserProf.first_name}
+              <Typography variant="h5" component="div">
+                {loginUserInfo.first_name}
               </Typography>
             </Box>
           </Box>
           <Box css={styles.comment}>
-            <Typography noWrap variant='body2' component='div'>
-              {`${loginUserProf.comment}`}
+            <Typography noWrap variant="body2" component="div">
+              {`${loginUserInfo.comment}`}
             </Typography>
           </Box>
         </Box>
         <MenuList>
           <MenuItem css={styles.menuItem} onClick={handleEditProfileClick}>
-            <EditIcon css={styles.icon} fontSize='small' />
+            <EditIcon css={styles.icon} fontSize="small" />
             <Typography>プロフィール編集</Typography>
           </MenuItem>
           <MenuItem css={styles.menuItem} onClick={handleLogoutClick}>
-            <ExitToAppIcon css={styles.icon} fontSize='small' />
+            <ExitToAppIcon css={styles.icon} fontSize="small" />
             <Typography>ログアウト</Typography>
           </MenuItem>
           <MenuItem css={styles.menuItem} onClick={handleLogoutClick}>
-            <GroupRemoveIcon css={styles.icon} fontSize='small' />
+            <GroupRemoveIcon css={styles.icon} fontSize="small" />
             <Typography>組織を脱退</Typography>
           </MenuItem>
         </MenuList>

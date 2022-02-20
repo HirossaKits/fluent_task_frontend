@@ -12,10 +12,10 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
-import { ORG_USER } from '../types';
+import { USER_INFO } from '../types';
 
 type Props = {
-  user: ORG_USER;
+  user: USER_INFO;
 };
 
 const ShortUserCard = (props: Props) => {
@@ -71,7 +71,7 @@ const ShortUserCard = (props: Props) => {
     <>
       <Card css={styles.card}>
         <IconButton css={styles.dot} onClick={handleClick}>
-          <MoreHorizIcon fontSize='small' />
+          <MoreHorizIcon fontSize="small" />
         </IconButton>
         <Box sx={{ display: 'flex' }}>
           {props.user.avatar_img ? (
@@ -83,16 +83,16 @@ const ShortUserCard = (props: Props) => {
             </Avatar>
           )}
           <Box css={styles.name}>
-            <Typography variant='h5' component='div'>
+            <Typography variant="h5" component="div">
               {props.user.last_name}
             </Typography>
-            <Typography variant='h5' component='div'>
+            <Typography variant="h5" component="div">
               {props.user.first_name}
             </Typography>
           </Box>
         </Box>
         <Box css={styles.comment}>
-          <Typography noWrap variant='body2' component='div'>
+          <Typography noWrap variant="body2" component="div">
             {`${props.user.comment}`}
           </Typography>
         </Box>
@@ -108,7 +108,7 @@ const ShortUserCard = (props: Props) => {
       >
         <MenuItem>
           <ListItemIcon>
-            <PersonRemoveIcon fontSize='small' />
+            <PersonRemoveIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>ユーザーを削除</ListItemText>
         </MenuItem>

@@ -21,11 +21,11 @@ import {
   setTaskDialogMode,
 } from '../task/taskSlice';
 
-import { ORG_USER, TASK } from '../types';
+import { USER_INFO, TASK } from '../types';
 
 type Props = {
   task: TASK;
-  user: ORG_USER | undefined;
+  user: USER_INFO | undefined;
 };
 
 const KanbanCard: React.FC<Props> = (props: Props) => {
@@ -147,14 +147,14 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
       >
         <Box
           css={styles.title}
-          component='div'
+          component="div"
           sx={{
             textOverflow: 'ellipsis',
             my: 2,
             overflow: 'hidden',
           }}
         >
-          <Typography component='div' noWrap>
+          <Typography component="div" noWrap>
             {props.task.task_name}
           </Typography>
         </Box>
@@ -163,7 +163,7 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
         </Box>
         <Box css={styles.dot}>
           <IconButton onClick={handleDotClick}>
-            <MoreVertIcon fontSize='small' />
+            <MoreVertIcon fontSize="small" />
           </IconButton>
         </Box>
       </Card>
@@ -178,19 +178,19 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
       >
         <MenuItem onClick={handleDetailClick}>
           <ListItemIcon>
-            <FeedIcon fontSize='small' />
+            <FeedIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText css={styles.menuItem}>詳細</ListItemText>
         </MenuItem>
         <MenuItem onClick={handleEditClick}>
           <ListItemIcon>
-            <EditIcon fontSize='small' />
+            <EditIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText css={styles.menuItem}>編集</ListItemText>
         </MenuItem>
         <MenuItem onClick={handleDeleteClick}>
           <ListItemIcon>
-            <DeleteIcon fontSize='small' />
+            <DeleteIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText css={styles.menuItem}>削除</ListItemText>
         </MenuItem>

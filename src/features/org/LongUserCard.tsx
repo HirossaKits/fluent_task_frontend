@@ -17,10 +17,10 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import GppGoodIcon from '@mui/icons-material/GppGood';
 import GppBadIcon from '@mui/icons-material/GppBad';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
-import { ORG_USER } from '../types';
+import { USER_INFO } from '../types';
 
 type Props = {
-  user: ORG_USER;
+  user: USER_INFO;
 };
 
 const LongUserCard = (props: Props) => {
@@ -92,7 +92,7 @@ const LongUserCard = (props: Props) => {
     <>
       <Card css={styles.card}>
         <IconButton css={styles.dot} onClick={handleClick}>
-          <MoreHorizIcon fontSize='small' />
+          <MoreHorizIcon fontSize="small" />
         </IconButton>
         <Box sx={{ display: 'flex' }}>
           {props.user.avatar_img ? (
@@ -104,22 +104,22 @@ const LongUserCard = (props: Props) => {
             </Avatar>
           )}
           <Box css={styles.text}>
-            <Typography variant='h6' component='div'>
+            <Typography variant="h6" component="div">
               {`${props.user.last_name} ${props.user.first_name} `}
             </Typography>
-            <Typography noWrap variant='body2' component='div'>
+            <Typography noWrap variant="body2" component="div">
               {`${props.user.comment}`}
             </Typography>
           </Box>
         </Box>
         <Box css={styles.comment}>
           {props.user.is_org_rep && (
-            <CommonTooltip title='グループ所有者'>
+            <CommonTooltip title="グループ所有者">
               <WorkspacePremiumIcon css={styles.iconPremium} />
             </CommonTooltip>
           )}
           {props.user.is_org_admin && (
-            <CommonTooltip title='グループ管理者'>
+            <CommonTooltip title="グループ管理者">
               <AdminPanelSettingsIcon css={styles.iconAdmin} />
             </CommonTooltip>
           )}
@@ -136,19 +136,19 @@ const LongUserCard = (props: Props) => {
       >
         <MenuItem>
           <ListItemIcon>
-            <GppGoodIcon fontSize='small' />
+            <GppGoodIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>管理者にする</ListItemText>
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <GppBadIcon fontSize='small' />
+            <GppBadIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>管理者から除外する</ListItemText>
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
-            <PersonOffIcon fontSize='small' />
+            <PersonOffIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>グループから除外する</ListItemText>
         </MenuItem>

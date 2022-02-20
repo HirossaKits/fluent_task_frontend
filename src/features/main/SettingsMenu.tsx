@@ -6,7 +6,7 @@ import Paper from '@mui/material/Paper';
 import CommonSwitch from '../../components/CommonSwitch';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  selectLoginUserCred,
+  // selectLoginUserInfo,
   selectPersonalSettings,
   setPersonalSettings,
   fetchAsyncUpdateSettings,
@@ -20,7 +20,7 @@ type Props = {
 
 const SettingsMenu: React.FC<Props> = (props) => {
   const theme = useTheme();
-  const loginUserCred = useSelector(selectLoginUserCred);
+  // const loginUserCred = useSelector(selectLoginUserCred);
   const settingsMenuOpen = useSelector(selectSettingsMenuOpen);
   const personalSettings = useSelector(selectPersonalSettings);
   const dispatch = useDispatch();
@@ -60,17 +60,20 @@ const SettingsMenu: React.FC<Props> = (props) => {
       keepMounted
     >
       <Paper css={styles.paper}>
-        {/* <div className={classes.switchWrapper}> */}
         <CommonSwitch
           label={'ダークモード'}
           labelWidth={10}
-          name='dark_mode'
-          value={personalSettings.dark_mode}
+          name="darkmode"
+          value={personalSettings.darkmode}
           onChange={handleInputChange}
         />
-        {/* <CommonSwitch label={"test"} labelWidth={10} />
-        <CommonSwitch label={"test"} labelWidth={10} /> */}
-        {/* </div> */}
+        <CommonSwitch
+          label={'ツールチップ'}
+          labelWidth={10}
+          name="tooltip"
+          value={personalSettings.tooltip}
+          onChange={handleInputChange}
+        />
       </Paper>
     </Popover>
   );

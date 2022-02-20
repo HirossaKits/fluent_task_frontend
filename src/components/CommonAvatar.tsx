@@ -1,30 +1,41 @@
 import React from 'react';
 import { css } from '@emotion/react';
 import Avatar from '@mui/material/Avatar';
-import { ORG_USER } from '../features/types';
+import { USER_INFO } from '../features/types';
 
 type Props = {
-  user: ORG_USER | undefined;
+  user: USER_INFO | undefined;
+  width?: string;
+  fontSize?: string;
 };
 
 const CommonAvatar = (props: Props) => {
-  const style = css`
-    width: 100%;
-    height: 100%;
-    user-drag: none;
-    -webkit-user-drag: none;
-    -moz-user-select: none;
-  `;
+  const styles = {
+    avatar: css`
+      width: ${'width' in props ? props.width : '100%'};
+      height: ${'width' in props ? props.width : '100%'};
+      ${'fontSize' in props ? `font-size: ${props.fontSize};` : ''}
+    `,
+    img: css`
+      width: 100%;
+      height: 100%;
+      user-drag: none;
+      -webkit-user-drag: none;
+      -moz-user-select: none;
+    `,
+  };
+
+  console.log(props.user);
 
   return (
     <>
       {props.user ? (
         props.user.avatar_img ? (
-          <Avatar>
-            <img css={style} src={props.user.avatar_img} alt='avatar' />
+          <Avatar css={styles.avatar}>
+            <img css={styles.img} src={props.user.avatar_img} alt="avatar" />
           </Avatar>
         ) : (
-          <Avatar>
+          <Avatar css={styles.avatar}>
             {props.user.last_name.slice(0, 1) +
               props.user.first_name.slice(0, 1)}
           </Avatar>

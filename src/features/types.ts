@@ -19,43 +19,44 @@ export type DIALOG_MODE = 'register' | 'edit' | 'detail' | 'display';
 /*authSlice*/
 
 export interface AUTH {
-  loginUserCred: LOGIN_USER_CRED;
-  loginUserProf: PROF;
+  loginUserInfo: USER_INFO;
   editedProf: EDITED_PROF;
   personalSettings: PERSONAL_SETTINGS;
-  profiles: PROF[];
+  profiles: USER_INFO[];
 }
 
-export interface LOGIN_USER_CRED {
-  id: string;
-  email: string;
-  org: string;
-  is_activate: boolean;
-  is_premium: boolean;
-  is_administrator: boolean;
-}
-
-export interface PROF {
+export interface USER_INFO {
   user_id: string;
+  // email: string;
+  // password: string;
   first_name: string;
   last_name: string;
   avatar_img: string;
   comment: string;
+  org_id: null | string;
+  is_org_rep: boolean;
+  is_org_admin: boolean;
 }
 
+// export interface PROF {
+//   user_id: string;
+//   first_name: string;
+//   last_name: string;
+//   avatar_img: string;
+//   comment: string;
+// }
+
 export interface EDITED_PROF {
-  user_id: string;
   first_name: string;
   last_name: string;
-  avatar_img: string;
-  upload_file: null | File;
   comment: string;
 }
 
 export interface PERSONAL_SETTINGS {
-  dark_mode: boolean;
-  show_own: boolean;
-  project: null | string;
+  darkmode: boolean;
+  tooltip: boolean;
+  // show_own: boolean;
+  // project: null | string;
 }
 
 // export interface USER_PROFILE {
@@ -68,42 +69,41 @@ export interface PERSONAL_SETTINGS {
 //   is_admin: boolean;
 // }
 
-export interface CRED {
+export interface SIGNIN_INFO {
   email: string;
   password: string;
 }
 
-export interface REG_INFO extends CRED {
+export interface SIGNUP_INFO extends SIGNIN_INFO {
   first_name: string;
   last_name: string;
 }
 
 export interface JWT {
-  refresh: string;
   access: string;
 }
 
-export interface USER_INFO {
-  id: number;
-  email: string;
-}
+// export interface USER_INFO {
+//   id: number;
+//   email: string;
+// }
 
 /*orgSlise*/
 
-export interface ORG_USER {
-  user_id: string;
-  first_name: string;
-  last_name: string;
-  avatar_img: string;
-  comment: string;
-  is_org_rep: boolean;
-  is_org_admin: boolean;
-}
+// export interface ORG_USER {
+//   user_id: string;
+//   first_name: string;
+//   last_name: string;
+//   avatar_img: string;
+//   comment: string;
+//   is_org_rep: boolean;
+//   is_org_admin: boolean;
+// }
 
 export interface ORG {
   org_id: string;
   org_name: string;
-  org_user: ORG_USER[];
+  org_user: USER_INFO[];
 }
 
 export interface ORG_STATE {

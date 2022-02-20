@@ -37,11 +37,10 @@ import CommonMessageBar from '../../components/CommonMessageBar';
 import { MAIN_COMPONENT_NAME } from '../types';
 import { AppDispatch } from '../../app/store';
 import {
-  selectLoginUserCred,
+  selectLoginUserInfo,
   fetchAsyncGetLoginUser,
-  fetchAsyncGetLoginUserProf,
   fetchAsyncGetPersonalSettings,
-  fetchAsyncGetProfiles,
+  // fetchAsyncGetProfiles,
 } from '../auth/authSlice';
 import {
   setSettingsMenuOpen,
@@ -174,13 +173,11 @@ const Main = () => {
   };
 
   const dispatch: AppDispatch = useDispatch();
-  const loginUserCred = useSelector(selectLoginUserCred);
+  const loginUserInfo = useSelector(selectLoginUserInfo);
   const mainComponentName = useSelector(selectMainComponentName);
   const projects = useSelector(selectProjects);
   const selectedProjectId = useSelector(selectSelectedProjectId);
-  const message = useSelector(selectMessage);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  // const [selectedIndex, setSelectedIndex] = useState(0);
   const settingsAnchorEl = useRef(null);
   const profileAnchorEl = useRef(null);
 
@@ -188,9 +185,7 @@ const Main = () => {
     const fectchBootLoader = async () => {
       const res = await dispatch(fetchAsyncGetLoginUser());
       if (fetchAsyncGetLoginUser.fulfilled.match(res)) {
-        await dispatch(fetchAsyncGetLoginUserProf(res.payload.id));
-        await dispatch(fetchAsyncGetPersonalSettings(res.payload.id));
-        await dispatch(fetchAsyncGetProfiles());
+        await dispatch(fetchAsyncGetPersonalSettings());
         await dispatch(fetchAsyncGetProject());
       } else {
         // localStorage.removeItem("localJWT");
@@ -234,22 +229,22 @@ const Main = () => {
     <Box sx={{ display: 'flex', width: '100%' }}>
       <AppBar
         css={drawerOpen ? styles.appBarShift : styles.appBar}
-        position='fixed'
+        position="fixed"
       >
-        <Toolbar css={styles.toolbar} disableGutters variant='dense'>
+        <Toolbar css={styles.toolbar} disableGutters variant="dense">
           <IconButton
             css={drawerOpen ? styles.menuIconHide : styles.menuIcon}
-            edge='start'
+            edge="start"
             onClick={handleDrawerOpen}
           >
             <AppsIcon />
           </IconButton>
-          <Typography css={styles.title} variant='h5' noWrap>
+          <Typography css={styles.title} variant="h5" noWrap>
             Fluent Task
           </Typography>
           <Box css={styles.iconBox} sx={{ display: 'flex' }}>
             <IconButton>
-              <Badge badgeContent={1} color='secondary'>
+              <Badge badgeContent={1} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -265,8 +260,8 @@ const Main = () => {
       <Drawer
         css={drawerOpen ? styles.drawerOpen : styles.drawerClose}
         className={'1gxenss-drawerOpen'}
-        variant='permanent'
-        anchor='left'
+        variant="permanent"
+        anchor="left"
         open={drawerOpen}
       >
         <div css={styles.drawerHeader}>
@@ -340,22 +335,22 @@ const Main = () => {
             <Tabs
               value={selectedProjectId}
               onChange={handleTabChange}
-              variant='scrollable'
-              scrollButtons='auto'
+              variant="scrollable"
+              scrollButtons="auto"
             >
               {projects.map((proj) => (
                 <Tab label={proj.project_name} value={proj.project_id} />
               ))}
 
               {mainComponentName === 'Proj' && (
-                <CommonTooltip title='新規作成'>
+                <CommonTooltip title="新規作成">
                   <Tab
                     css={styles.addIcon}
                     icon={<AddIcon />}
-                    iconPosition='start'
+                    iconPosition="start"
                     style={{ margin: 0, padding: 0 }}
                     // label='新規作成'
-                    value='new_project'
+                    value="new_project"
                   />
                 </CommonTooltip>
               )}
