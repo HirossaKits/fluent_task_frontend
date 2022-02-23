@@ -28,7 +28,7 @@ function App() {
       // text: {
       //   primary: "rgba(0, 0, 0, 0.7)",
       // },
-      mode: settings.darkmode ? 'dark' : 'light',
+      mode: settings.dark_mode ? 'dark' : 'light',
     },
   });
 

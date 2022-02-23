@@ -13,8 +13,7 @@ import OrgDialog from './OrgDialog';
 import InviteDialog from './InviteDialog';
 import CommonTooltip from '../../components/CommonTooltip';
 import {
-  selectOrgName,
-  selectOrgUser,
+  selectOrgInfo,
   setEditedOrgName,
   setOrgDialogOpen,
   setInviteDialogOpen,
@@ -72,11 +71,10 @@ const Org = () => {
   };
 
   const dispatch = useDispatch();
-  const orgName = useSelector(selectOrgName);
-  const users = useSelector(selectOrgUser);
+  const orgInfo = useSelector(selectOrgInfo);
 
   const handleEditClick = () => {
-    dispatch(setEditedOrgName(orgName));
+    dispatch(setEditedOrgName(orgInfo.org_name));
     dispatch(setOrgDialogOpen(true));
   };
 
@@ -88,12 +86,12 @@ const Org = () => {
     <>
       <Box css={styles.header}>
         <Box css={styles.titleWrap}>
-          <Typography css={styles.titleText} variant='h5' component='div'>
-            {orgName}
+          <Typography css={styles.titleText} variant="h5" component="div">
+            {orgInfo.org_name}
           </Typography>
-          <CommonTooltip title='編集'>
+          <CommonTooltip title="編集">
             <IconButton css={styles.editIcon} onClick={handleEditClick}>
-              <EditIcon fontSize='small' />
+              <EditIcon fontSize="small" />
             </IconButton>
           </CommonTooltip>
         </Box>
@@ -109,8 +107,12 @@ const Org = () => {
       </Box>
 
       <Box css={styles.wrap}>
-        {users.map((user) => (
-          <LongUserCard user={user} />
+        {orgInfo.org_user?.map((user) => (
+          <LongUserCard
+            user={user}
+            isOwner={user.user_id === orgInfo.org_owner_id}
+            isAdmin={orgInfo.org_admin_id.includes(user.user_id)}
+          />
         ))}
       </Box>
       <OrgDialog />

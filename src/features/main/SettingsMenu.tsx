@@ -5,14 +5,18 @@ import Popover from '@mui/material/Popover';
 import Paper from '@mui/material/Paper';
 import CommonSwitch from '../../components/CommonSwitch';
 import { useSelector, useDispatch } from 'react-redux';
+import { TARGET } from '../types';
 import {
-  // selectLoginUserInfo,
+  selectLoginUserInfo,
   selectPersonalSettings,
   setPersonalSettings,
   fetchAsyncUpdateSettings,
 } from '../auth/authSlice';
+import { selectOrgInfo } from '../org/orgSliece';
 import { selectSettingsMenuOpen, setSettingsMenuOpen } from './mainSlice';
-import { TARGET } from '../types';
+import { setMessageOpen, setMessage } from '../main/mainSlice';
+import CommonSelect from '../../components/CommonSelect';
+import useCreateOption from '../../hooks/optionCreater';
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;
@@ -20,12 +24,49 @@ type Props = {
 
 const SettingsMenu: React.FC<Props> = (props) => {
   const theme = useTheme();
-  // const loginUserCred = useSelector(selectLoginUserCred);
+  const loginUserInfo = useSelector(selectLoginUserInfo);
   const settingsMenuOpen = useSelector(selectSettingsMenuOpen);
   const personalSettings = useSelector(selectPersonalSettings);
   const dispatch = useDispatch();
+  const createOption = useCreateOption();
+
+  const orgOptions = createOption(
+    loginUserInfo.joined_org,
+    'org_id',
+    'org_name'
+  );
+
+  const validateOrgId = () => {
+    const joinedOrgId = loginUserInfo.joined_org.map((org) => org.org_id);
+    if (joinedOrgId.includes(personalSettings.selected_org_id)) {
+      return personalSettings.selected_org_id;
+    } else {
+      const settings = {
+        ...personalSettings,
+        selected_org_id: joinedOrgId[0],
+      };
+      dispatch(setPersonalSettings(settings));
+      dispatch(fetchAsyncUpdateSettings(settings));
+      return joinedOrgId[0];
+    }
+  };
 
   const handleInputChange = (target: TARGET) => {
+    console.log(target);
+    if (target.name === 'private_mode' && !loginUserInfo.joined_org) {
+      if (personalSettings.private_mode === false) {
+        dispatch(
+          setPersonalSettings({ ...personalSettings, private_mode: true })
+        );
+      }
+      dispatch(
+        setMessage(
+          '現在プライベートモードしか利用できません。グループに参加するか、グループを作成してください。'
+        )
+      );
+      dispatch(setMessageOpen(true));
+      return;
+    }
     const settings = { ...personalSettings, [target.name]: target.value };
     dispatch(setPersonalSettings(settings));
     dispatch(fetchAsyncUpdateSettings(settings));
@@ -63,8 +104,8 @@ const SettingsMenu: React.FC<Props> = (props) => {
         <CommonSwitch
           label={'ダークモード'}
           labelWidth={10}
-          name="darkmode"
-          value={personalSettings.darkmode}
+          name="dark_mode"
+          value={personalSettings.dark_mode}
           onChange={handleInputChange}
         />
         <CommonSwitch
@@ -74,6 +115,22 @@ const SettingsMenu: React.FC<Props> = (props) => {
           value={personalSettings.tooltip}
           onChange={handleInputChange}
         />
+        <CommonSwitch
+          label={'プライベートモード'}
+          labelWidth={10}
+          name="private_mode"
+          value={personalSettings.private_mode}
+          onChange={handleInputChange}
+        />
+        {!personalSettings.private_mode && (
+          <CommonSelect
+            label="グループを選択"
+            options={orgOptions}
+            name="selected_org_id"
+            value={validateOrgId()}
+            onChange={handleInputChange}
+          />
+        )}
       </Paper>
     </Popover>
   );

@@ -1,27 +1,65 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 import { RootState } from '../../app/store';
-import { ORG_STATE } from '../types';
+import { ORG, ORG_INFO } from '../types';
 
-// remove later
-import { dummyOrg } from '../../DummyData';
-
-const initialState: ORG_STATE = {
-  org: dummyOrg,
+const initialState: ORG = {
+  org_info: {
+    org_id: '',
+    org_name: '',
+    is_private: true,
+    org_owner_id: '',
+    org_admin_id: [],
+    org_user: [],
+  },
   editedOrgName: '',
   editedInviteMail: '',
   orgDialogOpen: false,
   inviteDialogOpen: false,
 };
 
+export const fetchAsyncGetOrgInfo = createAsyncThunk(
+  'org/getOrgInfo',
+  async (_, thunkAPI) => {
+    const user_id = (thunkAPI.getState() as RootState).auth.loginUserInfo
+      .user_id;
+    const settings = (thunkAPI.getState() as RootState).auth.personalSettings;
+
+    if (settings.private_mode) {
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/org/private/${user_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.localJWT}`,
+          },
+        }
+      );
+      console.log(res.data);
+      return res.data;
+    } else {
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/org/${settings.selected_org_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.localJWT}`,
+          },
+        }
+      );
+      console.log(res.data);
+      return res.data;
+    }
+  }
+);
+
 export const orgSlice = createSlice({
   name: 'org',
   initialState,
   reducers: {
     setOrgUser(state, action) {
-      state.org.org_user = action.payload;
+      state.org_info.org_user = action.payload;
     },
     setOrgName(state, action) {
-      state.org.org_name = action.payload;
+      state.org_info.org_name = action.payload;
     },
     setEditedOrgName(state, action) {
       state.editedOrgName = action.payload;
@@ -36,6 +74,14 @@ export const orgSlice = createSlice({
       state.inviteDialogOpen = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(
+      fetchAsyncGetOrgInfo.fulfilled,
+      (state, action: PayloadAction<ORG_INFO>) => {
+        state.org_info = action.payload;
+      }
+    );
+  },
 });
 
 export const {
@@ -47,9 +93,10 @@ export const {
   setInviteDialogOpen,
 } = orgSlice.actions;
 
-export const selectOrgId = (state: RootState) => state.org.org.org_id;
-export const selectOrgUser = (state: RootState) => state.org.org.org_user;
-export const selectOrgName = (state: RootState) => state.org.org.org_name;
+export const selectOrgInfo = (state: RootState) => state.org.org_info;
+// export const selectOrgId = (state: RootState) => state.org.org_info.org_id;
+// export const selectOrgUser = (state: RootState) => state.org.org_info.org_user;
+// export const selectOrgName = (state: RootState) => state.org.org_info.org_name;
 export const selectEditedOrgName = (state: RootState) =>
   state.org.editedOrgName;
 export const selectEditedInviteMail = (state: RootState) =>

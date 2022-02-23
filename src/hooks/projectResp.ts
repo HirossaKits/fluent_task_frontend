@@ -1,14 +1,15 @@
-import { useSelector } from 'react-redux'
-import { selectOrgUser } from '../features/org/orgSliece'
-import { selectProjectRespId } from '../features/proj/projectSlice'
+import { useSelector } from 'react-redux';
+import { selectOrgInfo } from '../features/org/orgSliece';
+import { selectProjectRespId } from '../features/proj/projectSlice';
 
 const useProjectResp = () => {
+  const orgInfo = useSelector(selectOrgInfo);
+  const respId = useSelector(selectProjectRespId);
 
-  const orgUser = useSelector(selectOrgUser)
-  const respId = useSelector(selectProjectRespId)
+  const projectResp = orgInfo.org_user?.filter((user) =>
+    respId?.includes(user.user_id)
+  );
+  return projectResp;
+};
 
-  const projectResp = orgUser.filter((user) => respId?.includes(user.user_id))
-  return projectResp
-}
-
-export default useProjectResp
+export default useProjectResp;

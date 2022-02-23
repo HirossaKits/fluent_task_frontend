@@ -19,32 +19,31 @@ export type DIALOG_MODE = 'register' | 'edit' | 'detail' | 'display';
 /*authSlice*/
 
 export interface AUTH {
-  loginUserInfo: USER_INFO;
+  loginUserInfo: LOGIN_USER_INFO;
   editedProf: EDITED_PROF;
   personalSettings: PERSONAL_SETTINGS;
   profiles: USER_INFO[];
 }
 
+export interface LOGIN_USER_INFO extends USER_INFO {
+  own_org: string[];
+  joined_org: [
+    {
+      org_id: string;
+      org_name: string;
+      is_private: true;
+    }
+  ];
+}
+
 export interface USER_INFO {
   user_id: string;
-  // email: string;
-  // password: string;
+  is_premium: boolean;
   first_name: string;
   last_name: string;
   avatar_img: string;
   comment: string;
-  org_id: null | string;
-  is_org_rep: boolean;
-  is_org_admin: boolean;
 }
-
-// export interface PROF {
-//   user_id: string;
-//   first_name: string;
-//   last_name: string;
-//   avatar_img: string;
-//   comment: string;
-// }
 
 export interface EDITED_PROF {
   first_name: string;
@@ -53,21 +52,11 @@ export interface EDITED_PROF {
 }
 
 export interface PERSONAL_SETTINGS {
-  darkmode: boolean;
+  dark_mode: boolean;
   tooltip: boolean;
-  // show_own: boolean;
-  // project: null | string;
+  private_mode: boolean;
+  selected_org_id: string;
 }
-
-// export interface USER_PROFILE {
-//   user_id: string;
-//   first_name: string;
-//   last_name: string;
-//   avatar_img: string;
-//   comment: string;
-//   is_premium: boolean;
-//   is_admin: boolean;
-// }
 
 export interface SIGNIN_INFO {
   email: string;
@@ -83,35 +72,23 @@ export interface JWT {
   access: string;
 }
 
-// export interface USER_INFO {
-//   id: number;
-//   email: string;
-// }
-
 /*orgSlise*/
 
-// export interface ORG_USER {
-//   user_id: string;
-//   first_name: string;
-//   last_name: string;
-//   avatar_img: string;
-//   comment: string;
-//   is_org_rep: boolean;
-//   is_org_admin: boolean;
-// }
-
 export interface ORG {
-  org_id: string;
-  org_name: string;
-  org_user: USER_INFO[];
-}
-
-export interface ORG_STATE {
-  org: ORG;
+  org_info: ORG_INFO;
   editedOrgName: string;
   editedInviteMail: string;
   orgDialogOpen: boolean;
   inviteDialogOpen: boolean;
+}
+
+export interface ORG_INFO {
+  org_id: string;
+  org_name: string;
+  is_private: boolean;
+  org_owner_id: string;
+  org_admin_id: string[];
+  org_user: USER_INFO[];
 }
 
 /*mainSlice*/
@@ -138,11 +115,6 @@ export interface PROFILE {
 }
 
 /*Project*/
-
-type USER = {
-  user_id: string;
-  user_name: string;
-};
 
 export interface PROJECT {
   project_id: string;

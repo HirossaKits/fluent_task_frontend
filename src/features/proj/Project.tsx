@@ -166,42 +166,42 @@ const Project = () => {
   return (
     <>
       <Stack
-        direction='row'
-        justifyContent='flex-start'
-        alignItems='flex-start'
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="flex-start"
         spacing={3}
       >
         <Stack
           css={styles.stack}
-          direction='column'
-          justifyContent='flex-start'
-          alignItems='flex-start'
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="flex-start"
           spacing={3}
         >
           <Box css={styles.titleWrap}>
-            <Typography css={styles.titleText} variant='h5' component='div'>
+            <Typography css={styles.titleText} variant="h5" component="div">
               {project?.project_name}
             </Typography>
-            <CommonTooltip title='編集'>
+            <CommonTooltip title="編集">
               <IconButton css={styles.editIcon} onClick={handleEditClick}>
-                <EditIcon fontSize='small' />
+                <EditIcon fontSize="small" />
               </IconButton>
             </CommonTooltip>
           </Box>
-          <Typography variant='subtitle1' component='div'>
+          <Typography variant="subtitle1" component="div">
             {project?.description}
           </Typography>
           <Card css={styles.userCard}>
             <Typography
               css={styles.listTitle}
-              variant='subtitle1'
-              component='div'
+              variant="subtitle1"
+              component="div"
             >
               プロジェクト管理者
             </Typography>
             <Divider />
             <List css={styles.respList} dense>
-              {projectResp.map((user) => (
+              {projectResp?.map((user) => (
                 <ListItem disablePadding>
                   <ListItemButton>
                     <ListItemAvatar>
@@ -225,14 +225,14 @@ const Project = () => {
           <Card css={styles.userCard}>
             <Typography
               css={styles.listTitle}
-              variant='subtitle1'
-              component='div'
+              variant="subtitle1"
+              component="div"
             >
               プロジェクトメンバー
             </Typography>
             <Divider />
             <List css={styles.memberList} dense>
-              {projectMember.map((user) => (
+              {projectMember?.map((user) => (
                 <ListItem disablePadding>
                   <ListItemButton>
                     <ListItemAvatar>
@@ -256,9 +256,9 @@ const Project = () => {
         </Stack>
         <Stack
           css={styles.graphArea}
-          direction='column'
-          justifyContent='center'
-          alignItems='flex-start'
+          direction="column"
+          justifyContent="center"
+          alignItems="flex-start"
         >
           <div css={styles.lineChartWrapper}>
             <Line css={styles.lineChart} data={lineData} options={lineOption} />

@@ -21,6 +21,8 @@ import { USER_INFO } from '../types';
 
 type Props = {
   user: USER_INFO;
+  isOwner: boolean;
+  isAdmin: boolean;
 };
 
 const LongUserCard = (props: Props) => {
@@ -113,12 +115,12 @@ const LongUserCard = (props: Props) => {
           </Box>
         </Box>
         <Box css={styles.comment}>
-          {props.user.is_org_rep && (
+          {props.isOwner && (
             <CommonTooltip title="グループ所有者">
               <WorkspacePremiumIcon css={styles.iconPremium} />
             </CommonTooltip>
           )}
-          {props.user.is_org_admin && (
+          {props.isAdmin && (
             <CommonTooltip title="グループ管理者">
               <AdminPanelSettingsIcon css={styles.iconAdmin} />
             </CommonTooltip>

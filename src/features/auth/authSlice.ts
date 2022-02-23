@@ -10,19 +10,24 @@ import {
   // PROF,
   EDITED_PROF,
   PERSONAL_SETTINGS,
+  LOGIN_USER_INFO,
 } from '../types';
 
-const userInfo = {
+const userInfo: LOGIN_USER_INFO = {
   user_id: '',
-  email: '',
-  password: '',
+  is_premium: false,
   first_name: '',
   last_name: '',
   avatar_img: '',
   comment: '',
-  org_id: null,
-  is_org_rep: false,
-  is_org_admin: false,
+  own_org: [],
+  joined_org: [
+    {
+      org_id: '',
+      org_name: '',
+      is_private: true,
+    },
+  ],
 };
 
 const initialState: AUTH = {
@@ -33,8 +38,10 @@ const initialState: AUTH = {
     comment: '',
   },
   personalSettings: {
-    darkmode: false,
+    dark_mode: false,
     tooltip: true,
+    private_mode: true,
+    selected_org_id: '',
   },
   profiles: [userInfo],
 };
@@ -72,7 +79,7 @@ export const fetchAsyncSignin = createAsyncThunk(
 export const fetchAsyncGetLoginUser = createAsyncThunk(
   'auth/getLoginUserCred',
   async (_, thunkAPI) => {
-    const res = await axios.get<USER_INFO>(
+    const res = await axios.get<LOGIN_USER_INFO>(
       `${process.env.REACT_APP_API_URL}/api/user`,
       {
         headers: {
@@ -80,6 +87,7 @@ export const fetchAsyncGetLoginUser = createAsyncThunk(
         },
       }
     );
+    console.log(res.data);
     return res.data;
   }
 );
@@ -192,21 +200,24 @@ export const authSlice = createSlice({
         action.payload.access && (window.location.href = '/app');
       }
     );
+    // ログインユーザーの基本情報
     builder.addCase(
       fetchAsyncGetLoginUser.fulfilled,
-      (state, action: PayloadAction<USER_INFO>) => {
+      (state, action: PayloadAction<LOGIN_USER_INFO>) => {
         return {
           ...state,
           loginUserInfo: action.payload,
         };
       }
     );
+    // プロフィール更新
     builder.addCase(fetchAsyncUpdateProf.fulfilled, (state, action) => {
       return {
         ...state,
         loginUserInfo: action.payload,
       };
     });
+    // 個人設定取得
     builder.addCase(
       fetchAsyncGetPersonalSettings.fulfilled,
       (state, action: PayloadAction<PERSONAL_SETTINGS>) => {

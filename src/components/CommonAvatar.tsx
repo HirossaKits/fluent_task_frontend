@@ -25,8 +25,6 @@ const CommonAvatar = (props: Props) => {
     `,
   };
 
-  console.log(props.user);
-
   return (
     <>
       {props.user ? (

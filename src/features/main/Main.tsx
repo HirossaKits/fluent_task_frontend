@@ -40,7 +40,6 @@ import {
   selectLoginUserInfo,
   fetchAsyncGetLoginUser,
   fetchAsyncGetPersonalSettings,
-  // fetchAsyncGetProfiles,
 } from '../auth/authSlice';
 import {
   setSettingsMenuOpen,
@@ -59,6 +58,7 @@ import {
   setProjectDialogMode,
   fetchAsyncGetProject,
 } from '../proj/projectSlice';
+import { fetchAsyncGetOrgInfo } from '../org/orgSliece';
 import CommonTooltip from '../../components/CommonTooltip';
 import ProjectDialog from '../proj/ProjectDialog';
 
@@ -186,6 +186,7 @@ const Main = () => {
       const res = await dispatch(fetchAsyncGetLoginUser());
       if (fetchAsyncGetLoginUser.fulfilled.match(res)) {
         await dispatch(fetchAsyncGetPersonalSettings());
+        await dispatch(fetchAsyncGetOrgInfo());
         await dispatch(fetchAsyncGetProject());
       } else {
         // localStorage.removeItem("localJWT");
