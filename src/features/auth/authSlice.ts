@@ -181,6 +181,7 @@ export const authSlice = createSlice({
     },
     setPersonalSettings(state, action) {
       state.personalSettings = action.payload;
+      fetchAsyncUpdateSettings(state.personalSettings);
     },
   },
   extraReducers: (builder) => {

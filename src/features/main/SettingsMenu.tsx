@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material';
 import Popover from '@mui/material/Popover';
@@ -12,7 +12,7 @@ import {
   setPersonalSettings,
   fetchAsyncUpdateSettings,
 } from '../auth/authSlice';
-import { selectOrgInfo } from '../org/orgSliece';
+import { fetchAsyncGetOrgInfo, selectOrgInfo } from '../org/orgSliece';
 import { selectSettingsMenuOpen, setSettingsMenuOpen } from './mainSlice';
 import { setMessageOpen, setMessage } from '../main/mainSlice';
 import CommonSelect from '../../components/CommonSelect';
@@ -36,28 +36,49 @@ const SettingsMenu: React.FC<Props> = (props) => {
     'org_name'
   );
 
+  const fetchInSequenceOrg = () => {
+    dispatch(fetchAsyncGetOrgInfo());
+    // project 取得処理
+
+    // task 取得処理
+  };
+
+  useEffect(() => {
+    dispatch(fetchAsyncGetOrgInfo());
+    console.log('test');
+  }, [personalSettings.selected_org_id]);
+
+  const handleInputChange = (target: TARGET) => {
+    const settings = { ...personalSettings, [target.name]: target.value };
+    dispatch(setPersonalSettings(settings));
+    dispatch(fetchAsyncUpdateSettings(settings));
+  };
+
   const validateOrgId = () => {
     const joinedOrgId = loginUserInfo.joined_org.map((org) => org.org_id);
+    // 設定に保持する organization に所属していない場合を考慮
     if (joinedOrgId.includes(personalSettings.selected_org_id)) {
       return personalSettings.selected_org_id;
     } else {
+      const orgId = joinedOrgId[0];
       const settings = {
         ...personalSettings,
-        selected_org_id: joinedOrgId[0],
+        selected_org_id: orgId,
       };
       dispatch(setPersonalSettings(settings));
       dispatch(fetchAsyncUpdateSettings(settings));
-      return joinedOrgId[0];
+      // fetchInSequenceOrg();
+      return orgId;
     }
   };
 
-  const handleInputChange = (target: TARGET) => {
-    console.log(target);
-    if (target.name === 'private_mode' && !loginUserInfo.joined_org) {
-      if (personalSettings.private_mode === false) {
-        dispatch(
-          setPersonalSettings({ ...personalSettings, private_mode: true })
-        );
+  const handleTogglePrivateModeChange = (target: TARGET) => {
+    if (!loginUserInfo.joined_org.length) {
+      // 設定に保持する organization に所属していない場合を考慮
+      if (!personalSettings.private_mode) {
+        const settings = { ...personalSettings, private_mode: true };
+        dispatch(setPersonalSettings(settings));
+        dispatch(fetchAsyncUpdateSettings(settings));
       }
       dispatch(
         setMessage(
@@ -66,10 +87,18 @@ const SettingsMenu: React.FC<Props> = (props) => {
       );
       dispatch(setMessageOpen(true));
       return;
+    } else {
+      const settings = {
+        ...personalSettings,
+        private_mode: Boolean(target.value),
+      };
+      dispatch(setPersonalSettings(settings));
+      dispatch(fetchAsyncUpdateSettings(settings));
     }
-    const settings = { ...personalSettings, [target.name]: target.value };
-    dispatch(setPersonalSettings(settings));
-    dispatch(fetchAsyncUpdateSettings(settings));
+  };
+
+  const handleSelectChange = (target: TARGET) => {
+    console.log('test');
   };
 
   const handleColse = () => {
@@ -120,7 +149,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
           labelWidth={10}
           name="private_mode"
           value={personalSettings.private_mode}
-          onChange={handleInputChange}
+          onChange={handleTogglePrivateModeChange}
         />
         {!personalSettings.private_mode && (
           <CommonSelect
@@ -128,7 +157,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
             options={orgOptions}
             name="selected_org_id"
             value={validateOrgId()}
-            onChange={handleInputChange}
+            onChange={handleSelectChange}
           />
         )}
       </Paper>

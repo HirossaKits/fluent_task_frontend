@@ -51,8 +51,8 @@ const CommonSelect: React.FC<Props> = (props: Props) => {
           props.readOnly ? (
             <TextField
               {...params}
-              variant='standard'
-              margin='normal'
+              variant="standard"
+              margin="normal"
               label={'label' in props && props.label}
               InputLabelProps={{
                 shrink: true,
@@ -64,8 +64,8 @@ const CommonSelect: React.FC<Props> = (props: Props) => {
           ) : (
             <TextField
               {...params}
-              variant='standard'
-              margin='normal'
+              variant="standard"
+              margin="normal"
               label={'label' in props && props.label}
               InputLabelProps={{
                 shrink: true,
