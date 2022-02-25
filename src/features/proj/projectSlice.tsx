@@ -27,12 +27,14 @@ const initialState: PROJECT_SATATE = {
 
 export const fetchAsyncGetProject = createAsyncThunk(
   'project/getProject',
-  async () => {
-    const res = await axios.get(
+  async (_, thunkAPI) => {
+    const org_id = (thunkAPI.getState() as RootState).org.org_info.org_id;
+    const res = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/project/`,
+      { org_id: org_id },
       {
         headers: {
-          Authorization: `JWT ${localStorage.localJWT}`,
+          Authorization: `Bearer ${localStorage.localJWT}`,
         },
       }
     );

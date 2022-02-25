@@ -15,6 +15,7 @@ import {
 import { fetchAsyncGetOrgInfo, selectOrgInfo } from '../org/orgSliece';
 import { selectSettingsMenuOpen, setSettingsMenuOpen } from './mainSlice';
 import { setMessageOpen, setMessage } from '../main/mainSlice';
+import { fetchAsyncGetProject } from '../proj/projectSlice';
 import CommonSelect from '../../components/CommonSelect';
 import useCreateOption from '../../hooks/optionCreater';
 
@@ -36,10 +37,10 @@ const SettingsMenu: React.FC<Props> = (props) => {
     'org_name'
   );
 
-  const fetchInSequenceOrg = () => {
-    dispatch(fetchAsyncGetOrgInfo());
+  const fetchInSequenceRelatedOrg = async () => {
+    await dispatch(fetchAsyncGetOrgInfo());
     // project 取得処理
-
+    dispatch(fetchAsyncGetProject());
     // task 取得処理
   };
 
@@ -67,7 +68,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
       };
       dispatch(setPersonalSettings(settings));
       dispatch(fetchAsyncUpdateSettings(settings));
-      // fetchInSequenceOrg();
+      fetchInSequenceRelatedOrg();
       return orgId;
     }
   };
@@ -94,11 +95,18 @@ const SettingsMenu: React.FC<Props> = (props) => {
       };
       dispatch(setPersonalSettings(settings));
       dispatch(fetchAsyncUpdateSettings(settings));
+      fetchInSequenceRelatedOrg();
     }
   };
 
   const handleSelectChange = (target: TARGET) => {
-    console.log('test');
+    const settings = {
+      ...personalSettings,
+      selected_org_id: target.value.toString(),
+    };
+    dispatch(setPersonalSettings(settings));
+    dispatch(fetchAsyncUpdateSettings(settings));
+    fetchInSequenceRelatedOrg();
   };
 
   const handleColse = () => {
@@ -133,29 +141,29 @@ const SettingsMenu: React.FC<Props> = (props) => {
         <CommonSwitch
           label={'ダークモード'}
           labelWidth={10}
-          name="dark_mode"
+          name='dark_mode'
           value={personalSettings.dark_mode}
           onChange={handleInputChange}
         />
         <CommonSwitch
           label={'ツールチップ'}
           labelWidth={10}
-          name="tooltip"
+          name='tooltip'
           value={personalSettings.tooltip}
           onChange={handleInputChange}
         />
         <CommonSwitch
           label={'プライベートモード'}
           labelWidth={10}
-          name="private_mode"
+          name='private_mode'
           value={personalSettings.private_mode}
           onChange={handleTogglePrivateModeChange}
         />
         {!personalSettings.private_mode && (
           <CommonSelect
-            label="グループを選択"
+            label='グループを選択'
             options={orgOptions}
-            name="selected_org_id"
+            name='selected_org_id'
             value={validateOrgId()}
             onChange={handleSelectChange}
           />
