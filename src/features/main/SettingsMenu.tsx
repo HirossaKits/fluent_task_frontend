@@ -40,7 +40,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
   const fetchInSequenceRelatedOrg = async () => {
     await dispatch(fetchAsyncGetOrgInfo());
     // project 取得処理
-    dispatch(fetchAsyncGetProject());
+    await dispatch(fetchAsyncGetProject());
     // task 取得処理
   };
 
@@ -141,29 +141,29 @@ const SettingsMenu: React.FC<Props> = (props) => {
         <CommonSwitch
           label={'ダークモード'}
           labelWidth={10}
-          name='dark_mode'
+          name="dark_mode"
           value={personalSettings.dark_mode}
           onChange={handleInputChange}
         />
         <CommonSwitch
           label={'ツールチップ'}
           labelWidth={10}
-          name='tooltip'
+          name="tooltip"
           value={personalSettings.tooltip}
           onChange={handleInputChange}
         />
         <CommonSwitch
           label={'プライベートモード'}
           labelWidth={10}
-          name='private_mode'
+          name="private_mode"
           value={personalSettings.private_mode}
           onChange={handleTogglePrivateModeChange}
         />
         {!personalSettings.private_mode && (
           <CommonSelect
-            label='グループを選択'
+            label="グループを選択"
             options={orgOptions}
-            name='selected_org_id'
+            name="selected_org_id"
             value={validateOrgId()}
             onChange={handleSelectChange}
           />

@@ -12,9 +12,9 @@ type Props = {
 const CommonAvatar = (props: Props) => {
   const styles = {
     avatar: css`
-      width: ${'width' in props ? props.width : '100%'};
-      height: ${'width' in props ? props.width : '100%'};
-      ${'fontSize' in props ? `font-size: ${props.fontSize};` : ''}
+      ${'width' in props && `width: ${props.width}`};
+      ${'width' in props && `height: ${props.width}`};
+      ${'fontSize' in props && `font-size: ${props.fontSize};`}
     `,
     img: css`
       width: 100%;
@@ -24,6 +24,15 @@ const CommonAvatar = (props: Props) => {
       -moz-user-select: none;
     `,
   };
+
+  console.log(
+    props.user?.first_name,
+    `
+  width: ${'width' in props ? props.width : '100%'};
+  height: ${'width' in props ? props.width : '100%'};
+  ${'fontSize' in props ? `font-size: ${props.fontSize};` : ''}
+`
+  );
 
   return (
     <>

@@ -116,12 +116,20 @@ export interface PROFILE {
 
 /*Project*/
 
+export interface PROJECT_SATATE {
+  projects: PROJECT[];
+  selectedProjectId: string;
+  editedProject: EDITED_PROJECT;
+  projectDialogOpen: false;
+  projectDialogMode: Extract<DIALOG_MODE, 'register' | 'edit'>;
+}
+
 export interface PROJECT {
   project_id: string;
   project_name: string;
   org_id: string;
-  resp_id: string[];
-  member_id: string[];
+  resp: USER_INFO[];
+  member: USER_INFO[];
   task_category: TASK_CATEGORY[];
   description: string;
   startdate: string;
@@ -130,12 +138,17 @@ export interface PROJECT {
   update_at?: string;
 }
 
-export interface PROJECT_SATATE {
-  projects: PROJECT[];
-  selectedProjectId: string;
-  editedProject: PROJECT;
-  projectDialogOpen: false;
-  projectDialogMode: Extract<DIALOG_MODE, 'register' | 'edit'>;
+export interface EDITED_PROJECT {
+  project_id: string;
+  project_name: string;
+  resp_id: string[];
+  member_id: string[];
+  task_category: TASK_CATEGORY[];
+  description: string;
+  startdate: string;
+  enddate: string;
+  created_at?: string;
+  update_at?: string;
 }
 
 /*taskSlice*/

@@ -1,46 +1,46 @@
 import { TASK, ORG, USER_INFO, PROJECT, TASK_STATUS } from './features/types';
 
-export const demoProjects = [
-  {
-    project_id: 'project_A',
-    project_name: 'プロジェクトA',
-    org_id: 'org_demo',
-    resp_id: ['user1', 'user2', 'user3'],
-    member_id: [
-      'user1',
-      'user2',
-      'user3',
-      'user4',
-      'user5',
-      'user6',
-      'user7',
-      'user8',
-    ],
-    task_category: [
-      { task_category_id: '1', task_category_name: '設計' },
-      { task_category_id: '2', task_category_name: '製造' },
-      { task_category_id: '3', task_category_name: 'テスト' },
-    ],
-    description: 'これはデモプロジェクトです。',
-    startdate: '2021-11-01',
-    enddate: '2021-11-29',
-  },
-  {
-    project_id: 'project_B',
-    project_name: 'テストプロジェクトB',
-    org_id: 'org_demo',
-    resp_id: ['user1', 'user2'],
-    member_id: ['user1', 'user2', 'user3', 'user5', 'user6', 'user7'],
-    task_category: [
-      { task_category_id: '4', task_category_name: '設計' },
-      { task_category_id: '5', task_category_name: '製造' },
-      { task_category_id: '6', task_category_name: 'テスト' },
-    ],
-    description: 'これはデモプロジェクトです。',
-    startdate: '2021-09-01',
-    enddate: '2022-01-06',
-  },
-];
+// export const demoProjects = [
+//   {
+//     project_id: 'project_A',
+//     project_name: 'プロジェクトA',
+//     org_id: 'org_demo',
+//     resp_id: ['user1', 'user2', 'user3'],
+//     member_id: [
+//       'user1',
+//       'user2',
+//       'user3',
+//       'user4',
+//       'user5',
+//       'user6',
+//       'user7',
+//       'user8',
+//     ],
+//     task_category: [
+//       { task_category_id: '1', task_category_name: '設計' },
+//       { task_category_id: '2', task_category_name: '製造' },
+//       { task_category_id: '3', task_category_name: 'テスト' },
+//     ],
+//     description: 'これはデモプロジェクトです。',
+//     startdate: '2021-11-01',
+//     enddate: '2021-11-29',
+//   },
+//   {
+//     project_id: 'project_B',
+//     project_name: 'テストプロジェクトB',
+//     org_id: 'org_demo',
+//     resp_id: ['user1', 'user2'],
+//     member_id: ['user1', 'user2', 'user3', 'user5', 'user6', 'user7'],
+//     task_category: [
+//       { task_category_id: '4', task_category_name: '設計' },
+//       { task_category_id: '5', task_category_name: '製造' },
+//       { task_category_id: '6', task_category_name: 'テスト' },
+//     ],
+//     description: 'これはデモプロジェクトです。',
+//     startdate: '2021-09-01',
+//     enddate: '2022-01-06',
+//   },
+// ];
 
 export const demoData: TASK[] = [
   {

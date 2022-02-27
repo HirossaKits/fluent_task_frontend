@@ -19,17 +19,18 @@ import EditIcon from '@mui/icons-material/Edit';
 import CommonTooltip from '../../components/CommonTooltip';
 import * as colorHandler from '../../util/colorHandler';
 import {
+  emptyProject,
   selectSelectedProject,
   setEditedProject,
   setProjectDialogOpen,
   setProjectDialogMode,
 } from './projectSlice';
 import ProjectDialog from './ProjectDialog';
-import useProjectMember from '../../hooks/projectMember';
-import useProjectResp from '../../hooks/projectResp';
 import useProjectTask from '../../hooks/projectTask';
 import useCreateLineChartData from '../../hooks/lineChartData';
 import useCreateDoughnutData from '../../hooks/doughnutData';
+import CommonAvatar from '../../components/CommonAvatar';
+import { EDITED_PROJECT } from '../types';
 
 const Project = () => {
   const theme = useTheme();
@@ -94,22 +95,17 @@ const Project = () => {
   const createDoughnutData = useCreateDoughnutData();
   const tasks = useProjectTask();
   const project = useSelector(selectSelectedProject);
-  const projectMember = useProjectMember();
-  const projectResp = useProjectResp();
-  const lineChartData = createLineChartData(
-    tasks,
-    project.startdate,
-    project.enddate,
-    'daily'
-  );
+  const lineChartData =
+    project &&
+    createLineChartData(tasks, project.startdate, project.enddate, 'daily');
   const doughnutData = createDoughnutData(tasks);
 
   const lineData = {
-    labels: lineChartData.map((data) => data.label),
+    labels: lineChartData?.map((data) => data.label),
     datasets: [
       {
         label: '進捗(%)',
-        data: lineChartData.map((data) => data.percent),
+        data: lineChartData?.map((data) => data.percent),
         lineTension: 0,
         backgroundColor: colorHandler.convertColorCodeToRGBA(
           theme.palette.primary.main,
@@ -158,117 +154,121 @@ const Project = () => {
   };
 
   const handleEditClick = () => {
+    const initEditeProject: EDITED_PROJECT = {
+      project_id: project.project_id,
+      project_name: project.project_name,
+      resp_id: project.resp.map((user) => user.user_id),
+      member_id: project.member.map((user) => user.user_id),
+      task_category: project.task_category,
+      description: project.description,
+      startdate: project.startdate,
+      enddate: project.enddate,
+    };
     dispatch(setProjectDialogMode('edit'));
-    dispatch(setEditedProject(project));
+    dispatch(setEditedProject(initEditeProject));
     dispatch(setProjectDialogOpen(true));
   };
 
   return (
     <>
-      <Stack
-        direction="row"
-        justifyContent="flex-start"
-        alignItems="flex-start"
-        spacing={3}
-      >
-        <Stack
-          css={styles.stack}
-          direction="column"
-          justifyContent="flex-start"
-          alignItems="flex-start"
-          spacing={3}
-        >
-          <Box css={styles.titleWrap}>
-            <Typography css={styles.titleText} variant="h5" component="div">
-              {project?.project_name}
-            </Typography>
-            <CommonTooltip title="編集">
-              <IconButton css={styles.editIcon} onClick={handleEditClick}>
-                <EditIcon fontSize="small" />
-              </IconButton>
-            </CommonTooltip>
-          </Box>
-          <Typography variant="subtitle1" component="div">
-            {project?.description}
-          </Typography>
-          <Card css={styles.userCard}>
-            <Typography
-              css={styles.listTitle}
-              variant="subtitle1"
-              component="div"
+      {!Object.is(project, emptyProject) && (
+        <>
+          <Stack
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            spacing={3}
+          >
+            <Stack
+              css={styles.stack}
+              direction="column"
+              justifyContent="flex-start"
+              alignItems="flex-start"
+              spacing={3}
             >
-              プロジェクト管理者
-            </Typography>
-            <Divider />
-            <List css={styles.respList} dense>
-              {projectResp?.map((user) => (
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemAvatar>
-                      {user.avatar_img ? (
-                        <Avatar src={user.avatar_img} />
-                      ) : (
-                        <Avatar>
-                          {user.last_name.slice(0, 1) +
-                            user.first_name.slice(0, 1)}
-                        </Avatar>
-                      )}
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={`${user.last_name} ${user.first_name}`}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          </Card>
-          <Card css={styles.userCard}>
-            <Typography
-              css={styles.listTitle}
-              variant="subtitle1"
-              component="div"
+              <Box css={styles.titleWrap}>
+                <Typography css={styles.titleText} variant="h5" component="div">
+                  {project.project_name}
+                </Typography>
+                <CommonTooltip title="編集">
+                  <IconButton css={styles.editIcon} onClick={handleEditClick}>
+                    <EditIcon fontSize="small" />
+                  </IconButton>
+                </CommonTooltip>
+              </Box>
+              <Typography variant="subtitle1" component="div">
+                {project.description}
+              </Typography>
+              <Card css={styles.userCard}>
+                <Typography
+                  css={styles.listTitle}
+                  variant="subtitle1"
+                  component="div"
+                >
+                  プロジェクト管理者
+                </Typography>
+                <Divider />
+                <List css={styles.respList} dense>
+                  {project.resp?.map((user) => (
+                    <ListItem disablePadding>
+                      <ListItemButton>
+                        <ListItemAvatar>
+                          <CommonAvatar user={user} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={`${user.last_name} ${user.first_name}`}
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </Card>
+              <Card css={styles.userCard}>
+                <Typography
+                  css={styles.listTitle}
+                  variant="subtitle1"
+                  component="div"
+                >
+                  プロジェクトメンバー
+                </Typography>
+                <Divider />
+                <List css={styles.memberList} dense>
+                  {project.member.map((user) => (
+                    <ListItem disablePadding>
+                      <ListItemButton>
+                        <ListItemAvatar>
+                          <CommonAvatar user={user} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={`${user.last_name} ${user.first_name}`}
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </Card>
+            </Stack>
+            <Stack
+              css={styles.graphArea}
+              direction="column"
+              justifyContent="center"
+              alignItems="flex-start"
             >
-              プロジェクトメンバー
-            </Typography>
-            <Divider />
-            <List css={styles.memberList} dense>
-              {projectMember?.map((user) => (
-                <ListItem disablePadding>
-                  <ListItemButton>
-                    <ListItemAvatar>
-                      {user.avatar_img ? (
-                        <Avatar src={user.avatar_img} />
-                      ) : (
-                        <Avatar>
-                          {user.last_name.slice(0, 1) +
-                            user.first_name.slice(0, 1)}
-                        </Avatar>
-                      )}
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={`${user.last_name} ${user.first_name}`}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
-          </Card>
-        </Stack>
-        <Stack
-          css={styles.graphArea}
-          direction="column"
-          justifyContent="center"
-          alignItems="flex-start"
-        >
-          <div css={styles.lineChartWrapper}>
-            <Line css={styles.lineChart} data={lineData} options={lineOption} />
-          </div>
-          <div css={styles.doughnutWrapper}>
-            <Doughnut css={styles.doughnut} data={dataDoughnut} />
-          </div>
-        </Stack>
-      </Stack>
-      <ProjectDialog />
+              <div css={styles.lineChartWrapper}>
+                <Line
+                  css={styles.lineChart}
+                  data={lineData}
+                  options={lineOption}
+                />
+              </div>
+              <div css={styles.doughnutWrapper}>
+                <Doughnut css={styles.doughnut} data={dataDoughnut} />
+              </div>
+            </Stack>
+          </Stack>
+          <ProjectDialog />
+        </>
+      )}
     </>
   );
 };

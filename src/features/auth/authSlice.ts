@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
 import { RootState } from '../../app/store';
 import axios from 'axios';
 import {
@@ -181,7 +182,6 @@ export const authSlice = createSlice({
     },
     setPersonalSettings(state, action) {
       state.personalSettings = action.payload;
-      fetchAsyncUpdateSettings(state.personalSettings);
     },
   },
   extraReducers: (builder) => {

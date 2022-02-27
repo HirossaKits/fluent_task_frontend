@@ -1,57 +1,80 @@
-import { useCallback } from "react"
-import { TASK } from '../../src/features/types'
-import { parseString } from '../util/dateHandler'
-import { sumByGroupToObject } from '../util/sumByGroup'
+import { useCallback } from 'react';
+import { TASK } from '../../src/features/types';
+import { parseString } from '../util/dateHandler';
+import { sumByGroupToObject } from '../util/sumByGroup';
 
-type DIVISION = "daily" | "weekly" | "monthly"
+type DIVISION = 'daily' | 'weekly' | 'monthly';
 
 type CHART_DATA = {
-  label: string,
-  value: number,
-  percent: number
-}
+  label: string;
+  value: number;
+  percent: number;
+};
 
 export default function useCreateLineChartData() {
+  return useCallback(
+    (
+      tasks: TASK[],
+      projectStartDate: string,
+      projectEndDate: string,
+      division: DIVISION
+    ): CHART_DATA[] => {
+      if (tasks.length === 0) return [];
 
-  return useCallback((tasks: TASK[], projectStartDate: string, projectEndDate: string, division: DIVISION): CHART_DATA[] => {
+      const startDate = new Date(projectStartDate);
+      const endDate = new Date(projectEndDate);
+      console.log(
+        startDate,
+        endDate,
+        (endDate.getTime() - startDate.getTime()) / 86400000
+      );
 
-    if (tasks.length === 0) return []
+      // 工数の総和
+      const sum = tasks
+        .map((task) => task.estimate_manhour ?? 0)
+        .reduce((acc, cur) => acc + cur);
 
-    const startDate = new Date(projectStartDate)
-    const endDate = new Date(projectEndDate)
+      // 日付ごとに完了工数を集計
+      const sumByDate = sumByGroupToObject(
+        tasks,
+        'actual_enddate',
+        'estimate_manhour'
+      );
 
-    // 工数の総和
-    const sum = tasks.map((task) => task.estimate_manhour ?? 0).reduce((acc, cur) => acc + cur)
+      // 完了工数を保有している日付
+      const dateHasAmount = Object.keys(sumByDate);
+      const dateSpan = (endDate.getTime() - startDate.getTime()) / 86400000;
 
-    // 日付ごとに完了工数を集計
-    const sumByDate = sumByGroupToObject(tasks, "actual_enddate", 'estimate_manhour')
+      const lineData = [...Array(dateSpan)].reduce(
+        (acc: CHART_DATA[], cur, idx) => {
+          let date = new Date(projectStartDate);
+          date.setDate(date.getDate() + idx);
+          const dateStr = parseString(date);
 
-    // 完了工数を保有している日付
-    const dateHasAmount = Object.keys(sumByDate)
-    const dateSpan = (endDate.getTime() - startDate.getTime()) / 86400000
+          let newValue = 0;
+          if (idx !== 0) {
+            newValue = acc[idx - 1].value;
+          } else {
+            acc = [];
+          }
 
-    const lineData = [...Array(dateSpan)].reduce((acc: CHART_DATA[], cur, idx) => {
-      let date = new Date(projectStartDate)
-      date.setDate(date.getDate() + idx)
-      const dateStr = parseString(date)
+          // 完了工数を保有している場合は加算
+          if (dateHasAmount.includes(dateStr)) {
+            newValue += sumByDate[dateStr];
+          }
 
-      let newValue = 0
-      if (idx !== 0) {
-        newValue = acc[idx - 1].value
-      } else {
-        acc = []
-      }
+          const percent = Math.ceil((newValue * 100) / sum);
 
-      // 完了工数を保有している場合は加算
-      if (dateHasAmount.includes(dateStr)) {
-        newValue += sumByDate[dateStr]
-      }
+          return [
+            ...acc,
+            { label: dateStr, value: newValue, percent: percent },
+          ];
+        },
+        { label: parseString(startDate), value: 0, percent: 0 }
+      );
 
-      const percent = Math.ceil(newValue * 100 / sum)
-
-      return [...acc, { label: dateStr, value: newValue, percent: percent }]
-    }, { label: parseString(startDate), value: 0, percent: 0 })
-
-    return lineData
-  }, [])
+      return lineData;
+    },
+    []
+  );
 }

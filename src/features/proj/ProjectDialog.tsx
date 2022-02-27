@@ -16,6 +16,7 @@ import {
   setProject,
   setEditedProject,
   setProjectDialogOpen,
+  selectSelectedProject,
 } from '../proj/projectSlice';
 import useCreateOption from '../../hooks/optionCreater';
 import { TARGET } from '../types';
@@ -40,6 +41,7 @@ const ProjectDialog = () => {
 
   const dispatch = useDispatch();
   const createOption = useCreateOption();
+  const project = useSelector(selectSelectedProject);
   const projectDialogOpen = useSelector(selectProjectDialogOpen);
   const projectDialogMode = useSelector(selectProjectDialogMode);
   const orgInfo = useSelector(selectOrgInfo);

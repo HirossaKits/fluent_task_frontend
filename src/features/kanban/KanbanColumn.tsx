@@ -10,7 +10,8 @@ import Divider from '@mui/material/Divider';
 import CircleIcon from '@mui/icons-material/Circle';
 import KanbanCard from './KanbanCard';
 import { TASK, TASK_STATUS } from '../types';
-import useProjectMember from '../../hooks/projectMember';
+import { selectSelectedProject } from '../proj/projectSlice';
+// import useProjectMember from '../../hooks/projectMember';
 
 interface RefValue {
   positions: { [key: string]: { x: number; y: number } };
@@ -74,7 +75,7 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
 
   const dispatch = useDispatch();
   const tasks = useSelector(selectTasks);
-  const projectMember = useProjectMember();
+  const project = useSelector(selectSelectedProject);
   const [dragOver, setDragOver] = useState(false);
 
   const ref = useRef<RefValue>({
@@ -131,7 +132,7 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
       <Card css={styles.column}>
         <Box css={styles.header}>
           <CircleIcon css={styles.icon} />
-          <Typography gutterBottom component='div'>
+          <Typography gutterBottom component="div">
             {props.headerText}
           </Typography>
         </Box>
@@ -159,7 +160,7 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
             >
               <KanbanCard
                 task={task}
-                user={projectMember.find(
+                user={project.member.find(
                   (user) => task.assigned_id === user.user_id
                 )}
               />

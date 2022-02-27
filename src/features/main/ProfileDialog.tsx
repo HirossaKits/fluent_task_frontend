@@ -25,6 +25,36 @@ import CommonToolTip from '../../components/CommonTooltip';
 import { TARGET, EDITED_PROF } from '../types';
 
 const ProfileDialog = () => {
+  const theme = useTheme();
+  const styles = {
+    wrap: css`
+      position: relative;
+    `,
+    form: css`
+      width: 100%;
+    `,
+    title: css`
+      margin-left: ${theme.spacing(3)};
+    `,
+    close: css`
+      position: absolute;
+      top: 10px;
+      right: 10px;
+    `,
+    stack: css`
+      text-align: center;
+    `,
+    avatar: css`
+      width: 160px;
+      height: 160px;
+      font-size: 36px;
+    `,
+    badge: css`
+      margin-top: 30px;
+      margin-left: 30px;
+    `,
+  };
+
   const dispatch = useDispatch();
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const editedProf = useSelector(selectEditedProf);
@@ -67,42 +97,10 @@ const ProfileDialog = () => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
-        // dispatch(setEditedProf({ ...editedProf, upload_file: file }));
         setUploadFile(file);
         setPreviewImg(reader.result as string);
       };
     }
-  };
-
-  const theme = useTheme();
-
-  const styles = {
-    wrap: css`
-      position: relative;
-    `,
-    form: css`
-      width: 100%;
-    `,
-    title: css`
-      margin-left: ${theme.spacing(3)};
-    `,
-    close: css`
-      position: absolute;
-      top: 10px;
-      right: 10px;
-    `,
-    stack: css`
-      text-align: center;
-    `,
-    avatar: css`
-      width: 160px;
-      height: 160px;
-      font-size: 36px;
-    `,
-    badge: css`
-      margin-top: 30px;
-      margin-left: 30px;
-    `,
   };
 
   return (
