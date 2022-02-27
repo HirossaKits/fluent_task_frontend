@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { TARGET } from '../features/types';
+import { useDatePickerDefaultizedProps } from '@mui/lab/DatePicker/shared';
 
 type Option = {
   value: string;
@@ -13,7 +14,7 @@ type Option = {
 
 type Props = {
   options: Option[];
-  value: Option[];
+  value: string[];
   label?: string;
   placeholder?: string;
   width?: number;
@@ -24,10 +25,15 @@ type Props = {
 };
 
 export default function CommonMultiSelect(props: Props) {
+  const [selected, setSelected] = useState<Option[]>(
+    props.options.filter((opt) => props.value.includes(opt.value))
+  );
+
   const handleSelectedChange = (
     event: React.SyntheticEvent<Element, Event>,
     value: Option[]
   ) => {
+    setSelected(value);
     let target: TARGET = {
       name: props.name,
       value: value.map((option) => option.value),
@@ -35,26 +41,26 @@ export default function CommonMultiSelect(props: Props) {
     props.onChange(target);
   };
 
-  const selectedValues = props.value.map((val) => val.value);
+  const compareOptionWithValue = (option: Option, value: Option) =>
+    option.value === value.value;
 
   return (
     <Autocomplete
       multiple
       options={props.options}
-      value={props.value}
+      value={selected}
+      isOptionEqualToValue={compareOptionWithValue}
       disableCloseOnSelect
       onChange={handleSelectedChange}
       getOptionLabel={(option) => option.label}
       renderOption={(props_ch, option, { selected }) => {
-        const isChecked = selectedValues.includes(option.value);
-
         return (
           <li {...props_ch}>
             <Checkbox
-              icon={<CheckBoxOutlineBlankIcon fontSize='small' />}
-              checkedIcon={<CheckBoxIcon fontSize='small' />}
+              icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+              checkedIcon={<CheckBoxIcon fontSize="small" />}
               style={{ marginRight: 8 }}
-              checked={isChecked}
+              checked={selected}
             />
             {option.label}
           </li>
@@ -67,7 +73,7 @@ export default function CommonMultiSelect(props: Props) {
             {...params}
             label={props.label ?? ''}
             placeholder={props.placeholder ?? ''}
-            margin='normal'
+            margin="normal"
             InputLabelProps={{
               shrink: true,
             }}
@@ -80,8 +86,11 @@ export default function CommonMultiSelect(props: Props) {
             {...params}
             label={props.label ?? ''}
             placeholder={props.placeholder ?? ''}
-            variant='standard'
-            margin='normal'
+            variant="standard"
+            margin="normal"
+            InputLabelProps={{
+              shrink: true,
+            }}
           />
         )
       }

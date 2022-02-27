@@ -51,22 +51,6 @@ const ProjectDialog = () => {
   ]);
   const editedProject = useSelector(selectEditedProject);
 
-  const editedRespOptions = createOption(
-    orgInfo.org_user?.filter((user) =>
-      editedProject.resp_id.includes(user.user_id)
-    ),
-    'user_id',
-    ['last_name', 'first_name']
-  );
-
-  const editedMemberOptions = createOption(
-    orgInfo.org_user?.filter((user) =>
-      editedProject.member_id.includes(user.user_id)
-    ),
-    'user_id',
-    ['last_name', 'first_name']
-  );
-
   const handleInputChange = (target: TARGET) => {
     dispatch(
       setEditedProject({ ...editedProject, [target.name]: target.value })
@@ -116,14 +100,14 @@ const ProjectDialog = () => {
           label="プロジェクト管理者"
           name="resp_id"
           options={userOptions}
-          value={editedRespOptions}
+          value={editedProject.resp_id}
           onChange={handleInputChange}
         />
         <CommonMultiSelect
           label="プロジェクトメンバー"
           name="member_id"
           options={userOptions}
-          value={editedMemberOptions}
+          value={editedProject.member_id}
           onChange={handleInputChange}
         />
         <Stack direction="row" justifyContent="flex-start" alignItems="center">
