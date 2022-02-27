@@ -25,15 +25,6 @@ const CommonAvatar = (props: Props) => {
     `,
   };
 
-  console.log(
-    props.user?.first_name,
-    `
-  width: ${'width' in props ? props.width : '100%'};
-  height: ${'width' in props ? props.width : '100%'};
-  ${'fontSize' in props ? `font-size: ${props.fontSize};` : ''}
-`
-  );
-
   return (
     <>
       {props.user ? (

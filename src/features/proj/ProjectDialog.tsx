@@ -10,6 +10,7 @@ import CommonDatePicker from '../../components/CommonDatePicker';
 import CommonDialog from '../../components/CommonDialog';
 import { selectOrgInfo } from '../org/orgSliece';
 import {
+  fetchAsyncUpdateProject,
   selectEditedProject,
   selectProjectDialogOpen,
   selectProjectDialogMode,
@@ -62,7 +63,7 @@ const ProjectDialog = () => {
   };
 
   const handleRegisterClick = () => {
-    dispatch(setProject(editedProject));
+    dispatch(fetchAsyncUpdateProject());
     dispatch(setProjectDialogOpen(false));
   };
 

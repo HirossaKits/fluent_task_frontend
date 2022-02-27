@@ -46,7 +46,6 @@ const SettingsMenu: React.FC<Props> = (props) => {
 
   useEffect(() => {
     dispatch(fetchAsyncGetOrgInfo());
-    console.log('test');
   }, [personalSettings.selected_org_id]);
 
   const handleInputChange = (target: TARGET) => {

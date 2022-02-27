@@ -141,9 +141,9 @@ export interface PROJECT {
 export interface EDITED_PROJECT {
   project_id: string;
   project_name: string;
+  org_id: string;
   resp_id: string[];
   member_id: string[];
-  task_category: TASK_CATEGORY[];
   description: string;
   startdate: string;
   enddate: string;

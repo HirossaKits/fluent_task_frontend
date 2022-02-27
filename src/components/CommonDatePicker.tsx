@@ -41,8 +41,8 @@ const DatePickerDialog: React.FC<Props> = (props) => {
     <>
       <LocalizationProvider dateAdapter={AdapterDateFns} locale={jaLocale}>
         <DatePicker
-          // mask='__-__-____'
-          inputFormat='yyyy-MM-dd'
+          mask="____-__-__"
+          inputFormat="yyyy-MM-dd"
           value={props.value ? parseDate(props.value) : null}
           readOnly={props.readOnly}
           onChange={(date) => handleDateChange(date)}
@@ -50,8 +50,8 @@ const DatePickerDialog: React.FC<Props> = (props) => {
             <TextField
               {...params}
               css={widthStyles}
-              variant='standard'
-              margin='normal'
+              variant="standard"
+              margin="normal"
               label={'label' in props && props.label}
               InputLabelProps={{
                 shrink: true,

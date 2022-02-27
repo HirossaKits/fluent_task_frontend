@@ -22,9 +22,9 @@ const initialState: PROJECT_SATATE = {
   editedProject: {
     project_id: '',
     project_name: '',
+    org_id: '',
     resp_id: [],
     member_id: [],
-    task_category: [],
     description: '',
     startdate: '',
     enddate: '',
@@ -45,6 +45,26 @@ export const fetchAsyncGetProject = createAsyncThunk(
         },
       }
     );
+    return res.data;
+  }
+);
+
+export const fetchAsyncUpdateProject = createAsyncThunk(
+  'project/updateProject',
+  async (_, thunkAPI) => {
+    const editedProject = (thunkAPI.getState() as RootState).project
+      .editedProject;
+    console.log(editedProject);
+    const res = await axios.put(
+      `${process.env.REACT_APP_API_URL}/api/project/${editedProject.project_id}`,
+      editedProject,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+    console.log(res.data);
     return res.data;
   }
 );
@@ -92,6 +112,12 @@ export const projectSlice = createSlice({
         projects: action.payload,
       };
     });
+    builder.addCase(fetchAsyncUpdateProject.fulfilled, (state, action) => {
+      return {
+        ...state,
+        projects: action.payload,
+      };
+    });
   },
 });
 
@@ -111,18 +137,6 @@ export const selectSelectedProject = (state: RootState) =>
   state.project.projects.find(
     (project) => project.project_id === state.project.selectedProjectId
   ) ?? emptyProject;
-// export const selectProjectRespId = (state: RootState) =>
-//   state.project.projects.find(
-//     (project) => project.project_id === state.project.selectedProjectId
-//   )?.resp_id ?? emptyProject.resp_id;
-// export const selectProjectMemberId = (state: RootState) =>
-//   state.project.projects.find(
-//     (project) => project.project_id === state.project.selectedProjectId
-//   )?.member_id ?? emptyProject.member_id;
-// export const selectTaskCategory = (state: RootState) =>
-//   state.project.projects.find(
-//     (project) => project.project_id === state.project.selectedProjectId
-//   )?.task_category ?? emptyProject.task_category;
 export const selectEditedProject = (state: RootState) =>
   state.project.editedProject;
 export const selectProjectDialogOpen = (state: RootState) =>

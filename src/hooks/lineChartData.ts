@@ -23,11 +23,6 @@ export default function useCreateLineChartData() {
 
       const startDate = new Date(projectStartDate);
       const endDate = new Date(projectEndDate);
-      console.log(
-        startDate,
-        endDate,
-        (endDate.getTime() - startDate.getTime()) / 86400000
-      );
 
       // 工数の総和
       const sum = tasks

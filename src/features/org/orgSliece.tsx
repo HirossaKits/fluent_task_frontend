@@ -34,7 +34,6 @@ export const fetchAsyncGetOrgInfo = createAsyncThunk(
           },
         }
       );
-      console.log(res.data);
       return res.data;
     } else {
       const res = await axios.get(
@@ -45,7 +44,6 @@ export const fetchAsyncGetOrgInfo = createAsyncThunk(
           },
         }
       );
-      console.log(res.data);
       return res.data;
     }
   }

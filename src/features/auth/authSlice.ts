@@ -88,7 +88,6 @@ export const fetchAsyncGetLoginUser = createAsyncThunk(
         },
       }
     );
-    console.log(res.data);
     return res.data;
   }
 );

@@ -47,39 +47,52 @@ const CommonDialog = (props: Props) => {
     <Dialog
       open={props.open}
       onClose={props.onClose}
-      aria-labelledby='form-dialog-title'
+      aria-labelledby="form-dialog-title"
       maxWidth={'maxWidth' in props && props.maxWidth}
       fullWidth
     >
       {/* <Paper css={props.mode === 'detail' && styles.dialog}> */}
       <Paper>
-        <Stack direction='row' justifyContent='space-between'>
+        <Stack direction="row" justifyContent="space-between">
           <DialogTitle css={styles.title}>{props.title}</DialogTitle>
           <Box css={styles.close}>
-            <IconButton size='small' onClick={props.onClose}>
+            <IconButton size="small" onClick={props.onClose}>
               <CloseIcon />
             </IconButton>
           </Box>
         </Stack>
-        <form css={styles.form} noValidate autoComplete='off'>
+        <form css={styles.form} noValidate autoComplete="off">
           {props.children}
         </form>
-        {(props.mode === 'register' || props.mode === 'edit') && (
+        {props.mode === 'register' && (
           <DialogActions>
-            <Button onClick={props.onClose} color='primary'>
+            <Button onClick={props.onClose} color="primary">
               キャンセル
             </Button>
-            <Button onClick={props.onRegisterClick} color='primary'>
+            <Button onClick={props.onRegisterClick} color="primary">
+              登録
+            </Button>
+          </DialogActions>
+        )}
+        {props.mode === 'edit' && (
+          <DialogActions>
+            <Button onClick={props.onDeleteClick} color="primary">
+              削除
+            </Button>
+            <Button onClick={props.onClose} color="primary">
+              キャンセル
+            </Button>
+            <Button onClick={props.onRegisterClick} color="primary">
               登録
             </Button>
           </DialogActions>
         )}
         {props.mode === 'detail' && (
           <DialogActions>
-            <Button onClick={props.onDeleteClick} color='primary'>
+            <Button onClick={props.onDeleteClick} color="primary">
               削除
             </Button>
-            <Button onClick={props.onEditClick} color='primary'>
+            <Button onClick={props.onEditClick} color="primary">
               編集
             </Button>
           </DialogActions>

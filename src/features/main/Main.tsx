@@ -350,7 +350,6 @@ const Main = () => {
                     icon={<AddIcon />}
                     iconPosition="start"
                     style={{ margin: 0, padding: 0 }}
-                    // label='新規作成'
                     value="new_project"
                   />
                 </CommonTooltip>

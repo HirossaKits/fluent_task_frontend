@@ -26,7 +26,7 @@ type Props = {
 
 export default function CommonMultiSelect(props: Props) {
   const [selected, setSelected] = useState<Option[]>(
-    props.options.filter((opt) => props.value.includes(opt.value))
+    props.options.filter((opt) => props.value?.includes(opt.value))
   );
 
   const handleSelectedChange = (
