@@ -10,14 +10,13 @@ import CommonDatePicker from '../../components/CommonDatePicker';
 import CommonDialog from '../../components/CommonDialog';
 import { selectOrgInfo } from '../org/orgSliece';
 import {
+  fetchAsyncRegisterProject,
   fetchAsyncUpdateProject,
   selectEditedProject,
   selectProjectDialogOpen,
   selectProjectDialogMode,
-  setProject,
   setEditedProject,
   setProjectDialogOpen,
-  selectSelectedProject,
 } from '../proj/projectSlice';
 import useCreateOption from '../../hooks/optionCreater';
 import { TARGET } from '../types';
@@ -42,7 +41,6 @@ const ProjectDialog = () => {
 
   const dispatch = useDispatch();
   const createOption = useCreateOption();
-  const project = useSelector(selectSelectedProject);
   const projectDialogOpen = useSelector(selectProjectDialogOpen);
   const projectDialogMode = useSelector(selectProjectDialogMode);
   const orgInfo = useSelector(selectOrgInfo);
@@ -63,6 +61,11 @@ const ProjectDialog = () => {
   };
 
   const handleRegisterClick = () => {
+    dispatch(fetchAsyncRegisterProject());
+    dispatch(setProjectDialogOpen(false));
+  };
+
+  const handleEditClick = () => {
     dispatch(fetchAsyncUpdateProject());
     dispatch(setProjectDialogOpen(false));
   };
@@ -74,9 +77,11 @@ const ProjectDialog = () => {
         'プロジェクトを' + (projectDialogMode === 'register' ? '登録' : '編集')
       }
       onClose={handleClose}
-      onRegisterClick={handleRegisterClick}
+      onRegister={handleRegisterClick}
+      onEdit={handleEditClick}
+      // onDelete={handleDeleteClick}
       maxWidth="sm"
-      mode="edit"
+      mode={projectDialogMode}
     >
       <Stack
         direction="column"

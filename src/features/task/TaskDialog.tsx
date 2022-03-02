@@ -65,7 +65,7 @@ const TaskDialog: React.FC = () => {
     dispatch(setTaskDialogOpen(false));
   };
 
-  const handleEditClick = () => {
+  const handleEditModeClick = () => {
     dispatch(setTaskDialogMode('edit'));
   };
 
@@ -84,8 +84,8 @@ const TaskDialog: React.FC = () => {
           : 'タスク詳細'
       }
       onClose={handleClose}
-      onEditClick={handleEditClick}
-      onDeleteClick={handleDeleteClick}
+      onEditMode={handleEditModeClick}
+      onDelete={handleDeleteClick}
       maxWidth="sm"
       mode={taskDialogMode}
     >

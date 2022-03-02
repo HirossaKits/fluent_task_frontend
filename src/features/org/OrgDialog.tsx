@@ -31,18 +31,18 @@ const OrgDialog = () => {
   return (
     <CommonDialog
       open={orgDialogOpen}
-      title='グループを編集'
+      title="グループを編集"
       onClose={handleClose}
-      onRegisterClick={handleRegisterClick}
-      maxWidth='xs'
-      mode='edit'
+      onRegister={handleRegisterClick}
+      maxWidth="xs"
+      mode="edit"
     >
       <CommonTextField
         // label='組織名'
-        name='org_name'
+        name="org_name"
         value={editedOrgName}
         onChange={handleInputChange}
-        width='100%'
+        width="100%"
       />
     </CommonDialog>
   );

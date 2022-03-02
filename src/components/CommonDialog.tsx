@@ -16,9 +16,10 @@ type Props = {
   open: boolean;
   title: string;
   onClose: () => void;
-  onRegisterClick?: () => void;
-  onEditClick?: () => void;
-  onDeleteClick?: () => void;
+  onRegister?: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
+  onEditMode?: () => void;
   maxWidth?: Breakpoint;
   mode: DIALOG_MODE;
 };
@@ -69,30 +70,30 @@ const CommonDialog = (props: Props) => {
             <Button onClick={props.onClose} color="primary">
               キャンセル
             </Button>
-            <Button onClick={props.onRegisterClick} color="primary">
+            <Button onClick={props.onRegister} color="primary">
               登録
             </Button>
           </DialogActions>
         )}
         {props.mode === 'edit' && (
           <DialogActions>
-            <Button onClick={props.onDeleteClick} color="primary">
+            {/* <Button onClick={props.onDelete} color="primary">
               削除
-            </Button>
+            </Button> */}
             <Button onClick={props.onClose} color="primary">
               キャンセル
             </Button>
-            <Button onClick={props.onRegisterClick} color="primary">
+            <Button onClick={props.onEdit} color="primary">
               登録
             </Button>
           </DialogActions>
         )}
         {props.mode === 'detail' && (
           <DialogActions>
-            <Button onClick={props.onDeleteClick} color="primary">
+            <Button onClick={props.onDelete} color="primary">
               削除
             </Button>
-            <Button onClick={props.onEditClick} color="primary">
+            <Button onClick={props.onEditMode} color="primary">
               編集
             </Button>
           </DialogActions>

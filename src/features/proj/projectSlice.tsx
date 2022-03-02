@@ -3,6 +3,7 @@ import axios from 'axios';
 import { RootState } from '../../app/store';
 import { PROJECT, PROJECT_SATATE } from '../types';
 import { Category } from '../../selectionOptions';
+import { isCompositeComponentWithType } from 'react-dom/test-utils';
 
 export const emptyProject: PROJECT = {
   project_id: '',
@@ -16,19 +17,21 @@ export const emptyProject: PROJECT = {
   enddate: '',
 };
 
+export const emptyEditedProject = {
+  project_id: '',
+  project_name: '',
+  org_id: '',
+  resp_id: [],
+  member_id: [],
+  description: '',
+  startdate: '',
+  enddate: '',
+};
+
 const initialState: PROJECT_SATATE = {
   projects: [],
   selectedProjectId: '',
-  editedProject: {
-    project_id: '',
-    project_name: '',
-    org_id: '',
-    resp_id: [],
-    member_id: [],
-    description: '',
-    startdate: '',
-    enddate: '',
-  },
+  editedProject: emptyEditedProject,
   projectDialogOpen: false,
   projectDialogMode: 'register',
 };
@@ -49,12 +52,29 @@ export const fetchAsyncGetProject = createAsyncThunk(
   }
 );
 
+export const fetchAsyncRegisterProject = createAsyncThunk(
+  'project/registerProject',
+  async (_, thunkAPI) => {
+    const editedProject = (thunkAPI.getState() as RootState).project
+      .editedProject;
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/project`,
+      editedProject,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
 export const fetchAsyncUpdateProject = createAsyncThunk(
   'project/updateProject',
   async (_, thunkAPI) => {
     const editedProject = (thunkAPI.getState() as RootState).project
       .editedProject;
-    console.log(editedProject);
     const res = await axios.put(
       `${process.env.REACT_APP_API_URL}/api/project/${editedProject.project_id}`,
       editedProject,
@@ -64,7 +84,23 @@ export const fetchAsyncUpdateProject = createAsyncThunk(
         },
       }
     );
-    console.log(res.data);
+    return res.data;
+  }
+);
+
+export const fetchAsyncDeleteProject = createAsyncThunk(
+  'project/deleteProject',
+  async (_, thunkAPI) => {
+    const projectId = (thunkAPI.getState() as RootState).project
+      .selectedProjectId;
+    const res = await axios.delete(
+      `${process.env.REACT_APP_API_URL}/api/project/${projectId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
     return res.data;
   }
 );
@@ -107,9 +143,31 @@ export const projectSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAsyncGetProject.fulfilled, (state, action) => {
+      // プロジェクト未選択の場合は、先頭のプロジェクトを選択状態とする。
+      if (
+        action.payload.length > 0 &&
+        (!state.selectedProjectId ||
+          !action.payload
+            .map((proj: PROJECT) => proj.project_id)
+            .includes(state.selectedProjectId))
+      ) {
+        return {
+          ...state,
+          projects: action.payload,
+          selectedProjectId: action.payload[0].project_id,
+        };
+      } else {
+        return {
+          ...state,
+          projects: action.payload,
+        };
+      }
+    });
+    builder.addCase(fetchAsyncRegisterProject.fulfilled, (state, action) => {
       return {
         ...state,
         projects: action.payload,
+        selectedProjectId: action.payload[action.payload.length - 1].project_id,
       };
     });
     builder.addCase(fetchAsyncUpdateProject.fulfilled, (state, action) => {
@@ -117,6 +175,22 @@ export const projectSlice = createSlice({
         ...state,
         projects: action.payload,
       };
+    });
+    builder.addCase(fetchAsyncDeleteProject.fulfilled, (state, action) => {
+      if (action.payload.length > 0) {
+        console.log('test', action.payload[0].project_id);
+        return {
+          ...state,
+          projects: action.payload,
+          selectedProjectId: action.payload[0].project_id,
+        };
+      } else {
+        console.log('test2', action.payload);
+        return {
+          ...state,
+          projects: action.payload,
+        };
+      }
     });
   },
 });

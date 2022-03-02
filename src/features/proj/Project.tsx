@@ -16,10 +16,12 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import { Line, Doughnut } from 'react-chartjs-2';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CommonTooltip from '../../components/CommonTooltip';
 import * as colorHandler from '../../util/colorHandler';
 import {
   emptyProject,
+  fetchAsyncDeleteProject,
   selectSelectedProject,
   setEditedProject,
   setProjectDialogOpen,
@@ -47,7 +49,7 @@ const Project = () => {
       padding-bottom: 2px;
     `,
     editIcon: css`
-      margin-left: 16px;
+      margin-left: 24px;
     `,
     userCard: css`
       width: 320px;
@@ -169,6 +171,10 @@ const Project = () => {
     dispatch(setProjectDialogOpen(true));
   };
 
+  const handleDeleteClick = () => {
+    dispatch(fetchAsyncDeleteProject());
+  };
+
   return (
     <>
       {!Object.is(project, emptyProject) && (
@@ -191,8 +197,20 @@ const Project = () => {
                   {project.project_name}
                 </Typography>
                 <CommonTooltip title="編集">
-                  <IconButton css={styles.editIcon} onClick={handleEditClick}>
-                    <EditIcon fontSize="small" />
+                  <IconButton
+                    aria-label="edit project"
+                    css={styles.editIcon}
+                    onClick={handleEditClick}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </CommonTooltip>
+                <CommonTooltip title="削除">
+                  <IconButton
+                    aria-label="delete project"
+                    onClick={handleDeleteClick}
+                  >
+                    <DeleteIcon />
                   </IconButton>
                 </CommonTooltip>
               </Box>

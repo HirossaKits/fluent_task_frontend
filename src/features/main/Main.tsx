@@ -41,6 +41,7 @@ import {
   fetchAsyncGetLoginUser,
   fetchAsyncGetPersonalSettings,
 } from '../auth/authSlice';
+import { selectOrgInfo } from '../org/orgSliece';
 import {
   setSettingsMenuOpen,
   setProfileMenuOpen,
@@ -49,7 +50,7 @@ import {
   selectMessage,
 } from './mainSlice';
 import {
-  emptyProject,
+  emptyEditedProject,
   selectProjects,
   selectSelectedProjectId,
   setSelectedProjectId,
@@ -173,8 +174,8 @@ const Main = () => {
   };
 
   const dispatch: AppDispatch = useDispatch();
-  const loginUserInfo = useSelector(selectLoginUserInfo);
   const mainComponentName = useSelector(selectMainComponentName);
+  const orgInfo = useSelector(selectOrgInfo);
   const projects = useSelector(selectProjects);
   const selectedProjectId = useSelector(selectSelectedProjectId);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -189,8 +190,8 @@ const Main = () => {
         await dispatch(fetchAsyncGetOrgInfo());
         await dispatch(fetchAsyncGetProject());
       } else {
-        // localStorage.removeItem("localJWT");
-        // window.location.href = "/login";
+        localStorage.removeItem('localJWT');
+        window.location.href = '/login';
       }
     };
     fectchBootLoader();
@@ -209,7 +210,9 @@ const Main = () => {
       dispatch(setSelectedProjectId(newId));
     } else {
       dispatch(setProjectDialogMode('register'));
-      dispatch(setEditedProject(emptyProject));
+      dispatch(
+        setEditedProject({ ...emptyEditedProject, org_id: orgInfo.org_id })
+      );
       dispatch(setProjectDialogOpen(true));
     }
   };
