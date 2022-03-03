@@ -153,24 +153,14 @@ export interface EDITED_PROJECT {
 
 /*taskSlice*/
 
-export type COLUMN_NAME =
-  | 'task_name'
-  | 'category_name'
-  | 'status'
-  | 'scheduled_startdate'
-  | 'scheduled_enddate'
-  | 'estimate_manhour'
-  | 'assigned_name'
-  | 'description';
-
-export const Status = {
-  Suspended: '保留　',
-  'Not started': '開始前',
-  'On going': '進行中',
-  Done: '完了　',
-};
-
-export type TASK_STATUS = keyof typeof Status;
+export interface TASK_STATE {
+  tasks: TASK[];
+  taskDialogOpen: boolean;
+  taskDialogMode: Extract<DIALOG_MODE, 'register' | 'edit' | 'detail'>;
+  filterTaskOpen: boolean;
+  filterTask: FILTER_TASK[];
+  editedTask: EDITED_TASK;
+}
 
 export interface TASK {
   task_id: string;
@@ -194,25 +184,53 @@ export interface TASK {
   update_at: null | string;
 }
 
+export interface EDITED_TASK {
+  task_name: string;
+  project_id: string;
+  category_id: null | string;
+  assigned_id: null | string;
+  author_id: null | string;
+  status: TASK_STATUS;
+  description: string;
+  estimate_manhour: null | number;
+  actual_manhour: null | number;
+  scheduled_startdate: string;
+  scheduled_enddate: string;
+  actual_startdate: null | string;
+  actual_enddate: null | string;
+  created_at: null | string;
+  update_at: null | string;
+}
+
 type TASK_CATEGORY = {
   task_category_id: string;
   task_category_name: string;
 };
+
+export const Status = {
+  Suspended: '保留　',
+  'Not started': '開始前',
+  'On going': '進行中',
+  Done: '完了　',
+};
+
+export type TASK_STATUS = keyof typeof Status;
+
+export type COLUMN_NAME =
+  | 'task_name'
+  | 'category_name'
+  | 'status'
+  | 'scheduled_startdate'
+  | 'scheduled_enddate'
+  | 'estimate_manhour'
+  | 'assigned_name'
+  | 'description';
 
 export interface FILTER_TASK {
   columnName: COLUMN_NAME;
   type: 'string' | 'number' | 'Date';
   operator: string;
   value: string;
-}
-
-export interface TASK_STATE {
-  tasks: TASK[];
-  taskDialogOpen: boolean;
-  taskDialogMode: Extract<DIALOG_MODE, 'register' | 'edit' | 'detail'>;
-  filterTaskOpen: boolean;
-  filterTask: FILTER_TASK[];
-  editedTask: TASK;
 }
 
 /*calendarSlice*/

@@ -49,7 +49,7 @@ const initialState: AUTH = {
 
 // サインアップ
 export const fetchAsyncSignup = createAsyncThunk(
-  'auth/register',
+  'auth/signup',
   async (auth: SIGNUP_INFO) => {
     const res = await axios.post<JWT>(
       `${process.env.REACT_APP_API_URL}/api/auth/signup`,
@@ -66,7 +66,7 @@ export const fetchAsyncSignup = createAsyncThunk(
 
 // サインイン
 export const fetchAsyncSignin = createAsyncThunk(
-  'auth/login',
+  'auth/signin',
   async (auth: SIGNIN_INFO) => {
     const res = await axios.post<JWT>(
       `${process.env.REACT_APP_API_URL}/api/auth/signin`,
@@ -78,7 +78,7 @@ export const fetchAsyncSignin = createAsyncThunk(
 
 // ログインユーザーの基本情報取得
 export const fetchAsyncGetLoginUser = createAsyncThunk(
-  'auth/getLoginUserCred',
+  'auth/getLoginUserInfo',
   async (_, thunkAPI) => {
     const res = await axios.get<LOGIN_USER_INFO>(
       `${process.env.REACT_APP_API_URL}/api/user`,

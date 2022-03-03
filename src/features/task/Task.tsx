@@ -12,6 +12,8 @@ import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import EastIcon from '@mui/icons-material/East';
 import { setMessageOpen, setMessage } from '../main/mainSlice';
+import { selectLoginUserInfo } from '../auth/authSlice';
+import { selectSelectedProjectId } from '../proj/projectSlice';
 import {
   initialTask,
   selectTaskDialogMode,
@@ -72,11 +74,19 @@ const Task = () => {
 
   const dispatch = useDispatch();
   const tasks = useProjectTask();
+  const loginUserInfo = useSelector(selectLoginUserInfo);
+  const selectedProjectId = useSelector(selectSelectedProjectId);
   const mode = useSelector(selectTaskDialogMode);
 
   const handleRegisterClick = () => {
     dispatch(setTaskDialogMode('register'));
-    dispatch(setEditedTask(initialTask));
+    dispatch(
+      setEditedTask({
+        ...initialTask,
+        project_id: selectedProjectId,
+        author_id: loginUserInfo.user_id,
+      })
+    );
     dispatch(setTaskDialogOpen(true));
   };
 
@@ -100,8 +110,8 @@ const Task = () => {
     task_name: (task: TASK) => (
       <Typography>
         <Link
-          href='#'
-          underline='always'
+          href="#"
+          underline="always"
           onClick={(event: any) => {
             event.stopPropagation();
             dispatch(setTaskDialogMode('detail'));
@@ -233,7 +243,7 @@ const Task = () => {
         elementFactory={elementFactory}
         columnInfo={columnInfo}
         showToolBar={true}
-        idColumn='task_id'
+        idColumn="task_id"
         handleEditClick={hendleEditClick}
         handleRegisterClick={handleRegisterClick}
         handleDeleteClick={handleRegisterClick}

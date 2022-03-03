@@ -14,6 +14,7 @@ import { TARGET } from '../types';
 import CommonSelect from '../../components/CommonSelect';
 import { Status } from '../../selectionOptions';
 import {
+  fetchAsyncRegisterTask,
   selectTaskDialogOpen,
   selectTaskDialogMode,
   setTaskDialogOpen,
@@ -65,6 +66,12 @@ const TaskDialog: React.FC = () => {
     dispatch(setTaskDialogOpen(false));
   };
 
+  const handleRegisterClick = () => {
+    dispatch(fetchAsyncRegisterTask());
+  };
+
+  const handleEditClick = () => {};
+
   const handleEditModeClick = () => {
     dispatch(setTaskDialogMode('edit'));
   };
@@ -84,6 +91,7 @@ const TaskDialog: React.FC = () => {
           : 'タスク詳細'
       }
       onClose={handleClose}
+      onRegister={handleRegisterClick}
       onEditMode={handleEditModeClick}
       onDelete={handleDeleteClick}
       maxWidth="sm"

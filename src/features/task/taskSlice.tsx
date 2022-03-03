@@ -1,11 +1,8 @@
+import axios from 'axios';
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
-import { TASK, TASK_STATE } from '../types';
+import { TASK, EDITED_TASK, TASK_STATE } from '../types';
 import { JWT } from '../types';
-
-// Demo
-import { demoData } from '../../DummyData';
-import axios from 'axios';
 
 export const initialTask: TASK = {
   task_id: '',
@@ -29,8 +26,26 @@ export const initialTask: TASK = {
   update_at: null,
 };
 
+export const emptyEditedTask: EDITED_TASK = {
+  task_name: '',
+  project_id: '',
+  category_id: '',
+  assigned_id: '',
+  author_id: '',
+  status: 'Not started',
+  description: '',
+  estimate_manhour: null,
+  actual_manhour: null,
+  scheduled_startdate: '',
+  scheduled_enddate: '',
+  actual_startdate: null,
+  actual_enddate: null,
+  created_at: null,
+  update_at: null,
+};
+
 const initialState: TASK_STATE = {
-  tasks: demoData,
+  tasks: [],
   taskDialogOpen: false,
   taskDialogMode: 'edit',
   filterTaskOpen: false,
@@ -42,19 +57,21 @@ const initialState: TASK_STATE = {
       value: '',
     },
   ],
-  editedTask: initialTask,
+  editedTask: emptyEditedTask,
 };
 
 // タスクの登録
-export const fetchAsyncRegister = createAsyncThunk(
+export const fetchAsyncRegisterTask = createAsyncThunk(
   'task/register',
-  async (editedTask) => {
+  async (_, thunkAPI) => {
+    const editedTask = (thunkAPI.getState() as RootState).task.editedTask;
     const res = await axios.post<JWT>(
-      `${process.env.REACT_APP_API_URL}/api/task/create/`,
+      `${process.env.REACT_APP_API_URL}/api/task`,
       editedTask,
       {
         headers: {
           'Content-type': 'application/json',
+          Authorization: `Bearer ${localStorage.localJWT}`,
         },
       }
     );
