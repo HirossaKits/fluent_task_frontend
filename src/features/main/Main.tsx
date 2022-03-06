@@ -59,6 +59,7 @@ import {
   setProjectDialogMode,
   fetchAsyncGetProject,
 } from '../proj/projectSlice';
+import { fetchAsyncGetTasks } from '../task/taskSlice';
 import { fetchAsyncGetOrgInfo } from '../org/orgSliece';
 import CommonTooltip from '../../components/CommonTooltip';
 import ProjectDialog from '../proj/ProjectDialog';
@@ -189,6 +190,7 @@ const Main = () => {
         await dispatch(fetchAsyncGetPersonalSettings());
         await dispatch(fetchAsyncGetOrgInfo());
         await dispatch(fetchAsyncGetProject());
+        await dispatch(fetchAsyncGetTasks());
       } else {
         localStorage.removeItem('localJWT');
         window.location.href = '/login';
@@ -337,13 +339,17 @@ const Main = () => {
             }}
           >
             <Tabs
-              value={selectedProjectId}
+              value={selectedProjectId === '' ? 0 : selectedProjectId}
               onChange={handleTabChange}
               variant="scrollable"
               scrollButtons="auto"
             >
-              {projects.map((proj) => (
-                <Tab label={proj.project_name} value={proj.project_id} />
+              {projects.map((proj, idx) => (
+                <Tab
+                  key={idx}
+                  label={proj.project_name}
+                  value={proj.project_id}
+                />
               ))}
 
               {mainComponentName === 'Proj' && (

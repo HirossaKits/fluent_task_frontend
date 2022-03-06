@@ -45,13 +45,15 @@ const Project = () => {
       display: flex;
       align-items: center;
     `,
-    titleText: css`
-      padding-bottom: 2px;
-    `,
     editIcon: css`
       margin-left: 24px;
     `,
+    description: css`
+      margin-top: ${theme.spacing(2)};
+      margin-bottom: 10px;
+    `,
     userCard: css`
+      margin: ${theme.spacing(2)} 0;
       width: 320px;
       text-align: left;
     `,
@@ -108,7 +110,7 @@ const Project = () => {
       {
         label: '進捗(%)',
         data: lineChartData?.map((data) => data.percent),
-        lineTension: 0,
+        lineTension: 0.1,
         backgroundColor: colorHandler.convertColorCodeToRGBA(
           theme.palette.primary.main,
           0.2
@@ -140,10 +142,10 @@ const Project = () => {
         data: doughnutData.map((data) => data.value),
 
         backgroundColor: [
-          colorHandler.convertColorCodeToRGBA(theme.palette.success.light, 0.4),
-          colorHandler.convertColorCodeToRGBA(theme.palette.info.light, 0.4),
-          colorHandler.convertColorCodeToRGBA(theme.palette.warning.light, 0.4),
-          colorHandler.convertColorCodeToRGBA(theme.palette.grey[400], 0.4),
+          colorHandler.convertColorCodeToRGBA(theme.palette.success.light, 0.2),
+          colorHandler.convertColorCodeToRGBA(theme.palette.info.light, 0.2),
+          colorHandler.convertColorCodeToRGBA(theme.palette.warning.light, 0.2),
+          colorHandler.convertColorCodeToRGBA(theme.palette.grey[400], 0.2),
         ],
         borderColor: [
           colorHandler.convertColorCodeToRGBA(theme.palette.success.light),
@@ -190,10 +192,10 @@ const Project = () => {
               direction="column"
               justifyContent="flex-start"
               alignItems="flex-start"
-              spacing={3}
+              // spacing={3}
             >
               <Box css={styles.titleWrap}>
-                <Typography css={styles.titleText} variant="h5" component="div">
+                <Typography variant="h5" component="div">
                   {project.project_name}
                 </Typography>
                 <CommonTooltip title="編集">
@@ -214,7 +216,11 @@ const Project = () => {
                   </IconButton>
                 </CommonTooltip>
               </Box>
-              <Typography variant="subtitle1" component="div">
+              <Typography
+                css={styles.description}
+                variant="subtitle1"
+                component="div"
+              >
                 {project.description}
               </Typography>
               <Card css={styles.userCard}>
@@ -227,15 +233,18 @@ const Project = () => {
                 </Typography>
                 <Divider />
                 <List css={styles.respList} dense>
-                  {project.resp?.map((user) => (
-                    <ListItem disablePadding>
+                  {project.resp?.map((user, idx) => (
+                    <ListItem key={idx} disablePadding>
                       <ListItemButton>
                         <ListItemAvatar>
                           <CommonAvatar user={user} />
                         </ListItemAvatar>
-                        <ListItemText
+                        {/* <ListItemText
                           primary={`${user.last_name} ${user.first_name}`}
-                        />
+                        /> */}
+                        <Typography>
+                          {`${user.last_name} ${user.first_name}`}
+                        </Typography>
                       </ListItemButton>
                     </ListItem>
                   ))}
@@ -251,15 +260,18 @@ const Project = () => {
                 </Typography>
                 <Divider />
                 <List css={styles.memberList} dense>
-                  {project.member.map((user) => (
-                    <ListItem disablePadding>
+                  {project.member.map((user, idx) => (
+                    <ListItem key={idx} disablePadding>
                       <ListItemButton>
                         <ListItemAvatar>
                           <CommonAvatar user={user} />
                         </ListItemAvatar>
-                        <ListItemText
+                        {/* <ListItemText
                           primary={`${user.last_name} ${user.first_name}`}
-                        />
+                        /> */}
+                        <Typography>
+                          {`${user.last_name} ${user.first_name}`}
+                        </Typography>
                       </ListItemButton>
                     </ListItem>
                   ))}

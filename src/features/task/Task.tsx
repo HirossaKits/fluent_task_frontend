@@ -2,7 +2,6 @@ import React from 'react';
 import { css } from '@emotion/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
-import { selectTasks } from './taskSlice';
 import CommonTable from '../../components/CommonTable';
 import TaskDialog from './TaskDialog';
 import Typography from '@mui/material/Typography';
@@ -11,33 +10,40 @@ import CircleIcon from '@mui/icons-material/Circle';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import EastIcon from '@mui/icons-material/East';
-import { setMessageOpen, setMessage } from '../main/mainSlice';
 import { selectLoginUserInfo } from '../auth/authSlice';
 import { selectSelectedProjectId } from '../proj/projectSlice';
 import {
-  initialTask,
-  selectTaskDialogMode,
+  initialEditedTask,
   setTaskDialogOpen,
   setTaskDialogMode,
   setEditedTask,
+  setSelectedTask,
+  fetchAsyncDeleteTask,
 } from './taskSlice';
 import { TASK, Status, COLUMN_INFO } from '../types';
 import useProjectTask from '../../hooks/projectTask';
+import useShapeTask from '../../hooks/shapeTask';
+import useMessage from '../../hooks/message';
 
 const columnInfo: COLUMN_INFO[] = [
   {
     name: 'task_name',
     label: 'タスク名',
     type: 'string',
-    width: '13%',
+    width: '14%',
     isJsxElement: true,
   },
-  { name: 'category_name', label: 'カテゴリー', type: 'string', width: '10%' },
+  {
+    name: 'task_category_name',
+    label: 'カテゴリー',
+    type: 'string',
+    width: '10%',
+  },
   {
     name: 'status',
     label: 'ステータス',
     type: 'string',
-    width: '10%',
+    width: '12%',
     isJsxElement: true,
   },
   {
@@ -60,8 +66,7 @@ const columnInfo: COLUMN_INFO[] = [
     type: 'number',
     width: '10%',
   },
-  { name: 'assigned_name', label: '担当', type: 'string', width: '10%' },
-  { name: 'description', label: '備考', type: 'string', width: '15%' },
+  { name: 'assigned_name', label: '担当', type: 'string', width: '14%' },
 ];
 
 const Task = () => {
@@ -76,13 +81,15 @@ const Task = () => {
   const tasks = useProjectTask();
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const selectedProjectId = useSelector(selectSelectedProjectId);
-  const mode = useSelector(selectTaskDialogMode);
+  const shapeTask = useShapeTask();
+  const message = useMessage();
 
+  // 登録
   const handleRegisterClick = () => {
     dispatch(setTaskDialogMode('register'));
     dispatch(
       setEditedTask({
-        ...initialTask,
+        ...initialEditedTask,
         project_id: selectedProjectId,
         author_id: loginUserInfo.user_id,
       })
@@ -90,20 +97,24 @@ const Task = () => {
     dispatch(setTaskDialogOpen(true));
   };
 
+  // 更新
   const hendleEditClick = (tasks: TASK[]) => {
     dispatch(setTaskDialogMode('edit'));
     if (tasks.length < 1) {
-      dispatch(setMessage('一覧から編集するタスクを選択してください。'));
-      dispatch(setMessageOpen(true));
+      message('一覧から編集するタスクを選択してください。');
       return;
     }
     if (tasks.length > 1) {
-      dispatch(setMessage('編集するタスクを一つに絞ってください。'));
-      dispatch(setMessageOpen(true));
+      message('編集するタスクを一つに絞ってください');
       return;
     }
-    dispatch(setEditedTask(tasks[0]));
+    dispatch(setEditedTask(shapeTask(tasks[0])));
     dispatch(setTaskDialogOpen(true));
+  };
+
+  // 削除
+  const handleDeleteClick = (tasks: TASK[]) => {
+    dispatch(fetchAsyncDeleteTask(tasks));
   };
 
   const elementFactory = {
@@ -115,7 +126,7 @@ const Task = () => {
           onClick={(event: any) => {
             event.stopPropagation();
             dispatch(setTaskDialogMode('detail'));
-            dispatch(setEditedTask(task));
+            dispatch(setSelectedTask(task));
             dispatch(setTaskDialogOpen(true));
           }}
         >
@@ -246,7 +257,7 @@ const Task = () => {
         idColumn="task_id"
         handleEditClick={hendleEditClick}
         handleRegisterClick={handleRegisterClick}
-        handleDeleteClick={handleRegisterClick}
+        handleDeleteClick={handleDeleteClick}
         // selectedIds={selectedIds}
         // setSelectedIds={setSelectedIds}
       />

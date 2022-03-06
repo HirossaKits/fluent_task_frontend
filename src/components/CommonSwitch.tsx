@@ -1,10 +1,10 @@
-import React from "react";
-import { css } from "@emotion/react";
-import { useTheme } from "@mui/material";
-import Grid from "@mui/material/Grid";
-import Switch, { SwitchClassKey, SwitchProps } from "@mui/material/Switch";
-import { makeStyles, Typography } from "@mui/material";
-import { TARGET } from "../features/types";
+import React from 'react';
+import { css } from '@emotion/react';
+import { useTheme } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Switch, { SwitchClassKey, SwitchProps } from '@mui/material/Switch';
+import { makeStyles, Typography } from '@mui/material';
+import { TARGET } from '../features/types';
 
 type WidthNumber = 2 | 4 | 6 | 8 | 10 | 12;
 
@@ -29,8 +29,7 @@ const CommonSwitch: React.FC<Props> = (props) => {
   const theme = useTheme();
   const styles = {
     wrapper: css`
-      marginTop: ${theme.spacing(1)},
-      marginBottom: ${theme.spacing(1)},
+      margin-bottom: ${theme.spacing(1)};
     `,
     switch: css`
       color: ${theme.palette.primary.main};
@@ -44,24 +43,24 @@ const CommonSwitch: React.FC<Props> = (props) => {
   };
 
   return (
-    <Grid css={styles.wrapper} container alignItems='center' xs={12}>
-      {"label" in props && (
-        <Grid item xs={"labelWidth" in props ? props.labelWidth : 8}>
-          <Typography variant='body2'>{props.label}</Typography>
+    <Grid css={styles.wrapper} container alignItems="center">
+      {'label' in props && (
+        <Grid item xs={'labelWidth' in props ? props.labelWidth : 8}>
+          <Typography>{props.label}</Typography>
         </Grid>
       )}
       <Grid
         item
         xs={
-          "labelWidth" in props &&
+          'labelWidth' in props &&
           ((12 - (props.labelWidth ?? 0)) as WidthNumber)
         }
       >
         <Switch
           checked={props.value}
           css={styles.switch}
-          color='primary'
-          size='small'
+          color="primary"
+          size="small"
           onChange={handleToggleChange}
         />
       </Grid>

@@ -14,7 +14,7 @@ type Props = {
   label?: string;
   width?: string | number;
   name: string;
-  value: string | number;
+  value: null | string | number;
   index?: number;
   onChange: Function;
   readOnly?: boolean;

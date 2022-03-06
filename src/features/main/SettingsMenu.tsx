@@ -12,12 +12,13 @@ import {
   setPersonalSettings,
   fetchAsyncUpdateSettings,
 } from '../auth/authSlice';
-import { fetchAsyncGetOrgInfo, selectOrgInfo } from '../org/orgSliece';
+import { fetchAsyncGetOrgInfo } from '../org/orgSliece';
 import { selectSettingsMenuOpen, setSettingsMenuOpen } from './mainSlice';
 import { setMessageOpen, setMessage } from '../main/mainSlice';
 import { fetchAsyncGetProject } from '../proj/projectSlice';
 import CommonSelect from '../../components/CommonSelect';
 import useCreateOption from '../../hooks/optionCreater';
+import useMessage from '../../hooks/message';
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;
@@ -25,11 +26,19 @@ type Props = {
 
 const SettingsMenu: React.FC<Props> = (props) => {
   const theme = useTheme();
+  const styles = {
+    paper: css`
+      width: 244px;
+      padding: ${theme.spacing(2)} ${theme.spacing(3)};
+    `,
+  };
+
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const settingsMenuOpen = useSelector(selectSettingsMenuOpen);
   const personalSettings = useSelector(selectPersonalSettings);
   const dispatch = useDispatch();
   const createOption = useCreateOption();
+  const message = useMessage();
 
   const orgOptions = createOption(
     loginUserInfo.joined_org,
@@ -44,9 +53,10 @@ const SettingsMenu: React.FC<Props> = (props) => {
     // task 取得処理
   };
 
-  useEffect(() => {
-    dispatch(fetchAsyncGetOrgInfo());
-  }, [personalSettings.selected_org_id]);
+  // useEffect(() => {
+  //   console.log('useEffect');
+  //   dispatch(fetchAsyncGetOrgInfo());
+  // }, [personalSettings.selected_org_id]);
 
   const handleInputChange = (target: TARGET) => {
     const settings = { ...personalSettings, [target.name]: target.value };
@@ -80,12 +90,9 @@ const SettingsMenu: React.FC<Props> = (props) => {
         dispatch(setPersonalSettings(settings));
         dispatch(fetchAsyncUpdateSettings(settings));
       }
-      dispatch(
-        setMessage(
-          '現在プライベートモードしか利用できません。グループに参加するか、グループを作成してください。'
-        )
+      message(
+        '現在プライベートモードしか利用できません。グループに参加するか、グループを作成してください。'
       );
-      dispatch(setMessageOpen(true));
       return;
     } else {
       const settings = {
@@ -99,26 +106,19 @@ const SettingsMenu: React.FC<Props> = (props) => {
   };
 
   const handleSelectChange = (target: TARGET) => {
-    const settings = {
-      ...personalSettings,
-      selected_org_id: target.value.toString(),
-    };
-    dispatch(setPersonalSettings(settings));
-    dispatch(fetchAsyncUpdateSettings(settings));
-    fetchInSequenceRelatedOrg();
+    if (target.value) {
+      const settings = {
+        ...personalSettings,
+        selected_org_id: target.value.toString(),
+      };
+      dispatch(setPersonalSettings(settings));
+      dispatch(fetchAsyncUpdateSettings(settings));
+      fetchInSequenceRelatedOrg();
+    }
   };
 
   const handleColse = () => {
     dispatch(setSettingsMenuOpen(false));
-  };
-
-  const styles = {
-    paper: css`
-      padding-left: ${theme.spacing(2)};
-      padding-top: ${theme.spacing(2)};
-      padding-right: ${theme.spacing(4)};
-      padding-bottom: ${theme.spacing(2)};
-    `,
   };
 
   return (

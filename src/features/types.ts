@@ -2,7 +2,7 @@
 
 export interface TARGET {
   name: string;
-  value: string | string[] | number | Date | boolean;
+  value: null | string | string[] | number | Date | boolean;
   index?: number;
 }
 
@@ -159,6 +159,7 @@ export interface TASK_STATE {
   taskDialogMode: Extract<DIALOG_MODE, 'register' | 'edit' | 'detail'>;
   filterTaskOpen: boolean;
   filterTask: FILTER_TASK[];
+  selectedTask: TASK;
   editedTask: EDITED_TASK;
 }
 
@@ -166,8 +167,8 @@ export interface TASK {
   task_id: string;
   task_name: string;
   project_id: string;
-  category_id: null | string;
-  category_name: string;
+  task_category_id: null | string;
+  task_category_name: string;
   assigned_id: null | string;
   assigned_name: string;
   author_id: null | string;
@@ -185,9 +186,10 @@ export interface TASK {
 }
 
 export interface EDITED_TASK {
+  task_id?: string;
   task_name: string;
   project_id: string;
-  category_id: null | string;
+  task_category_id: null | string;
   assigned_id: null | string;
   author_id: null | string;
   status: TASK_STATUS;
@@ -198,14 +200,12 @@ export interface EDITED_TASK {
   scheduled_enddate: string;
   actual_startdate: null | string;
   actual_enddate: null | string;
-  created_at: null | string;
-  update_at: null | string;
 }
 
-type TASK_CATEGORY = {
+interface TASK_CATEGORY {
   task_category_id: string;
   task_category_name: string;
-};
+}
 
 export const Status = {
   Suspended: '保留　',
@@ -218,13 +218,12 @@ export type TASK_STATUS = keyof typeof Status;
 
 export type COLUMN_NAME =
   | 'task_name'
-  | 'category_name'
+  | 'task_category_name'
   | 'status'
   | 'scheduled_startdate'
   | 'scheduled_enddate'
   | 'estimate_manhour'
-  | 'assigned_name'
-  | 'description';
+  | 'assigned_name';
 
 export interface FILTER_TASK {
   columnName: COLUMN_NAME;

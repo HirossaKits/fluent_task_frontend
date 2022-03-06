@@ -1,16 +1,16 @@
 import axios from 'axios';
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import { TASK, EDITED_TASK, TASK_STATE } from '../types';
-import { JWT } from '../types';
+import useConcatUserName from '../../hooks/userName';
 
 export const initialTask: TASK = {
   task_id: '',
   task_name: '',
   project_id: '',
-  category_id: '',
-  category_name: '',
-  assigned_id: '',
+  task_category_id: null,
+  task_category_name: '',
+  assigned_id: null,
   assigned_name: '',
   author_id: '',
   author_name: '',
@@ -26,12 +26,12 @@ export const initialTask: TASK = {
   update_at: null,
 };
 
-export const emptyEditedTask: EDITED_TASK = {
+export const initialEditedTask: EDITED_TASK = {
   task_name: '',
   project_id: '',
-  category_id: '',
-  assigned_id: '',
-  author_id: '',
+  task_category_id: null,
+  assigned_id: null,
+  author_id: null,
   status: 'Not started',
   description: '',
   estimate_manhour: null,
@@ -40,8 +40,6 @@ export const emptyEditedTask: EDITED_TASK = {
   scheduled_enddate: '',
   actual_startdate: null,
   actual_enddate: null,
-  created_at: null,
-  update_at: null,
 };
 
 const initialState: TASK_STATE = {
@@ -57,15 +55,57 @@ const initialState: TASK_STATE = {
       value: '',
     },
   ],
-  editedTask: emptyEditedTask,
+  selectedTask: initialTask,
+  editedTask: initialEditedTask,
 };
+
+// ユーザー名を作成
+interface IUser {
+  first_name: string;
+  last_name: string;
+}
+const concatUser = <T extends IUser>(user: T) => {
+  return `${user.last_name} ${user.first_name}`;
+};
+
+// タスクの取得
+export const fetchAsyncGetTasks = createAsyncThunk(
+  'task/get',
+  async (_, thunkAPI) => {
+    const selectedProjectId = (thunkAPI.getState() as RootState).project
+      .selectedProjectId;
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/task/project/${selectedProjectId}`,
+      {
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+
+    const tasks = res.data.map((task: any) => {
+      const userName = concatUser(task.assigned);
+      delete task.assigned;
+      return { ...task, assigned_name: userName };
+    });
+
+    console.log(tasks);
+
+    return tasks;
+  }
+);
 
 // タスクの登録
 export const fetchAsyncRegisterTask = createAsyncThunk(
   'task/register',
   async (_, thunkAPI) => {
-    const editedTask = (thunkAPI.getState() as RootState).task.editedTask;
-    const res = await axios.post<JWT>(
+    const editedTask = {
+      ...(thunkAPI.getState() as RootState).task.editedTask,
+    };
+    console.log('addTask', editedTask.task_id);
+    await console.log(editedTask);
+    const res = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/task`,
       editedTask,
       {
@@ -75,7 +115,68 @@ export const fetchAsyncRegisterTask = createAsyncThunk(
         },
       }
     );
-    return res.data;
+
+    const tasks = res.data.map((task: any) => {
+      const userName = concatUser(task.assigned);
+      delete task.assigned;
+      return { ...task, assigned_name: userName };
+    });
+
+    return tasks;
+  }
+);
+
+// タスクの更新
+export const fetchAsyncUpdateTask = createAsyncThunk(
+  'task/update',
+  async (_, thunkAPI) => {
+    const editedTask = (thunkAPI.getState() as RootState).task.editedTask;
+    await console.log(editedTask);
+    const res = await axios.put(
+      `${process.env.REACT_APP_API_URL}/api/task/${editedTask.task_id}`,
+      editedTask,
+      {
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+
+    const tasks = res.data.map((task: any) => {
+      const userName = concatUser(task.assigned);
+      delete task.assigned;
+      return { ...task, assigned_name: userName };
+    });
+    return tasks;
+  }
+);
+
+// タスクの削除
+export const fetchAsyncDeleteTask = createAsyncThunk(
+  'task/delete',
+  async (selectedTasks: TASK[], thunkAPI) => {
+    const selectedProjectId = (thunkAPI.getState() as RootState).project
+      .selectedProjectId;
+    const res = await axios.delete(
+      `${process.env.REACT_APP_API_URL}/api/task/project/${selectedProjectId}`,
+      {
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+        data: {
+          task_id: selectedTasks.map((task) => task.task_id),
+        },
+      }
+    );
+
+    const tasks = res.data.map((task: any) => {
+      const userName = concatUser(task.assigned);
+      delete task.assigned;
+      return { ...task, assigned_name: userName };
+    });
+    return tasks;
   }
 );
 
@@ -83,6 +184,9 @@ export const taskSlice = createSlice({
   name: 'task',
   initialState: initialState,
   reducers: {
+    setTasks(state, action) {
+      state.tasks = action.payload;
+    },
     setTaskDialogOpen(state, action) {
       state.taskDialogOpen = action.payload;
     },
@@ -98,19 +202,31 @@ export const taskSlice = createSlice({
     setEditedTask(state, action) {
       state.editedTask = action.payload;
     },
-    setTasks(state, action) {
-      state.tasks = action.payload;
+    setSelectedTask(state, action) {
+      state.selectedTask = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(fetchAsyncGetTasks.fulfilled, (state, action) => {
+      return { ...state, tasks: action.payload };
+    });
+    builder.addCase(fetchAsyncRegisterTask.fulfilled, (state, action) => {
+      return { ...state, tasks: action.payload };
+    });
+    builder.addCase(fetchAsyncUpdateTask.fulfilled, (state, action) => {
+      return { ...state, tasks: action.payload };
+    });
   },
 });
 
 export const {
+  setTasks,
   setTaskDialogOpen,
   setTaskDialogMode,
   setFilterTaskOpen,
   setFilterTask,
   setEditedTask,
-  setTasks,
+  setSelectedTask,
 } = taskSlice.actions;
 
 export const selectTasks = (state: RootState) => state.task.tasks;
@@ -122,5 +238,6 @@ export const selectFilterTaskOpen = (state: RootState) =>
   state.task.filterTaskOpen;
 export const selectFilterTask = (state: RootState) => state.task.filterTask;
 export const selectEditedTask = (state: RootState) => state.task.editedTask;
+export const selectSelectedTask = (state: RootState) => state.task.selectedTask;
 
 export default taskSlice.reducer;

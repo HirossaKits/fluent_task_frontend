@@ -25,28 +25,13 @@ type Props = {
 
 const ProfileMenu: React.FC<Props> = (props) => {
   const theme = useTheme();
-  const dispatch = useDispatch();
-  const profileMenuOpen = useSelector(selectProfileMenuOpen);
-  const loginUserInfo = useSelector(selectLoginUserInfo);
-
-  const handleEditProfileClick = () => {
-    dispatch(setProfileDialogOpen(true));
-  };
-
-  const handleLogoutClick = () => {
-    dispatch(logOut());
-  };
-
-  const handleClose = () => {
-    dispatch(setProfileMenuOpen(false));
-  };
-
   const styles = {
     wrap: css`
       display: flex;
       flex-direction: column;
-      min-width: 210px;
-      padding: 10px 10px 0 10px;
+      min-width: 220px;
+      padding: ${theme.spacing(2)};
+      padding-bottom: 0;
     `,
     name: css`
       display: flex;
@@ -66,9 +51,24 @@ const ProfileMenu: React.FC<Props> = (props) => {
       padding-right: ${theme.spacing(2)};
     `,
     icon: css`
-      margin-top: 2px;
-      margin-right: ${theme.spacing(1)};
+      margin-right: ${theme.spacing(2)};
     `,
+  };
+
+  const dispatch = useDispatch();
+  const profileMenuOpen = useSelector(selectProfileMenuOpen);
+  const loginUserInfo = useSelector(selectLoginUserInfo);
+
+  const handleEditProfileClick = () => {
+    dispatch(setProfileDialogOpen(true));
+  };
+
+  const handleLogoutClick = () => {
+    dispatch(logOut());
+  };
+
+  const handleClose = () => {
+    dispatch(setProfileMenuOpen(false));
   };
 
   return (
@@ -114,10 +114,10 @@ const ProfileMenu: React.FC<Props> = (props) => {
             <ExitToAppIcon css={styles.icon} fontSize="small" />
             <Typography>ログアウト</Typography>
           </MenuItem>
-          <MenuItem css={styles.menuItem} onClick={handleLogoutClick}>
+          {/* <MenuItem css={styles.menuItem} onClick={handleLogoutClick}>
             <GroupRemoveIcon css={styles.icon} fontSize="small" />
             <Typography>組織を脱退</Typography>
-          </MenuItem>
+          </MenuItem> */}
         </MenuList>
       </Popover>
       <ProfileDialog />

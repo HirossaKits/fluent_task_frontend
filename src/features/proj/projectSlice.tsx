@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../app/store';
 import { PROJECT, PROJECT_SATATE } from '../types';
-import { Category } from '../../selectionOptions';
 import { isCompositeComponentWithType } from 'react-dom/test-utils';
 
 export const emptyProject: PROJECT = {
@@ -178,17 +177,16 @@ export const projectSlice = createSlice({
     });
     builder.addCase(fetchAsyncDeleteProject.fulfilled, (state, action) => {
       if (action.payload.length > 0) {
-        console.log('test', action.payload[0].project_id);
         return {
           ...state,
           projects: action.payload,
           selectedProjectId: action.payload[0].project_id,
         };
       } else {
-        console.log('test2', action.payload);
         return {
           ...state,
           projects: action.payload,
+          selectedProjectId: 'new_project',
         };
       }
     });

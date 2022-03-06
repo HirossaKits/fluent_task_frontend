@@ -7,28 +7,23 @@ import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import CommonTextField from '../../components/CommonTextField';
 import CommonDatePicker from '../../components/CommonDatePicker';
 import CommonDialog from '../../components/CommonDialog';
-import CommonTypography from '../../components/CommonTypography';
-import { selectEditedTask } from '../task/taskSlice';
 import { setEditedTask } from '../task/taskSlice';
 import { TARGET } from '../types';
 import CommonSelect from '../../components/CommonSelect';
 import { Status } from '../../selectionOptions';
 import {
   fetchAsyncRegisterTask,
+  fetchAsyncUpdateTask,
   selectTaskDialogOpen,
   selectTaskDialogMode,
+  selectEditedTask,
+  selectSelectedTask,
   setTaskDialogOpen,
   setTaskDialogMode,
 } from './taskSlice';
 import { selectSelectedProject, setTaskCategory } from '../proj/projectSlice';
-import { DIALOG_MODE } from '../types';
-
-// remove later
 import useCreateOption from '../../hooks/optionCreater';
-
-// type Props = {
-//   mode: DIALOG_MODE;
-// };
+import useShapeTask from '../../hooks/shapeTask';
 
 const TaskDialog: React.FC = () => {
   const theme = useTheme();
@@ -52,6 +47,8 @@ const TaskDialog: React.FC = () => {
       'task_category_name'
     );
   const editedTask = useSelector(selectEditedTask);
+  const selectedTask = useSelector(selectSelectedTask);
+  const shapeTask = useShapeTask();
 
   const projectMemberOptions = project.member.map((user) => ({
     value: user.user_id,
@@ -70,10 +67,13 @@ const TaskDialog: React.FC = () => {
     dispatch(fetchAsyncRegisterTask());
   };
 
-  const handleEditClick = () => {};
+  const handleEditClick = () => {
+    dispatch(fetchAsyncUpdateTask());
+  };
 
   const handleEditModeClick = () => {
     dispatch(setTaskDialogMode('edit'));
+    dispatch(setEditedTask(shapeTask(selectedTask)));
   };
 
   const handleDeleteClick = () => {};
@@ -92,6 +92,7 @@ const TaskDialog: React.FC = () => {
       }
       onClose={handleClose}
       onRegister={handleRegisterClick}
+      onEdit={handleEditClick}
       onEditMode={handleEditModeClick}
       onDelete={handleDeleteClick}
       maxWidth="sm"
@@ -105,7 +106,7 @@ const TaskDialog: React.FC = () => {
         <CommonTextField
           label="タスク名"
           name="task_name"
-          value={editedTask.task_name}
+          value={isReadOnly ? selectedTask.task_name : editedTask.task_name}
           onChange={handleInputChange}
           width="350px"
           readOnly={isReadOnly}
@@ -114,7 +115,11 @@ const TaskDialog: React.FC = () => {
           label="カテゴリー"
           name="category_id"
           options={taskCategoryOption}
-          value={editedTask.category_id ?? ''}
+          value={
+            isReadOnly
+              ? selectedTask.task_category_id
+              : editedTask.task_category_id
+          }
           onChange={handleInputChange}
           readOnly={isReadOnly}
         />
@@ -130,7 +135,7 @@ const TaskDialog: React.FC = () => {
           label="担当者"
           name="assigned_id"
           options={projectMemberOptions}
-          value={editedTask.assigned_id ?? ''}
+          value={isReadOnly ? selectedTask.assigned_id : editedTask.assigned_id}
           onChange={handleInputChange}
           readOnly={isReadOnly}
         />
@@ -138,7 +143,11 @@ const TaskDialog: React.FC = () => {
           label="予定工数(H)"
           name="estimate_manhour"
           type="number"
-          value={editedTask.estimate_manhour}
+          value={
+            isReadOnly
+              ? selectedTask.estimate_manhour
+              : editedTask.estimate_manhour
+          }
           onChange={handleInputChange}
           readOnly={isReadOnly}
         />
@@ -154,7 +163,11 @@ const TaskDialog: React.FC = () => {
           <CommonDatePicker
             label="開始予定日"
             name="scheduled_startdate"
-            value={editedTask.scheduled_startdate}
+            value={
+              isReadOnly
+                ? selectedTask.scheduled_startdate
+                : editedTask.scheduled_startdate
+            }
             onChange={handleInputChange}
             readOnly={isReadOnly}
           />
@@ -162,7 +175,11 @@ const TaskDialog: React.FC = () => {
           <CommonDatePicker
             label="終了予定日"
             name="scheduled_enddate"
-            value={editedTask.scheduled_enddate}
+            value={
+              isReadOnly
+                ? selectedTask.scheduled_enddate
+                : editedTask.scheduled_enddate
+            }
             onChange={handleInputChange}
             readOnly={isReadOnly}
           />
@@ -171,7 +188,11 @@ const TaskDialog: React.FC = () => {
           <CommonDatePicker
             label="開始日"
             name="actual_startdate"
-            value={editedTask.actual_startdate}
+            value={
+              isReadOnly
+                ? selectedTask.actual_startdate
+                : editedTask.actual_startdate
+            }
             onChange={handleInputChange}
             readOnly={isReadOnly}
           />
@@ -179,31 +200,48 @@ const TaskDialog: React.FC = () => {
           <CommonDatePicker
             label="終了日"
             name="actual_enddate"
-            value={editedTask.actual_enddate}
+            value={
+              isReadOnly
+                ? selectedTask.actual_enddate
+                : editedTask.actual_enddate
+            }
             onChange={handleInputChange}
             readOnly={isReadOnly}
           />
         </Stack>
-        {taskDialogMode === 'detail' ? (
+        <CommonTextField
+          label="説明"
+          name="description"
+          value={isReadOnly ? selectedTask.description : editedTask.description}
+          onChange={handleInputChange}
+          width="90%"
+          readOnly={isReadOnly}
+          rows={3}
+        />
+        {isReadOnly ? (
           <>
             <CommonSelect
               label="作成者"
               name="assigned"
               options={projectMemberOptions}
-              value={editedTask.assigned_id ?? ''}
+              value={
+                isReadOnly
+                  ? selectedTask.assigned_id
+                  : editedTask.assigned_id ?? ''
+              }
               onChange={handleInputChange}
               readOnly={isReadOnly}
             />
             <CommonTextField
               label="作成日時"
               name="task_name"
-              value={editedTask.created_at}
+              value={selectedTask.created_at}
               readOnly={isReadOnly}
             />
             <CommonTextField
-              label="最終更新日時日時"
+              label="最終更新日時"
               name="task_name"
-              value={editedTask.created_at}
+              value={selectedTask.created_at}
               readOnly={isReadOnly}
             />
           </>

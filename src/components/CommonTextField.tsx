@@ -1,23 +1,22 @@
 import React from 'react';
 import { css } from '@emotion/react';
-import { useTheme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { TARGET } from '../features/types';
 
 type Props = {
   id?: string;
   label?: string;
-  type?: string;
+  type?: 'number';
   name: string;
   value: null | string | number;
   index?: number;
   onChange?: Function;
   width?: string;
   readOnly?: boolean;
+  rows?: number;
 };
 
 const CommonTextField: React.FC<Props> = (props) => {
-  const theme = useTheme();
   const widthStyle = css`
     ${'width' in props
       ? `width: ${props.width};`
@@ -31,7 +30,12 @@ const CommonTextField: React.FC<Props> = (props) => {
   ) => {
     let target: TARGET = {
       name: props.name,
-      value: event.target.value,
+      value:
+        props.type === 'number' && event.target.value !== ''
+          ? Number(event.target.value)
+          : props.type === 'number'
+          ? null
+          : event.target.value,
     };
     if ('index' in props) {
       target.index = props.index;
@@ -42,8 +46,8 @@ const CommonTextField: React.FC<Props> = (props) => {
   return (
     <TextField
       css={widthStyle}
-      variant='standard'
-      margin='normal'
+      variant="standard"
+      margin="normal"
       id={'id' in props ? props.id : undefined}
       label={'label' in props ? props.label : undefined}
       type={'type' in props ? props.type : undefined}
@@ -56,6 +60,8 @@ const CommonTextField: React.FC<Props> = (props) => {
       InputProps={{
         readOnly: props.readOnly,
       }}
+      multiline={'rows' in props ? true : false}
+      rows={'rows' in props ? props.rows : 0}
     />
   );
 };
