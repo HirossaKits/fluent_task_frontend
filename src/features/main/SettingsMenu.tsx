@@ -12,9 +12,8 @@ import {
   setPersonalSettings,
   fetchAsyncUpdateSettings,
 } from '../auth/authSlice';
-import { fetchAsyncGetOrgInfo } from '../org/orgSliece';
+import { fetchAsyncGetOrgInfo, selectOrgInfo } from '../org/orgSliece';
 import { selectSettingsMenuOpen, setSettingsMenuOpen } from './mainSlice';
-import { setMessageOpen, setMessage } from '../main/mainSlice';
 import { fetchAsyncGetProject } from '../proj/projectSlice';
 import CommonSelect from '../../components/CommonSelect';
 import useCreateOption from '../../hooks/optionCreater';
@@ -36,6 +35,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const settingsMenuOpen = useSelector(selectSettingsMenuOpen);
   const personalSettings = useSelector(selectPersonalSettings);
+  const orgInfo = useSelector(selectOrgInfo);
   const dispatch = useDispatch();
   const createOption = useCreateOption();
   const message = useMessage();
@@ -59,30 +59,34 @@ const SettingsMenu: React.FC<Props> = (props) => {
   // }, [personalSettings.selected_org_id]);
 
   const handleInputChange = (target: TARGET) => {
+    console.log('handleInputChange');
     const settings = { ...personalSettings, [target.name]: target.value };
     dispatch(setPersonalSettings(settings));
     dispatch(fetchAsyncUpdateSettings(settings));
   };
 
-  const validateOrgId = () => {
-    const joinedOrgId = loginUserInfo.joined_org.map((org) => org.org_id);
-    // 設定に保持する organization に所属していない場合を考慮
-    if (joinedOrgId.includes(personalSettings.selected_org_id)) {
-      return personalSettings.selected_org_id;
-    } else {
-      const orgId = joinedOrgId[0];
-      const settings = {
-        ...personalSettings,
-        selected_org_id: orgId,
-      };
-      dispatch(setPersonalSettings(settings));
-      dispatch(fetchAsyncUpdateSettings(settings));
-      fetchInSequenceRelatedOrg();
-      return orgId;
-    }
-  };
+  // const validateOrgId = () => {
+  //   console.log('validateOrgId');
+  //   const joinedOrgId = loginUserInfo.joined_org.map((org) => org.org_id);
+  //   // 設定に保持する organization に所属していない場合を考慮
+  //   if (joinedOrgId.includes(personalSettings.selected_org_id)) {
+  //     return personalSettings.selected_org_id;
+  //   } else {
+  //     const orgId = joinedOrgId[0];
+  //     const settings = {
+  //       ...personalSettings,
+  //       selected_org_id: orgId,
+  //     };
+  //     dispatch(setPersonalSettings(settings));
+  //     dispatch(fetchAsyncUpdateSettings(settings));
+  //     fetchInSequenceRelatedOrg();
+  //     return orgId;
+  //   }
+  // };
 
   const handleTogglePrivateModeChange = (target: TARGET) => {
+    console.log('handleTogglePrivateModeChange');
+
     if (!loginUserInfo.joined_org.length) {
       // 設定に保持する organization に所属していない場合を考慮
       if (!personalSettings.private_mode) {
@@ -163,7 +167,9 @@ const SettingsMenu: React.FC<Props> = (props) => {
             label="グループを選択"
             options={orgOptions}
             name="selected_org_id"
-            value={validateOrgId()}
+            value={orgInfo.org_id}
+            // value={validateOrgId()}
+
             onChange={handleSelectChange}
           />
         )}
