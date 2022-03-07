@@ -131,7 +131,6 @@ export const fetchAsyncUpdateTask = createAsyncThunk(
   'task/update',
   async (_, thunkAPI) => {
     const editedTask = (thunkAPI.getState() as RootState).task.editedTask;
-    await console.log(editedTask);
     const res = await axios.put(
       `${process.env.REACT_APP_API_URL}/api/task/${editedTask.task_id}`,
       editedTask,

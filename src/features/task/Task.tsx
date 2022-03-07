@@ -121,8 +121,8 @@ const Task = () => {
     task_name: (task: TASK) => (
       <Typography>
         <Link
-          href="#"
-          underline="always"
+          href='#'
+          underline='always'
           onClick={(event: any) => {
             event.stopPropagation();
             dispatch(setTaskDialogMode('detail'));
@@ -254,7 +254,7 @@ const Task = () => {
         elementFactory={elementFactory}
         columnInfo={columnInfo}
         showToolBar={true}
-        idColumn="task_id"
+        idColumn='task_id'
         handleEditClick={hendleEditClick}
         handleRegisterClick={handleRegisterClick}
         handleDeleteClick={handleDeleteClick}
