@@ -64,8 +64,8 @@ interface IUser {
   first_name: string;
   last_name: string;
 }
-const concatUser = <T extends IUser>(user: T) => {
-  return `${user.last_name} ${user.first_name}`;
+const concatUserName = <T extends IUser>(user: T) => {
+  return `${user?.last_name ?? ''} ${user?.first_name ?? ''}`;
 };
 
 // タスクの取得
@@ -84,13 +84,14 @@ export const fetchAsyncGetTasks = createAsyncThunk(
       }
     );
 
-    const tasks = res.data.map((task: any) => {
-      const userName = concatUser(task.assigned);
-      delete task.assigned;
-      return { ...task, assigned_name: userName };
+    const tasks = await res.data.map((task: any) => {
+      const shapedTask = {
+        ...task,
+        assigned_name: concatUserName(task.assigned),
+      };
+      delete shapedTask.assigned;
+      return shapedTask;
     });
-
-    console.log(tasks);
 
     return tasks;
   }
@@ -116,10 +117,13 @@ export const fetchAsyncRegisterTask = createAsyncThunk(
       }
     );
 
-    const tasks = res.data.map((task: any) => {
-      const userName = concatUser(task.assigned);
-      delete task.assigned;
-      return { ...task, assigned_name: userName };
+    const tasks = await res.data.map((task: any) => {
+      const shapedTask = {
+        ...task,
+        assigned_name: concatUserName(task.assigned),
+      };
+      delete shapedTask.assigned;
+      return shapedTask;
     });
 
     return tasks;
@@ -142,11 +146,15 @@ export const fetchAsyncUpdateTask = createAsyncThunk(
       }
     );
 
-    const tasks = res.data.map((task: any) => {
-      const userName = concatUser(task.assigned);
-      delete task.assigned;
-      return { ...task, assigned_name: userName };
+    const tasks = await res.data.map((task: any) => {
+      const shapedTask = {
+        ...task,
+        assigned_name: concatUserName(task.assigned),
+      };
+      delete shapedTask.assigned;
+      return shapedTask;
     });
+
     return tasks;
   }
 );
@@ -170,11 +178,15 @@ export const fetchAsyncDeleteTask = createAsyncThunk(
       }
     );
 
-    const tasks = res.data.map((task: any) => {
-      const userName = concatUser(task.assigned);
-      delete task.assigned;
-      return { ...task, assigned_name: userName };
+    const tasks = await res.data.map((task: any) => {
+      const shapedTask = {
+        ...task,
+        assigned_name: concatUserName(task.assigned),
+      };
+      delete shapedTask.assigned;
+      return shapedTask;
     });
+
     return tasks;
   }
 );
@@ -213,6 +225,10 @@ export const taskSlice = createSlice({
       return { ...state, tasks: action.payload };
     });
     builder.addCase(fetchAsyncUpdateTask.fulfilled, (state, action) => {
+      return { ...state, tasks: action.payload };
+    });
+    builder.addCase(fetchAsyncDeleteTask.fulfilled, (state, action) => {
+      console.log('why?', action.payload);
       return { ...state, tasks: action.payload };
     });
   },

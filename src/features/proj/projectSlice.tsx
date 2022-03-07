@@ -142,8 +142,11 @@ export const projectSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAsyncGetProject.fulfilled, (state, action) => {
-      // プロジェクト未選択の場合は、先頭のプロジェクトを選択状態とする。
-      if (
+      if (!action.payload.length) {
+        // プロジェクトが存在しない場合は新規作成を選択状態とする。
+        return { ...state, selectedProjectId: 'new_project' };
+      } else if (
+        // プロジェクト未選択の場合は、先頭のプロジェクトを選択状態とする。
         action.payload.length > 0 &&
         (!state.selectedProjectId ||
           !action.payload

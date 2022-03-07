@@ -143,7 +143,6 @@ export const fetchAsyncGetPersonalSettings = createAsyncThunk(
         },
       }
     );
-    console.log(res.data);
     return res.data;
   }
 );

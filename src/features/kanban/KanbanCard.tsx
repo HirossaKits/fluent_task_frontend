@@ -17,9 +17,12 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
   setEditedTask,
-  setTaskDialogOpen,
   setTaskDialogMode,
+  setTaskDialogOpen,
+  setSelectedTask,
+  fetchAsyncDeleteTask,
 } from '../task/taskSlice';
+import useShapeTask from '../../hooks/shapeTask';
 
 import { USER_INFO, TASK } from '../types';
 
@@ -71,22 +74,25 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
   // const [drag, setDrag] = useState(false);
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const shapeTask = useShapeTask();
 
   const handleDotClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
 
   const handleDetailClick = () => {
-    dispatch(setEditedTask(props.task));
+    dispatch(setSelectedTask(props.task));
     dispatch(setTaskDialogMode('detail'));
     dispatch(setTaskDialogOpen(true));
   };
   const handleEditClick = () => {
-    dispatch(setEditedTask(props.task));
+    dispatch(setEditedTask(shapeTask(props.task)));
     dispatch(setTaskDialogMode('edit'));
     dispatch(setTaskDialogOpen(true));
   };
-  const handleDeleteClick = () => {};
+  const handleDeleteClick = () => {
+    dispatch(fetchAsyncDeleteTask([props.task]));
+  };
 
   const handleDragStart = (e: React.DragEvent<HTMLElement>) => {
     // setDrag(true);
