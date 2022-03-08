@@ -17,10 +17,12 @@ import { fillDigitsByZero } from '../../util/dateHandler';
 import { useCalendarFactory } from '../../hooks/calendar';
 import useProjectTask from '../../hooks/projectTask';
 import { parseString } from '../../util/dateHandler';
+import { selectLoginUserInfo } from '../auth/authSlice';
 import { selectSelectedProjectId } from '../proj/projectSlice';
 import {
-  initialTask,
+  initialEditedTask,
   setEditedTask,
+  setSelectedTask,
   setTaskDialogMode,
   setTaskDialogOpen,
 } from '../task/taskSlice';
@@ -118,7 +120,8 @@ const Calendar = () => {
   };
 
   const dispatch = useDispatch();
-  const projectId = useSelector(selectSelectedProjectId);
+  const loginUserInfo = useSelector(selectLoginUserInfo);
+  const selectedProjectId = useSelector(selectSelectedProjectId);
   const yearMonth = useSelector(selectYearMonth);
   const tasks = useProjectTask();
 
@@ -201,8 +204,9 @@ const Calendar = () => {
   ) => {
     dispatch(
       setEditedTask({
-        ...initialTask,
-        project_id: projectId,
+        ...initialEditedTask,
+        project_id: selectedProjectId,
+        author_id: loginUserInfo.user_id,
         scheduled_startdate: dateStr,
       })
     );
@@ -217,7 +221,7 @@ const Calendar = () => {
     const selectedTask = tasks.find((task) => task.task_id === task_id);
 
     if (selectedTask) {
-      dispatch(setEditedTask(selectedTask));
+      dispatch(setSelectedTask(selectedTask));
       dispatch(setTaskDialogMode('detail'));
       dispatch(setTaskDialogOpen(true));
     }
@@ -227,17 +231,17 @@ const Calendar = () => {
     <>
       <Grid
         container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
+        direction='column'
+        justifyContent='center'
+        alignItems='center'
         css={styles.test}
       >
         <Grid
           css={styles.header}
           container
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
+          direction='row'
+          justifyContent='space-between'
+          alignItems='center'
         >
           <Grid item>
             <Autocomplete
@@ -247,7 +251,7 @@ const Calendar = () => {
               value={yearMonth.year_month}
               onChange={(event, newItem) => handleSelectChange(event, newItem)}
               renderInput={(params) => (
-                <TextField {...params} variant="standard" />
+                <TextField {...params} variant='standard' />
               )}
             />
           </Grid>
@@ -270,16 +274,16 @@ const Calendar = () => {
                   : styles.gridTileGray
               }
             >
-              <Stack height="100%" justifyContent="space-between">
+              <Stack height='100%' justifyContent='space-between'>
                 <Grid
                   item
                   xs={10}
                   css={styles.headerdate}
                   id={ctx.dateStr}
                   container
-                  direction="row"
-                  justifyContent="flex-start"
-                  alignItems="flex-start"
+                  direction='row'
+                  justifyContent='flex-start'
+                  alignItems='flex-start'
                   onClick={(e) => handleDateClick(e, ctx.dateStr)}
                 >
                   <Grid item>
@@ -290,7 +294,7 @@ const Calendar = () => {
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography className="plus">+</Typography>
+                    <Typography className='plus'>+</Typography>
                   </Grid>
                 </Grid>
                 {ctx.layer && Math.max(...ctx.layer) >= 4 && (

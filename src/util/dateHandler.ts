@@ -37,6 +37,21 @@ export const parseString = (value: Date): string => {
   }
 };
 
+// ISO日付を yyyy-MM-dd HH:mm 形式に変換する
+export const formatISOString = (value: null | string): string => {
+  if (value) {
+    const dateVal = new Date(value);
+    const year = dateVal.getFullYear();
+    const month = fillDigitsByZero(dateVal.getMonth() + 1, 2);
+    const date = fillDigitsByZero(dateVal.getDate(), 2);
+    const hour = fillDigitsByZero(dateVal.getHours(), 2);
+    const minute = fillDigitsByZero(dateVal.getMinutes(), 2);
+    return `${year}-${month}-${date} ${hour}:${minute}`;
+  } else {
+    return '';
+  }
+};
+
 // 月の初日の曜日を返す
 export const getFirstDayOfMonth = (year: number, month: number) => {
   return new Date(year, month - 1, 1).getDay;
