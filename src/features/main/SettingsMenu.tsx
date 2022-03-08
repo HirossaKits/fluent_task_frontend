@@ -41,7 +41,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
   const message = useMessage();
 
   const orgOptions = createOption(
-    loginUserInfo.joined_org,
+    loginUserInfo.joined_org?.filter((org) => org.is_private === false),
     'org_id',
     'org_name'
   );
@@ -87,7 +87,10 @@ const SettingsMenu: React.FC<Props> = (props) => {
   const handleTogglePrivateModeChange = (target: TARGET) => {
     console.log('handleTogglePrivateModeChange');
 
-    if (!loginUserInfo.joined_org.length) {
+    if (
+      !loginUserInfo.joined_org?.filter((org) => org.is_private === false)
+        .length
+    ) {
       // 設定に保持する organization に所属していない場合を考慮
       if (!personalSettings.private_mode) {
         const settings = { ...personalSettings, private_mode: true };

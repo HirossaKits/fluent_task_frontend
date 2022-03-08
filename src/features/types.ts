@@ -31,7 +31,7 @@ export interface LOGIN_USER_INFO extends USER_INFO {
     {
       org_id: string;
       org_name: string;
-      is_private: true;
+      is_private: boolean;
     }
   ];
 }

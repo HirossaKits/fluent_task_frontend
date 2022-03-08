@@ -12,12 +12,14 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import OrgDialog from './OrgDialog';
 import InviteDialog from './InviteDialog';
 import CommonTooltip from '../../components/CommonTooltip';
+import { selectLoginUserInfo } from '../auth/authSlice';
 import {
   selectOrgInfo,
   setEditedOrgName,
   setOrgDialogOpen,
   setInviteDialogOpen,
 } from './orgSliece';
+import useMessage from '../../hooks/message';
 
 const Org = () => {
   const theme = useTheme();
@@ -72,8 +74,14 @@ const Org = () => {
 
   const dispatch = useDispatch();
   const orgInfo = useSelector(selectOrgInfo);
+  const loginUserInfo = useSelector(selectLoginUserInfo);
+  const message = useMessage();
 
   const handleEditClick = () => {
+    if (orgInfo.org_owner_id === loginUserInfo.user_id) {
+      message('グループ所有者のみ変更可能です。');
+      return;
+    }
     dispatch(setEditedOrgName(orgInfo.org_name));
     dispatch(setOrgDialogOpen(true));
   };
