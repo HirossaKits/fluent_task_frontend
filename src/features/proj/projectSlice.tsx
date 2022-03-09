@@ -104,6 +104,65 @@ export const fetchAsyncDeleteProject = createAsyncThunk(
   }
 );
 
+// タスクカテゴリーの取得
+export const fetchAsyncGetTaskCategory = createAsyncThunk(
+  'taskcategory/get',
+  async (_, thunkAPI) => {
+    const selectedProjectId = (thunkAPI.getState() as RootState).project
+      .selectedProjectId;
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/taskcategory/project/${selectedProjectId}`,
+      {
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+
+    const tasks = await res.data.map((task: any) => {
+      const shapedTask = {
+        ...task,
+        assigned_name: concatUserName(task.assigned),
+      };
+      delete shapedTask.assigned;
+      return shapedTask;
+    });
+
+    return tasks;
+  }
+);
+
+// タスクカテゴリーの登録
+export const fetchAsyncRegisterTaskCategory = createAsyncThunk(
+  'taskcategory/register',
+  async (_, thunkAPI) => {
+    const project_id = (thunkAPI.getState() as RootState).task.editedTask
+      .project_id;
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/taskcategory`,
+      {},
+      {
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+
+    const tasks = await res.data.map((task: any) => {
+      const shapedTask = {
+        ...task,
+        assigned_name: concatUserName(task.assigned),
+      };
+      delete shapedTask.assigned;
+      return shapedTask;
+    });
+
+    return tasks;
+  }
+);
+
 export const projectSlice = createSlice({
   name: 'project',
   initialState,

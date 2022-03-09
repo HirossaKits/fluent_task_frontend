@@ -59,7 +59,10 @@ import {
   setProjectDialogMode,
   fetchAsyncGetProject,
 } from '../proj/projectSlice';
-import { fetchAsyncGetTasks } from '../task/taskSlice';
+import {
+  fetchAsyncGetTasks,
+  fetchAsyncGetTaskCategory,
+} from '../task/taskSlice';
 import { fetchAsyncGetOrgInfo } from '../org/orgSliece';
 import CommonTooltip from '../../components/CommonTooltip';
 import ProjectDialog from '../proj/ProjectDialog';
@@ -190,6 +193,7 @@ const Main = () => {
         await dispatch(fetchAsyncGetPersonalSettings());
         await dispatch(fetchAsyncGetOrgInfo());
         await dispatch(fetchAsyncGetProject());
+        await dispatch(fetchAsyncGetTaskCategory());
         await dispatch(fetchAsyncGetTasks());
       } else {
         localStorage.removeItem('localJWT');
