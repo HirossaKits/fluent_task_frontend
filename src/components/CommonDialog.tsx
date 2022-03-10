@@ -27,12 +27,9 @@ type Props = {
 const CommonDialog = (props: Props) => {
   const theme = useTheme();
   const styles = {
-    // dialog: css`
-    //   background-color: ${theme.palette.action.hover
-    //     .split(',')
-    //     .map((_, idx) => (idx !== 3 ? _ : ' 0.06)'))
-    //     .join(',')};
-    // `,
+    dialog: css`
+      width: 200px;
+    `,
     title: css`
       margin-left: ${theme.spacing(1)};
     `,
@@ -46,10 +43,12 @@ const CommonDialog = (props: Props) => {
 
   return (
     <Dialog
+      // css={styles.dialog}
       open={props.open}
       onClose={props.onClose}
       aria-labelledby="form-dialog-title"
-      maxWidth={'maxWidth' in props && props.maxWidth}
+      // maxWidth={'maxWidth' in props && props.maxWidth}
+      maxWidth={false}
       fullWidth
     >
       {/* <Paper css={props.mode === 'detail' && styles.dialog}> */}

@@ -119,17 +119,7 @@ export const fetchAsyncGetTaskCategory = createAsyncThunk(
         },
       }
     );
-
-    const tasks = await res.data.map((task: any) => {
-      const shapedTask = {
-        ...task,
-        assigned_name: concatUserName(task.assigned),
-      };
-      delete shapedTask.assigned;
-      return shapedTask;
-    });
-
-    return tasks;
+    return res.data;
   }
 );
 
@@ -137,8 +127,6 @@ export const fetchAsyncGetTaskCategory = createAsyncThunk(
 export const fetchAsyncRegisterTaskCategory = createAsyncThunk(
   'taskcategory/register',
   async (_, thunkAPI) => {
-    const project_id = (thunkAPI.getState() as RootState).task.editedTask
-      .project_id;
     const res = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/taskcategory`,
       {},
@@ -149,17 +137,7 @@ export const fetchAsyncRegisterTaskCategory = createAsyncThunk(
         },
       }
     );
-
-    const tasks = await res.data.map((task: any) => {
-      const shapedTask = {
-        ...task,
-        assigned_name: concatUserName(task.assigned),
-      };
-      delete shapedTask.assigned;
-      return shapedTask;
-    });
-
-    return tasks;
+    return res.data;
   }
 );
 

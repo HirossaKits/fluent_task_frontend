@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
-import { useTheme } from '@mui/material';
+import { Box, IconButton, useTheme } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import CommonTextField from '../../components/CommonTextField';
@@ -26,6 +26,9 @@ import useCreateOption from '../../hooks/optionCreater';
 import useShapeTask from '../../hooks/shapeTask';
 import useMessage from '../../hooks/message';
 import { formatISOString } from '../../util/dateHandler';
+import SettingsIcon from '@mui/icons-material/Settings';
+import CommonTooltip from '../../components/CommonTooltip';
+import TaskCategoryDialog from './TaskCategoryDialog';
 
 const TaskDialog: React.FC = () => {
   const theme = useTheme();
@@ -33,6 +36,10 @@ const TaskDialog: React.FC = () => {
     arrow: css`
       margin: 20px 28px 0 36px;
       color: ${theme.palette.action.active};
+    `,
+    settings: css`
+      margin-top: 28px;
+      margin-left: 8px;
     `,
   };
 
@@ -52,6 +59,7 @@ const TaskDialog: React.FC = () => {
   const selectedTask = useSelector(selectSelectedTask);
   const shapeTask = useShapeTask();
   const message = useMessage();
+  const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
 
   const projectMemberOptions = project.member.map((user) => ({
     value: user.user_id,
@@ -96,178 +104,209 @@ const TaskDialog: React.FC = () => {
 
   const handleDeleteClick = () => {};
 
+  const handleSettingsClick = () => {
+    setCategoryDialogOpen(true);
+  };
+
   const isReadOnly = taskDialogMode === 'detail';
 
   return (
-    <CommonDialog
-      open={taskDialogOpen}
-      title={
-        taskDialogMode === 'register'
-          ? 'タスクを登録'
-          : taskDialogMode === 'edit'
-          ? 'タスクを編集'
-          : 'タスク詳細'
-      }
-      onClose={handleClose}
-      onRegister={handleRegisterClick}
-      onEdit={handleEditClick}
-      onEditMode={handleEditModeClick}
-      onDelete={handleDeleteClick}
-      maxWidth="sm"
-      mode={taskDialogMode}
-    >
-      <Stack
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="flex-start"
+    <>
+      <CommonDialog
+        open={taskDialogOpen}
+        title={
+          taskDialogMode === 'register'
+            ? 'タスクを登録'
+            : taskDialogMode === 'edit'
+            ? 'タスクを編集'
+            : 'タスク詳細'
+        }
+        onClose={handleClose}
+        onRegister={handleRegisterClick}
+        onEdit={handleEditClick}
+        onEditMode={handleEditModeClick}
+        onDelete={handleDeleteClick}
+        maxWidth="sm"
+        mode={taskDialogMode}
       >
-        <CommonTextField
-          label="タスク名"
-          name="task_name"
-          value={isReadOnly ? selectedTask.task_name : editedTask.task_name}
-          onChange={handleInputChange}
-          width="350px"
-          readOnly={isReadOnly}
-        />
-        <CommonSelect
-          label="カテゴリー"
-          name="category_id"
-          options={taskCategoryOption}
-          value={
-            isReadOnly
-              ? selectedTask.task_category_id
-              : editedTask.task_category_id
-          }
-          onChange={handleInputChange}
-          readOnly={isReadOnly}
-        />
-        <CommonSelect
-          label="ステータス"
-          name="status"
-          options={Status}
-          value={editedTask.status}
-          onChange={handleInputChange}
-          readOnly={isReadOnly}
-        />
-        <CommonSelect
-          label="担当者"
-          name="assigned_id"
-          options={projectMemberOptions}
-          value={isReadOnly ? selectedTask.assigned_id : editedTask.assigned_id}
-          onChange={handleInputChange}
-          readOnly={isReadOnly}
-        />
-        <CommonTextField
-          label="予定工数(H)"
-          name="estimate_manhour"
-          type="number"
-          value={
-            isReadOnly
-              ? selectedTask.estimate_manhour
-              : editedTask.estimate_manhour
-          }
-          onChange={handleInputChange}
-          readOnly={isReadOnly}
-        />
-        <CommonTextField
-          label="実工数(H)"
-          name="actual_manhour"
-          type="number"
-          value={editedTask.actual_manhour}
-          onChange={handleInputChange}
-          readOnly={isReadOnly}
-        />
-        <Stack direction="row" justifyContent="flex-start" alignItems="center">
-          <CommonDatePicker
-            label="開始予定日"
-            name="scheduled_startdate"
-            value={
-              isReadOnly
-                ? selectedTask.scheduled_startdate
-                : editedTask.scheduled_startdate
-            }
+        <Stack
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="flex-start"
+        >
+          <CommonTextField
+            label="タスク名"
+            name="task_name"
+            value={isReadOnly ? selectedTask.task_name : editedTask.task_name}
             onChange={handleInputChange}
+            width="350px"
             readOnly={isReadOnly}
           />
-          <SwapHorizIcon css={styles.arrow} />
-          <CommonDatePicker
-            label="終了予定日"
-            name="scheduled_enddate"
-            value={
-              isReadOnly
-                ? selectedTask.scheduled_enddate
-                : editedTask.scheduled_enddate
-            }
-            onChange={handleInputChange}
-            readOnly={isReadOnly}
-          />
-        </Stack>
-        <Stack direction="row" justifyContent="flex-start" alignItems="center">
-          <CommonDatePicker
-            label="開始日"
-            name="actual_startdate"
-            value={
-              isReadOnly
-                ? selectedTask.actual_startdate
-                : editedTask.actual_startdate
-            }
-            onChange={handleInputChange}
-            readOnly={isReadOnly}
-          />
-          <SwapHorizIcon css={styles.arrow} />
-          <CommonDatePicker
-            label="終了日"
-            name="actual_enddate"
-            value={
-              isReadOnly
-                ? selectedTask.actual_enddate
-                : editedTask.actual_enddate
-            }
-            onChange={handleInputChange}
-            readOnly={isReadOnly}
-          />
-        </Stack>
-        <CommonTextField
-          label="説明"
-          name="description"
-          value={isReadOnly ? selectedTask.description : editedTask.description}
-          onChange={handleInputChange}
-          width="90%"
-          readOnly={isReadOnly}
-          rows={2}
-        />
-        {isReadOnly ? (
-          <>
+          <Stack direction="row">
             <CommonSelect
-              label="作成者"
-              name="assigned"
-              options={projectMemberOptions}
+              label="カテゴリー"
+              name="category_id"
+              options={taskCategoryOption}
               value={
                 isReadOnly
-                  ? selectedTask.assigned_id
-                  : editedTask.assigned_id ?? ''
+                  ? selectedTask.task_category_id
+                  : editedTask.task_category_id
               }
               onChange={handleInputChange}
               readOnly={isReadOnly}
             />
-            <CommonTextField
-              label="作成日時"
-              name="task_name"
-              value={formatISOString(selectedTask.created_at)}
+            <Box css={styles.settings}>
+              <CommonTooltip title="タスクの設定">
+                <IconButton onClick={handleSettingsClick}>
+                  <SettingsIcon />
+                </IconButton>
+              </CommonTooltip>
+            </Box>
+          </Stack>
+          <CommonSelect
+            label="ステータス"
+            name="status"
+            options={Status}
+            value={editedTask.status}
+            onChange={handleInputChange}
+            readOnly={isReadOnly}
+          />
+          <CommonSelect
+            label="担当者"
+            name="assigned_id"
+            options={projectMemberOptions}
+            value={
+              isReadOnly ? selectedTask.assigned_id : editedTask.assigned_id
+            }
+            onChange={handleInputChange}
+            readOnly={isReadOnly}
+          />
+          <CommonTextField
+            label="予定工数(H)"
+            name="estimate_manhour"
+            type="number"
+            value={
+              isReadOnly
+                ? selectedTask.estimate_manhour
+                : editedTask.estimate_manhour
+            }
+            onChange={handleInputChange}
+            readOnly={isReadOnly}
+          />
+          <CommonTextField
+            label="実工数(H)"
+            name="actual_manhour"
+            type="number"
+            value={editedTask.actual_manhour}
+            onChange={handleInputChange}
+            readOnly={isReadOnly}
+          />
+          <Stack
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
+          >
+            <CommonDatePicker
+              label="開始予定日"
+              name="scheduled_startdate"
+              value={
+                isReadOnly
+                  ? selectedTask.scheduled_startdate
+                  : editedTask.scheduled_startdate
+              }
+              onChange={handleInputChange}
               readOnly={isReadOnly}
             />
-            <CommonTextField
-              label="最終更新日時"
-              name="task_name"
-              value={formatISOString(selectedTask.update_at)}
+            <SwapHorizIcon css={styles.arrow} />
+            <CommonDatePicker
+              label="終了予定日"
+              name="scheduled_enddate"
+              value={
+                isReadOnly
+                  ? selectedTask.scheduled_enddate
+                  : editedTask.scheduled_enddate
+              }
+              onChange={handleInputChange}
               readOnly={isReadOnly}
             />
-          </>
-        ) : (
-          <></>
-        )}
-      </Stack>
-    </CommonDialog>
+          </Stack>
+          <Stack
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
+          >
+            <CommonDatePicker
+              label="開始日"
+              name="actual_startdate"
+              value={
+                isReadOnly
+                  ? selectedTask.actual_startdate
+                  : editedTask.actual_startdate
+              }
+              onChange={handleInputChange}
+              readOnly={isReadOnly}
+            />
+            <SwapHorizIcon css={styles.arrow} />
+            <CommonDatePicker
+              label="終了日"
+              name="actual_enddate"
+              value={
+                isReadOnly
+                  ? selectedTask.actual_enddate
+                  : editedTask.actual_enddate
+              }
+              onChange={handleInputChange}
+              readOnly={isReadOnly}
+            />
+          </Stack>
+          <CommonTextField
+            label="説明"
+            name="description"
+            value={
+              isReadOnly ? selectedTask.description : editedTask.description
+            }
+            onChange={handleInputChange}
+            width="90%"
+            readOnly={isReadOnly}
+            rows={2}
+          />
+          {isReadOnly ? (
+            <>
+              <CommonSelect
+                label="作成者"
+                name="assigned"
+                options={projectMemberOptions}
+                value={
+                  isReadOnly
+                    ? selectedTask.assigned_id
+                    : editedTask.assigned_id ?? ''
+                }
+                onChange={handleInputChange}
+                readOnly={isReadOnly}
+              />
+              <CommonTextField
+                label="作成日時"
+                name="task_name"
+                value={formatISOString(selectedTask.created_at)}
+                readOnly={isReadOnly}
+              />
+              <CommonTextField
+                label="最終更新日時"
+                name="task_name"
+                value={formatISOString(selectedTask.update_at)}
+                readOnly={isReadOnly}
+              />
+            </>
+          ) : (
+            <></>
+          )}
+        </Stack>
+      </CommonDialog>
+      <TaskCategoryDialog
+        open={categoryDialogOpen}
+        setOpen={setCategoryDialogOpen}
+      />
+    </>
   );
 };
 

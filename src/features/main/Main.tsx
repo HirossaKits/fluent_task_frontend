@@ -58,11 +58,9 @@ import {
   setProjectDialogOpen,
   setProjectDialogMode,
   fetchAsyncGetProject,
-} from '../proj/projectSlice';
-import {
-  fetchAsyncGetTasks,
   fetchAsyncGetTaskCategory,
-} from '../task/taskSlice';
+} from '../proj/projectSlice';
+import { fetchAsyncGetTasks } from '../task/taskSlice';
 import { fetchAsyncGetOrgInfo } from '../org/orgSliece';
 import CommonTooltip from '../../components/CommonTooltip';
 import ProjectDialog from '../proj/ProjectDialog';
