@@ -124,12 +124,12 @@ export const fetchAsyncGetTaskCategory = createAsyncThunk(
 );
 
 // タスクカテゴリーの登録
-export const fetchAsyncRegisterTaskCategory = createAsyncThunk(
+export const fetchAsyncRegisterTaskCategory = createAsyncThunk<string>(
   'taskcategory/register',
-  async (_, thunkAPI) => {
+  async (data) => {
     const res = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/taskcategory`,
-      {},
+      data,
       {
         headers: {
           'Content-type': 'application/json',
