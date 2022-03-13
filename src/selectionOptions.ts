@@ -65,3 +65,10 @@ export const FilterOperatorOfDate = [
     label: 'より以後の',
   },
 ];
+
+export const FilterOperatorOfSelect = [
+  {
+    value: '=',
+    label: 'に等しい',
+  },
+];

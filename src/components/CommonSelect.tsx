@@ -64,6 +64,7 @@ const CommonSelect: React.FC<Props> = (props: Props) => {
           ) : (
             <TextField
               {...params}
+              autoComplete="off"
               variant="standard"
               margin="normal"
               label={'label' in props && props.label}

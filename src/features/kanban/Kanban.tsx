@@ -2,8 +2,9 @@ import React from 'react';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material/styles';
 import KanbanColumn from './KanbanColumn';
-import useProjectTask from '../../hooks/projectTask';
 import TaskDialog from '../task/TaskDialog';
+import { useSelector } from 'react-redux';
+import { selectTasks } from '../task/taskSlice';
 
 const Kanban = () => {
   const theme = useTheme();
@@ -70,33 +71,33 @@ const Kanban = () => {
     `,
   };
 
-  const tasks = useProjectTask();
+  const tasks = useSelector(selectTasks);
 
   return (
     <>
       <div css={styles.container}>
         <KanbanColumn
           themeColor={theme.palette.text.disabled}
-          status='Suspended'
-          headerText='保留'
+          status="Suspended"
+          headerText="保留"
           tasks={tasks.filter((task) => task.status === 'Suspended')}
         />
         <KanbanColumn
           themeColor={theme.palette.warning.light}
-          status='Not started'
-          headerText='開始前'
+          status="Not started"
+          headerText="開始前"
           tasks={tasks.filter((task) => task.status === 'Not started')}
         />
         <KanbanColumn
           themeColor={theme.palette.info.light}
-          status='On going'
-          headerText='進行中'
+          status="On going"
+          headerText="進行中"
           tasks={tasks.filter((task) => task.status === 'On going')}
         />
         <KanbanColumn
           themeColor={theme.palette.success.light}
-          status='Done'
-          headerText='完了'
+          status="Done"
+          headerText="完了"
           tasks={tasks.filter((task) => task.status === 'Done')}
         />
         <TaskDialog />

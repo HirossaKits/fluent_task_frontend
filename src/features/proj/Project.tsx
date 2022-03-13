@@ -28,11 +28,11 @@ import {
   setProjectDialogMode,
 } from './projectSlice';
 import ProjectDialog from './ProjectDialog';
-import useProjectTask from '../../hooks/projectTask';
 import useCreateLineChartData from '../../hooks/lineChartData';
 import useCreateDoughnutData from '../../hooks/doughnutData';
 import CommonAvatar from '../../components/CommonAvatar';
 import { EDITED_PROJECT } from '../types';
+import { selectTasks } from '../task/taskSlice';
 
 const Project = () => {
   const theme = useTheme();
@@ -97,8 +97,8 @@ const Project = () => {
   const dispatch = useDispatch();
   const createLineChartData = useCreateLineChartData();
   const createDoughnutData = useCreateDoughnutData();
-  const tasks = useProjectTask();
   const project = useSelector(selectSelectedProject);
+  const tasks = useSelector(selectTasks);
   const lineChartData =
     project &&
     createLineChartData(tasks, project.startdate, project.enddate, 'daily');
@@ -184,34 +184,34 @@ const Project = () => {
       {!Object.is(project, emptyProject) && (
         <>
           <Stack
-            direction='row'
-            justifyContent='flex-start'
-            alignItems='flex-start'
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="flex-start"
             spacing={3}
           >
             <Stack
               css={styles.stack}
-              direction='column'
-              justifyContent='flex-start'
-              alignItems='flex-start'
+              direction="column"
+              justifyContent="flex-start"
+              alignItems="flex-start"
               // spacing={3}
             >
               <Box css={styles.titleWrap}>
-                <Typography variant='h5' component='div'>
+                <Typography variant="h5" component="div">
                   {project.project_name}
                 </Typography>
-                <CommonTooltip title='編集'>
+                <CommonTooltip title="編集">
                   <IconButton
-                    aria-label='edit project'
+                    aria-label="edit project"
                     css={styles.editIcon}
                     onClick={handleEditClick}
                   >
                     <EditIcon />
                   </IconButton>
                 </CommonTooltip>
-                <CommonTooltip title='削除'>
+                <CommonTooltip title="削除">
                   <IconButton
-                    aria-label='delete project'
+                    aria-label="delete project"
                     onClick={handleDeleteClick}
                   >
                     <DeleteIcon />
@@ -220,16 +220,16 @@ const Project = () => {
               </Box>
               <Typography
                 css={styles.description}
-                variant='subtitle1'
-                component='div'
+                variant="subtitle1"
+                component="div"
               >
                 {project.description}
               </Typography>
               <Card css={styles.userCard}>
                 <Typography
                   css={styles.listTitle}
-                  variant='subtitle1'
-                  component='div'
+                  variant="subtitle1"
+                  component="div"
                 >
                   プロジェクト管理者
                 </Typography>
@@ -255,8 +255,8 @@ const Project = () => {
               <Card css={styles.userCard}>
                 <Typography
                   css={styles.listTitle}
-                  variant='subtitle1'
-                  component='div'
+                  variant="subtitle1"
+                  component="div"
                 >
                   プロジェクトメンバー
                 </Typography>
@@ -282,9 +282,9 @@ const Project = () => {
             </Stack>
             <Stack
               css={styles.graphArea}
-              direction='column'
-              justifyContent='center'
-              alignItems='flex-start'
+              direction="column"
+              justifyContent="center"
+              alignItems="flex-start"
             >
               <div css={styles.lineChartWrapper}>
                 <Line

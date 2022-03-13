@@ -14,60 +14,18 @@ import { selectLoginUserInfo } from '../auth/authSlice';
 import { selectSelectedProjectId } from '../proj/projectSlice';
 import {
   initialEditedTask,
+  selectTaskCategory,
   setTaskDialogOpen,
   setTaskDialogMode,
   setEditedTask,
   setSelectedTask,
   fetchAsyncDeleteTask,
+  selectTasks,
 } from './taskSlice';
 import { TASK, Status, COLUMN_INFO } from '../types';
-import useProjectTask from '../../hooks/projectTask';
 import useShapeTask from '../../hooks/shapeTask';
 import useMessage from '../../hooks/message';
-
-const columnInfo: COLUMN_INFO[] = [
-  {
-    name: 'task_name',
-    label: 'タスク名',
-    type: 'string',
-    width: '14%',
-    isJsxElement: true,
-  },
-  {
-    name: 'task_category_name',
-    label: 'カテゴリー',
-    type: 'string',
-    width: '10%',
-  },
-  {
-    name: 'status',
-    label: 'ステータス',
-    type: 'string',
-    width: '12%',
-    isJsxElement: true,
-  },
-  {
-    name: 'scheduled_startdate',
-    label: '開始予定日',
-    type: 'Date',
-    width: '12%',
-    isJsxElement: true,
-  },
-  {
-    name: 'scheduled_enddate',
-    label: '終了予定日',
-    type: 'Date',
-    width: '12%',
-    isJsxElement: true,
-  },
-  {
-    name: 'estimate_manhour',
-    label: '予定工数(H)',
-    type: 'number',
-    width: '10%',
-  },
-  { name: 'assigned_name', label: '担当', type: 'string', width: '14%' },
-];
+import useCreateOption from '../../hooks/optionCreater';
 
 const Task = () => {
   const theme = useTheme();
@@ -78,11 +36,65 @@ const Task = () => {
   };
 
   const dispatch = useDispatch();
-  const tasks = useProjectTask();
-  const loginUserInfo = useSelector(selectLoginUserInfo);
-  const selectedProjectId = useSelector(selectSelectedProjectId);
   const shapeTask = useShapeTask();
   const message = useMessage();
+  const createOption = useCreateOption();
+  const loginUserInfo = useSelector(selectLoginUserInfo);
+  const selectedProjectId = useSelector(selectSelectedProjectId);
+  const tasks = useSelector(selectTasks);
+  const taskCategory = useSelector(selectTaskCategory);
+  const taskCategoryOption = createOption(
+    taskCategory,
+    'task_category_id',
+    'task_category_name'
+  );
+
+  console.log('taskCategoryOption', taskCategoryOption);
+
+  const columnInfo: COLUMN_INFO[] = [
+    {
+      name: 'task_name',
+      label: 'タスク名',
+      type: 'string',
+      width: '14%',
+      isJsxElement: true,
+    },
+    {
+      name: 'task_category_id',
+      label: 'カテゴリー',
+      type: 'select',
+      width: '10%',
+      selection: taskCategoryOption,
+    },
+    {
+      name: 'status',
+      label: 'ステータス',
+      type: 'string',
+      width: '12%',
+      isJsxElement: true,
+    },
+    {
+      name: 'scheduled_startdate',
+      label: '開始予定日',
+      type: 'Date',
+      width: '12%',
+      isJsxElement: true,
+    },
+    {
+      name: 'scheduled_enddate',
+      label: '終了予定日',
+      type: 'Date',
+      width: '12%',
+      isJsxElement: true,
+    },
+    {
+      name: 'estimate_manhour',
+      label: '予定工数(H)',
+      type: 'number',
+      width: '10%',
+    },
+    { name: 'assigned_name', label: '担当', type: 'string', width: '14%' },
+  ];
 
   // 登録
   const handleRegisterClick = () => {
@@ -121,8 +133,8 @@ const Task = () => {
     task_name: (task: TASK) => (
       <Typography>
         <Link
-          href='#'
-          underline='always'
+          href="#"
+          underline="always"
           onClick={(event: any) => {
             event.stopPropagation();
             dispatch(setTaskDialogMode('detail'));
@@ -254,7 +266,7 @@ const Task = () => {
         elementFactory={elementFactory}
         columnInfo={columnInfo}
         showToolBar={true}
-        idColumn='task_id'
+        idColumn="task_id"
         handleEditClick={hendleEditClick}
         handleRegisterClick={handleRegisterClick}
         handleDeleteClick={handleDeleteClick}

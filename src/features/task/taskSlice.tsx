@@ -57,6 +57,7 @@ const initialState: TASK_STATE = {
   ],
   selectedTask: initialTask,
   editedTask: initialEditedTask,
+  taskCategory: [],
 };
 
 // ユーザー名を作成
@@ -191,6 +192,78 @@ export const fetchAsyncDeleteTask = createAsyncThunk(
   }
 );
 
+// タスクカテゴリーの取得
+export const fetchAsyncGetTaskCategory = createAsyncThunk(
+  'taskcategory/get',
+  async (_, thunkAPI) => {
+    const selectedProjectId = (thunkAPI.getState() as RootState).project
+      .selectedProjectId;
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/taskcategory/project/${selectedProjectId}`,
+      {
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+// タスクカテゴリーの登録
+export const fetchAsyncRegisterTaskCategory = createAsyncThunk(
+  'taskcategory/register',
+  async (data: { task_category_name: string; project_id: string }) => {
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/taskcategory`,
+      data,
+      {
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+// タスクカテゴリーの更新
+export const fetchAsyncUpdateTaskCategory = createAsyncThunk(
+  'taskcategory/update',
+  async (data: { task_category_id: string; task_category_name: string }) => {
+    const res = await axios.put(
+      `${process.env.REACT_APP_API_URL}/api/taskcategory/${data.task_category_id}`,
+      { task_category_name: data.task_category_name },
+      {
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+// タスクカテゴリーの削除
+export const fetchAsyncDeleteTaskCategory = createAsyncThunk(
+  'taskcategory/delete',
+  async (task_category_id: string) => {
+    const res = await axios.delete(
+      `${process.env.REACT_APP_API_URL}/api/taskcategory/${task_category_id}`,
+      {
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
 export const taskSlice = createSlice({
   name: 'task',
   initialState: initialState,
@@ -228,8 +301,22 @@ export const taskSlice = createSlice({
       return { ...state, tasks: action.payload };
     });
     builder.addCase(fetchAsyncDeleteTask.fulfilled, (state, action) => {
-      console.log('why?', action.payload);
       return { ...state, tasks: action.payload };
+    });
+    builder.addCase(fetchAsyncGetTaskCategory.fulfilled, (state, action) => {
+      return { ...state, taskCategory: action.payload };
+    });
+    builder.addCase(
+      fetchAsyncRegisterTaskCategory.fulfilled,
+      (state, action) => {
+        return { ...state, taskCategory: action.payload };
+      }
+    );
+    builder.addCase(fetchAsyncUpdateTaskCategory.fulfilled, (state, action) => {
+      return { ...state, taskCategory: action.payload };
+    });
+    builder.addCase(fetchAsyncDeleteTaskCategory.fulfilled, (state, action) => {
+      return { ...state, taskCategory: action.payload };
     });
   },
 });
@@ -254,5 +341,6 @@ export const selectFilterTaskOpen = (state: RootState) =>
 export const selectFilterTask = (state: RootState) => state.task.filterTask;
 export const selectEditedTask = (state: RootState) => state.task.editedTask;
 export const selectSelectedTask = (state: RootState) => state.task.selectedTask;
+export const selectTaskCategory = (state: RootState) => state.task.taskCategory;
 
 export default taskSlice.reducer;

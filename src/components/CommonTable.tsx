@@ -29,10 +29,10 @@ import CommonDatePicker from '../components/CommonDatePicker';
 import CommonTooltip from './CommonTooltip';
 import { TARGET } from '../features/types';
 import {
-  // ListColumns,
   FilterOperatorOfString,
   FilterOperatorOfNumber,
   FilterOperatorOfDate,
+  FilterOperatorOfSelect,
 } from '../selectionOptions';
 import useCreateOption from '../hooks/optionCreater';
 
@@ -40,10 +40,11 @@ interface Props<T, K extends keyof T> {
   data: T[];
   elementFactory: { [key in K]: (param: T) => JSX.Element };
   columnInfo: {
-    name: keyof T;
+    name: string;
     label: string;
-    type: 'string' | 'number' | 'Date';
+    type: 'string' | 'number' | 'Date' | 'select';
     width: string;
+    selection?: { value: string; label: string }[];
     isJsxElement?: boolean;
   }[];
   idColumn: keyof T;
@@ -81,18 +82,20 @@ const CommonTable: ListComponent = (props) => {
       padding-right: 5%;
     `,
     paper: css`
-      width: 600px;
+      width: 580px;
+      padding-right: ${theme.spacing(1)};
+      padding-left: ${theme.spacing(1)};
       padding-bottom: ${theme.spacing(1)};
     `,
     form: css`
       width: 100%;
     `,
-    gridIcon: css`
-      padding-top: 20px;
+    iconGrid: css`
+      width: 36px;
+      margin-top: 24px;
     `,
-    gridItem: css`
-      margin-left: ${theme.spacing(1)};
-      marginr-right: ${theme.spacing(1)};
+    textGrid: css`
+      margin: 0 ${theme.spacing(1)};
     `,
   };
 
@@ -108,9 +111,9 @@ const CommonTable: ListComponent = (props) => {
 
   interface FILTER {
     columnName: ROW_ITEM;
-    type: 'string' | 'number' | 'Date';
+    type: 'string' | 'number' | 'Date' | 'select';
     operator: string;
-    value: string;
+    value: string | number;
   }
 
   const table = props.data.map((row, index) => ({ ...row, id: index }));
@@ -212,6 +215,8 @@ const CommonTable: ListComponent = (props) => {
         { ...filters[target.index], [target.name]: target.value },
         ...filters.slice(target.index + 1),
       ]);
+      console.log(filters);
+      console.log(table);
     }
   };
 
@@ -247,7 +252,6 @@ const CommonTable: ListComponent = (props) => {
 
   const sortRows = (tbl: ROW[]): ROW[] => {
     if (sortState.columnName === '') return tbl;
-    console.log(sortState);
     const sortedRows = tbl.slice().sort((a, b) => {
       const valA = a[sortState.columnName as ROW_ITEM];
       const valB = b[sortState.columnName as ROW_ITEM];
@@ -282,7 +286,7 @@ const CommonTable: ListComponent = (props) => {
         if (!validity) return;
         if (!filter.value) return;
 
-        const columnValue = String(row[filter.columnName]);
+        const columnValue = row[filter.columnName];
         const filterValue = filter.value;
         const operator = filter.operator;
         const type = props.columnInfo.filter(
@@ -298,13 +302,17 @@ const CommonTable: ListComponent = (props) => {
           if (operator === '=') {
             validity = columnValue === filterValue;
           } else if (operator === 'start_from') {
-            validity = columnValue.toString().startsWith(filterValue);
+            validity = String(columnValue).startsWith(String(filterValue));
           } else if (operator === 'include') {
             validity =
-              columnValue.toString().indexOf(filterValue) === -1 ? false : true;
+              String(columnValue).indexOf(String(filterValue)) === -1
+                ? false
+                : true;
           } else if (operator === 'exclude') {
             validity =
-              columnValue.toString().indexOf(filterValue) === -1 ? true : false;
+              String(columnValue).indexOf(String(filterValue)) === -1
+                ? true
+                : false;
           }
         }
 
@@ -316,6 +324,10 @@ const CommonTable: ListComponent = (props) => {
           } else if (operator === '>=') {
             validity = columnValue >= filterValue;
           }
+        }
+
+        if (type === 'select') {
+          validity = columnValue === filterValue;
         }
       });
 
@@ -394,7 +406,9 @@ const CommonTable: ListComponent = (props) => {
                           ? sortState.order
                           : 'asc'
                       }
-                      onClick={() => handleClickSortColumn(col.name)}
+                      onClick={() =>
+                        handleClickSortColumn(col.name as keyof DATA)
+                      }
                     >
                       {col.label}
                     </TableSortLabel>
@@ -426,15 +440,25 @@ const CommonTable: ListComponent = (props) => {
                       width={col.width}
                       align={col.type === 'number' ? 'right' : 'left'}
                     >
-                      {col.isJsxElement === true ? (
+                      {col.isJsxElement ? (
                         <>
                           {props.elementFactory &&
                             props.elementFactory[col.name as FACTORY](
                               row as DATA
                             )}
                         </>
+                      ) : col.type === 'select' ? (
+                        <Typography>
+                          {
+                            col.selection?.find(
+                              (item) =>
+                                String(item.value) ===
+                                String(row[col.name as keyof DATA])
+                            )?.label
+                          }
+                        </Typography>
                       ) : (
-                        <Typography>{row[col.name]}</Typography>
+                        <Typography>{row[col.name as keyof DATA]}</Typography>
                       )}
                     </TableCell>
                   ))}
@@ -456,112 +480,147 @@ const CommonTable: ListComponent = (props) => {
           horizontal: 'right',
         }}
         onClose={handleFilterClose}
-        keepMounted
       >
         <Paper css={styles.paper}>
-          <Grid
-            container
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <form css={styles.form} noValidate autoComplete="off">
-              {filters.map((filter, index) => (
-                <Grid
-                  item
-                  container
-                  direction="row"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <Grid css={styles.gridIcon} item xs={1}>
-                    {index === filters.length - 1 &&
-                      (filters[index].value === '' ? (
-                        <IconButton disabled>
-                          <AddIcon />
-                        </IconButton>
-                      ) : (
-                        <IconButton onClick={() => handleAddClick(index)}>
-                          <AddIcon />
-                        </IconButton>
-                      ))}
-                  </Grid>
-                  <Grid css={styles.gridItem} item xs={3}>
+          <form css={styles.form} noValidate autoComplete="off">
+            {filters.map((filter, index) => (
+              <Grid
+                item
+                container
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+              >
+                <Grid css={styles.iconGrid} item>
+                  {index === filters.length - 1 &&
+                    (filters[index].value === '' ? (
+                      <IconButton disabled>
+                        <AddIcon />
+                      </IconButton>
+                    ) : (
+                      <IconButton onClick={() => handleAddClick(index)}>
+                        <AddIcon />
+                      </IconButton>
+                    ))}
+                </Grid>
+                <Grid css={styles.textGrid} item xs={3}>
+                  <CommonSelect
+                    label="対象"
+                    name="columnName"
+                    options={filterTargetOption}
+                    value={filter.columnName as string}
+                    index={index}
+                    onChange={handleColumnSelectChange}
+                    width={'100%'}
+                  />
+                </Grid>
+                <Grid css={styles.textGrid} item>
+                  {filter.type === 'string' ? (
                     <CommonSelect
-                      label="対象"
-                      name="columnName"
-                      options={filterTargetOption}
-                      value={filter.columnName as string}
+                      label="演算子"
+                      name="operatoroperator"
+                      options={FilterOperatorOfString}
+                      value={filter.operator}
                       index={index}
-                      onChange={handleColumnSelectChange}
+                      onChange={handleInputChange}
                       width="140px"
                     />
-                  </Grid>
-                  <Grid css={styles.gridItem} item xs={3}>
-                    {filter.type === 'string' ? (
-                      <CommonSelect
-                        label="演算子"
-                        name="operator"
-                        options={FilterOperatorOfString}
-                        value={filter.operator}
-                        index={index}
-                        onChange={handleInputChange}
-                        width="140px"
-                      />
-                    ) : filter.type === 'number' ? (
-                      <CommonSelect
-                        label="演算子"
-                        name="operator"
-                        options={FilterOperatorOfNumber}
-                        value={filter.operator}
-                        index={index}
-                        onChange={handleInputChange}
-                        width="140px"
-                      />
-                    ) : (
-                      <CommonSelect
-                        label="演算子"
-                        name="operator"
-                        options={FilterOperatorOfDate}
-                        value={filter.operator}
-                        index={index}
-                        onChange={handleInputChange}
-                        width="140px"
-                      />
-                    )}
-                  </Grid>
-                  <Grid css={styles.gridItem} item xs={3}>
-                    {filter.type === 'string' || filter.type === 'number' ? (
-                      <CommonTextField
-                        label="値"
-                        name="value"
-                        value={filter.value}
-                        index={index}
-                        onChange={handleInputChange}
-                        width="140px"
-                      />
-                    ) : (
-                      <CommonDatePicker
-                        label="値"
-                        name="value"
-                        value={filter.value}
-                        index={index}
-                        onChange={handleInputChange}
-                        width="140px"
-                      />
-                    )}
-                  </Grid>
-                  <Grid css={styles.gridIcon} item xs={1}>
-                    {(filters.length !== 1 || index !== 0) && (
-                      <IconButton onClick={() => handleClearClick(index)}>
-                        <ClearIcon color="action" />
-                      </IconButton>
-                    )}
-                  </Grid>
+                  ) : filter.type === 'number' ? (
+                    <CommonSelect
+                      label="演算子"
+                      name="operatoroperator"
+                      options={FilterOperatorOfNumber}
+                      value={filter.operator}
+                      index={index}
+                      onChange={handleInputChange}
+                      width="140px"
+                    />
+                  ) : filter.type === 'Date' ? (
+                    <CommonSelect
+                      label="演算子"
+                      name="operatoroperator"
+                      options={FilterOperatorOfDate}
+                      value={filter.operator}
+                      index={index}
+                      onChange={handleInputChange}
+                      width="140px"
+                    />
+                  ) : (
+                    // <CommonSelect
+                    //   label="演算子"
+                    //   name="operatoroperator"
+                    //   options={FilterOperatorOfSelect}
+                    //   value={filter.operator}
+                    //   index={index}
+                    //   onChange={handleInputChange}
+                    //   width="140px"
+                    // />
+                    <CommonSelect
+                      label="演算子"
+                      name="operatoroperator"
+                      options={FilterOperatorOfString}
+                      value={filter.operator}
+                      index={index}
+                      onChange={handleInputChange}
+                      width="140px"
+                    />
+                  )}
                 </Grid>
-              ))}
-            </form>
-          </Grid>
+                <Grid css={styles.textGrid} item>
+                  {filter.type === 'string' ? (
+                    <CommonTextField
+                      label="値"
+                      name="value"
+                      value={filter.value}
+                      index={index}
+                      onChange={handleInputChange}
+                      width="140px"
+                    />
+                  ) : filter.type === 'number' ? (
+                    <CommonTextField
+                      label="値"
+                      type="number"
+                      name="value"
+                      value={filter.value}
+                      index={index}
+                      onChange={handleInputChange}
+                      width="140px"
+                    />
+                  ) : filter.type === 'Date' ? (
+                    <CommonDatePicker
+                      label="値"
+                      name="value"
+                      value={String(filter.value)}
+                      index={index}
+                      onChange={handleInputChange}
+                      width="140px"
+                    />
+                  ) : (
+                    <CommonSelect
+                      label="値"
+                      name="value"
+                      index={index}
+                      options={
+                        props.columnInfo.find(
+                          (col) => col.name === filter.columnName
+                        )?.selection
+                      }
+                      value={filter.value}
+                      onChange={handleInputChange}
+                      width="140px"
+                    />
+                  )}
+                </Grid>
+                <Grid css={styles.iconGrid} item>
+                  {(filters.length !== 1 || index !== 0) && (
+                    <IconButton onClick={() => handleClearClick(index)}>
+                      <ClearIcon color="action" />
+                    </IconButton>
+                  )}
+                </Grid>
+              </Grid>
+            ))}
+          </form>
         </Paper>
       </Popover>
     </>

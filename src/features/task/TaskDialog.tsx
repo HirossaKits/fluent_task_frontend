@@ -18,6 +18,7 @@ import {
   selectTaskDialogMode,
   selectEditedTask,
   selectSelectedTask,
+  selectTaskCategory,
   setTaskDialogOpen,
   setTaskDialogMode,
 } from './taskSlice';
@@ -39,27 +40,27 @@ const TaskDialog: React.FC = () => {
     `,
     settings: css`
       margin-top: 28px;
-      margin-left: 8px;
+      margin-left: 12px;
     `,
   };
 
+  const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
   const dispatch = useDispatch();
   const createOption = useCreateOption();
-  const project = useSelector(selectSelectedProject);
-  const taskDialogOpen = useSelector(selectTaskDialogOpen);
-  const taskDialogMode = useSelector(selectTaskDialogMode);
-  const taskCategoryOption =
-    project &&
-    createOption(
-      project.task_category,
-      'task_category_id',
-      'task_category_name'
-    );
-  const editedTask = useSelector(selectEditedTask);
-  const selectedTask = useSelector(selectSelectedTask);
   const shapeTask = useShapeTask();
   const message = useMessage();
-  const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
+  const project = useSelector(selectSelectedProject);
+  const editedTask = useSelector(selectEditedTask);
+  const selectedTask = useSelector(selectSelectedTask);
+  const taskDialogOpen = useSelector(selectTaskDialogOpen);
+  const taskDialogMode = useSelector(selectTaskDialogMode);
+  const taskCategory = useSelector(selectTaskCategory);
+  console.log('debug', taskCategory);
+  const taskCategoryOption = createOption(
+    taskCategory,
+    'task_category_id',
+    'task_category_name'
+  );
 
   const projectMemberOptions = project.member.map((user) => ({
     value: user.user_id,
@@ -145,7 +146,7 @@ const TaskDialog: React.FC = () => {
           <Stack direction="row">
             <CommonSelect
               label="カテゴリー"
-              name="category_id"
+              name="task_category_id"
               options={taskCategoryOption}
               value={
                 isReadOnly
@@ -156,7 +157,7 @@ const TaskDialog: React.FC = () => {
               readOnly={isReadOnly}
             />
             <Box css={styles.settings}>
-              <CommonTooltip title="タスクの設定">
+              <CommonTooltip title="カテゴリー設定">
                 <IconButton onClick={handleSettingsClick}>
                   <SettingsIcon />
                 </IconButton>

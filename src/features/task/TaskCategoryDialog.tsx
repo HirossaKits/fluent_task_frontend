@@ -5,14 +5,17 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
-import CheckIcon from '@mui/icons-material/Check';
-import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CommonDialog from '../../components/CommonDialog';
 import CommonTextField from '../../components/CommonTextField';
-import { selectSelectedProject } from '../proj/projectSlice';
 import CommonTooltip from '../../components/CommonTooltip';
-import { fetchAsyncRegisterTaskCategory } from '../proj/projectSlice';
+import { selectTaskCategory } from '../task/taskSlice';
+import { fetchAsyncRegisterTaskCategory } from '../task/taskSlice';
+import { TARGET } from '../types';
+import { CategoryScale } from 'chart.js';
+import TaskCategoryItem from './TaskCategoryItem';
+import { selectSelectedProjectId } from '../proj/projectSlice';
 
 type Props = {
   open: boolean;
@@ -22,30 +25,31 @@ type Props = {
 const TaskCategoryDialog = (props: Props) => {
   const styles = {
     icon: css`
-      margin-left: 4px;
       margin-top: 12px;
+      width: 40px;
+    `,
+    span: css`
+      margin-left: 12px;
     `,
   };
 
   const dispatch = useDispatch();
-  const selectedProject = useSelector(selectSelectedProject);
-  const [editedCategory, setEditedCategory] = useState(
-    selectedProject.task_category
-  );
-
+  const selectedProjectId = useSelector(selectSelectedProjectId);
+  const taskCategory = useSelector(selectTaskCategory);
   const [addedCategory, setAddedCategory] = useState('');
+
+  const handleAddChange = (target: TARGET) => {
+    setAddedCategory(target.value?.toString() ?? '');
+  };
 
   const handleAddClick = (event: React.MouseEvent<HTMLElement>) => {
     const data = {
       task_category_name: addedCategory,
-      project_id: selectedProject.project_id,
+      project_id: selectedProjectId,
     };
-    dispatch(fetchAsyncRegisterTaskCategory(''));
+    dispatch(fetchAsyncRegisterTaskCategory(data));
+    setAddedCategory('');
   };
-
-  const handleEditClick = () => {};
-
-  const handleDeleteClick = () => {};
 
   const handleClose = () => {
     props.setOpen(false);
@@ -55,53 +59,41 @@ const TaskCategoryDialog = (props: Props) => {
     <CommonDialog
       open={props.open}
       onClose={handleClose}
-      title='カテゴリを編集'
-      mode='display'
-      maxWidth='xs'
+      title="カテゴリー設定"
+      mode="display"
+      maxWidth="xs"
     >
       <>
-        <Stack direction='row' justifyContent='flex-start'>
-          <CommonTextField name='' value={addedCategory} width='240px' />
+        <Stack direction="row" justifyContent="flex-start">
+          <CommonTextField
+            name=""
+            value={addedCategory}
+            onChange={handleAddChange}
+            width="260px"
+          />
+          <Box css={styles.span}></Box>
           <Box css={styles.icon}>
-            <CommonTooltip title='追加'>
-              <IconButton aria-label='delete task' onClick={handleAddClick}>
+            <CommonTooltip title="追加">
+              <IconButton
+                aria-label="delete task"
+                onClick={handleAddClick}
+                disabled={
+                  !addedCategory ||
+                  taskCategory
+                    ?.map((cat) => cat.task_category_name)
+                    .includes(addedCategory)
+                }
+              >
                 <AddIcon />
               </IconButton>
             </CommonTooltip>
           </Box>
         </Stack>
-        {editedCategory?.map((cat) => (
-          <Stack direction='row' justifyContent='flex-start'>
-            <CommonTextField
-              name={cat.task_category_id}
-              value={cat.task_category_name}
-              width='240px'
-            />
-            <Box css={styles.icon}>
-              <CommonTooltip title='保存'>
-                <IconButton aria-label='edit task' onClick={handleEditClick}>
-                  <CheckIcon color='success' />
-                </IconButton>
-              </CommonTooltip>
-            </Box>
-            <Box css={styles.icon}>
-              <CommonTooltip title='編集'>
-                <IconButton aria-label='edit task' onClick={handleEditClick}>
-                  <EditIcon />
-                </IconButton>
-              </CommonTooltip>
-            </Box>
-            <Box css={styles.icon}>
-              <CommonTooltip title='削除'>
-                <IconButton
-                  aria-label='delete task'
-                  onClick={handleDeleteClick}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </CommonTooltip>
-            </Box>
-          </Stack>
+        {taskCategory?.map((cat) => (
+          <TaskCategoryItem
+            task_category_id={cat.task_category_id}
+            task_category_name={cat.task_category_name}
+          />
         ))}
       </>
     </CommonDialog>

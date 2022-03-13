@@ -7,10 +7,11 @@ export interface TARGET {
 }
 
 export interface COLUMN_INFO {
-  name: COLUMN_NAME;
+  name: string;
   label: string;
-  type: 'string' | 'number' | 'Date';
+  type: 'string' | 'number' | 'Date' | 'select';
   width: string;
+  selection?: { value: string; label: string }[];
   isJsxElement?: boolean;
 }
 
@@ -130,7 +131,6 @@ export interface PROJECT {
   org_id: string;
   resp: USER_INFO[];
   member: USER_INFO[];
-  task_category: TASK_CATEGORY[];
   description: string;
   startdate: string;
   enddate: string;
@@ -161,6 +161,7 @@ export interface TASK_STATE {
   filterTask: FILTER_TASK[];
   selectedTask: TASK;
   editedTask: EDITED_TASK;
+  taskCategory: TASK_CATEGORY[];
 }
 
 export interface TASK {
@@ -202,10 +203,14 @@ export interface EDITED_TASK {
   actual_enddate: null | string;
 }
 
-interface TASK_CATEGORY {
+export interface TASK_CATEGORY {
   task_category_id: string;
   task_category_name: string;
 }
+
+// export interface EDITED_TASK_CATEGORY extends TASK_CATEGORY {
+//   edited: boolean;
+// }
 
 export const Status = {
   Suspended: '保留　',
@@ -216,18 +221,10 @@ export const Status = {
 
 export type TASK_STATUS = keyof typeof Status;
 
-export type COLUMN_NAME =
-  | 'task_name'
-  | 'task_category_name'
-  | 'status'
-  | 'scheduled_startdate'
-  | 'scheduled_enddate'
-  | 'estimate_manhour'
-  | 'assigned_name';
-
 export interface FILTER_TASK {
-  columnName: COLUMN_NAME;
-  type: 'string' | 'number' | 'Date';
+  // columnName: COLUMN_NAME;
+  columnName: string;
+  type: 'string' | 'number' | 'Date' | 'select';
   operator: string;
   value: string;
 }

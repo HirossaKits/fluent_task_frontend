@@ -98,7 +98,7 @@ const ProfileDialog = () => {
       reader.readAsDataURL(file);
       reader.onload = () => {
         setUploadFile(file);
-        setPreviewImg(reader.result as string);
+        setPreviewImg(String(reader.result));
       };
     }
   };
