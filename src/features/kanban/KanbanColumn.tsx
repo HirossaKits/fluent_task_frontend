@@ -11,6 +11,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 import KanbanCard from './KanbanCard';
 import { TASK, TASK_STATUS } from '../types';
 import { selectSelectedProject } from '../proj/projectSlice';
+import useMessage from '../../hooks/message'
 // import useProjectMember from '../../hooks/projectMember';
 
 interface RefValue {
@@ -74,6 +75,7 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
   };
 
   const dispatch = useDispatch();
+  const message = useMessage();
   const tasks = useSelector(selectTasks);
   const project = useSelector(selectSelectedProject);
   const [dragOver, setDragOver] = useState(false);
@@ -101,6 +103,11 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
+    // test
+    if(){}
+    message('タスクの担当者、作成者、プロジェクトの管理者のみ変更可能です。')
+    setDragOver(false);
+    return;
     const data = e.dataTransfer.getData('text/plain');
     const [status, task_id] = data.split('/');
     if (props.status !== status) {
