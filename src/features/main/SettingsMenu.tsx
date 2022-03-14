@@ -15,6 +15,10 @@ import {
 import { fetchAsyncGetOrgInfo, selectOrgInfo } from '../org/orgSliece';
 import { selectSettingsMenuOpen, setSettingsMenuOpen } from './mainSlice';
 import { fetchAsyncGetProject } from '../proj/projectSlice';
+import {
+  fetchAsyncGetTaskCategory,
+  fetchAsyncGetTasks,
+} from '../task/taskSlice';
 import CommonSelect from '../../components/CommonSelect';
 import useCreateOption from '../../hooks/optionCreater';
 import useMessage from '../../hooks/message';
@@ -48,15 +52,10 @@ const SettingsMenu: React.FC<Props> = (props) => {
 
   const fetchInSequenceRelatedOrg = async () => {
     await dispatch(fetchAsyncGetOrgInfo());
-    // project 取得処理
     await dispatch(fetchAsyncGetProject());
-    // task 取得処理
+    await dispatch(fetchAsyncGetTaskCategory());
+    await dispatch(fetchAsyncGetTasks());
   };
-
-  // useEffect(() => {
-  //   console.log('useEffect');
-  //   dispatch(fetchAsyncGetOrgInfo());
-  // }, [personalSettings.selected_org_id]);
 
   const handleInputChange = (target: TARGET) => {
     console.log('handleInputChange');
@@ -65,24 +64,25 @@ const SettingsMenu: React.FC<Props> = (props) => {
     dispatch(fetchAsyncUpdateSettings(settings));
   };
 
-  // const validateOrgId = () => {
-  //   console.log('validateOrgId');
-  //   const joinedOrgId = loginUserInfo.joined_org.map((org) => org.org_id);
-  //   // 設定に保持する organization に所属していない場合を考慮
-  //   if (joinedOrgId.includes(personalSettings.selected_org_id)) {
-  //     return personalSettings.selected_org_id;
-  //   } else {
-  //     const orgId = joinedOrgId[0];
-  //     const settings = {
-  //       ...personalSettings,
-  //       selected_org_id: orgId,
-  //     };
-  //     dispatch(setPersonalSettings(settings));
-  //     dispatch(fetchAsyncUpdateSettings(settings));
-  //     fetchInSequenceRelatedOrg();
-  //     return orgId;
-  //   }
-  // };
+  const validateOrgId = (org_id: string) => {
+    const joinedOrgId = loginUserInfo.joined_org.map((org) => org.org_id);
+    // settings の selected_org_id に所属している場合
+    if (joinedOrgId.includes(org_id)) {
+      return org_id;
+    }
+    // settings の selected_org_id に所属していない場合
+    else {
+      const alter_org_id = joinedOrgId[0];
+      const settings = {
+        ...personalSettings,
+        selected_org_id: alter_org_id,
+      };
+      dispatch(setPersonalSettings(settings));
+      dispatch(fetchAsyncUpdateSettings(settings));
+      fetchInSequenceRelatedOrg();
+      return alter_org_id;
+    }
+  };
 
   const handleTogglePrivateModeChange = (target: TARGET) => {
     console.log('handleTogglePrivateModeChange');
@@ -116,11 +116,6 @@ const SettingsMenu: React.FC<Props> = (props) => {
             (org) => org.is_private === target.value
           )?.org_id ?? '',
       };
-      console.log(
-        'debug',
-        loginUserInfo.joined_org?.find((org) => org.is_private === target.value)
-          ?.org_id ?? ''
-      );
       dispatch(setPersonalSettings(settings));
       dispatch(fetchAsyncUpdateSettings(settings));
       fetchInSequenceRelatedOrg();
@@ -162,32 +157,30 @@ const SettingsMenu: React.FC<Props> = (props) => {
         <CommonSwitch
           label={'ダークモード'}
           labelWidth={10}
-          name='dark_mode'
+          name="dark_mode"
           value={personalSettings.dark_mode}
           onChange={handleInputChange}
         />
         <CommonSwitch
           label={'ツールチップ'}
           labelWidth={10}
-          name='tooltip'
+          name="tooltip"
           value={personalSettings.tooltip}
           onChange={handleInputChange}
         />
         <CommonSwitch
           label={'プライベートモード'}
           labelWidth={10}
-          name='private_mode'
+          name="private_mode"
           value={personalSettings.private_mode}
           onChange={handleTogglePrivateModeChange}
         />
         {!personalSettings.private_mode && (
           <CommonSelect
-            label='グループを選択'
+            label="グループを選択"
             options={orgOptions}
-            name='selected_org_id'
-            value={orgInfo.org_id}
-            // value={validateOrgId()}
-
+            name="selected_org_id"
+            value={validateOrgId(personalSettings.selected_org_id)}
             onChange={handleSelectChange}
           />
         )}

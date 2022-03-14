@@ -55,7 +55,6 @@ const TaskDialog: React.FC = () => {
   const taskDialogOpen = useSelector(selectTaskDialogOpen);
   const taskDialogMode = useSelector(selectTaskDialogMode);
   const taskCategory = useSelector(selectTaskCategory);
-  console.log('debug', taskCategory);
   const taskCategoryOption = createOption(
     taskCategory,
     'task_category_id',

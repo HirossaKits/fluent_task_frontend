@@ -40,36 +40,33 @@ export default function useCreateLineChartData() {
       const dateHasAmount = Object.keys(sumByDate);
       const dateSpan = (endDate.getTime() - startDate.getTime()) / 86400000;
 
-      const lineData = dateSpan
-        ? [...Array(dateSpan)].reduce(
-            (acc: CHART_DATA[], cur, idx) => {
-              let date = new Date(projectStartDate);
-              date.setDate(date.getDate() + idx);
-              const dateStr = parseString(date);
+      const lineData = [...Array(dateSpan)].reduce(
+        (acc: CHART_DATA[], cur, idx) => {
+          let date = new Date(projectStartDate);
+          date.setDate(date.getDate() + idx);
+          const dateStr = parseString(date);
 
-              let newValue = 0;
-              if (idx !== 0) {
-                newValue = acc[idx - 1].value;
-              } else {
-                acc = [];
-              }
+          let newValue = 0;
+          if (idx !== 0) {
+            newValue = acc[idx - 1].value;
+          } else {
+            acc = [];
+          }
 
-              // 完了工数を保有している場合は加算
-              if (dateHasAmount.includes(dateStr)) {
-                newValue += sumByDate[dateStr];
-              }
+          // 完了工数を保有している場合は加算
+          if (dateHasAmount.includes(dateStr)) {
+            newValue += sumByDate[dateStr];
+          }
 
-              const percent = Math.ceil((newValue * 100) / sum);
+          const percent = Math.ceil((newValue * 100) / sum);
 
-              return [
-                ...acc,
-                { label: dateStr, value: newValue, percent: percent },
-              ];
-            },
-            { label: parseString(startDate), value: 0, percent: 0 }
-          )
-        : undefined;
-
+          return [
+            ...acc,
+            { label: dateStr, value: newValue, percent: percent },
+          ];
+        },
+        { label: parseString(startDate), value: 0, percent: 0 }
+      );
       return lineData;
     },
     []

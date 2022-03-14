@@ -99,9 +99,17 @@ const Project = () => {
   const createDoughnutData = useCreateDoughnutData();
   const project = useSelector(selectSelectedProject);
   const tasks = useSelector(selectTasks);
-  const lineChartData =
-    project &&
-    createLineChartData(tasks, project.startdate, project.enddate, 'daily');
+  const lineChartData = createLineChartData(
+    tasks,
+    project.startdate,
+    project.enddate,
+    'daily'
+  );
+
+  console.log('tasks', tasks);
+  console.log('startdate', project.startdate);
+  console.log('enddate', project.enddate);
+
   const doughnutData = createDoughnutData(tasks);
 
   const lineData = {
