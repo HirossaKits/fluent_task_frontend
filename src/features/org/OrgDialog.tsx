@@ -5,9 +5,9 @@ import CommonDialog from '../../components/CommonDialog';
 import {
   selectOrgDialogOpen,
   selectEditedOrgName,
-  setOrgName,
   setOrgDialogOpen,
   setEditedOrgName,
+  fetchAsyncUpdateOrgInfo,
 } from '../org/orgSliece';
 import { TARGET } from '../types';
 
@@ -25,7 +25,7 @@ const OrgDialog = () => {
   };
 
   const handleRegisterClick = () => {
-    dispatch(setOrgName(editedOrgName));
+    dispatch(fetchAsyncUpdateOrgInfo(editedOrgName));
   };
 
   return (

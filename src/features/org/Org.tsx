@@ -20,6 +20,7 @@ import {
   setInviteDialogOpen,
 } from './orgSliece';
 import useMessage from '../../hooks/message';
+import useSortUser from '../../hooks/sortUser';
 
 const Org = () => {
   const theme = useTheme();
@@ -75,10 +76,11 @@ const Org = () => {
   const dispatch = useDispatch();
   const orgInfo = useSelector(selectOrgInfo);
   const loginUserInfo = useSelector(selectLoginUserInfo);
+  const sortUser = useSortUser();
   const message = useMessage();
 
   const handleEditClick = () => {
-    if (orgInfo.org_owner_id === loginUserInfo.user_id) {
+    if (orgInfo.org_owner_id !== loginUserInfo.user_id) {
       message('グループ所有者のみ変更可能です。');
       return;
     }
@@ -115,7 +117,7 @@ const Org = () => {
       </Box>
 
       <Box css={styles.wrap}>
-        {orgInfo.org_user?.map((user) => (
+        {sortUser(orgInfo.org_user)?.map((user) => (
           <LongUserCard
             user={user}
             isOwner={user.user_id === orgInfo.org_owner_id}

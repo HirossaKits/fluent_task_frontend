@@ -33,6 +33,7 @@ import useCreateDoughnutData from '../../hooks/doughnutData';
 import CommonAvatar from '../../components/CommonAvatar';
 import { EDITED_PROJECT } from '../types';
 import { selectTasks } from '../task/taskSlice';
+import useSortUser from '../../hooks/sortUser';
 
 const Project = () => {
   const theme = useTheme();
@@ -95,6 +96,7 @@ const Project = () => {
   };
 
   const dispatch = useDispatch();
+  const sortUser = useSortUser();
   const createLineChartData = useCreateLineChartData();
   const createDoughnutData = useCreateDoughnutData();
   const project = useSelector(selectSelectedProject);
@@ -106,10 +108,6 @@ const Project = () => {
     'daily'
   );
 
-  console.log('tasks', tasks);
-  console.log('startdate', project.startdate);
-  console.log('enddate', project.enddate);
-
   const doughnutData = createDoughnutData(tasks);
 
   const lineData = {
@@ -117,9 +115,7 @@ const Project = () => {
     datasets: [
       {
         label: '進捗(%)',
-        data: lineChartData.length
-          ? lineChartData.map((data) => data.percent)
-          : [],
+        data: lineChartData?.map((data) => data.percent),
         lineTension: 0.1,
         backgroundColor: colorHandler.convertColorCodeToRGBA(
           theme.palette.primary.main,
@@ -202,7 +198,6 @@ const Project = () => {
               direction="column"
               justifyContent="flex-start"
               alignItems="flex-start"
-              // spacing={3}
             >
               <Box css={styles.titleWrap}>
                 <Typography variant="h5" component="div">
@@ -243,7 +238,7 @@ const Project = () => {
                 </Typography>
                 <Divider />
                 <List css={styles.respList} dense>
-                  {project.resp?.map((user, idx) => (
+                  {sortUser(project.resp)?.map((user, idx) => (
                     <ListItem key={idx} disablePadding>
                       <ListItemButton>
                         <ListItemAvatar>
@@ -270,7 +265,7 @@ const Project = () => {
                 </Typography>
                 <Divider />
                 <List css={styles.memberList} dense>
-                  {project.member.map((user, idx) => (
+                  {sortUser(project.member).map((user, idx) => (
                     <ListItem key={idx} disablePadding>
                       <ListItemButton>
                         <ListItemAvatar>
