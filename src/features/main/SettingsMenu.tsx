@@ -91,9 +91,15 @@ const SettingsMenu: React.FC<Props> = (props) => {
       !loginUserInfo.joined_org?.filter((org) => org.is_private === false)
         .length
     ) {
-      // 設定に保持する organization に所属していない場合を考慮
+      // organization に所属していない場合、強制的に private に変更
       if (!personalSettings.private_mode) {
-        const settings = { ...personalSettings, private_mode: true };
+        const settings = {
+          ...personalSettings,
+          private_mode: true,
+          selected_org_id:
+            loginUserInfo.joined_org?.find((org) => org.is_private)?.org_id ??
+            '',
+        };
         dispatch(setPersonalSettings(settings));
         dispatch(fetchAsyncUpdateSettings(settings));
       }
@@ -105,7 +111,16 @@ const SettingsMenu: React.FC<Props> = (props) => {
       const settings = {
         ...personalSettings,
         private_mode: Boolean(target.value),
+        selected_org_id:
+          loginUserInfo.joined_org?.find(
+            (org) => org.is_private === target.value
+          )?.org_id ?? '',
       };
+      console.log(
+        'debug',
+        loginUserInfo.joined_org?.find((org) => org.is_private === target.value)
+          ?.org_id ?? ''
+      );
       dispatch(setPersonalSettings(settings));
       dispatch(fetchAsyncUpdateSettings(settings));
       fetchInSequenceRelatedOrg();
@@ -147,29 +162,29 @@ const SettingsMenu: React.FC<Props> = (props) => {
         <CommonSwitch
           label={'ダークモード'}
           labelWidth={10}
-          name="dark_mode"
+          name='dark_mode'
           value={personalSettings.dark_mode}
           onChange={handleInputChange}
         />
         <CommonSwitch
           label={'ツールチップ'}
           labelWidth={10}
-          name="tooltip"
+          name='tooltip'
           value={personalSettings.tooltip}
           onChange={handleInputChange}
         />
         <CommonSwitch
           label={'プライベートモード'}
           labelWidth={10}
-          name="private_mode"
+          name='private_mode'
           value={personalSettings.private_mode}
           onChange={handleTogglePrivateModeChange}
         />
         {!personalSettings.private_mode && (
           <CommonSelect
-            label="グループを選択"
+            label='グループを選択'
             options={orgOptions}
-            name="selected_org_id"
+            name='selected_org_id'
             value={orgInfo.org_id}
             // value={validateOrgId()}
 
