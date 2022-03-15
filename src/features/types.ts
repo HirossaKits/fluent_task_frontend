@@ -129,6 +129,8 @@ export interface PROJECT {
   project_id: string;
   project_name: string;
   org_id: string;
+  resp_id: string[];
+  member_id: string[];
   resp: USER_INFO[];
   member: USER_INFO[];
   description: string;

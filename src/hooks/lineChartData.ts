@@ -40,6 +40,8 @@ export default function useCreateLineChartData() {
       const dateHasAmount = Object.keys(sumByDate);
       const dateSpan = (endDate.getTime() - startDate.getTime()) / 86400000;
 
+      if (!dateSpan) return [];
+
       const lineData = [...Array(dateSpan)].reduce(
         (acc: CHART_DATA[], cur, idx) => {
           let date = new Date(projectStartDate);

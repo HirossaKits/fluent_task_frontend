@@ -1,7 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { css } from '@emotion/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectTasks, setTasks } from '../task/taskSlice';
+import {
+  fetchAsyncUpdateTaskStatus,
+  selectTasks,
+  setTasks,
+} from '../task/taskSlice';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -11,7 +15,8 @@ import CircleIcon from '@mui/icons-material/Circle';
 import KanbanCard from './KanbanCard';
 import { TASK, TASK_STATUS } from '../types';
 import { selectSelectedProject } from '../proj/projectSlice';
-import useMessage from '../../hooks/message'
+import useMessage from '../../hooks/message';
+import { selectLoginUserInfo } from '../auth/authSlice';
 // import useProjectMember from '../../hooks/projectMember';
 
 interface RefValue {
@@ -76,6 +81,7 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
 
   const dispatch = useDispatch();
   const message = useMessage();
+  const loginUserInfo = useSelector(selectLoginUserInfo);
   const tasks = useSelector(selectTasks);
   const project = useSelector(selectSelectedProject);
   const [dragOver, setDragOver] = useState(false);
@@ -103,11 +109,16 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    // test
-    if(){}
-    message('タスクの担当者、作成者、プロジェクトの管理者のみ変更可能です。')
-    setDragOver(false);
-    return;
+
+    if (
+      !project.resp_id.includes(loginUserInfo.user_id) &&
+      !project.member_id.includes(loginUserInfo.user_id)
+    ) {
+      message('タスクの担当者、作成者、プロジェクトの管理者のみ変更可能です。');
+      setDragOver(false);
+      return;
+    }
+
     const data = e.dataTransfer.getData('text/plain');
     const [status, task_id] = data.split('/');
     if (props.status !== status) {
@@ -119,7 +130,12 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
           return task;
         }
       });
+
       dispatch(setTasks(newTasks));
+
+      dispatch(
+        fetchAsyncUpdateTaskStatus({ task_id: task_id, status: props.status })
+      );
     }
     setDragOver(false);
   };
@@ -139,7 +155,7 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
       <Card css={styles.column}>
         <Box css={styles.header}>
           <CircleIcon css={styles.icon} />
-          <Typography gutterBottom component="div">
+          <Typography gutterBottom component='div'>
             {props.headerText}
           </Typography>
         </Box>

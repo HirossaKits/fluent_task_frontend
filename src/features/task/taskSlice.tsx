@@ -160,6 +160,35 @@ export const fetchAsyncUpdateTask = createAsyncThunk(
   }
 );
 
+// タスクのステータスのみを更新
+export const fetchAsyncUpdateTaskStatus = createAsyncThunk(
+  'task/status/update',
+  async (data: { task_id: string; status: string }, thunkAPI) => {
+    console.log('fetchAsyncUpdateTaskStatus');
+    const res = await axios.put(
+      `${process.env.REACT_APP_API_URL}/api/task/${data.task_id}`,
+      { status: data.status },
+      {
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+
+    const tasks = await res.data.map((task: any) => {
+      const shapedTask = {
+        ...task,
+        assigned_name: concatUserName(task.assigned),
+      };
+      delete shapedTask.assigned;
+      return shapedTask;
+    });
+
+    return tasks;
+  }
+);
+
 // タスクの削除
 export const fetchAsyncDeleteTask = createAsyncThunk(
   'task/delete',
@@ -299,6 +328,10 @@ export const taskSlice = createSlice({
     });
     builder.addCase(fetchAsyncUpdateTask.fulfilled, (state, action) => {
       return { ...state, tasks: action.payload };
+    });
+    builder.addCase(fetchAsyncUpdateTaskStatus.fulfilled, (state, action) => {
+      console.log('fetchAsyncUpdateTaskStatus');
+      // return { ...state, tasks: action.payload };
     });
     builder.addCase(fetchAsyncDeleteTask.fulfilled, (state, action) => {
       return { ...state, tasks: action.payload };
