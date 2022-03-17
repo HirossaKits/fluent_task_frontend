@@ -122,6 +122,9 @@ export const fetchAsyncUpdateProf = createAsyncThunk(
           },
         }
       );
+      console.log(res);
+      console.log('why?', res.data);
+
       return res.data;
     }
 
@@ -211,12 +214,12 @@ export const authSlice = createSlice({
       }
     );
     // プロフィール更新
-    builder.addCase(fetchAsyncUpdateProf.fulfilled, (state, action) => {
-      return {
-        ...state,
-        loginUserInfo: action.payload,
-      };
-    });
+    // builder.addCase(fetchAsyncUpdateProf.fulfilled, (state, action) => {
+    //   return {
+    //     ...state,
+    //     loginUserInfo: action.payload,
+    //   };
+    // });
     // 個人設定取得
     builder.addCase(
       fetchAsyncGetPersonalSettings.fulfilled,

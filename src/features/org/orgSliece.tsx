@@ -62,8 +62,23 @@ export const fetchAsyncUpdateOrgInfo = createAsyncThunk(
         },
       }
     );
-    console.log(res.data);
     return res.data;
+  }
+);
+
+export const fetchAsycnRegisterInvite = createAsyncThunk(
+  'invite',
+  async (editedInviteMail: string, thunkAPI) => {
+    const org_id = (thunkAPI.getState() as RootState).org.org_info.org_id;
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/invite`,
+      { org_id: org_id, email: editedInviteMail },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
   }
 );
 
@@ -97,6 +112,10 @@ export const orgSlice = createSlice({
         state.org_info = action.payload;
       }
     );
+    builder.addCase(fetchAsyncUpdateOrgInfo.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.org_info = action.payload;
+    });
   },
 });
 

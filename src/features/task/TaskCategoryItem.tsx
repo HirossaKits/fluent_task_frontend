@@ -50,27 +50,29 @@ const TaskCategoryItem: React.FC<Props> = (props) => {
     dispatch(fetchAsyncDeleteTaskCategory(props.task_category_id));
   };
 
+  console.log('test', edited, props.task_category_name);
+
   return (
-    <Stack direction="row" justifyContent="flex-start">
+    <Stack direction='row' justifyContent='flex-start'>
       <CommonTextField
         name={props.task_category_id}
         value={edited}
         onChange={handleChange}
-        width="260px"
+        width='260px'
       />
       <Box css={styles.span}></Box>
       {edited && props.task_category_name !== edited && (
         <Box css={styles.icon}>
-          <CommonTooltip title="保存">
-            <IconButton aria-label="edit task" onClick={handleEditClick}>
+          <CommonTooltip title='保存'>
+            <IconButton aria-label='edit task' onClick={handleEditClick}>
               <CheckIcon />
             </IconButton>
           </CommonTooltip>
         </Box>
       )}
       <Box css={styles.icon}>
-        <CommonTooltip title="削除">
-          <IconButton aria-label="delete task" onClick={handleDeleteClick}>
+        <CommonTooltip title='削除'>
+          <IconButton aria-label='delete task' onClick={handleDeleteClick}>
             <DeleteIcon />
           </IconButton>
         </CommonTooltip>

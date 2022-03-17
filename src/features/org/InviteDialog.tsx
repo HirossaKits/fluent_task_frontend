@@ -42,11 +42,13 @@ const InviteDialog = () => {
     dispatch(setInviteDialogOpen(false));
   };
 
-  const handleInputChange = (target: TARGET) => {
-    dispatch(setEditedInviteMail(target.value));
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    dispatch(setEditedInviteMail(event.target.value));
   };
 
-  const handleRegisterClick = () => {
+  const handleSendClick = () => {
     console.log('Send email here');
   };
 
@@ -71,12 +73,14 @@ const InviteDialog = () => {
             <InputAdornment position='start'>
               <IconButton
                 css={focus ? styles.iconbuttonFocus : styles.iconbutton}
+                onClick={handleSendClick}
               >
                 <SendIcon />
               </IconButton>
             </InputAdornment>
           ),
         }}
+        onChange={handleInputChange}
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
       />

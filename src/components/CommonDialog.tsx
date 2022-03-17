@@ -50,7 +50,6 @@ const CommonDialog = (props: Props) => {
       maxWidth={'maxWidth' in props && props.maxWidth}
       fullWidth
     >
-      {/* <Paper css={props.mode === 'detail' && styles.dialog}> */}
       <Paper>
         <Stack direction='row' justifyContent='space-between'>
           <DialogTitle css={styles.title}>{props.title}</DialogTitle>
@@ -75,9 +74,6 @@ const CommonDialog = (props: Props) => {
         )}
         {props.mode === 'edit' && (
           <DialogActions>
-            {/* <Button onClick={props.onDelete} color="primary">
-              削除
-            </Button> */}
             <Button onClick={props.onClose} color='primary'>
               キャンセル
             </Button>
