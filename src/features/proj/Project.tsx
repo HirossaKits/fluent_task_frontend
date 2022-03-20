@@ -167,7 +167,6 @@ const Project = () => {
     const initEditeProject: EDITED_PROJECT = {
       project_id: project.project_id,
       project_name: project.project_name,
-      org_id: project.org_id,
       resp_id: project.resp.map((user) => user.user_id),
       member_id: project.member.map((user) => user.user_id),
       description: project.description,

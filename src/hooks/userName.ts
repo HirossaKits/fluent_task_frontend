@@ -6,7 +6,11 @@ interface IUser {
 }
 
 export default function useConcatUserName() {
-  return useCallback(<T extends IUser>(user: T) => {
-    return `${user.last_name} ${user.first_name}`;
+  return useCallback(<T extends IUser | undefined>(user: T) => {
+    if (user) {
+      return `${user.last_name} ${user.first_name}`;
+    } else {
+      return '不明なユーザー';
+    }
   }, []);
 }

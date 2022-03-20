@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material/styles';
@@ -19,12 +19,13 @@ import {
   setEditedTask,
   setTaskDialogMode,
   setTaskDialogOpen,
-  setSelectedTask,
   fetchAsyncDeleteTask,
 } from '../task/taskSlice';
 import useShapeTask from '../../hooks/shapeTask';
 
 import { USER_INFO, TASK } from '../types';
+import CommonTooltip from '../../components/CommonTooltip';
+import useConcatUserName from '../../hooks/userName';
 
 type Props = {
   task: TASK;
@@ -71,17 +72,18 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
     `,
   };
 
-  // const [drag, setDrag] = useState(false);
+  const [drag, setDrag] = useState(false);
   const dispatch = useDispatch();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const shapeTask = useShapeTask();
+  const concatUserName = useConcatUserName();
 
   const handleDotClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
   };
 
   const handleDetailClick = () => {
-    dispatch(setSelectedTask(props.task));
+    dispatch(setEditedTask(shapeTask(props.task)));
     dispatch(setTaskDialogMode('detail'));
     dispatch(setTaskDialogOpen(true));
   };
@@ -95,17 +97,19 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
   };
 
   const handleDragStart = (e: React.DragEvent<HTMLElement>) => {
-    // setDrag(true);
+    setDrag(true);
     e.dataTransfer.setData(
       'text/plain',
-      `${props.task.status}/${props.task.task_id}`
+      `${props.task.status}/${props.task.task_id}/${[
+        props.task.actual_startdate,
+      ]}`
     );
     e.dataTransfer.effectAllowed = 'move';
     e.currentTarget.style.opacity = '0.5';
   };
 
   const handleDragEnd = (e: React.DragEvent<HTMLElement>) => {
-    // setDrag(false);
+    setDrag(false);
     e.currentTarget.style.opacity = '1';
     e.dataTransfer.clearData();
   };
@@ -113,7 +117,6 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
   // const handleOnDrag = (e: React.DragEvent<HTMLElement>) => {
   //   e.currentTarget.style.cursor = 'grabbing';
   //   if (!drag) return;
-  //   console.log('drag');
   // };
 
   // const handleOnMouseDown = (e: React.MouseEvent<HTMLElement>) => {
@@ -150,6 +153,7 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
         draggable
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
+        // onDrag={handleOnDrag}
       >
         <Box
           css={styles.title}
@@ -165,7 +169,11 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
           </Typography>
         </Box>
         <Box css={styles.user}>
-          <CommonAvatar user={props.user} />
+          <CommonTooltip title={`担当者 : ${concatUserName(props.user)}`}>
+            <div>
+              <CommonAvatar user={props.user} />
+            </div>
+          </CommonTooltip>
         </Box>
         <Box css={styles.dot}>
           <IconButton onClick={handleDotClick}>

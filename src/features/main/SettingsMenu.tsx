@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material';
 import Popover from '@mui/material/Popover';
@@ -13,7 +13,11 @@ import {
   fetchAsyncUpdateSettings,
 } from '../auth/authSlice';
 import { fetchAsyncGetOrgInfo, selectOrgInfo } from '../org/orgSliece';
-import { selectSettingsMenuOpen, setSettingsMenuOpen } from './mainSlice';
+import {
+  selectSettingsMenuOpen,
+  setMainComponentName,
+  setSettingsMenuOpen,
+} from './mainSlice';
 import { fetchAsyncGetProject } from '../proj/projectSlice';
 import {
   fetchAsyncGetTaskCategory,
@@ -39,7 +43,6 @@ const SettingsMenu: React.FC<Props> = (props) => {
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const settingsMenuOpen = useSelector(selectSettingsMenuOpen);
   const personalSettings = useSelector(selectPersonalSettings);
-  const orgInfo = useSelector(selectOrgInfo);
   const dispatch = useDispatch();
   const createOption = useCreateOption();
   const message = useMessage();
@@ -58,7 +61,6 @@ const SettingsMenu: React.FC<Props> = (props) => {
   };
 
   const handleInputChange = (target: TARGET) => {
-    console.log('handleInputChange');
     const settings = { ...personalSettings, [target.name]: target.value };
     dispatch(setPersonalSettings(settings));
     dispatch(fetchAsyncUpdateSettings(settings));
@@ -85,8 +87,6 @@ const SettingsMenu: React.FC<Props> = (props) => {
   };
 
   const handleTogglePrivateModeChange = (target: TARGET) => {
-    console.log('handleTogglePrivateModeChange');
-
     if (
       !loginUserInfo.joined_org?.filter((org) => org.is_private === false)
         .length
@@ -118,7 +118,9 @@ const SettingsMenu: React.FC<Props> = (props) => {
       };
       dispatch(setPersonalSettings(settings));
       dispatch(fetchAsyncUpdateSettings(settings));
-      fetchInSequenceRelatedOrg();
+      fetchInSequenceRelatedOrg().then(() => {
+        if (target.value) dispatch(setMainComponentName('Proj'));
+      });
     }
   };
 

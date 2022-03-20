@@ -41,53 +41,62 @@ const CommonDialog = (props: Props) => {
     `,
   };
 
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event?.preventDefault();
+  };
+
   return (
     <Dialog
       // css={styles.dialog}
       open={props.open}
       onClose={props.onClose}
-      aria-labelledby='form-dialog-title'
+      aria-labelledby="form-dialog-title"
       maxWidth={'maxWidth' in props && props.maxWidth}
       fullWidth
     >
       <Paper>
-        <Stack direction='row' justifyContent='space-between'>
+        <Stack direction="row" justifyContent="space-between">
           <DialogTitle css={styles.title}>{props.title}</DialogTitle>
           <Box css={styles.close}>
-            <IconButton size='small' onClick={props.onClose}>
+            <IconButton size="small" onClick={props.onClose}>
               <CloseIcon />
             </IconButton>
           </Box>
         </Stack>
-        <form css={styles.form} noValidate autoComplete='off'>
+        <form
+          css={styles.form}
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit}
+        >
           {props.children}
         </form>
         {props.mode === 'register' && (
           <DialogActions>
-            <Button onClick={props.onClose} color='primary'>
+            <Button onClick={props.onClose} color="primary">
               キャンセル
             </Button>
-            <Button onClick={props.onRegister} color='primary'>
+            <Button onClick={props.onRegister} color="primary">
               登録
             </Button>
           </DialogActions>
         )}
         {props.mode === 'edit' && (
           <DialogActions>
-            <Button onClick={props.onClose} color='primary'>
+            <Button onClick={props.onClose} color="primary">
               キャンセル
             </Button>
-            <Button onClick={props.onEdit} color='primary'>
+            <Button onClick={props.onEdit} color="primary">
               登録
             </Button>
           </DialogActions>
         )}
         {props.mode === 'detail' && (
           <DialogActions>
-            <Button onClick={props.onDelete} color='primary'>
+            <Button onClick={props.onDelete} color="primary">
               削除
             </Button>
-            <Button onClick={props.onEditMode} color='primary'>
+            <Button onClick={props.onEditMode} color="primary">
               編集
             </Button>
           </DialogActions>

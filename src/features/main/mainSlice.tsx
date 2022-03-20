@@ -7,6 +7,8 @@ const initialState: MAIN_STATE = {
   settingsMenuOpen: false,
   profileMenuOpen: false,
   profileDialogOpen: false,
+  notificationDialogOpen: false,
+  notificationCount: 0,
   messageOpen: false,
   message: '',
 };
@@ -27,6 +29,12 @@ export const mainSlice = createSlice({
     setProfileDialogOpen(state, action) {
       state.profileDialogOpen = action.payload;
     },
+    setNotificationDialogOpen(state, action) {
+      state.notificationDialogOpen = action.payload;
+    },
+    setNotificationCount(state, action) {
+      state.notificationCount = action.payload;
+    },
     setMessageOpen(state, action) {
       state.messageOpen = action.payload;
     },
@@ -38,11 +46,13 @@ export const mainSlice = createSlice({
 
 export const {
   setMainComponentName,
+  setNotificationDialogOpen,
   setSettingsMenuOpen,
   setProfileMenuOpen,
   setProfileDialogOpen,
   setMessageOpen,
   setMessage,
+  setNotificationCount,
 } = mainSlice.actions;
 export const selectMainComponentName = (state: RootState) =>
   state.main.mainComponentName;
@@ -54,5 +64,9 @@ export const selectProfileDialogOpen = (state: RootState) =>
   state.main.profileDialogOpen;
 export const selectMessageOpen = (state: RootState) => state.main.messageOpen;
 export const selectMessage = (state: RootState) => state.main.message;
+export const selectNotificationDialogOpen = (state: RootState) =>
+  state.main.notificationDialogOpen;
+export const selectNotificationCount = (state: RootState) =>
+  state.main.notificationCount;
 
 export default mainSlice.reducer;

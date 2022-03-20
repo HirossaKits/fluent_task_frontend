@@ -16,6 +16,7 @@ const initialState: ORG = {
   editedInviteMail: '',
   orgDialogOpen: false,
   inviteDialogOpen: false,
+  invite: [],
 };
 
 export const fetchAsyncGetOrgInfo = createAsyncThunk(
@@ -66,6 +67,7 @@ export const fetchAsyncUpdateOrgInfo = createAsyncThunk(
   }
 );
 
+// 組織への招待を登録
 export const fetchAsycnRegisterInvite = createAsyncThunk(
   'invite',
   async (editedInviteMail: string, thunkAPI) => {
@@ -79,6 +81,45 @@ export const fetchAsycnRegisterInvite = createAsyncThunk(
         },
       }
     );
+  }
+);
+
+// 組織への招待情報を取得
+export const fetchAsycnGetInvite = createAsyncThunk(
+  'invite/getInvite',
+  async (_, thunkAPI) => {
+    const user_id = (thunkAPI.getState() as RootState).auth.loginUserInfo
+      .user_id;
+    const res = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/invite/user/${user_id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+// 組織への招待を承認、または拒否
+export const fetchAsyncUpdateInvite = createAsyncThunk(
+  'invite/update',
+  async (data: { invite_id: string; result: boolean }) => {
+    const body = data.result
+      ? { accepted: true, rejected: false }
+      : { accepted: true, rejected: true };
+
+    const res = await axios.put(
+      `${process.env.REACT_APP_API_URL}/api/invite/${data.invite_id}`,
+      body,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
   }
 );
 
@@ -113,8 +154,20 @@ export const orgSlice = createSlice({
       }
     );
     builder.addCase(fetchAsyncUpdateOrgInfo.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.org_info = action.payload;
+    });
+    // 招待を取得
+    builder.addCase(fetchAsycnGetInvite.fulfilled, (state, action) => {
+      return {
+        ...state,
+        invite: action.payload,
+      };
+    });
+    builder.addCase(fetchAsyncUpdateInvite.fulfilled, (state, action) => {
+      return {
+        ...state,
+        invite: action.payload,
+      };
     });
   },
 });
@@ -129,9 +182,6 @@ export const {
 } = orgSlice.actions;
 
 export const selectOrgInfo = (state: RootState) => state.org.org_info;
-// export const selectOrgId = (state: RootState) => state.org.org_info.org_id;
-// export const selectOrgUser = (state: RootState) => state.org.org_info.org_user;
-// export const selectOrgName = (state: RootState) => state.org.org_info.org_name;
 export const selectEditedOrgName = (state: RootState) =>
   state.org.editedOrgName;
 export const selectEditedInviteMail = (state: RootState) =>
@@ -140,5 +190,7 @@ export const selectOrgDialogOpen = (state: RootState) =>
   state.org.orgDialogOpen;
 export const selectInviteDialogOpen = (state: RootState) =>
   state.org.inviteDialogOpen;
+export const selectInvite = (state: RootState) => state.org.invite;
+export const selectInviteCount = (state: RootState) => state.org.invite.length;
 
 export default orgSlice.reducer;

@@ -22,11 +22,11 @@ import {
   initialEditedTask,
   selectTasks,
   setEditedTask,
-  setSelectedTask,
   setTaskDialogMode,
   setTaskDialogOpen,
 } from '../task/taskSlice';
 import TaskDialog from '../task/TaskDialog';
+import useShapeTask from '../../hooks/shapeTask';
 
 const week = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -120,6 +120,7 @@ const Calendar = () => {
   };
 
   const dispatch = useDispatch();
+  const shapeTask = useShapeTask();
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const selectedProjectId = useSelector(selectSelectedProjectId);
   const tasks = useSelector(selectTasks);
@@ -221,7 +222,7 @@ const Calendar = () => {
     const selectedTask = tasks.find((task) => task.task_id === task_id);
 
     if (selectedTask) {
-      dispatch(setSelectedTask(selectedTask));
+      dispatch(setEditedTask(shapeTask(selectedTask)));
       dispatch(setTaskDialogMode('detail'));
       dispatch(setTaskDialogOpen(true));
     }

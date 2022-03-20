@@ -215,8 +215,6 @@ const CommonTable: ListComponent = (props) => {
         { ...filters[target.index], [target.name]: target.value },
         ...filters.slice(target.index + 1),
       ]);
-      console.log(filters);
-      console.log(table);
     }
   };
 
@@ -255,7 +253,6 @@ const CommonTable: ListComponent = (props) => {
     const sortedRows = tbl.slice().sort((a, b) => {
       const valA = a[sortState.columnName as ROW_ITEM];
       const valB = b[sortState.columnName as ROW_ITEM];
-      console.log(valA, valB);
       if (valA === null && valB === null) {
         return 0;
       }

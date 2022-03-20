@@ -11,14 +11,17 @@ import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import EastIcon from '@mui/icons-material/East';
 import { selectLoginUserInfo } from '../auth/authSlice';
-import { selectSelectedProjectId } from '../proj/projectSlice';
+import {
+  selectSelectedProject,
+  selectSelectedProjectId,
+} from '../proj/projectSlice';
 import {
   initialEditedTask,
   selectTaskCategory,
   setTaskDialogOpen,
   setTaskDialogMode,
   setEditedTask,
-  setSelectedTask,
+  // setSelectedTask,
   fetchAsyncDeleteTask,
   selectTasks,
 } from './taskSlice';
@@ -26,6 +29,7 @@ import { TASK, Status, COLUMN_INFO } from '../types';
 import useShapeTask from '../../hooks/shapeTask';
 import useMessage from '../../hooks/message';
 import useCreateOption from '../../hooks/optionCreater';
+import useTaskEditPermission from '../../hooks/taskEditPermission';
 
 const Task = () => {
   const theme = useTheme();
@@ -39,6 +43,7 @@ const Task = () => {
   const shapeTask = useShapeTask();
   const message = useMessage();
   const createOption = useCreateOption();
+  const taskEditPermisson = useTaskEditPermission();
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const selectedProjectId = useSelector(selectSelectedProjectId);
   const tasks = useSelector(selectTasks);
@@ -48,8 +53,6 @@ const Task = () => {
     'task_category_id',
     'task_category_name'
   );
-
-  console.log('taskCategoryOption', taskCategoryOption);
 
   const columnInfo: COLUMN_INFO[] = [
     {
@@ -103,6 +106,7 @@ const Task = () => {
       setEditedTask({
         ...initialEditedTask,
         project_id: selectedProjectId,
+        assigned_id: loginUserInfo.user_id,
         author_id: loginUserInfo.user_id,
       })
     );
@@ -118,6 +122,12 @@ const Task = () => {
     }
     if (tasks.length > 1) {
       message('編集するタスクを一つに絞ってください');
+      return;
+    }
+    if (!taskEditPermisson(tasks)) {
+      message(
+        'タスクの担当者、作成者、またはプロジェクトに管理者のみ編集可能です。'
+      );
       return;
     }
     dispatch(setEditedTask(shapeTask(tasks[0])));
@@ -138,7 +148,7 @@ const Task = () => {
           onClick={(event: any) => {
             event.stopPropagation();
             dispatch(setTaskDialogMode('detail'));
-            dispatch(setSelectedTask(task));
+            dispatch(setEditedTask(shapeTask(task)));
             dispatch(setTaskDialogOpen(true));
           }}
         >

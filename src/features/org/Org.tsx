@@ -89,6 +89,10 @@ const Org = () => {
   };
 
   const handleInviteClick = () => {
+    if (!orgInfo.org_admin_id.includes(loginUserInfo.user_id)) {
+      message('グループの管理者のみユーザーを招待可能です。');
+      return;
+    }
     dispatch(setInviteDialogOpen(true));
   };
 

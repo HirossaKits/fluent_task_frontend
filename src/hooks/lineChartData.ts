@@ -62,8 +62,6 @@ export default function useCreateLineChartData() {
 
           const percent = Math.ceil((newValue * 100) / sum);
 
-          console.log(newValue, sum);
-
           return [
             ...acc,
             { label: dateStr, value: newValue, percent: percent },

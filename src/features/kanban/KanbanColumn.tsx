@@ -17,7 +17,7 @@ import { TASK, TASK_STATUS } from '../types';
 import { selectSelectedProject } from '../proj/projectSlice';
 import useMessage from '../../hooks/message';
 import { selectLoginUserInfo } from '../auth/authSlice';
-// import useProjectMember from '../../hooks/projectMember';
+import { getTodayString } from '../../util/dateHandler';
 
 interface RefValue {
   positions: { [key: string]: { x: number; y: number } };
@@ -120,7 +120,7 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
     }
 
     const data = e.dataTransfer.getData('text/plain');
-    const [status, task_id] = data.split('/');
+    const [status, task_id, actual_startdate] = data.split('/');
     if (props.status !== status) {
       const newTasks = tasks.map((task) => {
         if (task.task_id === task_id) {
@@ -133,9 +133,26 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
 
       dispatch(setTasks(newTasks));
 
-      dispatch(
-        fetchAsyncUpdateTaskStatus({ task_id: task_id, status: props.status })
-      );
+      const data = {
+        task_id: task_id,
+        status: props.status,
+        actual_startdate: '',
+        actual_enddate: '',
+      };
+
+      if (props.status === 'On going') {
+        data.actual_startdate = getTodayString();
+      }
+
+      if (props.status === 'Done') {
+        const todayStr = getTodayString();
+        if (!actual_startdate) {
+          data.actual_startdate = todayStr;
+        }
+        data.actual_enddate = todayStr;
+      }
+
+      dispatch(fetchAsyncUpdateTaskStatus(data));
     }
     setDragOver(false);
   };
@@ -155,7 +172,7 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
       <Card css={styles.column}>
         <Box css={styles.header}>
           <CircleIcon css={styles.icon} />
-          <Typography gutterBottom component='div'>
+          <Typography gutterBottom component="div">
             {props.headerText}
           </Typography>
         </Box>
@@ -166,6 +183,7 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
               ref={(ele) => {
                 if (!ele) return;
                 const position = ref.positions[task.task_id];
+                if (!position) return;
                 const rect = ele.getBoundingClientRect();
                 if (position.x && position.y) {
                   const x = position.x - rect.left;

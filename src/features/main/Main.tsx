@@ -37,17 +37,21 @@ import CommonMessageBar from '../../components/CommonMessageBar';
 import { MAIN_COMPONENT_NAME } from '../types';
 import { AppDispatch } from '../../app/store';
 import {
-  selectLoginUserInfo,
   fetchAsyncGetLoginUser,
   fetchAsyncGetPersonalSettings,
+  selectPersonalSettings,
 } from '../auth/authSlice';
-import { selectOrgInfo } from '../org/orgSliece';
 import {
+  selectOrgInfo,
+  selectInviteCount,
+  fetchAsycnGetInvite,
+} from '../org/orgSliece';
+import {
+  setNotificationDialogOpen,
   setSettingsMenuOpen,
   setProfileMenuOpen,
   setMainComponentName,
   selectMainComponentName,
-  selectMessage,
 } from './mainSlice';
 import {
   emptyEditedProject,
@@ -66,6 +70,8 @@ import {
 import { fetchAsyncGetOrgInfo } from '../org/orgSliece';
 import CommonTooltip from '../../components/CommonTooltip';
 import ProjectDialog from '../proj/ProjectDialog';
+import NotificationMenu from './NotificationMenu';
+import useMessage from '../../hooks/message';
 
 const Main = () => {
   const theme = useTheme();
@@ -178,11 +184,16 @@ const Main = () => {
   };
 
   const dispatch: AppDispatch = useDispatch();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const message = useMessage();
+
   const mainComponentName = useSelector(selectMainComponentName);
+  const settings = useSelector(selectPersonalSettings);
   const orgInfo = useSelector(selectOrgInfo);
   const projects = useSelector(selectProjects);
   const selectedProjectId = useSelector(selectSelectedProjectId);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const inviteCount = useSelector(selectInviteCount);
+  const notificationAnchorEl = useRef(null);
   const settingsAnchorEl = useRef(null);
   const profileAnchorEl = useRef(null);
 
@@ -195,6 +206,7 @@ const Main = () => {
         await dispatch(fetchAsyncGetProject());
         await dispatch(fetchAsyncGetTaskCategory());
         await dispatch(fetchAsyncGetTasks());
+        await dispatch(fetchAsycnGetInvite());
       } else {
         // localStorage.removeItem('localJWT');
         // window.location.href = '/login';
@@ -214,6 +226,7 @@ const Main = () => {
   const handleTabChange = (event: React.SyntheticEvent, newId: string) => {
     if (newId !== 'new_project') {
       dispatch(setSelectedProjectId(newId));
+      dispatch(fetchAsyncGetTasks());
     } else {
       dispatch(setProjectDialogMode('register'));
       dispatch(
@@ -221,6 +234,10 @@ const Main = () => {
       );
       dispatch(setProjectDialogOpen(true));
     }
+  };
+
+  const handleNotificationClick = () => {
+    dispatch(setNotificationDialogOpen(true));
   };
 
   const handleSettingsOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -232,6 +249,10 @@ const Main = () => {
   };
 
   const handleVirticalMenuClick = (component: MAIN_COMPONENT_NAME) => {
+    if (component === 'Org' && settings.private_mode) {
+      message('プライペートモードのためグループ機能は使用できません。');
+      return;
+    }
     dispatch(setMainComponentName(component));
   };
 
@@ -250,11 +271,14 @@ const Main = () => {
             <AppsIcon />
           </IconButton>
           <Typography css={styles.title} variant="h5" noWrap>
-            Fluent Task
+            Fluent Task ( Beta )
           </Typography>
           <Box css={styles.iconBox} sx={{ display: 'flex' }}>
-            <IconButton>
-              <Badge badgeContent={1} color="secondary">
+            <IconButton
+              ref={notificationAnchorEl}
+              onClick={handleNotificationClick}
+            >
+              <Badge badgeContent={inviteCount} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -376,6 +400,7 @@ const Main = () => {
         {mainComponentName === 'Kanban' && <Kanban />}
         {mainComponentName === 'Calendar' && <Calendar />}
       </div>
+      <NotificationMenu anchorEl={notificationAnchorEl} />
       <SettingsMenu anchorEl={settingsAnchorEl} />
       <ProfileMenu anchorEl={profileAnchorEl} />
       <ProjectDialog />

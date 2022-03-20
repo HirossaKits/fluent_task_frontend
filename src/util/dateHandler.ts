@@ -13,6 +13,15 @@ export const getToday = () => {
   return new Date(today.getFullYear(), today.getMonth(), today.getDate());
 };
 
+// 今日の日付を yyyy-MM-dd 形式で取得
+export const getTodayString = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = fillDigitsByZero(today.getMonth() + 1, 2);
+  const date = fillDigitsByZero(today.getDate(), 2);
+  return `${year}-${month}-${date})`;
+};
+
 // yyyy-MM-dd 形式の文字列を日付に変換する
 export const parseDate = (value: string): Date => {
   try {

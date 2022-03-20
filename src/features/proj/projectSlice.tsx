@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../app/store';
-import { PROJECT, PROJECT_SATATE } from '../types';
+import { EDITED_PROJECT, PROJECT, PROJECT_SATATE } from '../types';
 import { isCompositeComponentWithType } from 'react-dom/test-utils';
 
 export const emptyProject: PROJECT = {
@@ -17,10 +17,9 @@ export const emptyProject: PROJECT = {
   enddate: '',
 };
 
-export const emptyEditedProject = {
+export const emptyEditedProject: EDITED_PROJECT = {
   project_id: '',
   project_name: '',
-  org_id: '',
   resp_id: [],
   member_id: [],
   description: '',
@@ -48,6 +47,7 @@ export const fetchAsyncGetProject = createAsyncThunk(
         },
       }
     );
+    console.log(res.data);
     return res.data;
   }
 );
@@ -145,7 +145,11 @@ export const projectSlice = createSlice({
     builder.addCase(fetchAsyncGetProject.fulfilled, (state, action) => {
       if (!action.payload.length) {
         // プロジェクトが存在しない場合は新規作成を選択状態とする。
-        return { ...state, selectedProjectId: 'new_project' };
+        return {
+          ...state,
+          projects: action.payload,
+          selectedProjectId: 'new_project',
+        };
       } else if (
         // プロジェクト未選択の場合は、先頭のプロジェクトを選択状態とする。
         action.payload.length > 0 &&

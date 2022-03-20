@@ -12,8 +12,10 @@ import {
   selectEditedInviteMail,
   setInviteDialogOpen,
   setEditedInviteMail,
+  fetchAsycnRegisterInvite,
 } from './orgSliece';
 import { TARGET } from '../types';
+import useMessage from '../../hooks/message';
 
 const InviteDialog = () => {
   const theme = useTheme();
@@ -28,6 +30,7 @@ const InviteDialog = () => {
 
   const [focus, setFocus] = React.useState(false);
   const dispatch = useDispatch();
+  const message = useMessage();
   const inviteDialogOpen = useSelector(selectInviteDialogOpen);
   const editedInviteMail = useSelector(selectEditedInviteMail);
 
@@ -48,21 +51,32 @@ const InviteDialog = () => {
     dispatch(setEditedInviteMail(event.target.value));
   };
 
+  const validateEmail = (email: string) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
   const handleSendClick = () => {
-    console.log('Send email here');
+    dispatch(fetchAsycnRegisterInvite(editedInviteMail));
+    message(`${editedInviteMail}をグループに招待しました。`);
+    dispatch(setInviteDialogOpen(false));
   };
 
   return (
     <CommonDialog
       open={inviteDialogOpen}
-      title='ユーザーを招待'
+      title="ユーザーを招待"
       onClose={handleClose}
-      maxWidth='xs'
-      mode='display'
+      maxWidth="xs"
+      mode="display"
     >
       <TextField
-        variant='standard'
-        label='メールアドレス'
+        variant="standard"
+        name="email"
+        label="メールアドレス"
         fullWidth
         sx={{ marginBottom: theme.spacing(1) }}
         InputLabelProps={{
@@ -70,7 +84,7 @@ const InviteDialog = () => {
         }}
         InputProps={{
           endAdornment: (
-            <InputAdornment position='start'>
+            <InputAdornment position="start">
               <IconButton
                 css={focus ? styles.iconbuttonFocus : styles.iconbutton}
                 onClick={handleSendClick}

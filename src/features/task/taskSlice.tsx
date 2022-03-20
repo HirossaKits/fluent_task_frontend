@@ -2,7 +2,7 @@ import axios from 'axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 import { TASK, EDITED_TASK, TASK_STATE } from '../types';
-import useConcatUserName from '../../hooks/userName';
+import { getTodayString } from '../../util/dateHandler';
 
 export const initialTask: TASK = {
   task_id: '',
@@ -36,10 +36,12 @@ export const initialEditedTask: EDITED_TASK = {
   description: '',
   estimate_manhour: null,
   actual_manhour: null,
-  scheduled_startdate: '',
-  scheduled_enddate: '',
+  scheduled_startdate: getTodayString(),
+  scheduled_enddate: getTodayString(),
   actual_startdate: null,
   actual_enddate: null,
+  created_at: null,
+  update_at: null,
 };
 
 const initialState: TASK_STATE = {
@@ -55,7 +57,7 @@ const initialState: TASK_STATE = {
       value: '',
     },
   ],
-  selectedTask: initialTask,
+  // selectedTask: initialTask,
   editedTask: initialEditedTask,
   taskCategory: [],
 };
@@ -105,8 +107,6 @@ export const fetchAsyncRegisterTask = createAsyncThunk(
     const editedTask = {
       ...(thunkAPI.getState() as RootState).task.editedTask,
     };
-    console.log('addTask', editedTask.task_id);
-    await console.log(editedTask);
     const res = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/task`,
       editedTask,
@@ -164,7 +164,6 @@ export const fetchAsyncUpdateTask = createAsyncThunk(
 export const fetchAsyncUpdateTaskStatus = createAsyncThunk(
   'task/status/update',
   async (data: { task_id: string; status: string }, thunkAPI) => {
-    console.log('fetchAsyncUpdateTaskStatus');
     const res = await axios.put(
       `${process.env.REACT_APP_API_URL}/api/task/${data.task_id}`,
       { status: data.status },
@@ -184,6 +183,10 @@ export const fetchAsyncUpdateTaskStatus = createAsyncThunk(
       delete shapedTask.assigned;
       return shapedTask;
     });
+
+    const sleep = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+    await sleep(1000);
 
     return tasks;
   }
@@ -315,9 +318,9 @@ export const taskSlice = createSlice({
     setEditedTask(state, action) {
       state.editedTask = action.payload;
     },
-    setSelectedTask(state, action) {
-      state.selectedTask = action.payload;
-    },
+    // setSelectedTask(state, action) {
+    //   state.selectedTask = action.payload;
+    // },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAsyncGetTasks.fulfilled, (state, action) => {
@@ -330,8 +333,7 @@ export const taskSlice = createSlice({
       return { ...state, tasks: action.payload };
     });
     builder.addCase(fetchAsyncUpdateTaskStatus.fulfilled, (state, action) => {
-      console.log('fetchAsyncUpdateTaskStatus');
-      // return { ...state, tasks: action.payload };
+      return { ...state, tasks: action.payload };
     });
     builder.addCase(fetchAsyncDeleteTask.fulfilled, (state, action) => {
       return { ...state, tasks: action.payload };
@@ -361,7 +363,7 @@ export const {
   setFilterTaskOpen,
   setFilterTask,
   setEditedTask,
-  setSelectedTask,
+  // setSelectedTask,
 } = taskSlice.actions;
 
 export const selectTasks = (state: RootState) => state.task.tasks;
@@ -373,7 +375,7 @@ export const selectFilterTaskOpen = (state: RootState) =>
   state.task.filterTaskOpen;
 export const selectFilterTask = (state: RootState) => state.task.filterTask;
 export const selectEditedTask = (state: RootState) => state.task.editedTask;
-export const selectSelectedTask = (state: RootState) => state.task.selectedTask;
+// export const selectSelectedTask = (state: RootState) => state.task.selectedTask;
 export const selectTaskCategory = (state: RootState) => state.task.taskCategory;
 
 export default taskSlice.reducer;

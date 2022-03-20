@@ -19,6 +19,20 @@ export type DIALOG_MODE = 'register' | 'edit' | 'detail' | 'display';
 
 /*authSlice*/
 
+export interface SIGNIN_INFO {
+  email: string;
+  password: string;
+}
+
+export interface SIGNUP_INFO extends SIGNIN_INFO {
+  first_name: string;
+  last_name: string;
+}
+
+export interface JWT {
+  access: string;
+}
+
 export interface AUTH {
   loginUserInfo: LOGIN_USER_INFO;
   editedProf: EDITED_PROF;
@@ -59,18 +73,9 @@ export interface PERSONAL_SETTINGS {
   selected_org_id: string;
 }
 
-export interface SIGNIN_INFO {
-  email: string;
-  password: string;
-}
-
-export interface SIGNUP_INFO extends SIGNIN_INFO {
-  first_name: string;
-  last_name: string;
-}
-
-export interface JWT {
-  access: string;
+export interface INVITE {
+  invite_id: string;
+  org_name: string;
 }
 
 /*orgSlise*/
@@ -81,6 +86,7 @@ export interface ORG {
   editedInviteMail: string;
   orgDialogOpen: boolean;
   inviteDialogOpen: boolean;
+  invite: INVITE[];
 }
 
 export interface ORG_INFO {
@@ -106,6 +112,8 @@ export interface MAIN_STATE {
   settingsMenuOpen: boolean;
   profileMenuOpen: boolean;
   profileDialogOpen: boolean;
+  notificationDialogOpen: boolean;
+  notificationCount: number;
   messageOpen: boolean;
   message: string;
 }
@@ -143,7 +151,6 @@ export interface PROJECT {
 export interface EDITED_PROJECT {
   project_id: string;
   project_name: string;
-  org_id: string;
   resp_id: string[];
   member_id: string[];
   description: string;
@@ -161,7 +168,7 @@ export interface TASK_STATE {
   taskDialogMode: Extract<DIALOG_MODE, 'register' | 'edit' | 'detail'>;
   filterTaskOpen: boolean;
   filterTask: FILTER_TASK[];
-  selectedTask: TASK;
+  // selectedTask: TASK;
   editedTask: EDITED_TASK;
   taskCategory: TASK_CATEGORY[];
 }
@@ -203,6 +210,8 @@ export interface EDITED_TASK {
   scheduled_enddate: string;
   actual_startdate: null | string;
   actual_enddate: null | string;
+  created_at?: null | string;
+  update_at?: null | string;
 }
 
 export interface TASK_CATEGORY {

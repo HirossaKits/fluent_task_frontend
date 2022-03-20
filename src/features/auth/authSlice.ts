@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { useDispatch } from 'react-redux';
 import { RootState } from '../../app/store';
 import axios from 'axios';
 import {
@@ -8,8 +7,6 @@ import {
   SIGNUP_INFO,
   JWT,
   USER_INFO,
-  // PROF,
-  EDITED_PROF,
   PERSONAL_SETTINGS,
   LOGIN_USER_INFO,
 } from '../types';
@@ -122,9 +119,6 @@ export const fetchAsyncUpdateProf = createAsyncThunk(
           },
         }
       );
-      console.log(res);
-      console.log('why?', res.data);
-
       return res.data;
     }
 
@@ -214,12 +208,12 @@ export const authSlice = createSlice({
       }
     );
     // プロフィール更新
-    // builder.addCase(fetchAsyncUpdateProf.fulfilled, (state, action) => {
-    //   return {
-    //     ...state,
-    //     loginUserInfo: action.payload,
-    //   };
-    // });
+    builder.addCase(fetchAsyncUpdateProf.fulfilled, (state, action) => {
+      return {
+        ...state,
+        loginUserInfo: action.payload,
+      };
+    });
     // 個人設定取得
     builder.addCase(
       fetchAsyncGetPersonalSettings.fulfilled,
@@ -240,5 +234,7 @@ export const selectLoginUserInfo = (state: RootState) =>
 export const selectEditedProf = (state: RootState) => state.auth.editedProf;
 export const selectPersonalSettings = (state: RootState) =>
   state.auth.personalSettings;
+export const selectTooltip = (state: RootState) =>
+  state.auth.personalSettings.tooltip;
 
 export default authSlice.reducer;

@@ -22,7 +22,7 @@ import {
 import { setProfileDialogOpen, selectProfileDialogOpen } from './mainSlice';
 import CommonTextField from '../../components/CommonTextField';
 import CommonToolTip from '../../components/CommonTooltip';
-import { TARGET, EDITED_PROF } from '../types';
+import { TARGET } from '../types';
 
 const ProfileDialog = () => {
   const theme = useTheme();
