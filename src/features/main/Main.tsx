@@ -224,6 +224,7 @@ const Main = () => {
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newId: string) => {
+    console.log(newId);
     if (newId !== 'new_project') {
       dispatch(setSelectedProjectId(newId));
       dispatch(fetchAsyncGetTasks());

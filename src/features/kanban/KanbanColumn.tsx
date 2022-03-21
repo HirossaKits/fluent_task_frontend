@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { css } from '@emotion/react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -43,16 +43,15 @@ type Props = {
 const KanbanColumn: React.FC<Props> = (props: Props) => {
   const theme = useTheme();
   const styles = {
-    stack: css`
-      padding: ${theme.spacing(2)};
-      overflow: auto;
-    `,
     column: css`
       display: flex;
       flex-direction: column;
       flex-wrap: nowrap;
       width: 20vw;
       height: 83vh;
+      // height: ${props.tasks.length * 76}px;
+      min-height: 83vh;
+      margin-bottom: 25px;
       background-color: ${theme.palette.action.hover
         .split(',')
         .map((_, idx) => (idx !== 3 ? _ : ' 0.03)'))
@@ -68,14 +67,36 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
       color: ${props.themeColor};
       margin: 0px 20px 2px 0px;
     `,
+    dragRange: css`
+      position: relative;
+      flex: 1;
+      overflow: auto;
+    `,
     dragOver: css`
       flex: 1;
       border: dashed 3px ${theme.palette.action.disabled};
-      transition: all 80ms ease-out;
+      // transition: all 80ms ease-out;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
     `,
     dragLeave: css`
       flex: 1;
       border: dashed 3px transparent;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    `,
+    cards: css`
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
     `,
   };
 
@@ -89,12 +110,44 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
   const ref = useRef<RefValue>({
     positions: Object.assign(
       {},
-      ...tasks.map((task) => ({
+      ...props.tasks.map((task) => ({
         [task.task_id]: { x: 0, y: 0 },
       }))
     ),
     isFirstRender: true,
   }).current;
+
+  const kanbanCards = useMemo(() => {
+    return props.tasks.map((task, idx) => (
+      <div
+        ref={(ele) => {
+          if (!ele) return;
+          const position = ref.positions[task.task_id];
+          if (!position) return;
+          const rect = ele.getBoundingClientRect();
+          if (position.x && position.y) {
+            const x = position.x - rect.left;
+            const y = position.y - rect.top;
+            animation(ele, x, y, 200 - 10 * idx);
+          } else {
+            if (!ref.isFirstRender) {
+              const x = position.x - rect.left;
+              animation(ele, x, 0, 300);
+            }
+          }
+          position.x = rect.left;
+          position.y = rect.top;
+        }}
+      >
+        <KanbanCard
+          task={task}
+          user={project.member.find(
+            (user) => task.assigned_id === user.user_id
+          )}
+        />
+      </div>
+    ));
+  }, [props.tasks]);
 
   const handleDragEnter = (e: any) => {
     e.preventDefault();
@@ -103,8 +156,9 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
     setDragOver(true);
   };
 
-  const handleDragOver = (e: any) => {
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    setDragOver(true);
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -121,6 +175,7 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
 
     const data = e.dataTransfer.getData('text/plain');
     const [status, task_id, actual_startdate] = data.split('/');
+    console.log(actual_startdate);
     if (props.status !== status) {
       const newTasks = tasks.map((task) => {
         if (task.task_id === task_id) {
@@ -148,9 +203,13 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
         const todayStr = getTodayString();
         if (!actual_startdate) {
           data.actual_startdate = todayStr;
+        } else {
+          data.actual_startdate = actual_startdate;
         }
         data.actual_enddate = todayStr;
       }
+
+      console.log(data);
 
       dispatch(fetchAsyncUpdateTaskStatus(data));
     }
@@ -171,43 +230,16 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
     >
       <Card css={styles.column}>
         <Box css={styles.header}>
-          <CircleIcon css={styles.icon} />
+          <CircleIcon css={styles.icon} />{' '}
           <Typography gutterBottom component="div">
             {props.headerText}
           </Typography>
         </Box>
         <Divider />
-        <Box css={dragOver ? styles.dragOver : styles.dragLeave}>
-          {props.tasks.map((task, idx) => (
-            <div
-              ref={(ele) => {
-                if (!ele) return;
-                const position = ref.positions[task.task_id];
-                if (!position) return;
-                const rect = ele.getBoundingClientRect();
-                if (position.x && position.y) {
-                  const x = position.x - rect.left;
-                  const y = position.y - rect.top;
-                  animation(ele, x, y, 200 - 10 * idx);
-                } else {
-                  if (!ref.isFirstRender) {
-                    const x = position.x - rect.left;
-                    animation(ele, x, 0, 300);
-                  }
-                }
-                position.x = rect.left;
-                position.y = rect.top;
-              }}
-            >
-              <KanbanCard
-                task={task}
-                user={project.member.find(
-                  (user) => task.assigned_id === user.user_id
-                )}
-              />
-            </div>
-          ))}
-        </Box>
+        <div css={styles.dragRange}>
+          <div css={dragOver ? styles.dragOver : styles.dragLeave}></div>
+          <div css={styles.cards}>{kanbanCards}</div>
+        </div>
       </Card>
     </div>
   );

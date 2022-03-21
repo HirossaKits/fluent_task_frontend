@@ -19,7 +19,7 @@ export const getTodayString = () => {
   const year = today.getFullYear();
   const month = fillDigitsByZero(today.getMonth() + 1, 2);
   const date = fillDigitsByZero(today.getDate(), 2);
-  return `${year}-${month}-${date})`;
+  return `${year}-${month}-${date}`;
 };
 
 // yyyy-MM-dd 形式の文字列を日付に変換する
@@ -47,7 +47,7 @@ export const parseString = (value: Date): string => {
 };
 
 // ISO日付を yyyy-MM-dd HH:mm 形式に変換する
-export const formatISOString = (value: null | string): string => {
+export const formatISOString = (value: null | undefined | string): string => {
   if (value) {
     const dateVal = new Date(value);
     const year = dateVal.getFullYear();

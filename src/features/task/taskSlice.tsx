@@ -107,6 +107,8 @@ export const fetchAsyncRegisterTask = createAsyncThunk(
     const editedTask = {
       ...(thunkAPI.getState() as RootState).task.editedTask,
     };
+    delete editedTask.created_at;
+    delete editedTask.update_at;
     const res = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/task`,
       editedTask,
@@ -163,10 +165,22 @@ export const fetchAsyncUpdateTask = createAsyncThunk(
 // タスクのステータスのみを更新
 export const fetchAsyncUpdateTaskStatus = createAsyncThunk(
   'task/status/update',
-  async (data: { task_id: string; status: string }, thunkAPI) => {
+  async (
+    data: {
+      task_id: string;
+      status: string;
+      actual_startdate: string;
+      actual_enddate: string;
+    },
+    thunkAPI
+  ) => {
     const res = await axios.put(
       `${process.env.REACT_APP_API_URL}/api/task/${data.task_id}`,
-      { status: data.status },
+      {
+        status: data.status,
+        actual_startdate: data.actual_startdate,
+        actual_enddate: data.actual_enddate,
+      },
       {
         headers: {
           'Content-type': 'application/json',

@@ -100,9 +100,7 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
     setDrag(true);
     e.dataTransfer.setData(
       'text/plain',
-      `${props.task.status}/${props.task.task_id}/${[
-        props.task.actual_startdate,
-      ]}`
+      `${props.task.status}/${props.task.task_id}/${props.task.actual_startdate}`
     );
     e.dataTransfer.effectAllowed = 'move';
     e.currentTarget.style.opacity = '0.5';
