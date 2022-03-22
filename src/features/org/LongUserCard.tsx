@@ -1,5 +1,6 @@
 import React from 'react';
 import { css } from '@emotion/react';
+import { useSelector } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -19,7 +20,9 @@ import GppBadIcon from '@mui/icons-material/GppBad';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import { USER_INFO } from '../types';
 import { useDispatch } from 'react-redux';
-import { fetchAsyncUpdateOrgInfo } from './orgSliece';
+import { selectLoginUserInfo } from '../auth/authSlice';
+import { selectOrgInfo, fetchAsyncUpdateOrgInfo } from './orgSliece';
+import useMessage from '../../hooks/message';
 
 type Props = {
   user: USER_INFO;
@@ -84,6 +87,9 @@ const LongUserCard = (props: Props) => {
 
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const message = useMessage();
+  const loginUserInfo = useSelector(selectLoginUserInfo);
+  const orgInfo = useSelector(selectOrgInfo);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -94,14 +100,31 @@ const LongUserCard = (props: Props) => {
   };
 
   const handleIncludeAdminClick = () => {
+    if (!orgInfo.org_admin_id.includes(loginUserInfo.user_id)) {
+      message('変更権限がありません。グループの管理者のみ変更可能です。');
+    }
+    if (orgInfo.org_admin_id.includes(props.user.user_id)) {
+      message('すでにグループの管理者です。');
+    }
     dispatch(fetchAsyncUpdateOrgInfo);
   };
 
   const handleExcludeAdminClick = () => {
+    if (!orgInfo.org_admin_id.includes(loginUserInfo.user_id)) {
+      message('変更権限がありません。グループの管理者のみ変更可能です。');
+    }
+    if (orgInfo.org_owner_id === props.user.user_id) {
+      message('グループの所有者を管理者から除外することはできません。');
+    }
     dispatch(fetchAsyncUpdateOrgInfo);
   };
 
   const handleExcludeFromGroupClick = () => {
+    if (!orgInfo.org_admin_id.includes(loginUserInfo.user_id)) {
+      message(
+        '変更権限がありません。グループの所有者または、管理者のみ変更可能です。'
+      );
+    }
     dispatch(fetchAsyncUpdateOrgInfo);
   };
 
