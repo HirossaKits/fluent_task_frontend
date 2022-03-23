@@ -15,6 +15,7 @@ import ListItemText from '@mui/material/ListItemText';
 import CommonTooltip from '../../components/CommonTooltip';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import GppGoodIcon from '@mui/icons-material/GppGood';
 import GppBadIcon from '@mui/icons-material/GppBad';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
@@ -100,11 +101,16 @@ const LongUserCard = (props: Props) => {
   };
 
   const handleIncludeAdminClick = () => {
+    console.log(orgInfo.org_admin_id);
+    console.log(loginUserInfo.user_id);
+    console.log(!orgInfo.org_admin_id.includes(loginUserInfo.user_id));
     if (!orgInfo.org_admin_id.includes(loginUserInfo.user_id)) {
       message('変更権限がありません。グループの管理者のみ変更可能です。');
+      return;
     }
     if (orgInfo.org_admin_id.includes(props.user.user_id)) {
       message('すでにグループの管理者です。');
+      return;
     }
     dispatch(fetchAsyncUpdateOrgInfo);
   };
@@ -112,9 +118,11 @@ const LongUserCard = (props: Props) => {
   const handleExcludeAdminClick = () => {
     if (!orgInfo.org_admin_id.includes(loginUserInfo.user_id)) {
       message('変更権限がありません。グループの管理者のみ変更可能です。');
+      return;
     }
     if (orgInfo.org_owner_id === props.user.user_id) {
       message('グループの所有者を管理者から除外することはできません。');
+      return;
     }
     dispatch(fetchAsyncUpdateOrgInfo);
   };
@@ -124,8 +132,17 @@ const LongUserCard = (props: Props) => {
       message(
         '変更権限がありません。グループの所有者または、管理者のみ変更可能です。'
       );
+      return;
+    }
+    if (orgInfo.org_owner_id === props.user.user_id) {
+      message('グループの所有者をグループから除外することはできません。');
+      return;
     }
     dispatch(fetchAsyncUpdateOrgInfo);
+  };
+
+  const handleWithdrawOrgClick = () => {
+    // 脱退
   };
 
   return (
@@ -174,24 +191,34 @@ const LongUserCard = (props: Props) => {
           horizontal: 'left',
         }}
       >
-        <MenuItem>
-          <ListItemIcon onClick={handleIncludeAdminClick}>
+        <MenuItem onClick={handleIncludeAdminClick}>
+          <ListItemIcon>
             <GppGoodIcon fontSize='small' />
           </ListItemIcon>
           <ListItemText>管理者にする</ListItemText>
         </MenuItem>
-        <MenuItem>
-          <ListItemIcon onClick={handleExcludeAdminClick}>
+        <MenuItem onClick={handleExcludeAdminClick}>
+          <ListItemIcon>
             <GppBadIcon fontSize='small' />
           </ListItemIcon>
           <ListItemText>管理者から除外する</ListItemText>
         </MenuItem>
-        <MenuItem>
-          <ListItemIcon onClick={handleExcludeFromGroupClick}>
-            <PersonOffIcon fontSize='small' />
-          </ListItemIcon>
-          <ListItemText>グループから除外する</ListItemText>
-        </MenuItem>
+
+        {props.user.user_id === loginUserInfo.user_id ? (
+          <MenuItem onClick={handleWithdrawOrgClick}>
+            <ListItemIcon>
+              <DirectionsRunIcon fontSize='small' />
+            </ListItemIcon>
+            <ListItemText>グループから脱退する</ListItemText>
+          </MenuItem>
+        ) : (
+          <MenuItem onClick={handleExcludeFromGroupClick}>
+            <ListItemIcon>
+              <PersonOffIcon fontSize='small' />
+            </ListItemIcon>
+            <ListItemText>グループから除外する</ListItemText>
+          </MenuItem>
+        )}
       </Popover>
     </>
   );
