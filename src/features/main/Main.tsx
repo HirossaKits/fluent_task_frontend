@@ -251,7 +251,7 @@ const Main = () => {
 
   const handleVirticalMenuClick = (component: MAIN_COMPONENT_NAME) => {
     if (component === 'Org' && settings.private_mode) {
-      message('プライペートモードのためグループ機能は使用できません。');
+      message('プライベートモードではグループ機能は使用できません。');
       return;
     }
     dispatch(setMainComponentName(component));
@@ -261,17 +261,17 @@ const Main = () => {
     <Box sx={{ display: 'flex', width: '100%' }}>
       <AppBar
         css={drawerOpen ? styles.appBarShift : styles.appBar}
-        position='fixed'
+        position="fixed"
       >
-        <Toolbar css={styles.toolbar} disableGutters variant='dense'>
+        <Toolbar css={styles.toolbar} disableGutters variant="dense">
           <IconButton
             css={drawerOpen ? styles.menuIconHide : styles.menuIcon}
-            edge='start'
+            edge="start"
             onClick={handleDrawerOpen}
           >
             <AppsIcon />
           </IconButton>
-          <Typography css={styles.title} variant='h5' noWrap>
+          <Typography css={styles.title} variant="h5" noWrap>
             Fluent Task ( Beta )
           </Typography>
           <Box css={styles.iconBox} sx={{ display: 'flex' }}>
@@ -279,7 +279,7 @@ const Main = () => {
               ref={notificationAnchorEl}
               onClick={handleNotificationClick}
             >
-              <Badge badgeContent={inviteCount} color='secondary'>
+              <Badge badgeContent={inviteCount} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -295,8 +295,8 @@ const Main = () => {
       <Drawer
         css={drawerOpen ? styles.drawerOpen : styles.drawerClose}
         className={'1gxenss-drawerOpen'}
-        variant='permanent'
-        anchor='left'
+        variant="permanent"
+        anchor="left"
         open={drawerOpen}
       >
         <div css={styles.drawerHeader}>
@@ -370,8 +370,8 @@ const Main = () => {
             <Tabs
               value={selectedProjectId === '' ? 0 : selectedProjectId}
               onChange={handleTabChange}
-              variant='scrollable'
-              scrollButtons='auto'
+              variant="scrollable"
+              scrollButtons="auto"
             >
               {projects.map((proj, idx) => (
                 <Tab
@@ -390,9 +390,9 @@ const Main = () => {
                       <Typography>新規作成</Typography>
                     </>
                   }
-                  iconPosition='start'
+                  iconPosition="start"
                   style={{ margin: 0, padding: 0 }}
-                  value='new_project'
+                  value="new_project"
                 />
               )}
             </Tabs>

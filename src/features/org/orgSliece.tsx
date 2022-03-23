@@ -123,6 +123,60 @@ export const fetchAsyncUpdateInvite = createAsyncThunk(
   }
 );
 
+// 組織の管理者に追加
+export const fetchAsyncIncludeOrgAdmin = createAsyncThunk(
+  'org/includeAdmin',
+  async (user_id: string, thunkAPI) => {
+    const org_id = (thunkAPI.getState() as RootState).org.org_info.org_id;
+    const res = await axios.put(
+      `${process.env.REACT_APP_API_URL}/api/org/admin/include/${org_id}`,
+      { user_id: user_id },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+// 組織の管理者から除外
+export const fetchAsyncExcludeOrgAdmin = createAsyncThunk(
+  'org/excludeAdmin',
+  async (user_id: string, thunkAPI) => {
+    const org_id = (thunkAPI.getState() as RootState).org.org_info.org_id;
+    const res = await axios.put(
+      `${process.env.REACT_APP_API_URL}/api/org/admin/exclude/${org_id}`,
+      { user_id: user_id },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
+// 組織からユーザーを除外
+export const fetchAsyncExcludeOrgUser = createAsyncThunk(
+  'org/excludeUser',
+  async (user_id: string, thunkAPI) => {
+    const org_id = (thunkAPI.getState() as RootState).org.org_info.org_id;
+    const res = await axios.put(
+      `${process.env.REACT_APP_API_URL}/api/org/user/exclude/${org_id}`,
+      { user_id: user_id },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
 export const orgSlice = createSlice({
   name: 'org',
   initialState,
