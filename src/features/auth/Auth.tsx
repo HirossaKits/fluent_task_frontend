@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import Lottie from 'react-lottie';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -10,9 +11,8 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import { SIGNIN_INFO, SIGNUP_INFO } from '../types';
 import { AppDispatch } from '../../app/store';
+import { SIGNIN_INFO, SIGNUP_INFO } from '../types';
 import { fetchAsyncSignin, fetchAsyncSignup } from './authSlice';
 import loginPageAnimation from '../../img/loginPageAnimation.json';
 

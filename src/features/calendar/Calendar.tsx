@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material';
@@ -6,16 +6,16 @@ import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import Autocomplete from '@mui/material/Autocomplete';
 import Typography from '@mui/material/Typography';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { selectYearMonth, setYearMonth } from './calendarSlice';
-import { fillDigitsByZero } from '../../util/dateHandler';
+import { parseString, fillDigitsByZero } from '../../util/dateHandler';
 import { useCalendarFactory } from '../../hooks/calendar';
-import { parseString } from '../../util/dateHandler';
+import useShapeTask from '../../hooks/shapeTask';
 import { selectLoginUserInfo } from '../auth/authSlice';
 import { selectSelectedProjectId } from '../proj/projectSlice';
 import {
@@ -25,8 +25,8 @@ import {
   setTaskDialogMode,
   setTaskDialogOpen,
 } from '../task/taskSlice';
+import { selectYearMonth, setYearMonth } from './calendarSlice';
 import TaskDialog from '../task/TaskDialog';
-import useShapeTask from '../../hooks/shapeTask';
 
 const week = ['日', '月', '火', '水', '木', '金', '土'];
 
@@ -102,9 +102,10 @@ const Calendar = () => {
       border-radius: 15px;
     `,
     texttask: css`
+      white-space: nowrap;
       display: block;
       height: ${calendarBarStyle.height}px;
-      padding-left: 10px;
+      padding: 0 10px;
       color: white;
       background: ${theme.palette.primary.main};
       position: absolute;
@@ -115,7 +116,7 @@ const Calendar = () => {
       color: action;
     `,
     remarks: css`
-      padding-bottom: 2px;
+      padding-bottom: 3px;
     `,
   };
 
@@ -300,9 +301,10 @@ const Calendar = () => {
                 </Grid>
                 {ctx.layer && Math.max(...ctx.layer) >= 4 && (
                   <Grid css={styles.remarks}>
-                    <Typography color={theme.palette.text.disabled}>{`その他${
-                      Math.max(...ctx.layer) - 3
-                    }件`}</Typography>
+                    <Typography
+                      variant="body2"
+                      color={theme.palette.text.disabled}
+                    >{`その他${Math.max(...ctx.layer) - 3}件`}</Typography>
                   </Grid>
                 )}
               </Stack>
@@ -311,7 +313,7 @@ const Calendar = () => {
           {calendarBars.map(
             (bar) =>
               bar.visible && (
-                <Typography
+                <div
                   css={css`
                     ${styles.texttask};
                     top: ${bar.top};
@@ -328,8 +330,36 @@ const Calendar = () => {
                   `}
                   onClick={(e) => handleBarClick(e, bar.task_id)}
                 >
+                  <Box
+                    component="div"
+                    sx={{
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      typography: 'body1',
+                    }}
+                  >
+                    {/* <Typography
+                  css={css`
+                    ${styles.texttaskuu};
+                    top: ${bar.top};
+                    left: ${bar.left};
+                    width: ${bar.width};
+                    border-radius: ${!bar.startEdge && !bar.endEdge
+                      ? '0px'
+                      : bar.startEdge && !bar.endEdge
+                      ? `${calendarBarStyle.roundEdge}px 0px 0px ${calendarBarStyle.roundEdge}px`
+                      : !bar.startEdge && bar.endEdge
+                      ? `0px ${calendarBarStyle.roundEdge}px ${calendarBarStyle.roundEdge}px 0px`
+                      : `${calendarBarStyle.roundEdge}px`};
+                    cursor: pointer;
+                  `}
+                  onClick={(e) => handleBarClick(e, bar.task_id)}
+                >
                   {bar.task_name}
-                </Typography>
+                </Typography> */}
+                    {bar.task_name}
+                  </Box>
+                </div>
               )
           )}
         </ImageList>

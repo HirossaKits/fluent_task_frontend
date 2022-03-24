@@ -3,21 +3,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material';
 import Popover from '@mui/material/Popover';
-import Avatar from '@mui/material/Avatar';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import GroupRemoveIcon from '@mui/icons-material/GroupRemove';
-import { selectLoginUserInfo } from '../auth/authSlice';
-import { selectProfileMenuOpen } from './mainSlice';
-import { setProfileMenuOpen, setProfileDialogOpen } from './mainSlice';
-import { logOut } from '../auth/authSlice';
-import ProfileDialog from './ProfileDialog';
+import {
+  selectProfileMenuOpen,
+  setProfileMenuOpen,
+  setProfileDialogOpen,
+} from './mainSlice';
+import { selectLoginUserInfo, logOut } from '../auth/authSlice';
 import CommonAvatar from '../../components/CommonAvatar';
-import { cpuUsage } from 'process';
+import ProfileDialog from './ProfileDialog';
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;

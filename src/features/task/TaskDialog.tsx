@@ -116,10 +116,10 @@ const TaskDialog: React.FC = () => {
         open={taskDialogOpen}
         title={
           taskDialogMode === 'register'
-            ? 'タスクを登録'
+            ? 'タスクを作成'
             : taskDialogMode === 'edit'
             ? 'タスクを編集'
-            : 'タスク詳細'
+            : 'タスクの詳細'
         }
         onClose={handleClose}
         onRegister={handleRegisterClick}
@@ -250,7 +250,7 @@ const TaskDialog: React.FC = () => {
                 label="作成者"
                 name="assigned"
                 options={projectMemberOptions}
-                value={editedTask.assigned_id ?? ''}
+                value={editedTask.author_id ?? ''}
                 onChange={handleInputChange}
                 readOnly={isReadOnly}
               />

@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
-import CommonDialog from '../../components/CommonDialog';
+import useMessage from '../../hooks/message';
 import {
   selectInviteDialogOpen,
   selectEditedInviteMail,
@@ -14,8 +14,7 @@ import {
   setEditedInviteMail,
   fetchAsycnRegisterInvite,
 } from './orgSliece';
-import { TARGET } from '../types';
-import useMessage from '../../hooks/message';
+import CommonDialog from '../../components/CommonDialog';
 
 const InviteDialog = () => {
   const theme = useTheme();

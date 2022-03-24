@@ -6,13 +6,15 @@ import Paper from '@mui/material/Paper';
 import CommonSwitch from '../../components/CommonSwitch';
 import { useSelector, useDispatch } from 'react-redux';
 import { TARGET } from '../types';
+import useCreateOption from '../../hooks/optionCreater';
+import useMessage from '../../hooks/message';
 import {
   selectLoginUserInfo,
   selectPersonalSettings,
   setPersonalSettings,
   fetchAsyncUpdateSettings,
 } from '../auth/authSlice';
-import { fetchAsyncGetOrgInfo, selectOrgInfo } from '../org/orgSliece';
+import { fetchAsyncGetOrgInfo } from '../org/orgSliece';
 import {
   selectSettingsMenuOpen,
   setMainComponentName,
@@ -24,8 +26,6 @@ import {
   fetchAsyncGetTasks,
 } from '../task/taskSlice';
 import CommonSelect from '../../components/CommonSelect';
-import useCreateOption from '../../hooks/optionCreater';
-import useMessage from '../../hooks/message';
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;

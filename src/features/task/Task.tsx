@@ -2,7 +2,6 @@ import React from 'react';
 import { css } from '@emotion/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTheme } from '@mui/material/styles';
-import CommonTable from '../../components/CommonTable';
 import TaskDialog from './TaskDialog';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
@@ -10,26 +9,23 @@ import CircleIcon from '@mui/icons-material/Circle';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import EastIcon from '@mui/icons-material/East';
+import { TASK, Status, COLUMN_INFO } from '../types';
+import useShapeTask from '../../hooks/shapeTask';
+import useMessage from '../../hooks/message';
+import useCreateOption from '../../hooks/optionCreater';
+import useTaskEditPermission from '../../hooks/taskEditPermission';
 import { selectLoginUserInfo } from '../auth/authSlice';
-import {
-  selectSelectedProject,
-  selectSelectedProjectId,
-} from '../proj/projectSlice';
+import { selectSelectedProjectId } from '../proj/projectSlice';
 import {
   initialEditedTask,
   selectTaskCategory,
   setTaskDialogOpen,
   setTaskDialogMode,
   setEditedTask,
-  // setSelectedTask,
   fetchAsyncDeleteTask,
   selectTasks,
 } from './taskSlice';
-import { TASK, Status, COLUMN_INFO } from '../types';
-import useShapeTask from '../../hooks/shapeTask';
-import useMessage from '../../hooks/message';
-import useCreateOption from '../../hooks/optionCreater';
-import useTaskEditPermission from '../../hooks/taskEditPermission';
+import CommonTable from '../../components/CommonTable';
 
 const Task = () => {
   const theme = useTheme();

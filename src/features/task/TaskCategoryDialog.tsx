@@ -5,17 +5,16 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
-import SaveIcon from '@mui/icons-material/Save';
-import DeleteIcon from '@mui/icons-material/Delete';
+import { TARGET } from '../types';
+import TaskCategoryItem from './TaskCategoryItem';
+import { selectSelectedProjectId } from '../proj/projectSlice';
+import {
+  selectTaskCategory,
+  fetchAsyncRegisterTaskCategory,
+} from '../task/taskSlice';
 import CommonDialog from '../../components/CommonDialog';
 import CommonTextField from '../../components/CommonTextField';
 import CommonTooltip from '../../components/CommonTooltip';
-import { selectTaskCategory } from '../task/taskSlice';
-import { fetchAsyncRegisterTaskCategory } from '../task/taskSlice';
-import { TARGET } from '../types';
-import { CategoryScale } from 'chart.js';
-import TaskCategoryItem from './TaskCategoryItem';
-import { selectSelectedProjectId } from '../proj/projectSlice';
 
 type Props = {
   open: boolean;

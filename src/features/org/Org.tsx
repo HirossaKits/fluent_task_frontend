@@ -9,9 +9,8 @@ import { useTheme } from '@mui/material/styles';
 import LongUserCard from './LongUserCard';
 import EditIcon from '@mui/icons-material/Edit';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import OrgDialog from './OrgDialog';
-import InviteDialog from './InviteDialog';
-import CommonTooltip from '../../components/CommonTooltip';
+import useMessage from '../../hooks/message';
+import useSortUser from '../../hooks/sortUser';
 import { selectLoginUserInfo } from '../auth/authSlice';
 import {
   selectOrgInfo,
@@ -19,8 +18,9 @@ import {
   setOrgDialogOpen,
   setInviteDialogOpen,
 } from './orgSliece';
-import useMessage from '../../hooks/message';
-import useSortUser from '../../hooks/sortUser';
+import CommonTooltip from '../../components/CommonTooltip';
+import OrgDialog from './OrgDialog';
+import InviteDialog from './InviteDialog';
 
 const Org = () => {
   const theme = useTheme();

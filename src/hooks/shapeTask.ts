@@ -17,6 +17,8 @@ const useShapeTask = () => {
       scheduled_enddate: task.scheduled_enddate,
       actual_startdate: task.actual_startdate,
       actual_enddate: task.actual_enddate,
+      created_at: task.created_at,
+      update_at: task.update_at,
     };
   }, []);
 };

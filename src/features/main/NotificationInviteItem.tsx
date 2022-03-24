@@ -5,8 +5,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { fetchAsyncUpdateInvite } from '../org/orgSliece';
 import { setNotificationDialogOpen } from './mainSlice';
+import { fetchAsyncUpdateInvite } from '../org/orgSliece';
 
 type Props = {
   inviteId: string;

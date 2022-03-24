@@ -26,16 +26,9 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import ViewWeekIcon from '@mui/icons-material/ViewWeek';
 import AddIcon from '@mui/icons-material/Add';
-import SettingsMenu from './SettingsMenu';
-import ProfileMenu from './ProfileMenu';
-import Org from '../org/Org';
-import Proj from '../proj/Project';
-import Task from '../task/Task';
-import Kanban from '../kanban/Kanban';
-import Calendar from '../calendar/Calendar';
-import CommonMessageBar from '../../components/CommonMessageBar';
 import { MAIN_COMPONENT_NAME } from '../types';
 import { AppDispatch } from '../../app/store';
+import useMessage from '../../hooks/message';
 import {
   fetchAsyncGetLoginUser,
   fetchAsyncGetPersonalSettings,
@@ -44,6 +37,7 @@ import {
 import {
   selectOrgInfo,
   selectInviteCount,
+  fetchAsyncGetOrgInfo,
   fetchAsycnGetInvite,
 } from '../org/orgSliece';
 import {
@@ -67,11 +61,16 @@ import {
   fetchAsyncGetTasks,
   fetchAsyncGetTaskCategory,
 } from '../task/taskSlice';
-import { fetchAsyncGetOrgInfo } from '../org/orgSliece';
-import CommonTooltip from '../../components/CommonTooltip';
 import ProjectDialog from '../proj/ProjectDialog';
 import NotificationMenu from './NotificationMenu';
-import useMessage from '../../hooks/message';
+import SettingsMenu from './SettingsMenu';
+import ProfileMenu from './ProfileMenu';
+import Org from '../org/Org';
+import Proj from '../proj/Project';
+import Task from '../task/Task';
+import Kanban from '../kanban/Kanban';
+import Calendar from '../calendar/Calendar';
+import CommonMessageBar from '../../components/CommonMessageBar';
 
 const Main = () => {
   const theme = useTheme();

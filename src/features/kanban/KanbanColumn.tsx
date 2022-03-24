@@ -1,11 +1,6 @@
 import React, { useState, useRef, useMemo } from 'react';
-import { css } from '@emotion/react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  fetchAsyncUpdateTaskStatus,
-  selectTasks,
-  setTasks,
-} from '../task/taskSlice';
+import { css } from '@emotion/react';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -14,10 +9,15 @@ import Divider from '@mui/material/Divider';
 import CircleIcon from '@mui/icons-material/Circle';
 import KanbanCard from './KanbanCard';
 import { TASK, TASK_STATUS } from '../types';
-import { selectSelectedProject } from '../proj/projectSlice';
+import { getTodayString } from '../../util/dateHandler';
 import useMessage from '../../hooks/message';
 import { selectLoginUserInfo } from '../auth/authSlice';
-import { getTodayString } from '../../util/dateHandler';
+import { selectSelectedProject } from '../proj/projectSlice';
+import {
+  fetchAsyncUpdateTaskStatus,
+  selectTasks,
+  setTasks,
+} from '../task/taskSlice';
 
 interface RefValue {
   positions: { [key: string]: { x: number; y: number } };

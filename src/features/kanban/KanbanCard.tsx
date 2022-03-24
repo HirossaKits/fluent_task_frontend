@@ -5,27 +5,25 @@ import { useTheme } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import CommonAvatar from '../../components/CommonAvatar';
 import Popover from '@mui/material/Popover';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import FeedIcon from '@mui/icons-material/Feed';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { USER_INFO, TASK } from '../types';
+import useShapeTask from '../../hooks/shapeTask';
+import useConcatUserName from '../../hooks/userName';
 import {
   setEditedTask,
   setTaskDialogMode,
   setTaskDialogOpen,
   fetchAsyncDeleteTask,
 } from '../task/taskSlice';
-import useShapeTask from '../../hooks/shapeTask';
-
-import { USER_INFO, TASK } from '../types';
+import CommonAvatar from '../../components/CommonAvatar';
 import CommonTooltip from '../../components/CommonTooltip';
-import useConcatUserName from '../../hooks/userName';
 
 type Props = {
   task: TASK;
@@ -47,25 +45,23 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
       margin-left: ${theme.spacing(2)};
       margin-right: ${theme.spacing(2)};
     `,
-    title: css`
-      display: flex;
-      flex-grow: 1;
-      flex-wrap: nowrap;
-      flex-direction: column;
-      justify-content: center;
-      align-items: start;
-      margin-left: 15px;
+    titleWrap: css`
+      width: calc(100% - 75px);
+      white-space: nowrap;
+      text-align: left;
+      padding: 0 10px 0 15px;
     `,
     user: css`
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-left: 10px;
+      width: 40px;
     `,
     dot: css`
       display: flex;
       flex-direction: column;
       justify-content: center;
+      width: 35px;
     `,
     menuItem: css`
       padding-right: ${theme.spacing(3)};
@@ -151,21 +147,19 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
         draggable
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
-        // onDrag={handleOnDrag}
       >
-        <Box
-          css={styles.title}
-          component="div"
-          sx={{
-            textOverflow: 'ellipsis',
-            my: 2,
-            overflow: 'hidden',
-          }}
-        >
-          <Typography component="div" noWrap>
+        <div css={styles.titleWrap}>
+          <Box
+            component="div"
+            sx={{
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              typography: 'body1',
+            }}
+          >
             {props.task.task_name}
-          </Typography>
-        </Box>
+          </Box>
+        </div>
         <Box css={styles.user}>
           <CommonTooltip title={`担当者 : ${concatUserName(props.user)}`}>
             <div>

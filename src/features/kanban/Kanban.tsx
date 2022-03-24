@@ -1,10 +1,10 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material/styles';
+import { selectTasks } from '../task/taskSlice';
 import KanbanColumn from './KanbanColumn';
 import TaskDialog from '../task/TaskDialog';
-import { useSelector } from 'react-redux';
-import { selectTasks } from '../task/taskSlice';
 
 const Kanban = () => {
   const theme = useTheme();

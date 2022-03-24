@@ -201,7 +201,7 @@ export interface EDITED_TASK {
   project_id: string;
   task_category_id: null | string;
   assigned_id: null | string;
-  author_id: null | string;
+  author_id?: null | string;
   status: TASK_STATUS;
   description: string;
   estimate_manhour: null | number;

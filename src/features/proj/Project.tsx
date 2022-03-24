@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
+import { Line, Doughnut } from 'react-chartjs-2';
 import { useTheme } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -9,16 +10,17 @@ import IconButton from '@mui/material/IconButton';
 import Card from '@mui/material/Card';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import Avatar from '@mui/material/Avatar';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
-import { Line, Doughnut } from 'react-chartjs-2';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import CommonTooltip from '../../components/CommonTooltip';
 import * as colorHandler from '../../util/colorHandler';
+import { AppDispatch } from '../../app/store';
+import { EDITED_PROJECT } from '../types';
+import useSortUser from '../../hooks/sortUser';
+import useCreateLineChartData from '../../hooks/lineChartData';
+import useCreateDoughnutData from '../../hooks/doughnutData';
 import {
   emptyProject,
   fetchAsyncDeleteProject,
@@ -27,17 +29,14 @@ import {
   setProjectDialogOpen,
   setProjectDialogMode,
 } from './projectSlice';
-import ProjectDialog from './ProjectDialog';
-import useCreateLineChartData from '../../hooks/lineChartData';
-import useCreateDoughnutData from '../../hooks/doughnutData';
-import CommonAvatar from '../../components/CommonAvatar';
-import { EDITED_PROJECT } from '../types';
 import {
   fetchAsyncGetTaskCategory,
   fetchAsyncGetTasks,
   selectTasks,
 } from '../task/taskSlice';
-import useSortUser from '../../hooks/sortUser';
+import CommonAvatar from '../../components/CommonAvatar';
+import CommonTooltip from '../../components/CommonTooltip';
+import ProjectDialog from './ProjectDialog';
 
 const Project = () => {
   const theme = useTheme();
@@ -99,7 +98,7 @@ const Project = () => {
     `,
   };
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const sortUser = useSortUser();
   const createLineChartData = useCreateLineChartData();
   const createDoughnutData = useCreateDoughnutData();
@@ -199,33 +198,33 @@ const Project = () => {
       {!Object.is(project, emptyProject) && (
         <>
           <Stack
-            direction='row'
-            justifyContent='flex-start'
-            alignItems='flex-start'
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="flex-start"
             spacing={3}
           >
             <Stack
               css={styles.stack}
-              direction='column'
-              justifyContent='flex-start'
-              alignItems='flex-start'
+              direction="column"
+              justifyContent="flex-start"
+              alignItems="flex-start"
             >
               <Box css={styles.titleWrap}>
-                <Typography variant='h5' component='div'>
+                <Typography variant="h5" component="div">
                   {project.project_name}
                 </Typography>
-                <CommonTooltip title='編集'>
+                <CommonTooltip title="編集">
                   <IconButton
-                    aria-label='edit project'
+                    aria-label="edit project"
                     css={styles.editIcon}
                     onClick={handleEditClick}
                   >
                     <EditIcon />
                   </IconButton>
                 </CommonTooltip>
-                <CommonTooltip title='削除'>
+                <CommonTooltip title="削除">
                   <IconButton
-                    aria-label='delete project'
+                    aria-label="delete project"
                     onClick={handleDeleteClick}
                   >
                     <DeleteIcon />
@@ -234,16 +233,16 @@ const Project = () => {
               </Box>
               <Typography
                 css={styles.description}
-                variant='subtitle1'
-                component='div'
+                variant="subtitle1"
+                component="div"
               >
                 {project.description}
               </Typography>
               <Card css={styles.userCard}>
                 <Typography
                   css={styles.listTitle}
-                  variant='subtitle1'
-                  component='div'
+                  variant="subtitle1"
+                  component="div"
                 >
                   プロジェクト管理者
                 </Typography>
@@ -269,8 +268,8 @@ const Project = () => {
               <Card css={styles.userCard}>
                 <Typography
                   css={styles.listTitle}
-                  variant='subtitle1'
-                  component='div'
+                  variant="subtitle1"
+                  component="div"
                 >
                   プロジェクトメンバー
                 </Typography>
@@ -296,9 +295,9 @@ const Project = () => {
             </Stack>
             <Stack
               css={styles.graphArea}
-              direction='column'
-              justifyContent='center'
-              alignItems='flex-start'
+              direction="column"
+              justifyContent="center"
+              alignItems="flex-start"
             >
               <div css={styles.lineChartWrapper}>
                 <Line

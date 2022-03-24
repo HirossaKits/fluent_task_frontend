@@ -13,6 +13,7 @@ import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
 import CloseIcon from '@mui/icons-material/Close';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import { TARGET } from '../types';
 import {
   selectLoginUserInfo,
   selectEditedProf,
@@ -22,7 +23,6 @@ import {
 import { setProfileDialogOpen, selectProfileDialogOpen } from './mainSlice';
 import CommonTextField from '../../components/CommonTextField';
 import CommonToolTip from '../../components/CommonTooltip';
-import { TARGET } from '../types';
 
 const ProfileDialog = () => {
   const theme = useTheme();

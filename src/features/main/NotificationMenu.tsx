@@ -1,21 +1,16 @@
-import { useTheme } from '@mui/material/styles';
-import { css } from '@emotion/react';
-import {
-  Dialog,
-  Divider,
-  Paper,
-  Popover,
-  Stack,
-  Typography,
-} from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { css } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
+import Popover from '@mui/material/Popover';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import {
   selectNotificationDialogOpen,
   setNotificationDialogOpen,
 } from './mainSlice';
-import { NotificationInviteItem } from './NotificationInviteItem';
 import { selectInvite } from '../org/orgSliece';
+import { NotificationInviteItem } from './NotificationInviteItem';
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;
