@@ -107,9 +107,6 @@ const LongUserCard = (props: Props) => {
   };
 
   const handleIncludeAdminClick = (user_id: string) => {
-    console.log(orgInfo.org_admin_id);
-    console.log(loginUserInfo.user_id);
-    console.log(!orgInfo.org_admin_id.includes(loginUserInfo.user_id));
     if (!orgInfo.org_admin_id.includes(loginUserInfo.user_id)) {
       message('変更権限がありません。グループの管理者のみ変更可能です。');
       return;
@@ -120,6 +117,7 @@ const LongUserCard = (props: Props) => {
     }
     // 組織の管理者に追加
     dispatch(fetchAsyncIncludeOrgAdmin(user_id));
+    handleClose();
   };
 
   const handleExcludeAdminClick = (user_id: string) => {
@@ -133,6 +131,7 @@ const LongUserCard = (props: Props) => {
     }
     // 組織の管理者から除外
     dispatch(fetchAsyncExcludeOrgAdmin(user_id));
+    handleClose();
   };
 
   const handleExcludeFromGroupClick = (user_id: string) => {
@@ -148,11 +147,13 @@ const LongUserCard = (props: Props) => {
     }
     // 組織から除外
     dispatch(fetchAsyncExcludeOrgUser(user_id));
+    handleClose();
   };
 
   const handleWithdrawOrgClick = (user_id: string) => {
     // 組織から除外
     dispatch(fetchAsyncExcludeOrgUser(user_id));
+    handleClose();
   };
 
   return (
@@ -160,7 +161,7 @@ const LongUserCard = (props: Props) => {
       <Card css={styles.card}>
         {props.user.user_id !== orgInfo.org_owner_id && (
           <IconButton css={styles.dot} onClick={handleClick}>
-            <MoreHorizIcon fontSize="small" />
+            <MoreHorizIcon fontSize='small' />
           </IconButton>
         )}
         <Box sx={{ display: 'flex' }}>
@@ -173,22 +174,22 @@ const LongUserCard = (props: Props) => {
             </Avatar>
           )}
           <Box css={styles.text}>
-            <Typography variant="h6" component="div">
+            <Typography variant='h6' component='div'>
               {`${props.user.last_name} ${props.user.first_name} `}
             </Typography>
-            <Typography noWrap variant="body2" component="div">
+            <Typography noWrap variant='body2' component='div'>
               {`${props.user.comment}`}
             </Typography>
           </Box>
         </Box>
         <Box css={styles.comment}>
           {props.isOwner && (
-            <CommonTooltip title="グループ所有者">
+            <CommonTooltip title='グループ所有者'>
               <WorkspacePremiumIcon css={styles.iconPremium} />
             </CommonTooltip>
           )}
           {props.isAdmin && (
-            <CommonTooltip title="グループ管理者">
+            <CommonTooltip title='グループ管理者'>
               <AdminPanelSettingsIcon css={styles.iconAdmin} />
             </CommonTooltip>
           )}
@@ -205,13 +206,13 @@ const LongUserCard = (props: Props) => {
       >
         <MenuItem onClick={() => handleIncludeAdminClick(props.user.user_id)}>
           <ListItemIcon>
-            <GppGoodIcon fontSize="small" />
+            <GppGoodIcon fontSize='small' />
           </ListItemIcon>
           <ListItemText>管理者にする</ListItemText>
         </MenuItem>
         <MenuItem onClick={() => handleExcludeAdminClick(props.user.user_id)}>
           <ListItemIcon>
-            <GppBadIcon fontSize="small" />
+            <GppBadIcon fontSize='small' />
           </ListItemIcon>
           <ListItemText>管理者から除外する</ListItemText>
         </MenuItem>
@@ -219,7 +220,7 @@ const LongUserCard = (props: Props) => {
         {props.user.user_id === loginUserInfo.user_id ? (
           <MenuItem onClick={() => handleWithdrawOrgClick(props.user.user_id)}>
             <ListItemIcon>
-              <DirectionsRunIcon fontSize="small" />
+              <DirectionsRunIcon fontSize='small' />
             </ListItemIcon>
             <ListItemText>グループから脱退する</ListItemText>
           </MenuItem>
@@ -228,7 +229,7 @@ const LongUserCard = (props: Props) => {
             onClick={() => handleExcludeFromGroupClick(props.user.user_id)}
           >
             <ListItemIcon>
-              <PersonOffIcon fontSize="small" />
+              <PersonOffIcon fontSize='small' />
             </ListItemIcon>
             <ListItemText>グループから除外する</ListItemText>
           </MenuItem>

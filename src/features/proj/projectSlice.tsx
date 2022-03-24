@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../app/store';
 import { EDITED_PROJECT, PROJECT, PROJECT_SATATE } from '../types';
@@ -93,7 +93,7 @@ export const fetchAsyncDeleteProject = createAsyncThunk(
   async (_, thunkAPI) => {
     const projectId = (thunkAPI.getState() as RootState).project
       .selectedProjectId;
-    const res = await axios.delete(
+    const res = await axios.delete<PROJECT[]>(
       `${process.env.REACT_APP_API_URL}/api/project/${projectId}`,
       {
         headers: {
@@ -183,21 +183,24 @@ export const projectSlice = createSlice({
         projects: action.payload,
       };
     });
-    builder.addCase(fetchAsyncDeleteProject.fulfilled, (state, action) => {
-      if (action.payload.length > 0) {
-        return {
-          ...state,
-          projects: action.payload,
-          selectedProjectId: action.payload[0].project_id,
-        };
-      } else {
-        return {
-          ...state,
-          projects: action.payload,
-          selectedProjectId: 'new_project',
-        };
+    builder.addCase(
+      fetchAsyncDeleteProject.fulfilled,
+      (state, action: PayloadAction<PROJECT[]>) => {
+        if (action.payload.length > 0) {
+          return {
+            ...state,
+            projects: action.payload,
+            selectedProjectId: action.payload[0].project_id,
+          };
+        } else {
+          return {
+            ...state,
+            projects: action.payload,
+            selectedProjectId: 'new_project',
+          };
+        }
       }
-    });
+    );
   },
 });
 

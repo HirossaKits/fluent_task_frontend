@@ -244,6 +244,7 @@ export const fetchAsyncGetTaskCategory = createAsyncThunk(
   async (_, thunkAPI) => {
     const selectedProjectId = (thunkAPI.getState() as RootState).project
       .selectedProjectId;
+    console.log('testes', selectedProjectId);
     const res = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/taskcategory/project/${selectedProjectId}`,
       {

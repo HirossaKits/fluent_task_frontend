@@ -217,10 +217,32 @@ export const orgSlice = createSlice({
         invite: action.payload,
       };
     });
+    // 招待を更新
     builder.addCase(fetchAsyncUpdateInvite.fulfilled, (state, action) => {
       return {
         ...state,
         invite: action.payload,
+      };
+    });
+    // 管理者に追加
+    builder.addCase(fetchAsyncIncludeOrgAdmin.fulfilled, (state, action) => {
+      return {
+        ...state,
+        org_info: action.payload,
+      };
+    });
+    // 管理者から除外
+    builder.addCase(fetchAsyncExcludeOrgAdmin.fulfilled, (state, action) => {
+      return {
+        ...state,
+        org_info: action.payload,
+      };
+    });
+    // 組織から除外
+    builder.addCase(fetchAsyncExcludeOrgUser.fulfilled, (state, action) => {
+      return {
+        ...state,
+        org_info: action.payload,
       };
     });
   },

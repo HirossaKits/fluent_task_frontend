@@ -17,10 +17,12 @@ import {
   selectProjectDialogMode,
   setEditedProject,
   setProjectDialogOpen,
+  setTaskCategory,
 } from '../proj/projectSlice';
 import useCreateOption from '../../hooks/optionCreater';
 import { TARGET } from '../types';
 import useMessage from '../../hooks/message';
+import { fetchAsyncGetTaskCategory, setTasks } from '../task/taskSlice';
 
 const ProjectDialog = () => {
   const theme = useTheme();
@@ -63,6 +65,8 @@ const ProjectDialog = () => {
 
   const handleRegisterClick = () => {
     dispatch(fetchAsyncRegisterProject());
+    dispatch(setTasks([]));
+    dispatch(setTaskCategory([]));
     dispatch(setProjectDialogOpen(false));
   };
 
@@ -81,53 +85,53 @@ const ProjectDialog = () => {
       onRegister={handleRegisterClick}
       onEdit={handleEditClick}
       // onDelete={handleDeleteClick}
-      maxWidth="sm"
+      maxWidth='sm'
       mode={projectDialogMode}
     >
       <Stack
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="flex-start"
+        direction='column'
+        justifyContent='flex-start'
+        alignItems='flex-start'
       >
         <CommonTextField
-          label="プロジェクト名"
-          name="project_name"
+          label='プロジェクト名'
+          name='project_name'
           value={editedProject.project_name}
           onChange={handleInputChange}
-          width="50%"
+          width='50%'
         />
         <CommonTextField
-          label="説明"
-          name="description"
+          label='説明'
+          name='description'
           value={editedProject.description}
           onChange={handleInputChange}
-          width="100%"
+          width='100%'
         />
         <CommonMultiSelect
-          label="プロジェクト管理者"
-          name="resp_id"
+          label='プロジェクト管理者'
+          name='resp_id'
           options={userOptions}
           value={editedProject.resp_id}
           onChange={handleInputChange}
         />
         <CommonMultiSelect
-          label="プロジェクトメンバー"
-          name="member_id"
+          label='プロジェクトメンバー'
+          name='member_id'
           options={userOptions}
           value={editedProject.member_id}
           onChange={handleInputChange}
         />
-        <Stack direction="row" justifyContent="flex-start" alignItems="center">
+        <Stack direction='row' justifyContent='flex-start' alignItems='center'>
           <CommonDatePicker
-            label="開始日"
-            name="startdate"
+            label='開始日'
+            name='startdate'
             value={editedProject.startdate}
             onChange={handleInputChange}
           />
           <SwapHorizIcon css={styles.arrow} />
           <CommonDatePicker
-            label="終了日"
-            name="enddate"
+            label='終了日'
+            name='enddate'
             value={editedProject.enddate}
             onChange={handleInputChange}
           />
