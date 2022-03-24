@@ -168,8 +168,7 @@ export interface TASK_STATE {
   taskDialogMode: Extract<DIALOG_MODE, 'register' | 'edit' | 'detail'>;
   filterTaskOpen: boolean;
   filterTask: FILTER_TASK[];
-  // selectedTask: TASK;
-  editedTask: EDITED_TASK;
+  editedTask: TASK;
   taskCategory: TASK_CATEGORY[];
 }
 
@@ -178,11 +177,11 @@ export interface TASK {
   task_name: string;
   project_id: string;
   task_category_id: null | string;
-  task_category_name: string;
+  task_category_name?: string;
   assigned_id: null | string;
-  assigned_name: string;
+  assigned_name?: string;
   author_id: null | string;
-  author_name: string;
+  author_name?: string;
   status: TASK_STATUS;
   description: string;
   estimate_manhour: null | number;
@@ -191,8 +190,8 @@ export interface TASK {
   scheduled_enddate: string;
   actual_startdate: null | string;
   actual_enddate: null | string;
-  created_at: null | string;
-  update_at: null | string;
+  created_at?: null | string;
+  update_at?: null | string;
 }
 
 export interface EDITED_TASK {
@@ -210,8 +209,6 @@ export interface EDITED_TASK {
   scheduled_enddate: string;
   actual_startdate: null | string;
   actual_enddate: null | string;
-  created_at?: null | string;
-  update_at?: null | string;
 }
 
 export interface TASK_CATEGORY {

@@ -14,7 +14,6 @@ import FeedIcon from '@mui/icons-material/Feed';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { USER_INFO, TASK } from '../types';
-import useShapeTask from '../../hooks/shapeTask';
 import useConcatUserName from '../../hooks/userName';
 import {
   setEditedTask,
@@ -71,7 +70,6 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
   const [drag, setDrag] = useState(false);
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const shapeTask = useShapeTask();
   const concatUserName = useConcatUserName();
 
   const handleDotClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -79,12 +77,12 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
   };
 
   const handleDetailClick = () => {
-    dispatch(setEditedTask(shapeTask(props.task)));
+    dispatch(setEditedTask(props.task));
     dispatch(setTaskDialogMode('detail'));
     dispatch(setTaskDialogOpen(true));
   };
   const handleEditClick = () => {
-    dispatch(setEditedTask(shapeTask(props.task)));
+    dispatch(setEditedTask(props.task));
     dispatch(setTaskDialogMode('edit'));
     dispatch(setTaskDialogOpen(true));
   };

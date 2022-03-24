@@ -17,14 +17,12 @@ import {
   selectTaskDialogOpen,
   selectTaskDialogMode,
   selectEditedTask,
-  // selectSelectedTask,
   selectTaskCategory,
   setTaskDialogOpen,
   setTaskDialogMode,
 } from './taskSlice';
 import { selectSelectedProject, setTaskCategory } from '../proj/projectSlice';
 import useCreateOption from '../../hooks/optionCreater';
-import useShapeTask from '../../hooks/shapeTask';
 import useMessage from '../../hooks/message';
 import { formatISOString } from '../../util/dateHandler';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -47,7 +45,6 @@ const TaskDialog: React.FC = () => {
   const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
   const dispatch = useDispatch();
   const createOption = useCreateOption();
-  const shapeTask = useShapeTask();
   const message = useMessage();
   const project = useSelector(selectSelectedProject);
   const editedTask = useSelector(selectEditedTask);
@@ -93,6 +90,7 @@ const TaskDialog: React.FC = () => {
   };
 
   const handleEditClick = () => {
+    console.log('handleEditClick');
     dispatch(fetchAsyncUpdateTask());
     dispatch(setTaskDialogOpen(false));
   };

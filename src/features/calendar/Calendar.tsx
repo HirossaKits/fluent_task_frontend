@@ -15,7 +15,6 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { parseString, fillDigitsByZero } from '../../util/dateHandler';
 import { useCalendarFactory } from '../../hooks/calendar';
-import useShapeTask from '../../hooks/shapeTask';
 import { selectLoginUserInfo } from '../auth/authSlice';
 import { selectSelectedProjectId } from '../proj/projectSlice';
 import {
@@ -121,7 +120,6 @@ const Calendar = () => {
   };
 
   const dispatch = useDispatch();
-  const shapeTask = useShapeTask();
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const selectedProjectId = useSelector(selectSelectedProjectId);
   const tasks = useSelector(selectTasks);
@@ -223,7 +221,7 @@ const Calendar = () => {
     const selectedTask = tasks.find((task) => task.task_id === task_id);
 
     if (selectedTask) {
-      dispatch(setEditedTask(shapeTask(selectedTask)));
+      dispatch(setEditedTask(selectedTask));
       dispatch(setTaskDialogMode('detail'));
       dispatch(setTaskDialogOpen(true));
     }

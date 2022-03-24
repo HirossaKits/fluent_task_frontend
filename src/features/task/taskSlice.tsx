@@ -26,7 +26,8 @@ export const initialTask: TASK = {
   update_at: null,
 };
 
-export const initialEditedTask: EDITED_TASK = {
+export const initialEditedTask: TASK = {
+  task_id: '',
   task_name: '',
   project_id: '',
   task_category_id: null,
@@ -40,8 +41,6 @@ export const initialEditedTask: EDITED_TASK = {
   scheduled_enddate: getTodayString(),
   actual_startdate: null,
   actual_enddate: null,
-  created_at: null,
-  update_at: null,
 };
 
 const initialState: TASK_STATE = {
@@ -69,6 +68,28 @@ interface IUser {
 }
 const concatUserName = <T extends IUser>(user: T) => {
   return `${user?.last_name ?? ''} ${user?.first_name ?? ''}`;
+};
+
+// 編集タスクデータを整形
+const shapeTask = (task: TASK, mode: 'register' | 'update'): EDITED_TASK => {
+  const shapedTask = {
+    task_id: task.task_id,
+    task_name: task.task_name,
+    project_id: task.project_id,
+    task_category_id: task.task_category_id,
+    assigned_id: task.assigned_id,
+    author_id: task.author_id,
+    status: task.status,
+    description: task.description,
+    estimate_manhour: task.estimate_manhour,
+    actual_manhour: task.actual_manhour,
+    scheduled_startdate: task.scheduled_startdate,
+    scheduled_enddate: task.scheduled_enddate,
+    actual_startdate: task.actual_startdate,
+    actual_enddate: task.actual_enddate,
+  };
+  if (mode === 'update') shapedTask.task_id = task.task_id;
+  return shapedTask;
 };
 
 // タスクの取得
@@ -107,11 +128,11 @@ export const fetchAsyncRegisterTask = createAsyncThunk(
     const editedTask = {
       ...(thunkAPI.getState() as RootState).task.editedTask,
     };
-    delete editedTask.created_at;
-    delete editedTask.update_at;
+
+    const data = shapeTask(editedTask, 'register');
     const res = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/task`,
-      editedTask,
+      data,
       {
         headers: {
           'Content-type': 'application/json',
@@ -138,12 +159,10 @@ export const fetchAsyncUpdateTask = createAsyncThunk(
   'task/update',
   async (_, thunkAPI) => {
     const editedTask = (thunkAPI.getState() as RootState).task.editedTask;
-    delete editedTask.author_id;
-    delete editedTask.created_at;
-    delete editedTask.update_at;
+    const data = shapeTask(editedTask, 'update');
     const res = await axios.put(
       `${process.env.REACT_APP_API_URL}/api/task/${editedTask.task_id}`,
-      editedTask,
+      data,
       {
         headers: {
           'Content-type': 'application/json',
@@ -152,6 +171,7 @@ export const fetchAsyncUpdateTask = createAsyncThunk(
       }
     );
 
+    console.log(res);
     const tasks = await res.data.map((task: any) => {
       const shapedTask = {
         ...task,
@@ -160,12 +180,12 @@ export const fetchAsyncUpdateTask = createAsyncThunk(
       delete shapedTask.assigned;
       return shapedTask;
     });
-
+    console.log(tasks);
     return tasks;
   }
 );
 
-// タスクのステータスのみを更新
+// カンバン移動時のタスク更新
 export const fetchAsyncUpdateTaskStatus = createAsyncThunk(
   'task/status/update',
   async (

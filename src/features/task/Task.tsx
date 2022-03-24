@@ -10,7 +10,6 @@ import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import EastIcon from '@mui/icons-material/East';
 import { TASK, Status, COLUMN_INFO } from '../types';
-import useShapeTask from '../../hooks/shapeTask';
 import useMessage from '../../hooks/message';
 import useCreateOption from '../../hooks/optionCreater';
 import useTaskEditPermission from '../../hooks/taskEditPermission';
@@ -36,7 +35,6 @@ const Task = () => {
   };
 
   const dispatch = useDispatch();
-  const shapeTask = useShapeTask();
   const message = useMessage();
   const createOption = useCreateOption();
   const taskEditPermisson = useTaskEditPermission();
@@ -126,7 +124,7 @@ const Task = () => {
       );
       return;
     }
-    dispatch(setEditedTask(shapeTask(tasks[0])));
+    dispatch(setEditedTask(tasks[0]));
     dispatch(setTaskDialogOpen(true));
   };
 
@@ -144,7 +142,7 @@ const Task = () => {
           onClick={(event: any) => {
             event.stopPropagation();
             dispatch(setTaskDialogMode('detail'));
-            dispatch(setEditedTask(shapeTask(task)));
+            dispatch(setEditedTask(task));
             dispatch(setTaskDialogOpen(true));
           }}
         >
