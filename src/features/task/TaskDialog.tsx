@@ -12,16 +12,17 @@ import { TARGET } from '../types';
 import CommonSelect from '../../components/CommonSelect';
 import { Status } from '../../selectionOptions';
 import {
-  fetchAsyncRegisterTask,
-  fetchAsyncUpdateTask,
   selectTaskDialogOpen,
   selectTaskDialogMode,
   selectEditedTask,
   selectTaskCategory,
   setTaskDialogOpen,
   setTaskDialogMode,
+  fetchAsyncRegisterTask,
+  fetchAsyncUpdateTask,
+  fetchAsyncDeleteTask,
 } from './taskSlice';
-import { selectSelectedProject, setTaskCategory } from '../proj/projectSlice';
+import { selectSelectedProject } from '../proj/projectSlice';
 import useCreateOption from '../../hooks/optionCreater';
 import useMessage from '../../hooks/message';
 import { formatISOString } from '../../util/dateHandler';
@@ -48,7 +49,6 @@ const TaskDialog: React.FC = () => {
   const message = useMessage();
   const project = useSelector(selectSelectedProject);
   const editedTask = useSelector(selectEditedTask);
-  // const selectedTask = useSelector(selectSelectedTask);
   const taskDialogOpen = useSelector(selectTaskDialogOpen);
   const taskDialogMode = useSelector(selectTaskDialogMode);
   const taskCategory = useSelector(selectTaskCategory);
@@ -95,12 +95,15 @@ const TaskDialog: React.FC = () => {
     dispatch(setTaskDialogOpen(false));
   };
 
+  const handleDeleteClick = () => {
+    dispatch(fetchAsyncDeleteTask([editedTask]));
+    dispatch(setTaskDialogOpen(false));
+  };
+
   const handleEditModeClick = () => {
     dispatch(setTaskDialogMode('edit'));
     dispatch(setEditedTask(editedTask));
   };
-
-  const handleDeleteClick = () => {};
 
   const handleSettingsClick = () => {
     setCategoryDialogOpen(true);

@@ -216,10 +216,6 @@ export interface TASK_CATEGORY {
   task_category_name: string;
 }
 
-// export interface EDITED_TASK_CATEGORY extends TASK_CATEGORY {
-//   edited: boolean;
-// }
-
 export const Status = {
   Suspended: '保留　',
   'Not started': '開始前',
