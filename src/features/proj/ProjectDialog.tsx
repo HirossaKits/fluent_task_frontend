@@ -17,7 +17,6 @@ import {
   setProjectDialogOpen,
   setTaskCategory,
 } from '../proj/projectSlice';
-
 import { setTasks } from '../task/taskSlice';
 import CommonTextField from '../../components/CommonTextField';
 import CommonMultiSelect from '../../components/CommonMultiSelect';
