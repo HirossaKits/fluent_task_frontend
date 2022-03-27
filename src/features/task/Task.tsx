@@ -10,6 +10,7 @@ import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import EastIcon from '@mui/icons-material/East';
 import { TASK, Status, COLUMN_INFO } from '../types';
+import { getStrDateSpan } from '../../util/dateHandler';
 import useMessage from '../../hooks/message';
 import useCreateOption from '../../hooks/optionCreater';
 import useTaskEditPermission from '../../hooks/taskEditPermission';
@@ -25,6 +26,7 @@ import {
   selectTasks,
 } from './taskSlice';
 import CommonTable from '../../components/CommonTable';
+import CommonTooltip from '../../components/CommonTooltip';
 
 const Task = () => {
   const theme = useTheme();
@@ -177,13 +179,15 @@ const Task = () => {
           return (
             <div style={{ display: 'flex' }}>
               <Typography>{task.scheduled_startdate}</Typography>
-              <NorthEastIcon
-                sx={{
-                  margin: '0 0 0 8px;',
-                  fontSize: 'small',
-                  color: theme.palette.success.light,
-                }}
-              />
+              <CommonTooltip title={`${1}`}>
+                <NorthEastIcon
+                  sx={{
+                    margin: '0 0 0 8px;',
+                    fontSize: 'small',
+                    color: theme.palette.success.light,
+                  }}
+                />
+              </CommonTooltip>
             </div>
           );
         } else if (task.actual_startdate > task.scheduled_startdate) {

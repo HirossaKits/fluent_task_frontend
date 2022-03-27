@@ -29,6 +29,7 @@ const userInfo: LOGIN_USER_INFO = {
 };
 
 const initialState: AUTH = {
+  lang: '',
   loginUserInfo: userInfo,
   editedProf: {
     first_name: '',
@@ -179,6 +180,9 @@ export const authSlice = createSlice({
     setPersonalSettings(state, action) {
       state.personalSettings = action.payload;
     },
+    setLang(state, action) {
+      state.lang = action.payload;
+    },
   },
   extraReducers: (builder) => {
     // サインアップ
@@ -227,7 +231,8 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setEditedProf, setPersonalSettings } = authSlice.actions;
+export const { setEditedProf, setPersonalSettings, setLang } =
+  authSlice.actions;
 
 export const selectLoginUserInfo = (state: RootState) =>
   state.auth.loginUserInfo;
@@ -236,5 +241,6 @@ export const selectPersonalSettings = (state: RootState) =>
   state.auth.personalSettings;
 export const selectTooltip = (state: RootState) =>
   state.auth.personalSettings.tooltip;
+export const selectLang = (state: RootState) => state.auth.lang;
 
 export default authSlice.reducer;

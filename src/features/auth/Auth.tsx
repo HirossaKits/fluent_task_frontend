@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Lottie from 'react-lottie';
 import { css } from '@emotion/react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Container from '@mui/material/Container';
@@ -13,8 +14,14 @@ import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import { AppDispatch } from '../../app/store';
 import { SIGNIN_INFO, SIGNUP_INFO } from '../types';
-import { fetchAsyncSignin, fetchAsyncSignup } from './authSlice';
+import {
+  selectLang,
+  setLang,
+  fetchAsyncSignin,
+  fetchAsyncSignup,
+} from './authSlice';
 import loginPageAnimation from '../../img/loginPageAnimation.json';
+import CommonLanguageSelect from '../../components/CommonLanguageSelect';
 
 enum MODE {
   Login = 0,
@@ -29,10 +36,64 @@ const initRegInfo: SIGNUP_INFO = {
 };
 
 const Auth: React.FC = () => {
-  const dispatch: AppDispatch = useDispatch();
+  const theme = useTheme();
+  const styles = {
+    root: css`
+      min-height: 100vh;
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    `,
+    container: css`
+      margin-top: ${theme.spacing(18)};
+    `,
+    title: css`
+      font-family: 'Oleo Script', cursive;
+    `,
+    form: css`
+      margin-top: ${theme.spacing(3)};
+    `,
+    submit: css`
+      margin-top: ${theme.spacing(3)};
+      padding: ${theme.spacing(1, 6)};
+    `,
+  };
 
+  const lottieOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: loginPageAnimation,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid meet',
+    },
+  };
+
+  const dispatch: AppDispatch = useDispatch();
+  const { t, i18n } = useTranslation();
   const [mode, setMode] = useState(MODE.Login);
   const [regInfo, setRegInfo] = useState<SIGNUP_INFO>(initRegInfo);
+  useEffect(() => {
+    const lang = localStorage.getItem('localeLang');
+    if (lang) {
+      switch (navigator.language) {
+        case 'ja':
+          dispatch(setLang('ja'));
+          localStorage.setItem('localeLang', 'ja');
+          break;
+        default:
+          dispatch(setLang('en'));
+          localStorage.setItem('localeLang', 'en');
+      }
+    } else {
+      console.log('OK');
+      dispatch(setLang('ja'));
+      localStorage.setItem('localeLang', 'ja');
+    }
+  }, []);
+
+  const lang = useSelector(selectLang);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -59,39 +120,8 @@ const Auth: React.FC = () => {
     await dispatch(fetchAsyncSignup(regInfo));
   };
 
-  const lottieOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: loginPageAnimation,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice',
-    },
-  };
-
-  const theme = useTheme();
-
-  const styles = {
-    root: css`
-      min-height: 100vh;
-      display: flex;
-      flex-grow: 1;
-      flex-direction: column;
-      justify-content: center;
-      text-align: center;
-    `,
-    container: css`
-      margin-top: ${theme.spacing(20)};
-    `,
-    title: css`
-      font-family: 'Oleo Script', cursive;
-    `,
-    form: css`
-      margin-top: ${theme.spacing(3)};
-    `,
-    submit: css`
-      margin-top: ${theme.spacing(3)};
-      padding: ${theme.spacing(1, 6)};
-    `,
+  const handleLanguageChange = (lang: string) => {
+    i18n.changeLanguage(lang);
   };
 
   return (
@@ -117,7 +147,7 @@ const Auth: React.FC = () => {
                     margin="normal"
                     fullWidth
                     id="email"
-                    label="Email"
+                    label={t('login.email')}
                     name="email"
                     autoComplete="email"
                     size="small"
@@ -131,7 +161,7 @@ const Auth: React.FC = () => {
                     margin="normal"
                     fullWidth
                     name="password"
-                    label="Password"
+                    label={t('login.password')}
                     type="password"
                     id="password"
                     autoComplete="current-password"
@@ -152,7 +182,7 @@ const Auth: React.FC = () => {
                     fullWidth
                     id="lastName"
                     name="last_name"
-                    label="姓"
+                    label={t('login.firstName')}
                     autoComplete="lname"
                     size="small"
                     onChange={handleInputChange}
@@ -165,7 +195,7 @@ const Auth: React.FC = () => {
                     fullWidth
                     id="firstName"
                     name="first_name"
-                    label="名"
+                    label={t('login.lastName')}
                     autoComplete="fname"
                     size="small"
                     onChange={handleInputChange}
@@ -177,7 +207,7 @@ const Auth: React.FC = () => {
                     margin="normal"
                     fullWidth
                     id="email"
-                    label="Email"
+                    label={t('login.email')}
                     name="email"
                     autoComplete="email"
                     size="small"
@@ -191,7 +221,7 @@ const Auth: React.FC = () => {
                     margin="normal"
                     fullWidth
                     name="password"
-                    label="Password"
+                    label={t('login.password')}
                     type="password"
                     id="password"
                     autoComplete="current-password"
@@ -211,18 +241,29 @@ const Auth: React.FC = () => {
                 css={styles.submit}
                 onClick={mode === MODE.Login ? signin : signup}
               >
-                {mode === MODE.Login ? 'ログイン' : 'サインアップ'}
+                {mode === MODE.Login ? t('login.login') : t('login.signup')}
               </Button>
             </Grid>
             <Grid item xs={12}>
               <Link variant="body2" onClick={toggleView}>
-                {mode === MODE.Login ? 'アカウント作成' : 'ログイン画面に戻る'}
+                {mode === MODE.Login
+                  ? t('login.createAccount')
+                  : t('login.backToLogin')}
               </Link>
+            </Grid>
+            <Grid item xs={6}>
+              <CommonLanguageSelect
+                width="100%"
+                value={lang}
+                onChange={handleLanguageChange}
+              />
             </Grid>
           </Grid>
         </form>
+      </Container>
+      <Container component="main" maxWidth="sm">
         <Lottie options={lottieOptions} />
-        <Box mt={8}>
+        <Box>
           <Typography variant="body2" color="textSecondary" align="center">
             {/* {"Copyright © "} */}
             {'Copyright   '}

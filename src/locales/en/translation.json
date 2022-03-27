@@ -1,0 +1,12 @@
+{
+    "login" : {
+        "login" : "Log in",
+        "createAccount": "Create Account",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "password": "Password",
+        "signup": "Sign up",
+        "backToLogin": "Go back to login"
+    }
+}

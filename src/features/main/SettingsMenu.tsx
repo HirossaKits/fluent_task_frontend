@@ -1,6 +1,7 @@
 import React from 'react';
 import { css } from '@emotion/react';
 import { useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import Popover from '@mui/material/Popover';
 import Paper from '@mui/material/Paper';
 import CommonSwitch from '../../components/CommonSwitch';
@@ -13,6 +14,7 @@ import {
   selectPersonalSettings,
   setPersonalSettings,
   fetchAsyncUpdateSettings,
+  selectLang,
 } from '../auth/authSlice';
 import { fetchAsyncGetOrgInfo } from '../org/orgSliece';
 import {
@@ -26,6 +28,7 @@ import {
   fetchAsyncGetTasks,
 } from '../task/taskSlice';
 import CommonSelect from '../../components/CommonSelect';
+import CommonLanguageSelect from '../../components/CommonLanguageSelect';
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;
@@ -40,12 +43,14 @@ const SettingsMenu: React.FC<Props> = (props) => {
     `,
   };
 
+  const dispatch = useDispatch();
+  const { t, i18n } = useTranslation();
+  const createOption = useCreateOption();
+  const message = useMessage();
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const settingsMenuOpen = useSelector(selectSettingsMenuOpen);
   const personalSettings = useSelector(selectPersonalSettings);
-  const dispatch = useDispatch();
-  const createOption = useCreateOption();
-  const message = useMessage();
+  const lang = useSelector(selectLang);
 
   const orgOptions = createOption(
     loginUserInfo.joined_org?.filter((org) => org.is_private === false),
@@ -136,6 +141,10 @@ const SettingsMenu: React.FC<Props> = (props) => {
     }
   };
 
+  const handleLanguageChange = (lang: string) => {
+    i18n.changeLanguage(lang);
+  };
+
   const handleColse = () => {
     dispatch(setSettingsMenuOpen(false));
   };
@@ -186,6 +195,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
             onChange={handleSelectChange}
           />
         )}
+        <CommonLanguageSelect value={lang} onChange={handleLanguageChange} />
       </Paper>
     </Popover>
   );
