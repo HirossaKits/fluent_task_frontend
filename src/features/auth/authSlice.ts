@@ -29,7 +29,7 @@ const userInfo: LOGIN_USER_INFO = {
 };
 
 const initialState: AUTH = {
-  lang: '',
+  lang: 'ja',
   loginUserInfo: userInfo,
   editedProf: {
     first_name: '',

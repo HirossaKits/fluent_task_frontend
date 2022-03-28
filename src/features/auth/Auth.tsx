@@ -74,23 +74,31 @@ const Auth: React.FC = () => {
   const { t, i18n } = useTranslation();
   const [mode, setMode] = useState(MODE.Login);
   const [regInfo, setRegInfo] = useState<SIGNUP_INFO>(initRegInfo);
+
   useEffect(() => {
-    const lang = localStorage.getItem('localeLang');
-    if (lang) {
-      switch (navigator.language) {
-        case 'ja':
-          dispatch(setLang('ja'));
-          localStorage.setItem('localeLang', 'ja');
-          break;
-        default:
-          dispatch(setLang('en'));
-          localStorage.setItem('localeLang', 'en');
-      }
-    } else {
-      console.log('OK');
-      dispatch(setLang('ja'));
-      localStorage.setItem('localeLang', 'ja');
-    }
+    let lang = localStorage.getItem('lang');
+    if (!lang) lang = 'ja';
+    i18n.changeLanguage(lang);
+    dispatch(setLang(lang));
+    localStorage.setItem('lang', lang);
+
+    // if (lang) {
+    //   switch (navigator.language) {
+    //     case 'ja':
+    //       i18n.changeLanguage(lang);
+    //       // dispatch(setLang('ja'));
+    //       localStorage.setItem('lang', 'ja');
+    //       break;
+    //     default:
+    //       i18n.changeLanguage(lang);
+    //       // dispatch(setLang('en'));
+    //       localStorage.setItem('lang', 'en');
+    //   }
+    // } else {
+    //   i18n.changeLanguage('ja');
+    //   // dispatch(setLang('ja'));
+    //   localStorage.setItem('lang', 'ja');
+    // }
   }, []);
 
   const lang = useSelector(selectLang);
@@ -122,20 +130,22 @@ const Auth: React.FC = () => {
 
   const handleLanguageChange = (lang: string) => {
     i18n.changeLanguage(lang);
+    dispatch(setLang(lang));
+    localStorage.setItem('lang', lang);
   };
 
   return (
     <div css={styles.root}>
-      <Container css={styles.container} component="main" maxWidth="xs">
+      <Container css={styles.container} component='main' maxWidth='xs'>
         <CssBaseline />
-        <Typography css={styles.title} variant="h2">
+        <Typography css={styles.title} variant='h2'>
           Fluent Task
         </Typography>
         <form css={styles.form}>
           <Grid
             container
-            justifyContent="center"
-            alignItems="center"
+            justifyContent='center'
+            alignItems='center'
             spacing={2}
           >
             {mode === MODE.Login && (
@@ -143,29 +153,29 @@ const Auth: React.FC = () => {
                 <Grid item xs={8}>
                   <TextField
                     autoFocus
-                    variant="outlined"
-                    margin="normal"
+                    variant='outlined'
+                    margin='normal'
                     fullWidth
-                    id="email"
+                    id='email'
                     label={t('login.email')}
-                    name="email"
-                    autoComplete="email"
-                    size="small"
+                    name='email'
+                    autoComplete='email'
+                    size='small'
                     value={regInfo.email}
                     onChange={handleInputChange}
                   />
                 </Grid>
                 <Grid item xs={8}>
                   <TextField
-                    variant="outlined"
-                    margin="normal"
+                    variant='outlined'
+                    margin='normal'
                     fullWidth
-                    name="password"
+                    name='password'
                     label={t('login.password')}
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    size="small"
+                    type='password'
+                    id='password'
+                    autoComplete='current-password'
+                    size='small'
                     value={regInfo.password}
                     onChange={handleInputChange}
                   />
@@ -177,55 +187,55 @@ const Auth: React.FC = () => {
                 <Grid item xs={4}>
                   <TextField
                     autoFocus
-                    variant="outlined"
-                    margin="normal"
+                    variant='outlined'
+                    margin='normal'
                     fullWidth
-                    id="lastName"
-                    name="last_name"
+                    id='lastName'
+                    name='last_name'
                     label={t('login.firstName')}
-                    autoComplete="lname"
-                    size="small"
+                    autoComplete='lname'
+                    size='small'
                     onChange={handleInputChange}
                   />
                 </Grid>
                 <Grid item xs={4}>
                   <TextField
-                    margin="normal"
-                    variant="outlined"
+                    margin='normal'
+                    variant='outlined'
                     fullWidth
-                    id="firstName"
-                    name="first_name"
+                    id='firstName'
+                    name='first_name'
                     label={t('login.lastName')}
-                    autoComplete="fname"
-                    size="small"
+                    autoComplete='fname'
+                    size='small'
                     onChange={handleInputChange}
                   />
                 </Grid>
                 <Grid item xs={8}>
                   <TextField
-                    variant="outlined"
-                    margin="normal"
+                    variant='outlined'
+                    margin='normal'
                     fullWidth
-                    id="email"
+                    id='email'
                     label={t('login.email')}
-                    name="email"
-                    autoComplete="email"
-                    size="small"
+                    name='email'
+                    autoComplete='email'
+                    size='small'
                     value={regInfo.email}
                     onChange={handleInputChange}
                   />
                 </Grid>
                 <Grid item xs={8}>
                   <TextField
-                    variant="outlined"
-                    margin="normal"
+                    variant='outlined'
+                    margin='normal'
                     fullWidth
-                    name="password"
+                    name='password'
                     label={t('login.password')}
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    size="small"
+                    type='password'
+                    id='password'
+                    autoComplete='current-password'
+                    size='small'
                     value={regInfo.password}
                     onChange={handleInputChange}
                   />
@@ -235,9 +245,9 @@ const Auth: React.FC = () => {
 
             <Grid item xs={12}>
               <Button
-                type="submit"
-                variant="contained"
-                color="primary"
+                type='submit'
+                variant='contained'
+                color='primary'
                 css={styles.submit}
                 onClick={mode === MODE.Login ? signin : signup}
               >
@@ -245,7 +255,7 @@ const Auth: React.FC = () => {
               </Button>
             </Grid>
             <Grid item xs={12}>
-              <Link variant="body2" onClick={toggleView}>
+              <Link variant='body2' onClick={toggleView}>
                 {mode === MODE.Login
                   ? t('login.createAccount')
                   : t('login.backToLogin')}
@@ -253,7 +263,7 @@ const Auth: React.FC = () => {
             </Grid>
             <Grid item xs={6}>
               <CommonLanguageSelect
-                width="100%"
+                width='100%'
                 value={lang}
                 onChange={handleLanguageChange}
               />
@@ -261,13 +271,13 @@ const Auth: React.FC = () => {
           </Grid>
         </form>
       </Container>
-      <Container component="main" maxWidth="sm">
+      <Container component='main' maxWidth='sm'>
         <Lottie options={lottieOptions} />
         <Box>
-          <Typography variant="body2" color="textSecondary" align="center">
+          <Typography variant='body2' color='textSecondary' align='center'>
             {/* {"Copyright © "} */}
             {'Copyright   '}
-            <Link color="inherit" href="">
+            <Link color='inherit' href=''>
               Hirohisa Kitsuka
             </Link>{' '}
             {new Date().getFullYear()}

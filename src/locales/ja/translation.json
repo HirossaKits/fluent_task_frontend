@@ -1,25 +1,17 @@
-
 {
-    "login" : {
-        "login" : "ログイン",
-        "createAccount": "アカウントを作成",
-        "firstName": "姓",
-        "lastName": "名",
-        "email": "メールアドレス",
-        "password": "パスワード",
-        "signup": "サインイン",
-        "backToLogin": "ログイン画面に戻る"
-    },
-    "langSelect" : {
-        "login" : "ログイン",
-        "createAccount": "アカウントを作成",
-        "firstName": "姓",
-        "lastName": "名",
-        "email": "メールアドレス",
-        "password": "パスワード",
-        "signup": "サインイン",
-        "backToLogin": "ログイン画面に戻る"
-    }
+  "langSelect": {
+    "selectLanguage": "言語を選択",
+    "english": "英語",
+    "japanese": "日本語"
+  },
+  "login": {
+    "login": "ログイン",
+    "createAccount": "アカウントを作成",
+    "firstName": "姓",
+    "lastName": "名",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "signup": "サインイン",
+    "backToLogin": "ログイン画面に戻る"
+  }
 }
-
-
