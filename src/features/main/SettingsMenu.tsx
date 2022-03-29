@@ -1,7 +1,7 @@
 import React from 'react';
 import { css } from '@emotion/react';
-import { useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '@mui/material';
 import Popover from '@mui/material/Popover';
 import Paper from '@mui/material/Paper';
 import CommonSwitch from '../../components/CommonSwitch';
@@ -44,7 +44,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
   };
 
   const dispatch = useDispatch();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const createOption = useCreateOption();
   const message = useMessage();
   const loginUserInfo = useSelector(selectLoginUserInfo);
@@ -108,9 +108,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
         dispatch(setPersonalSettings(settings));
         dispatch(fetchAsyncUpdateSettings(settings));
       }
-      message(
-        '現在プライベートモードしか利用できません。グループに参加するか、グループを作成してください。'
-      );
+      message(t('settings.cannotUseGroup'));
       return;
     } else {
       const settings = {
@@ -140,11 +138,6 @@ const SettingsMenu: React.FC<Props> = (props) => {
       fetchInSequenceRelatedOrg();
     }
   };
-
-  const handleLanguageChange = (lang: string) => {
-    i18n.changeLanguage(lang);
-  };
-
   const handleColse = () => {
     dispatch(setSettingsMenuOpen(false));
   };
@@ -166,36 +159,36 @@ const SettingsMenu: React.FC<Props> = (props) => {
     >
       <Paper css={styles.paper}>
         <CommonSwitch
-          label={'ダークモード'}
+          label={t('settings.darkMode')}
           labelWidth={10}
-          name="dark_mode"
+          name='dark_mode'
           value={personalSettings.dark_mode}
           onChange={handleInputChange}
         />
         <CommonSwitch
-          label={'ツールチップ'}
+          label={t('settings.tooltip')}
           labelWidth={10}
-          name="tooltip"
+          name='tooltip'
           value={personalSettings.tooltip}
           onChange={handleInputChange}
         />
         <CommonSwitch
-          label={'プライベートモード'}
+          label={t('settings.privateMode')}
           labelWidth={10}
-          name="private_mode"
+          name='private_mode'
           value={personalSettings.private_mode}
           onChange={handleTogglePrivateModeChange}
         />
         {!personalSettings.private_mode && (
           <CommonSelect
-            label="グループを選択"
+            label={t('settings.selectGroup')}
             options={orgOptions}
-            name="selected_org_id"
+            name='selected_org_id'
             value={validateOrgId(personalSettings.selected_org_id)}
             onChange={handleSelectChange}
           />
         )}
-        <CommonLanguageSelect value={lang} onChange={handleLanguageChange} />
+        <CommonLanguageSelect value={lang} />
       </Paper>
     </Popover>
   );

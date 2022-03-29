@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
@@ -184,6 +185,7 @@ const Main = () => {
 
   const dispatch: AppDispatch = useDispatch();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { t } = useTranslation();
   const message = useMessage();
 
   const mainComponentName = useSelector(selectMainComponentName);
@@ -250,7 +252,7 @@ const Main = () => {
 
   const handleVirticalMenuClick = (component: MAIN_COMPONENT_NAME) => {
     if (component === 'Org' && settings.private_mode) {
-      message('プライベートモードではグループ機能は使用できません。');
+      message(t('main.cannotUseGroup'));
       return;
     }
     dispatch(setMainComponentName(component));
@@ -260,17 +262,17 @@ const Main = () => {
     <Box sx={{ display: 'flex', width: '100%' }}>
       <AppBar
         css={drawerOpen ? styles.appBarShift : styles.appBar}
-        position="fixed"
+        position='fixed'
       >
-        <Toolbar css={styles.toolbar} disableGutters variant="dense">
+        <Toolbar css={styles.toolbar} disableGutters variant='dense'>
           <IconButton
             css={drawerOpen ? styles.menuIconHide : styles.menuIcon}
-            edge="start"
+            edge='start'
             onClick={handleDrawerOpen}
           >
             <AppsIcon />
           </IconButton>
-          <Typography css={styles.title} variant="h5" noWrap>
+          <Typography css={styles.title} variant='h5' noWrap>
             Fluent Task ( Beta )
           </Typography>
           <Box css={styles.iconBox} sx={{ display: 'flex' }}>
@@ -278,7 +280,7 @@ const Main = () => {
               ref={notificationAnchorEl}
               onClick={handleNotificationClick}
             >
-              <Badge badgeContent={inviteCount} color="secondary">
+              <Badge badgeContent={inviteCount} color='secondary'>
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -294,8 +296,8 @@ const Main = () => {
       <Drawer
         css={drawerOpen ? styles.drawerOpen : styles.drawerClose}
         className={'1gxenss-drawerOpen'}
-        variant="permanent"
-        anchor="left"
+        variant='permanent'
+        anchor='left'
         open={drawerOpen}
       >
         <div css={styles.drawerHeader}>
@@ -312,7 +314,7 @@ const Main = () => {
             <ListItemIcon>
               <PeopleAltIcon />
             </ListItemIcon>
-            <ListItemText css={styles.drawerText} primary={'グループ'} />
+            <ListItemText css={styles.drawerText} primary={t('main.group')} />
           </ListItem>
           <ListItem
             button
@@ -322,7 +324,7 @@ const Main = () => {
             <ListItemIcon>
               <GroupWorkIcon />
             </ListItemIcon>
-            <ListItemText css={styles.drawerText} primary={'プロジェクト'} />
+            <ListItemText css={styles.drawerText} primary={t('main.project')} />
           </ListItem>
           <ListItem
             button
@@ -332,7 +334,7 @@ const Main = () => {
             <ListItemIcon>
               <ListAltIcon />
             </ListItemIcon>
-            <ListItemText css={styles.drawerText} primary={'一覧'} />
+            <ListItemText css={styles.drawerText} primary={t('main.list')} />
           </ListItem>
           <ListItem
             button
@@ -342,7 +344,7 @@ const Main = () => {
             <ListItemIcon>
               <ViewWeekIcon />
             </ListItemIcon>
-            <ListItemText css={styles.drawerText} primary={'カード'} />
+            <ListItemText css={styles.drawerText} primary={t('main.kanban')} />
           </ListItem>
           <ListItem
             button
@@ -352,7 +354,10 @@ const Main = () => {
             <ListItemIcon>
               <EventNoteIcon />
             </ListItemIcon>
-            <ListItemText css={styles.drawerText} primary={'カレンダー'} />
+            <ListItemText
+              css={styles.drawerText}
+              primary={t('main.calendar')}
+            />
           </ListItem>
         </List>
       </Drawer>
@@ -369,8 +374,8 @@ const Main = () => {
             <Tabs
               value={selectedProjectId === '' ? 0 : selectedProjectId}
               onChange={handleTabChange}
-              variant="scrollable"
-              scrollButtons="auto"
+              variant='scrollable'
+              scrollButtons='auto'
             >
               {projects.map((proj, idx) => (
                 <Tab
@@ -386,12 +391,14 @@ const Main = () => {
                   icon={
                     <>
                       <AddIcon />
-                      <Typography>新規作成</Typography>
+                      <Typography variant='body2'>
+                        {t('main.addProject')}
+                      </Typography>
                     </>
                   }
-                  iconPosition="start"
+                  iconPosition='start'
                   style={{ margin: 0, padding: 0 }}
-                  value="new_project"
+                  value='new_project'
                 />
               )}
             </Tabs>

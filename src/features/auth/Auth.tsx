@@ -262,11 +262,7 @@ const Auth: React.FC = () => {
               </Link>
             </Grid>
             <Grid item xs={6}>
-              <CommonLanguageSelect
-                width='100%'
-                value={lang}
-                onChange={handleLanguageChange}
-              />
+              <CommonLanguageSelect width='100%' value={lang} />
             </Grid>
           </Grid>
         </form>

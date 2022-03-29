@@ -13,5 +13,43 @@
     "password": "パスワード",
     "signup": "サインイン",
     "backToLogin": "ログイン画面に戻る"
+  },
+  "main": {
+    "group": "グループ",
+    "project": "プロジェクト",
+    "list": "一覧",
+    "kanban": "カンバン",
+    "calendar": "カレンダー",
+    "addProject": "新規作成",
+    "cannotUseGroup": "プライベートモードではグループ機能は使用できません。"
+  },
+  "settings": {
+    "darkMode": "ダークモード",
+    "tooltip": "ツールチップ",
+    "privateMode": "プライベートモード",
+    "selectGroup": "グループを選択",
+    "calendar": "カレンダー",
+    "cannotUseGroup": "現在プライベートモードしか利用できません。グループに参加するか、グループを作成してください。"
+  },
+  "profileMenu": {
+    "edit": "プロフィール編集",
+    "logout": "ログアウト",
+    "firstName": "姓",
+    "lastName": "名",
+    "comment": "コメント"
+  },
+  "profileDialog": {
+    "editProfile": "プロフィールを編集",
+    "firstName": "姓",
+    "lastName": "名",
+    "comment": "コメント",
+    "uploadImage": "画像をアップロード"
+  },
+  "project": {
+    "edit": "プロジェクトを編集",
+    "delete": "プロジェクトを削除",
+    "admin": "プロジェクト管理者",
+    "member": "プロジェクトメンバー",
+    "progress": "進捗 (%)"
   }
 }

@@ -1,9 +1,11 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { setLang } from '../features/auth/authSlice';
 
 interface LanguageType {
   lang: string;
@@ -13,7 +15,6 @@ interface LanguageType {
 
 type Props = {
   value: string;
-  onChange: Function;
   width?: string | number;
 };
 
@@ -24,7 +25,8 @@ export default function CommonLanguageSelect(props: Props) {
     `,
   };
 
-  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { t, i18n } = useTranslation();
 
   const languages: readonly LanguageType[] = [
     {
@@ -41,7 +43,9 @@ export default function CommonLanguageSelect(props: Props) {
   ];
 
   const handleSelectChange = (event: any, newItem: LanguageType) => {
-    props.onChange(newItem.lang);
+    i18n.changeLanguage(newItem.lang);
+    dispatch(setLang(newItem.lang));
+    localStorage.setItem('lang', newItem.lang);
   };
 
   return (
@@ -68,7 +72,7 @@ export default function CommonLanguageSelect(props: Props) {
         <TextField
           {...params}
           variant='standard'
-          label='language'
+          label={t('langSelect.selectLanguage')}
           margin='normal'
           inputProps={{
             ...params.inputProps,

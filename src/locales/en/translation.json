@@ -13,5 +13,39 @@
     "password": "Password",
     "signup": "Sign up",
     "backToLogin": "Go back to login"
+  },
+  "main": {
+    "group": "Group",
+    "project": "Project",
+    "list": "List",
+    "kanban": "Kanban",
+    "calendar": "Calendar",
+    "addProject": "New Project",
+    "cannotUseGroup": "The group function cannot be used in private mode."
+  },
+  "settings": {
+    "darkMode": "Dark mode",
+    "tooltip": "Tooltip",
+    "privateMode": "Private mode",
+    "selectGroup": "Select Group",
+    "cannotUseGroup": "Currently only private mode is available. Join a group or create a group."
+  },
+  "profileMenu": {
+    "edit": "Edit Profile",
+    "logout": "Logout"
+  },
+  "profileDialog": {
+    "editProfile": "Edit Profile",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "comment": "Comment",
+    "uploadImage": "Upload avatar image"
+  },
+  "project": {
+    "edit": "Edit project",
+    "delete": "Remove project",
+    "admin": "Project Administrator",
+    "member": "Project Member",
+    "progress": "Progress (%)"
   }
 }

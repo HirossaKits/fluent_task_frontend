@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { css } from '@emotion/react';
 import { Line, Doughnut } from 'react-chartjs-2';
 import { useTheme } from '@mui/material/styles';
@@ -99,6 +100,7 @@ const Project = () => {
   };
 
   const dispatch: AppDispatch = useDispatch();
+  const { t } = useTranslation();
   const sortUser = useSortUser();
   const createLineChartData = useCreateLineChartData();
   const createDoughnutData = useCreateDoughnutData();
@@ -125,7 +127,7 @@ const Project = () => {
     labels: lineChartData.length ? lineChartData.map((data) => data.label) : [],
     datasets: [
       {
-        label: '進捗(%)',
+        label: t('project.progress'),
         data: lineChartData?.map((data) => data.percent),
         lineTension: 0.1,
         backgroundColor: colorHandler.convertColorCodeToRGBA(
@@ -198,33 +200,33 @@ const Project = () => {
       {!Object.is(project, emptyProject) && (
         <>
           <Stack
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="flex-start"
+            direction='row'
+            justifyContent='flex-start'
+            alignItems='flex-start'
             spacing={3}
           >
             <Stack
               css={styles.stack}
-              direction="column"
-              justifyContent="flex-start"
-              alignItems="flex-start"
+              direction='column'
+              justifyContent='flex-start'
+              alignItems='flex-start'
             >
               <Box css={styles.titleWrap}>
-                <Typography variant="h5" component="div">
+                <Typography variant='h5' component='div'>
                   {project.project_name}
                 </Typography>
-                <CommonTooltip title="編集">
+                <CommonTooltip title={t('project.edit')}>
                   <IconButton
-                    aria-label="edit project"
+                    aria-label='edit project'
                     css={styles.editIcon}
                     onClick={handleEditClick}
                   >
                     <EditIcon />
                   </IconButton>
                 </CommonTooltip>
-                <CommonTooltip title="削除">
+                <CommonTooltip title={t('project.delete')}>
                   <IconButton
-                    aria-label="delete project"
+                    aria-label='delete project'
                     onClick={handleDeleteClick}
                   >
                     <DeleteIcon />
@@ -233,18 +235,18 @@ const Project = () => {
               </Box>
               <Typography
                 css={styles.description}
-                variant="subtitle1"
-                component="div"
+                variant='subtitle1'
+                component='div'
               >
                 {project.description}
               </Typography>
               <Card css={styles.userCard}>
                 <Typography
                   css={styles.listTitle}
-                  variant="subtitle1"
-                  component="div"
+                  variant='subtitle1'
+                  component='div'
                 >
-                  プロジェクト管理者
+                  {t('project.admin')}
                 </Typography>
                 <Divider />
                 <List css={styles.respList} dense>
@@ -268,10 +270,10 @@ const Project = () => {
               <Card css={styles.userCard}>
                 <Typography
                   css={styles.listTitle}
-                  variant="subtitle1"
-                  component="div"
+                  variant='subtitle1'
+                  component='div'
                 >
-                  プロジェクトメンバー
+                  {t('project.member')}
                 </Typography>
                 <Divider />
                 <List css={styles.memberList} dense>
@@ -295,9 +297,9 @@ const Project = () => {
             </Stack>
             <Stack
               css={styles.graphArea}
-              direction="column"
-              justifyContent="center"
-              alignItems="flex-start"
+              direction='column'
+              justifyContent='center'
+              alignItems='flex-start'
             >
               <div css={styles.lineChartWrapper}>
                 <Line
