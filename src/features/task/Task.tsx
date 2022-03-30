@@ -1,6 +1,7 @@
 import React from 'react';
 import { css } from '@emotion/react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material/styles';
 import TaskDialog from './TaskDialog';
 import Typography from '@mui/material/Typography';
@@ -10,7 +11,6 @@ import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import EastIcon from '@mui/icons-material/East';
 import { TASK, Status, COLUMN_INFO } from '../types';
-import { getStrDateSpan } from '../../util/dateHandler';
 import useMessage from '../../hooks/message';
 import useCreateOption from '../../hooks/optionCreater';
 import useTaskEditPermission from '../../hooks/taskEditPermission';
@@ -37,6 +37,7 @@ const Task = () => {
   };
 
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const message = useMessage();
   const createOption = useCreateOption();
   const taskEditPermisson = useTaskEditPermission();
@@ -53,46 +54,51 @@ const Task = () => {
   const columnInfo: COLUMN_INFO[] = [
     {
       name: 'task_name',
-      label: 'タスク名',
+      label: t('task.taskName'),
       type: 'string',
       width: '14%',
       isJsxElement: true,
     },
     {
       name: 'task_category_id',
-      label: 'カテゴリー',
+      label: t('task.category'),
       type: 'select',
       width: '10%',
       selection: taskCategoryOption,
     },
     {
       name: 'status',
-      label: 'ステータス',
+      label: t('task.status'),
       type: 'string',
       width: '12%',
       isJsxElement: true,
     },
     {
       name: 'scheduled_startdate',
-      label: '開始予定日',
+      label: t('task.startDate'),
       type: 'Date',
       width: '12%',
       isJsxElement: true,
     },
     {
       name: 'scheduled_enddate',
-      label: '終了予定日',
+      label: t('task.endDate'),
       type: 'Date',
       width: '12%',
       isJsxElement: true,
     },
     {
       name: 'estimate_manhour',
-      label: '予定工数(H)',
+      label: t('task.manHour'),
       type: 'number',
       width: '10%',
     },
-    { name: 'assigned_name', label: '担当', type: 'string', width: '14%' },
+    {
+      name: 'assigned_name',
+      label: t('task.assigned'),
+      type: 'string',
+      width: '14%',
+    },
   ];
 
   // 登録
@@ -113,17 +119,15 @@ const Task = () => {
   const hendleEditClick = (tasks: TASK[]) => {
     dispatch(setTaskDialogMode('edit'));
     if (tasks.length < 1) {
-      message('一覧から編集するタスクを選択してください。');
+      message(t('task.selectTask'));
       return;
     }
     if (tasks.length > 1) {
-      message('編集するタスクを一つに絞ってください');
+      message(t('task.narrowDownTask'));
       return;
     }
     if (!taskEditPermisson(tasks)) {
-      message(
-        'タスクの担当者、作成者、またはプロジェクトに管理者のみ編集可能です。'
-      );
+      message(t('task.cannotEditTask'));
       return;
     }
     dispatch(setEditedTask(tasks[0]));
@@ -139,8 +143,8 @@ const Task = () => {
     task_name: (task: TASK) => (
       <Typography>
         <Link
-          href="#"
-          underline="always"
+          href='#'
+          underline='always'
           onClick={(event: any) => {
             event.stopPropagation();
             dispatch(setTaskDialogMode('detail'));
@@ -274,7 +278,7 @@ const Task = () => {
         elementFactory={elementFactory}
         columnInfo={columnInfo}
         showToolBar={true}
-        idColumn="task_id"
+        idColumn='task_id'
         handleEditClick={hendleEditClick}
         handleRegisterClick={handleRegisterClick}
         handleDeleteClick={handleDeleteClick}

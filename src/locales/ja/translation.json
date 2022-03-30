@@ -4,6 +4,12 @@
     "english": "英語",
     "japanese": "日本語"
   },
+  "table": {
+    "add": "タスクを登録",
+    "edit": "タスクを編集",
+    "remove": "タスクを削除",
+    "filter": "フィルター"
+  },
   "login": {
     "login": "ログイン",
     "createAccount": "アカウントを作成",
@@ -45,11 +51,39 @@
     "comment": "コメント",
     "uploadImage": "画像をアップロード"
   },
+  "org": {
+    "edit": "グループを編集",
+    "invite": "ユーザーを招待",
+    "owner": "グループ所有者",
+    "admin": "グループ管理者",
+    "addToAdmin": "管理者にする",
+    "excludeFromAdmin": "管理者から除外する",
+    "withdrawFromGroup": "グループから脱退する",
+    "excludeFromGroup": "グループから除外する",
+    "onlyOwnerEdit": "グループ所有者のみ変更可能です。",
+    "onlyAdminInvite": "グループの管理者のみユーザーを招待可能です。"
+  },
+  "orgDialog": {
+    "edit": "グループを編集",
+    "orgName": "グループ名"
+  },
   "project": {
     "edit": "プロジェクトを編集",
     "delete": "プロジェクトを削除",
     "admin": "プロジェクト管理者",
     "member": "プロジェクトメンバー",
     "progress": "進捗 (%)"
+  },
+  "task": {
+    "taskName": "タスク名",
+    "category": "カテゴリー",
+    "status": "ステータス",
+    "startDate": "開始予定日",
+    "endDate": "終了予定日",
+    "manHour": "予定工数(H)",
+    "assigned": "担当者",
+    "selectTask": "一覧から編集するタスクを選択してください。",
+    "narrowDownTask": "編集するタスクを一つに絞ってください。",
+    "cannotEditTask": "タスクの担当者、作成者、またはプロジェクトに管理者のみ編集可能です。"
   }
 }

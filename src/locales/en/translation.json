@@ -4,6 +4,12 @@
     "english": "English",
     "japanese": "Japanese"
   },
+  "table": {
+    "add": "Add task",
+    "edit": "Edit task",
+    "remove": "Remove tasks",
+    "filter": "Filter"
+  },
   "login": {
     "login": "Log in",
     "createAccount": "Create Account",
@@ -41,11 +47,39 @@
     "comment": "Comment",
     "uploadImage": "Upload avatar image"
   },
+  "org": {
+    "edit": "Edit group",
+    "invite": "Invite users",
+    "owner": "Group onwer",
+    "admin": "Group administrator",
+    "addToAdmin": "Add to administrator",
+    "excludeFromAdmin": "Exclude from administrator",
+    "withdrawFromGroup": "Withdraw from the group",
+    "excludeFromGroup": "Exclude from the group",
+    "onlyOwnerEdit": "Only the group owner can change it.",
+    "onlyAdminInvite": "Only group admins can invite users."
+  },
+  "orgDialog": {
+    "edit": "Edit group",
+    "orgName": "Group name"
+  },
   "project": {
     "edit": "Edit project",
     "delete": "Remove project",
-    "admin": "Project Administrator",
+    "admin": "Project Admin",
     "member": "Project Member",
     "progress": "Progress (%)"
+  },
+  "task": {
+    "taskName": "Title",
+    "category": "Category",
+    "status": "Status",
+    "startDate": "Scheduled start date",
+    "endDate": "Scheduled end date",
+    "manHour": "Estimate man hour",
+    "assigned": "Assigned person",
+    "selectTask": "Select the task you want to edit from the list.",
+    "narrowDownTask": "Narrow down the task to be edited to one.",
+    "cannotEditTask": "Only the person responsible for the task, the creator, or the administrator of the project can edit it."
   }
 }

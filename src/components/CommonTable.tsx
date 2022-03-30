@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { css } from '@emotion/react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -116,6 +117,7 @@ const CommonTable: ListComponent = (props) => {
     value: string | number;
   }
 
+  const { t } = useTranslation();
   const table = props.data.map((row, index) => ({ ...row, id: index }));
 
   const filterAnchorEl = useRef(null);
@@ -340,22 +342,22 @@ const CommonTable: ListComponent = (props) => {
       <Box sx={{ width: '100%' }}>
         {props.showToolBar && (
           <Toolbar disableGutters>
-            <CommonTooltip title="登録">
+            <CommonTooltip title={t('table.add')}>
               <IconButton
-                aria-label="register task"
+                aria-label='register task'
                 onClick={handleRegisterClick}
               >
                 <PlaylistAddIcon />
               </IconButton>
             </CommonTooltip>
-            <CommonTooltip title="編集">
-              <IconButton aria-label="edit task" onClick={handleEditClick}>
+            <CommonTooltip title={t('table.edit')}>
+              <IconButton aria-label='edit task' onClick={handleEditClick}>
                 <EditIcon />
               </IconButton>
             </CommonTooltip>
-            <CommonTooltip title="削除">
+            <CommonTooltip title={t('table.remove')}>
               <IconButton
-                aria-label="delete task"
+                aria-label='delete task'
                 onClick={() =>
                   props.handleDeleteClick &&
                   props.handleDeleteClick(
@@ -366,11 +368,11 @@ const CommonTable: ListComponent = (props) => {
                 <DeleteIcon />
               </IconButton>
             </CommonTooltip>
-            <CommonTooltip title="フィルター">
+            <CommonTooltip title={t('table.filter')}>
               <IconButton
                 ref={filterAnchorEl}
                 css={styles.filterButton}
-                aria-label="filter list"
+                aria-label='filter list'
                 onClick={handleFilterClick}
               >
                 <FilterListIcon />
@@ -382,7 +384,7 @@ const CommonTable: ListComponent = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell css={styles.tableCheckCell} padding="checkbox">
+                <TableCell css={styles.tableCheckCell} padding='checkbox'>
                   <Checkbox
                     indeterminate={
                       selected.length > 0 && selected.length < table.length
@@ -391,7 +393,7 @@ const CommonTable: ListComponent = (props) => {
                       selected.length > 0 && selected.length === table.length
                     }
                     onChange={handleSelectAllClic}
-                    color="primary"
+                    color='primary'
                   />
                 </TableCell>
                 {props.columnInfo.map((col, idx) => (
@@ -421,10 +423,10 @@ const CommonTable: ListComponent = (props) => {
                   hover
                   selected={selected.indexOf(row.id) !== -1}
                 >
-                  <TableCell css={styles.tableCheckCell} padding="checkbox">
+                  <TableCell css={styles.tableCheckCell} padding='checkbox'>
                     <Checkbox
                       checked={selected.indexOf(row.id) !== -1}
-                      color="primary"
+                      color='primary'
                     />
                   </TableCell>
                   {props.columnInfo.map((col) => (
@@ -479,14 +481,14 @@ const CommonTable: ListComponent = (props) => {
         onClose={handleFilterClose}
       >
         <Paper css={styles.paper}>
-          <form css={styles.form} noValidate autoComplete="off">
+          <form css={styles.form} noValidate autoComplete='off'>
             {filters.map((filter, index) => (
               <Grid
                 item
                 container
-                direction="row"
-                justifyContent="space-around"
-                alignItems="center"
+                direction='row'
+                justifyContent='space-around'
+                alignItems='center'
               >
                 <Grid css={styles.iconGrid} item>
                   {index === filters.length - 1 &&
@@ -502,8 +504,8 @@ const CommonTable: ListComponent = (props) => {
                 </Grid>
                 <Grid css={styles.textGrid} item xs={3}>
                   <CommonSelect
-                    label="対象"
-                    name="columnName"
+                    label='対象'
+                    name='columnName'
                     options={filterTargetOption}
                     value={filter.columnName as string}
                     index={index}
@@ -514,33 +516,33 @@ const CommonTable: ListComponent = (props) => {
                 <Grid css={styles.textGrid} item>
                   {filter.type === 'string' ? (
                     <CommonSelect
-                      label="演算子"
-                      name="operatoroperator"
+                      label='演算子'
+                      name='operatoroperator'
                       options={FilterOperatorOfString}
                       value={filter.operator}
                       index={index}
                       onChange={handleInputChange}
-                      width="140px"
+                      width='140px'
                     />
                   ) : filter.type === 'number' ? (
                     <CommonSelect
-                      label="演算子"
-                      name="operatoroperator"
+                      label='演算子'
+                      name='operatoroperator'
                       options={FilterOperatorOfNumber}
                       value={filter.operator}
                       index={index}
                       onChange={handleInputChange}
-                      width="140px"
+                      width='140px'
                     />
                   ) : filter.type === 'Date' ? (
                     <CommonSelect
-                      label="演算子"
-                      name="operatoroperator"
+                      label='演算子'
+                      name='operatoroperator'
                       options={FilterOperatorOfDate}
                       value={filter.operator}
                       index={index}
                       onChange={handleInputChange}
-                      width="140px"
+                      width='140px'
                     />
                   ) : (
                     // <CommonSelect
@@ -553,49 +555,49 @@ const CommonTable: ListComponent = (props) => {
                     //   width="140px"
                     // />
                     <CommonSelect
-                      label="演算子"
-                      name="operatoroperator"
+                      label='演算子'
+                      name='operatoroperator'
                       options={FilterOperatorOfString}
                       value={filter.operator}
                       index={index}
                       onChange={handleInputChange}
-                      width="140px"
+                      width='140px'
                     />
                   )}
                 </Grid>
                 <Grid css={styles.textGrid} item>
                   {filter.type === 'string' ? (
                     <CommonTextField
-                      label="値"
-                      name="value"
+                      label='値'
+                      name='value'
                       value={filter.value}
                       index={index}
                       onChange={handleInputChange}
-                      width="140px"
+                      width='140px'
                     />
                   ) : filter.type === 'number' ? (
                     <CommonTextField
-                      label="値"
-                      type="number"
-                      name="value"
+                      label='値'
+                      type='number'
+                      name='value'
                       value={filter.value}
                       index={index}
                       onChange={handleInputChange}
-                      width="140px"
+                      width='140px'
                     />
                   ) : filter.type === 'Date' ? (
                     <CommonDatePicker
-                      label="値"
-                      name="value"
+                      label='値'
+                      name='value'
                       value={String(filter.value)}
                       index={index}
                       onChange={handleInputChange}
-                      width="140px"
+                      width='140px'
                     />
                   ) : (
                     <CommonSelect
-                      label="値"
-                      name="value"
+                      label='値'
+                      name='value'
                       index={index}
                       options={
                         props.columnInfo.find(
@@ -604,14 +606,14 @@ const CommonTable: ListComponent = (props) => {
                       }
                       value={filter.value}
                       onChange={handleInputChange}
-                      width="140px"
+                      width='140px'
                     />
                   )}
                 </Grid>
                 <Grid css={styles.iconGrid} item>
                   {(filters.length !== 1 || index !== 0) && (
                     <IconButton onClick={() => handleClearClick(index)}>
-                      <ClearIcon color="action" />
+                      <ClearIcon color='action' />
                     </IconButton>
                   )}
                 </Grid>

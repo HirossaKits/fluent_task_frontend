@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -91,6 +92,7 @@ const LongUserCard = (props: Props) => {
   };
 
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const message = useMessage();
   const loginUserInfo = useSelector(selectLoginUserInfo);
@@ -159,7 +161,7 @@ const LongUserCard = (props: Props) => {
       <Card css={styles.card}>
         {props.user.user_id !== orgInfo.org_owner_id && (
           <IconButton css={styles.dot} onClick={handleClick}>
-            <MoreHorizIcon fontSize="small" />
+            <MoreHorizIcon fontSize='small' />
           </IconButton>
         )}
         <Box sx={{ display: 'flex' }}>
@@ -172,22 +174,22 @@ const LongUserCard = (props: Props) => {
             </Avatar>
           )}
           <Box css={styles.text}>
-            <Typography variant="h6" component="div">
+            <Typography variant='h6' component='div'>
               {`${props.user.last_name} ${props.user.first_name} `}
             </Typography>
-            <Typography noWrap variant="body2" component="div">
+            <Typography noWrap variant='body2' component='div'>
               {`${props.user.comment}`}
             </Typography>
           </Box>
         </Box>
         <Box css={styles.comment}>
           {props.isOwner && (
-            <CommonTooltip title="グループ所有者">
+            <CommonTooltip title={t('org.owner')}>
               <WorkspacePremiumIcon css={styles.iconPremium} />
             </CommonTooltip>
           )}
           {props.isAdmin && (
-            <CommonTooltip title="グループ管理者">
+            <CommonTooltip title={t('org.admin')}>
               <AdminPanelSettingsIcon css={styles.iconAdmin} />
             </CommonTooltip>
           )}
@@ -204,32 +206,32 @@ const LongUserCard = (props: Props) => {
       >
         <MenuItem onClick={() => handleIncludeAdminClick(props.user.user_id)}>
           <ListItemIcon>
-            <GppGoodIcon fontSize="small" />
+            <GppGoodIcon fontSize='small' />
           </ListItemIcon>
-          <ListItemText>管理者にする</ListItemText>
+          <ListItemText>{t('org.addToAdmin')}</ListItemText>
         </MenuItem>
         <MenuItem onClick={() => handleExcludeAdminClick(props.user.user_id)}>
           <ListItemIcon>
-            <GppBadIcon fontSize="small" />
+            <GppBadIcon fontSize='small' />
           </ListItemIcon>
-          <ListItemText>管理者から除外する</ListItemText>
+          <ListItemText>{t('org.excludeFromAdmin')}</ListItemText>
         </MenuItem>
 
         {props.user.user_id === loginUserInfo.user_id ? (
           <MenuItem onClick={() => handleWithdrawOrgClick(props.user.user_id)}>
             <ListItemIcon>
-              <DirectionsRunIcon fontSize="small" />
+              <DirectionsRunIcon fontSize='small' />
             </ListItemIcon>
-            <ListItemText>グループから脱退する</ListItemText>
+            <ListItemText>{t('org.excludeFromGroup')}</ListItemText>
           </MenuItem>
         ) : (
           <MenuItem
             onClick={() => handleExcludeFromGroupClick(props.user.user_id)}
           >
             <ListItemIcon>
-              <PersonOffIcon fontSize="small" />
+              <PersonOffIcon fontSize='small' />
             </ListItemIcon>
-            <ListItemText>グループから除外する</ListItemText>
+            <ListItemText>{t('org.excludeFromGroup')}</ListItemText>
           </MenuItem>
         )}
       </Popover>

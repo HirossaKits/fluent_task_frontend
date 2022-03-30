@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
+import { useTranslation } from 'react-i18next';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -74,6 +75,7 @@ const Org = () => {
   };
 
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const orgInfo = useSelector(selectOrgInfo);
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const sortUser = useSortUser();
@@ -81,7 +83,7 @@ const Org = () => {
 
   const handleEditClick = () => {
     if (orgInfo.org_owner_id !== loginUserInfo.user_id) {
-      message('グループ所有者のみ変更可能です。');
+      message(t('org.onlyOwnerEdit'));
       return;
     }
     dispatch(setEditedOrgName(orgInfo.org_name));
@@ -90,7 +92,7 @@ const Org = () => {
 
   const handleInviteClick = () => {
     if (!orgInfo.org_admin_id.includes(loginUserInfo.user_id)) {
-      message('グループの管理者のみユーザーを招待可能です。');
+      message(t('org.onlyAdminInvite'));
       return;
     }
     dispatch(setInviteDialogOpen(true));
@@ -100,12 +102,12 @@ const Org = () => {
     <>
       <Box css={styles.header}>
         <Box css={styles.titleWrap}>
-          <Typography css={styles.titleText} variant="h5" component="div">
+          <Typography css={styles.titleText} variant='h5' component='div'>
             {orgInfo.org_name}
           </Typography>
-          <CommonTooltip title="編集">
+          <CommonTooltip title={t('org.edit')}>
             <IconButton css={styles.editIcon} onClick={handleEditClick}>
-              <EditIcon fontSize="small" />
+              <EditIcon fontSize='small' />
             </IconButton>
           </CommonTooltip>
         </Box>
@@ -115,7 +117,7 @@ const Org = () => {
             startIcon={<GroupAddIcon sx={{ marginBottom: '1px' }} />}
             onClick={handleInviteClick}
           >
-            ユーザーを招待
+            {t('org.invite')}
           </Button>
         </div>
       </Box>
