@@ -1,35 +1,42 @@
-import { useCallback } from 'react'
-import { TASK } from '../../src/features/types'
-import { sumByGroupToObject } from '../util/sumByGroup'
-import { Status } from '../features/types'
+import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+import { TASK } from '../../src/features/types';
+import { sumByGroupToObject } from '../util/sumByGroup';
+import { Status } from '../features/types';
 
-type DOUGHNUT_DATA =
-  {
-    label: string,
-    value: number,
-    percent: number
-  }
+type DOUGHNUT_DATA = {
+  label: string;
+  value: number;
+  percent: number;
+};
 
 export default function useCreateDoughnutData() {
+  const { t } = useTranslation();
 
   return useCallback((tasks: TASK[]): DOUGHNUT_DATA[] => {
-
-    if (tasks.length === 0) return []
+    if (tasks.length === 0) return [];
 
     // 工数の総和
-    const sum = tasks.map((task) => task.estimate_manhour ?? 0).reduce((acc, cur) => acc + cur)
+    const sum = tasks
+      .map((task) => task.estimate_manhour ?? 0)
+      .reduce((acc, cur) => acc + cur);
 
     // ステータスごとに完了工数を集計
-    const sumByStatus = sumByGroupToObject(tasks, 'status', 'estimate_manhour')
+    const sumByStatus = sumByGroupToObject(tasks, 'status', 'estimate_manhour');
 
-    const statusKeys: (keyof typeof Status)[] = ['Done', 'On going', 'Not started', 'Suspended']
+    const statusKeys: { status: keyof typeof Status; label: string }[] = [
+      { status: 'Done', label: t('kanban.done') },
+      { status: 'On going', label: t('kanban.onGoing') },
+      { status: 'Not started', label: t('kanban.notStarted') },
+      { status: 'Suspended', label: t('kanban.suspended') },
+    ];
 
     const doughnutData = statusKeys.map((elem) => ({
-      label: Status[elem],
-      value: sumByStatus[elem],
-      percent: Math.round(sumByStatus[elem] * 100 / sum)
-    }))
+      label: elem.label,
+      value: sumByStatus[elem.status],
+      percent: Math.round((sumByStatus[elem.status] * 100) / sum),
+    }));
 
-    return doughnutData
-  }, [])
+    return doughnutData;
+  }, []);
 }

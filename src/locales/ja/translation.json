@@ -8,7 +8,18 @@
     "add": "タスクを登録",
     "edit": "タスクを編集",
     "remove": "タスクを削除",
-    "filter": "フィルター"
+    "filter": "フィルター",
+    "target": "対象",
+    "operator": "演算子",
+    "value": "値",
+
+    "startFrom": "Remove tasks",
+    "include": "Filter",
+    "exclude": "Target",
+    "equal": "Operator",
+
+    "orLess": "Or less",
+    "orMore": "Or more"
   },
   "login": {
     "login": "ログイン",
@@ -28,6 +39,13 @@
     "calendar": "カレンダー",
     "addProject": "新規作成",
     "cannotUseGroup": "プライベートモードではグループ機能は使用できません。"
+  },
+  "notification": {
+    "noNotification": "通知はありません。",
+    "inviteFront": "",
+    "inviteRear": " からグループへの招待が届いています。",
+    "join": "参加",
+    "reject": "拒否"
   },
   "settings": {
     "darkMode": "ダークモード",
@@ -85,5 +103,11 @@
     "selectTask": "一覧から編集するタスクを選択してください。",
     "narrowDownTask": "編集するタスクを一つに絞ってください。",
     "cannotEditTask": "タスクの担当者、作成者、またはプロジェクトに管理者のみ編集可能です。"
+  },
+  "kanban": {
+    "suspended": "保留",
+    "notStarted": "開始前",
+    "onGoing": "進行中",
+    "done": "完了"
   }
 }

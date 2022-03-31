@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { css } from '@emotion/react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material/styles';
 import Popover from '@mui/material/Popover';
 import Paper from '@mui/material/Paper';
@@ -25,6 +26,7 @@ const NotificationMenu = (props: Props) => {
   };
 
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const dialogOpen = useSelector(selectNotificationDialogOpen);
   const invite = useSelector(selectInvite);
 
@@ -57,7 +59,7 @@ const NotificationMenu = (props: Props) => {
             </>
           ))
         ) : (
-          <Typography>通知はありません。</Typography>
+          <Typography>{t('notification.noNotification')}</Typography>
         )}
       </Paper>
     </Popover>

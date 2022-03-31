@@ -29,12 +29,6 @@ import CommonTextField from '../components/CommonTextField';
 import CommonDatePicker from '../components/CommonDatePicker';
 import CommonTooltip from './CommonTooltip';
 import { TARGET } from '../features/types';
-import {
-  FilterOperatorOfString,
-  FilterOperatorOfNumber,
-  FilterOperatorOfDate,
-  FilterOperatorOfSelect,
-} from '../selectionOptions';
 import useCreateOption from '../hooks/optionCreater';
 
 interface Props<T, K extends keyof T> {
@@ -99,6 +93,62 @@ const CommonTable: ListComponent = (props) => {
       margin: 0 ${theme.spacing(1)};
     `,
   };
+
+  const FilterOperatorOfString = [
+    {
+      value: 'start_from',
+      label: 'から始まる',
+    },
+    {
+      value: 'include',
+      label: 'を含む',
+    },
+    {
+      value: 'exclude',
+      label: 'を含まない',
+    },
+    {
+      value: '=',
+      label: 'に等しい',
+    },
+  ];
+
+  const FilterOperatorOfNumber = [
+    {
+      value: '=',
+      label: 'に等しい',
+    },
+    {
+      value: '<=',
+      label: 'より小さい',
+    },
+    {
+      value: '>=',
+      label: 'より大きい',
+    },
+  ];
+
+  const FilterOperatorOfDate = [
+    {
+      value: '=',
+      label: 'に等しい',
+    },
+    {
+      value: '<=',
+      label: 'より以前の',
+    },
+    {
+      value: '>=',
+      label: 'より以後の',
+    },
+  ];
+
+  const FilterOperatorOfSelect = [
+    {
+      value: '=',
+      label: 'に等しい',
+    },
+  ];
 
   type FACTORY = keyof typeof props.elementFactory;
   type DATA = typeof props.data[0];
@@ -504,7 +554,7 @@ const CommonTable: ListComponent = (props) => {
                 </Grid>
                 <Grid css={styles.textGrid} item xs={3}>
                   <CommonSelect
-                    label='対象'
+                    label={t('table.target')}
                     name='columnName'
                     options={filterTargetOption}
                     value={filter.columnName as string}
@@ -516,7 +566,7 @@ const CommonTable: ListComponent = (props) => {
                 <Grid css={styles.textGrid} item>
                   {filter.type === 'string' ? (
                     <CommonSelect
-                      label='演算子'
+                      label={t('table.operator')}
                       name='operatoroperator'
                       options={FilterOperatorOfString}
                       value={filter.operator}
@@ -526,7 +576,7 @@ const CommonTable: ListComponent = (props) => {
                     />
                   ) : filter.type === 'number' ? (
                     <CommonSelect
-                      label='演算子'
+                      label={t('table.operator')}
                       name='operatoroperator'
                       options={FilterOperatorOfNumber}
                       value={filter.operator}
@@ -536,7 +586,7 @@ const CommonTable: ListComponent = (props) => {
                     />
                   ) : filter.type === 'Date' ? (
                     <CommonSelect
-                      label='演算子'
+                      label={t('table.operator')}
                       name='operatoroperator'
                       options={FilterOperatorOfDate}
                       value={filter.operator}
@@ -555,7 +605,7 @@ const CommonTable: ListComponent = (props) => {
                     //   width="140px"
                     // />
                     <CommonSelect
-                      label='演算子'
+                      label={t('table.operator')}
                       name='operatoroperator'
                       options={FilterOperatorOfString}
                       value={filter.operator}
@@ -568,7 +618,7 @@ const CommonTable: ListComponent = (props) => {
                 <Grid css={styles.textGrid} item>
                   {filter.type === 'string' ? (
                     <CommonTextField
-                      label='値'
+                      label={t('table.value')}
                       name='value'
                       value={filter.value}
                       index={index}
@@ -577,7 +627,7 @@ const CommonTable: ListComponent = (props) => {
                     />
                   ) : filter.type === 'number' ? (
                     <CommonTextField
-                      label='値'
+                      label={t('table.value')}
                       type='number'
                       name='value'
                       value={filter.value}
@@ -587,7 +637,7 @@ const CommonTable: ListComponent = (props) => {
                     />
                   ) : filter.type === 'Date' ? (
                     <CommonDatePicker
-                      label='値'
+                      label={t('table.value')}
                       name='value'
                       value={String(filter.value)}
                       index={index}
@@ -596,7 +646,7 @@ const CommonTable: ListComponent = (props) => {
                     />
                   ) : (
                     <CommonSelect
-                      label='値'
+                      label={t('table.value')}
                       name='value'
                       index={index}
                       options={

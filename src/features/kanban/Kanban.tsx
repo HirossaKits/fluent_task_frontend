@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { css } from '@emotion/react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material/styles';
 import { selectTasks } from '../task/taskSlice';
 import KanbanColumn from './KanbanColumn';
@@ -71,6 +72,7 @@ const Kanban = () => {
     `,
   };
 
+  const { t } = useTranslation();
   const tasks = useSelector(selectTasks);
 
   return (
@@ -78,26 +80,26 @@ const Kanban = () => {
       <div css={styles.container}>
         <KanbanColumn
           themeColor={theme.palette.text.disabled}
-          status="Suspended"
-          headerText="保留"
+          status='Suspended'
+          headerText={t('kanban.suspended')}
           tasks={tasks.filter((task) => task.status === 'Suspended')}
         />
         <KanbanColumn
           themeColor={theme.palette.warning.light}
-          status="Not started"
-          headerText="開始前"
+          status='Not started'
+          headerText={t('kanban.notStarted')}
           tasks={tasks.filter((task) => task.status === 'Not started')}
         />
         <KanbanColumn
           themeColor={theme.palette.info.light}
-          status="On going"
-          headerText="進行中"
+          status='On going'
+          headerText={t('kanban.onGoing')}
           tasks={tasks.filter((task) => task.status === 'On going')}
         />
         <KanbanColumn
           themeColor={theme.palette.success.light}
-          status="Done"
-          headerText="完了"
+          status='Done'
+          headerText={t('kanban.done')}
           tasks={tasks.filter((task) => task.status === 'Done')}
         />
         <TaskDialog />

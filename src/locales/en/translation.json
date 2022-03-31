@@ -8,7 +8,18 @@
     "add": "Add task",
     "edit": "Edit task",
     "remove": "Remove tasks",
-    "filter": "Filter"
+    "filter": "Filter",
+    "target": "Target",
+    "operator": "Operator",
+    "value": "Value",
+
+    "startFrom": "Remove tasks",
+    "include": "Filter",
+    "exclude": "Target",
+    "equal": "Operator",
+
+    "orLess": "Or less",
+    "orMore": "Or more"
   },
   "login": {
     "login": "Log in",
@@ -28,6 +39,13 @@
     "calendar": "Calendar",
     "addProject": "New Project",
     "cannotUseGroup": "The group function cannot be used in private mode."
+  },
+  "notification": {
+    "noNotification": "There is no notification.",
+    "inviteFront": "An invitation to the group has arrived from ",
+    "inviteRear": ".",
+    "join": "Join",
+    "reject": "Reject"
   },
   "settings": {
     "darkMode": "Dark mode",
@@ -81,5 +99,11 @@
     "selectTask": "Select the task you want to edit from the list.",
     "narrowDownTask": "Narrow down the task to be edited to one.",
     "cannotEditTask": "Only the person responsible for the task, the creator, or the administrator of the project can edit it."
+  },
+  "kanban": {
+    "suspended": "Suspended",
+    "notStarted": "Not started",
+    "onGoing": "On going",
+    "done": "Done"
   }
 }

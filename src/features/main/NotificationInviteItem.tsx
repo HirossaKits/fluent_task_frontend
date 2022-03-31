@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -15,6 +16,7 @@ type Props = {
 
 export const NotificationInviteItem = (props: Props) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const handleClick = (value: boolean) => {
     const data = { invite_id: props.inviteId, result: value };
     dispatch(fetchAsyncUpdateInvite(data));
@@ -23,17 +25,21 @@ export const NotificationInviteItem = (props: Props) => {
 
   return (
     <Stack
-      direction="row"
+      direction='row'
       alignItems={'center'}
-      justifyContent="flex-start"
+      justifyContent='flex-start'
       spacing={1}
     >
-      <Typography>{`${props.orgName} からグループへの招待が届いています。`}</Typography>
+      <Typography>
+        {t('notification.inviteFront') +
+          props.orgName +
+          t('notification.inviteRear')}
+      </Typography>
       <Button startIcon={<CheckCircleIcon />} onClick={() => handleClick(true)}>
-        参加
+        {t('notification.join')}
       </Button>
       <Button startIcon={<CancelIcon />} onClick={() => handleClick(false)}>
-        拒否
+        {t('notification.reject')}
       </Button>
     </Stack>
   );
