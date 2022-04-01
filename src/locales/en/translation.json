@@ -63,7 +63,9 @@
     "firstName": "First name",
     "lastName": "Last name",
     "comment": "Comment",
-    "uploadImage": "Upload avatar image"
+    "uploadImage": "Upload avatar image",
+    "cancel": "Cancel",
+    "register": "Edit"
   },
   "org": {
     "edit": "Edit group",
@@ -100,7 +102,7 @@
     "narrowDownTask": "Narrow down the task to be edited to one.",
     "cannotEditTask": "Only the person responsible for the task, the creator, or the administrator of the project can edit it."
   },
-  "kanban": {
+  "status": {
     "suspended": "Suspended",
     "notStarted": "Not started",
     "onGoing": "On going",

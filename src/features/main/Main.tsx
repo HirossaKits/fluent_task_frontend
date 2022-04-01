@@ -34,6 +34,7 @@ import {
   fetchAsyncGetLoginUser,
   fetchAsyncGetPersonalSettings,
   selectPersonalSettings,
+  setLang,
 } from '../auth/authSlice';
 import {
   selectOrgInfo,
@@ -177,15 +178,13 @@ const Main = () => {
       margin-left: ${drawerCloseWidth}px;
     `,
     addIcon: css`
-      margin: 0;
-      padding: 0;
-      height: 12px;
+      margin-bottom: 1px;
     `,
   };
 
   const dispatch: AppDispatch = useDispatch();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const message = useMessage();
 
   const mainComponentName = useSelector(selectMainComponentName);
@@ -200,6 +199,10 @@ const Main = () => {
 
   useEffect(() => {
     const fectchBootLoader = async () => {
+      const lang = localStorage.getItem('lang');
+      i18n.changeLanguage(lang ?? 'ja');
+      dispatch(setLang(lang ?? 'ja'));
+
       const res = await dispatch(fetchAsyncGetLoginUser());
       if (fetchAsyncGetLoginUser.fulfilled.match(res)) {
         await dispatch(fetchAsyncGetPersonalSettings());
@@ -390,7 +393,7 @@ const Main = () => {
                   css={styles.addIcon}
                   icon={
                     <>
-                      <AddIcon />
+                      <AddIcon css={styles.addIcon} />
                       <Typography variant='body2'>
                         {t('main.addProject')}
                       </Typography>

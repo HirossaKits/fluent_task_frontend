@@ -25,10 +25,10 @@ export default function useCreateDoughnutData() {
     const sumByStatus = sumByGroupToObject(tasks, 'status', 'estimate_manhour');
 
     const statusKeys: { status: keyof typeof Status; label: string }[] = [
-      { status: 'Done', label: t('kanban.done') },
-      { status: 'On going', label: t('kanban.onGoing') },
-      { status: 'Not started', label: t('kanban.notStarted') },
-      { status: 'Suspended', label: t('kanban.suspended') },
+      { status: 'Done', label: t('status.done') },
+      { status: 'On going', label: t('status.onGoing') },
+      { status: 'Not started', label: t('status.notStarted') },
+      { status: 'Suspended', label: t('status.suspended') },
     ];
 
     const doughnutData = statusKeys.map((elem) => ({

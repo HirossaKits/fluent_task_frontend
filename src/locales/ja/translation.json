@@ -67,7 +67,9 @@
     "firstName": "姓",
     "lastName": "名",
     "comment": "コメント",
-    "uploadImage": "画像をアップロード"
+    "uploadImage": "画像をアップロード",
+    "cancel": "キャンセル",
+    "register": "登録"
   },
   "org": {
     "edit": "グループを編集",
@@ -104,7 +106,29 @@
     "narrowDownTask": "編集するタスクを一つに絞ってください。",
     "cannotEditTask": "タスクの担当者、作成者、またはプロジェクトに管理者のみ編集可能です。"
   },
-  "kanban": {
+  "taskDialog": {
+    "addTask": "タスクを追加",
+    "editTask": "タスクを編集",
+    "removeTask": "タスクを削除",
+    "taskName": "タスク名",
+    "category": "カテゴリー",
+    "categorySetting": "カテゴリー設定",
+    "status": "ステータス",
+    "assigned": "担当者",
+    "sManHour": "予定工数(H)",
+    "aManHour": "実工数(H)",
+    "sStartDate": "開始予定日",
+    "sEndDate": "終了予定日",
+    "aStartDate": "開始日",
+    "aEndDate": "終了日",
+    "description": "説明",
+    "author": "作成者",
+    "createdAt": "作成日時",
+    "updateAt": "更新日時",
+    "requireTaskName": "タスク名を入力してください。",
+    "requireAssigned": "担当者を選択してください。"
+  },
+  "status": {
     "suspended": "保留",
     "notStarted": "開始前",
     "onGoing": "進行中",

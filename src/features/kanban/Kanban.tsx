@@ -81,25 +81,25 @@ const Kanban = () => {
         <KanbanColumn
           themeColor={theme.palette.text.disabled}
           status='Suspended'
-          headerText={t('kanban.suspended')}
+          headerText={t('status.suspended')}
           tasks={tasks.filter((task) => task.status === 'Suspended')}
         />
         <KanbanColumn
           themeColor={theme.palette.warning.light}
           status='Not started'
-          headerText={t('kanban.notStarted')}
+          headerText={t('status.notStarted')}
           tasks={tasks.filter((task) => task.status === 'Not started')}
         />
         <KanbanColumn
           themeColor={theme.palette.info.light}
           status='On going'
-          headerText={t('kanban.onGoing')}
+          headerText={t('status.onGoing')}
           tasks={tasks.filter((task) => task.status === 'On going')}
         />
         <KanbanColumn
           themeColor={theme.palette.success.light}
           status='Done'
-          headerText={t('kanban.done')}
+          headerText={t('status.done')}
           tasks={tasks.filter((task) => task.status === 'Done')}
         />
         <TaskDialog />

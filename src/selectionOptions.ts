@@ -72,3 +72,10 @@
 //     label: 'に等しい',
 //   },
 // ];
+
+export const damn = [
+  {
+    value: '=',
+    label: 'に等しい',
+  },
+];

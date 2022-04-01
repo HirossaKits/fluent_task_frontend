@@ -128,12 +128,6 @@ const Auth: React.FC = () => {
     await dispatch(fetchAsyncSignup(regInfo));
   };
 
-  const handleLanguageChange = (lang: string) => {
-    i18n.changeLanguage(lang);
-    dispatch(setLang(lang));
-    localStorage.setItem('lang', lang);
-  };
-
   return (
     <div css={styles.root}>
       <Container css={styles.container} component='main' maxWidth='xs'>

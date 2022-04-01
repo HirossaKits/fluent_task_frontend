@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -56,6 +57,7 @@ const ProfileDialog = () => {
   };
 
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const editedProf = useSelector(selectEditedProf);
   const profileDialogOpen = useSelector(selectProfileDialogOpen);
@@ -108,31 +110,31 @@ const ProfileDialog = () => {
       <Dialog
         open={profileDialogOpen}
         onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-        maxWidth="xs"
+        aria-labelledby='form-dialog-title'
+        maxWidth='xs'
         fullWidth
       >
         <Grid css={styles.title} item>
           <DialogTitle>プロフィールを編集</DialogTitle>
         </Grid>
         <Grid css={styles.close} item>
-          <IconButton size="small" onClick={handleClose}>
+          <IconButton size='small' onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </Grid>
-        <form css={styles.form} noValidate autoComplete="off">
-          <Stack direction="column" justifyContent="center" alignItems="center">
+        <form css={styles.form} noValidate autoComplete='off'>
+          <Stack direction='column' justifyContent='center' alignItems='center'>
             <input
-              type="file"
-              id="imageInput"
+              type='file'
+              id='imageInput'
               hidden={true}
               onChange={(e) => handleOnFileChange(e)}
             />
             <Badge
-              overlap="circular"
+              overlap='circular'
               anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
               badgeContent={
-                <CommonToolTip title="画像をアップロード">
+                <CommonToolTip title={t('profileDialog.editProfile')}>
                   <IconButton css={styles.badge} onClick={handlePictureClick}>
                     <CameraAltIcon />
                   </IconButton>
@@ -145,32 +147,32 @@ const ProfileDialog = () => {
               />
             </Badge>
             <CommonTextField
-              label="姓"
-              name="last_name"
+              label={t('profileDialog.firstName')}
+              name='last_name'
               value={editedProf.last_name}
               onChange={handleInputChange}
-              width="200px"
+              width='200px'
             />
             <CommonTextField
-              label="名"
-              name="first_name"
+              label={t('profileDialog.lastName')}
+              name='first_name'
               value={editedProf.first_name}
               onChange={handleInputChange}
-              width="200px"
+              width='200px'
             />
             <CommonTextField
-              label="コメント"
-              name="comment"
+              label={t('profileDialog.comment')}
+              name='comment'
               value={editedProf.comment}
               onChange={handleInputChange}
-              width="200px"
+              width='200px'
             />
           </Stack>
           <DialogActions>
-            <Button onClick={handleClose} color="primary">
+            <Button onClick={handleClose} color='primary'>
               キャンセル
             </Button>
-            <Button onClick={handleRegisterClick} color="primary">
+            <Button onClick={handleRegisterClick} color='primary'>
               登録
             </Button>
           </DialogActions>
