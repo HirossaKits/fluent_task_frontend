@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import IconButton from '@mui/material/IconButton';
@@ -70,6 +71,7 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
   const [drag, setDrag] = useState(false);
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { t } = useTranslation();
   const concatUserName = useConcatUserName();
 
   const handleDotClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -148,18 +150,20 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
       >
         <div css={styles.titleWrap}>
           <Box
-            component="div"
+            component='div'
             sx={{
               textOverflow: 'ellipsis',
               overflow: 'hidden',
-              typography: 'body1',
+              typography: 'body2',
             }}
           >
             {props.task.task_name}
           </Box>
         </div>
         <Box css={styles.user}>
-          <CommonTooltip title={`担当者 : ${concatUserName(props.user)}`}>
+          <CommonTooltip
+            title={`${t('kanban.assigned')} : ${concatUserName(props.user)}`}
+          >
             <div>
               <CommonAvatar user={props.user} />
             </div>
@@ -167,7 +171,7 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
         </Box>
         <Box css={styles.dot}>
           <IconButton onClick={handleDotClick}>
-            <MoreVertIcon fontSize="small" />
+            <MoreVertIcon fontSize='small' />
           </IconButton>
         </Box>
       </Card>
@@ -182,21 +186,25 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
       >
         <MenuItem onClick={handleDetailClick}>
           <ListItemIcon>
-            <FeedIcon fontSize="small" />
+            <FeedIcon fontSize='small' />
           </ListItemIcon>
-          <ListItemText css={styles.menuItem}>詳細</ListItemText>
+          <ListItemText css={styles.menuItem}>
+            {t('kanban.detail')}
+          </ListItemText>
         </MenuItem>
         <MenuItem onClick={handleEditClick}>
           <ListItemIcon>
-            <EditIcon fontSize="small" />
+            <EditIcon fontSize='small' />
           </ListItemIcon>
-          <ListItemText css={styles.menuItem}>編集</ListItemText>
+          <ListItemText css={styles.menuItem}>{t('kanban.edit')}</ListItemText>
         </MenuItem>
         <MenuItem onClick={handleDeleteClick}>
           <ListItemIcon>
-            <DeleteIcon fontSize="small" />
+            <DeleteIcon fontSize='small' />
           </ListItemIcon>
-          <ListItemText css={styles.menuItem}>削除</ListItemText>
+          <ListItemText css={styles.menuItem}>
+            {t('kanban.remove')}
+          </ListItemText>
         </MenuItem>
       </Popover>
     </>

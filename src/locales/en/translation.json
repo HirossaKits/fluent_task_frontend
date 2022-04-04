@@ -4,6 +4,12 @@
     "english": "English",
     "japanese": "Japanese"
   },
+  "status": {
+    "suspended": "Suspended",
+    "notStarted": "Not started",
+    "onGoing": "On going",
+    "done": "Done"
+  },
   "table": {
     "add": "Add task",
     "edit": "Edit task",
@@ -83,6 +89,11 @@
     "edit": "Edit group",
     "orgName": "Group name"
   },
+  "inviteDialog": {
+    "inviteUser": "Invite user",
+    "email": "Email",
+    "hasInvited": "was invited to the group."
+  },
   "project": {
     "edit": "Edit project",
     "delete": "Remove project",
@@ -96,16 +107,52 @@
     "status": "Status",
     "startDate": "Scheduled start date",
     "endDate": "Scheduled end date",
-    "manHour": "Estimate man hour",
+    "manHour": "Estimated man hour",
     "assigned": "Assigned person",
     "selectTask": "Select the task you want to edit from the list.",
     "narrowDownTask": "Narrow down the task to be edited to one.",
     "cannotEditTask": "Only the person responsible for the task, the creator, or the administrator of the project can edit it."
   },
-  "status": {
-    "suspended": "Suspended",
-    "notStarted": "Not started",
-    "onGoing": "On going",
-    "done": "Done"
+  "taskDialog": {
+    "addTask": "Add Task",
+    "editTask": "Edit Task",
+    "taskDetails": "Task Details",
+    "taskName": "Task name",
+    "category": "Category",
+    "categorySettings": "Category settings",
+    "status": "Status",
+    "assigned": "Assigned person",
+    "sManHour": "Estimated man hour",
+    "aManHour": "Actual man hour",
+    "sStartDate": "Scheduled start date",
+    "sEndDate": "Scheduled end date",
+    "aStartDate": "Actual start date",
+    "aEndDate": "Actual end date",
+    "description": "Description",
+    "author": "Author",
+    "createdAt": "Created at",
+    "updateAt": "Updated at",
+    "requireTaskName": "Please enter the task name.",
+    "requireAssigned": "Please select a assigned person."
+  },
+  "kanban": {
+    "assigned": "Assigned Person",
+    "detail": "Details",
+    "edit": "Edit",
+    "remove": "Remove"
+  },
+  "calendar": {
+    "1": "Jan. 1",
+    "2": "Feb. 1",
+    "3": "Mar. 1",
+    "4": "Apr. 1",
+    "5": "May. 1",
+    "6": "Jun. 1",
+    "7": "Jul. 1",
+    "8": "Aug. 1",
+    "9": "Sep. 1",
+    "10": "Oct. 1",
+    "11": "Nov. 1",
+    "12": "Dec. 1"
   }
 }

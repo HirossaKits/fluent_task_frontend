@@ -4,6 +4,12 @@
     "english": "英語",
     "japanese": "日本語"
   },
+  "status": {
+    "suspended": "保留",
+    "notStarted": "開始前",
+    "onGoing": "進行中",
+    "done": "完了"
+  },
   "table": {
     "add": "タスクを登録",
     "edit": "タスクを編集",
@@ -87,6 +93,11 @@
     "edit": "グループを編集",
     "orgName": "グループ名"
   },
+  "inviteDialog": {
+    "inviteUser": "ユーザーを招待",
+    "email": "メールアドレス",
+    "hasInvited": "をグループに招待しました。"
+  },
   "project": {
     "edit": "プロジェクトを編集",
     "delete": "プロジェクトを削除",
@@ -109,10 +120,10 @@
   "taskDialog": {
     "addTask": "タスクを追加",
     "editTask": "タスクを編集",
-    "removeTask": "タスクを削除",
+    "taskDetails": "タスクの詳細",
     "taskName": "タスク名",
     "category": "カテゴリー",
-    "categorySetting": "カテゴリー設定",
+    "categorySettings": "カテゴリー設定",
     "status": "ステータス",
     "assigned": "担当者",
     "sManHour": "予定工数(H)",
@@ -128,10 +139,24 @@
     "requireTaskName": "タスク名を入力してください。",
     "requireAssigned": "担当者を選択してください。"
   },
-  "status": {
-    "suspended": "保留",
-    "notStarted": "開始前",
-    "onGoing": "進行中",
-    "done": "完了"
+  "kanban": {
+    "assigned": "担当者",
+    "detail": "詳細",
+    "edit": "編集",
+    "remove": "削除"
+  },
+  "calendar": {
+    "1": "Jan. 1",
+    "2": "Feb. 1",
+    "3": "Mar. 1",
+    "4": "Apr. 1",
+    "5": "May. 1",
+    "6": "Jun. 1",
+    "7": "Jul. 1",
+    "8": "Aug. 1",
+    "9": "Sep. 1",
+    "10": "Oct. 1",
+    "11": "Nov. 1",
+    "12": "Dec. 1"
   }
 }

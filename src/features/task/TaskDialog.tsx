@@ -141,7 +141,7 @@ const TaskDialog: React.FC = () => {
             ? t('taskDialog.addTask')
             : taskDialogMode === 'edit'
             ? t('taskDialog.editTask')
-            : t('taskDialog.removeTask')
+            : t('taskDialog.taskDetails')
         }
         onClose={handleClose}
         onRegister={handleRegisterClick}
@@ -175,7 +175,7 @@ const TaskDialog: React.FC = () => {
             />
             {(taskDialogMode === 'register' || taskDialogMode === 'edit') && (
               <Box css={styles.settings}>
-                <CommonTooltip title='カテゴリー設定'>
+                <CommonTooltip title={t('taskDialog.categorySettings')}>
                   <IconButton onClick={handleSettingsClick}>
                     <SettingsIcon />
                   </IconButton>

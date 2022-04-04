@@ -1,6 +1,7 @@
 import React from 'react';
-import { css } from '@emotion/react';
 import { useDispatch, useSelector } from 'react-redux';
+import { css } from '@emotion/react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -29,6 +30,7 @@ const InviteDialog = () => {
 
   const [focus, setFocus] = React.useState(false);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const message = useMessage();
   const inviteDialogOpen = useSelector(selectInviteDialogOpen);
   const editedInviteMail = useSelector(selectEditedInviteMail);
@@ -60,22 +62,22 @@ const InviteDialog = () => {
 
   const handleSendClick = () => {
     dispatch(fetchAsycnRegisterInvite(editedInviteMail));
-    message(`${editedInviteMail}をグループに招待しました。`);
+    message(`${editedInviteMail} ${t('inviteDialog.hasInvited')}`);
     dispatch(setInviteDialogOpen(false));
   };
 
   return (
     <CommonDialog
       open={inviteDialogOpen}
-      title="ユーザーを招待"
+      title={t('inviteDialog.inviteUser')}
       onClose={handleClose}
-      maxWidth="xs"
-      mode="display"
+      maxWidth='xs'
+      mode='display'
     >
       <TextField
-        variant="standard"
-        name="email"
-        label="メールアドレス"
+        variant='standard'
+        name='email'
+        label={t('inviteDialog.email')}
         fullWidth
         sx={{ marginBottom: theme.spacing(1) }}
         InputLabelProps={{
@@ -83,7 +85,7 @@ const InviteDialog = () => {
         }}
         InputProps={{
           endAdornment: (
-            <InputAdornment position="start">
+            <InputAdornment position='start'>
               <IconButton
                 css={focus ? styles.iconbuttonFocus : styles.iconbutton}
                 onClick={handleSendClick}

@@ -115,7 +115,7 @@ const ProfileDialog = () => {
         fullWidth
       >
         <Grid css={styles.title} item>
-          <DialogTitle>プロフィールを編集</DialogTitle>
+          <DialogTitle>{t('profileDialog.editProfile')}</DialogTitle>
         </Grid>
         <Grid css={styles.close} item>
           <IconButton size='small' onClick={handleClose}>
