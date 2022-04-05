@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
+import { Normalize, useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
@@ -26,8 +27,6 @@ import {
 } from '../task/taskSlice';
 import { selectYearMonth, setYearMonth } from './calendarSlice';
 import TaskDialog from '../task/TaskDialog';
-
-const week = ['日', '月', '火', '水', '木', '金', '土'];
 
 export interface DATE_CONTEXT {
   index: number;
@@ -120,6 +119,7 @@ const Calendar = () => {
   };
 
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const selectedProjectId = useSelector(selectSelectedProjectId);
   const tasks = useSelector(selectTasks);
@@ -131,6 +131,16 @@ const Calendar = () => {
     tasks,
     calendarBarStyle
   );
+
+  const week = [
+    t('calendar.sun'),
+    t('calendar.mon'),
+    t('calendar.the'),
+    t('calendar.wed'),
+    t('calendar.thu'),
+    t('calendar.fri'),
+    t('calendar.sat'),
+  ];
 
   const yearMonthOptions = (optionCount: number): string[] => {
     const options = [...Array(optionCount)].map((_, idx) => {
@@ -231,17 +241,17 @@ const Calendar = () => {
     <>
       <Grid
         container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
+        direction='column'
+        justifyContent='center'
+        alignItems='center'
         css={styles.test}
       >
         <Grid
           css={styles.header}
           container
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
+          direction='row'
+          justifyContent='space-between'
+          alignItems='center'
         >
           <Grid item>
             <Autocomplete
@@ -251,7 +261,7 @@ const Calendar = () => {
               value={yearMonth.year_month}
               onChange={(event, newItem) => handleSelectChange(event, newItem)}
               renderInput={(params) => (
-                <TextField {...params} variant="standard" />
+                <TextField {...params} variant='standard' />
               )}
             />
           </Grid>
@@ -264,6 +274,11 @@ const Calendar = () => {
             </IconButton>
           </Grid>
         </Grid>
+        <ImageList rowHeight={10} cols={7} gap={0}>
+          {week.map((w, idx) => (
+            <ImageListItem key={idx}>{w}</ImageListItem>
+          ))}
+        </ImageList>
         <ImageList css={styles.gridList} rowHeight={160} cols={7} gap={0}>
           {calendarDates.map((ctx, idx) => (
             <ImageListItem
@@ -274,33 +289,50 @@ const Calendar = () => {
                   : styles.gridTileGray
               }
             >
-              <Stack height="100%" justifyContent="space-between">
+              <Stack height='100%' justifyContent='space-between'>
                 <Grid
                   item
                   xs={10}
                   css={styles.headerdate}
                   id={ctx.dateStr}
                   container
-                  direction="row"
-                  justifyContent="flex-start"
-                  alignItems="flex-start"
+                  direction='row'
+                  justifyContent='flex-start'
+                  alignItems='flex-start'
                   onClick={(e) => handleDateClick(e, ctx.dateStr)}
                 >
                   <Grid item>
                     <Typography css={ctx.isToday && styles.texttoday}>
                       {ctx.date === 1
-                        ? `${ctx.month}月${ctx.date}日`
+                        ? t(
+                            ('calendar.' + String(ctx.month)) as Normalize<{
+                              calendar: {
+                                '1': string;
+                                '2': string;
+                                '3': string;
+                                '4': string;
+                                '5': string;
+                                '6': string;
+                                '7': string;
+                                '8': string;
+                                '9': string;
+                                '10': string;
+                                '11': string;
+                                '12': string;
+                              };
+                            }>
+                          )
                         : ctx.date}
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography className="plus">+</Typography>
+                    <Typography className='plus'>+</Typography>
                   </Grid>
                 </Grid>
                 {ctx.layer && Math.max(...ctx.layer) >= 4 && (
                   <Grid css={styles.remarks}>
                     <Typography
-                      variant="body2"
+                      variant='body2'
                       color={theme.palette.text.disabled}
                     >{`その他${Math.max(...ctx.layer) - 3}件`}</Typography>
                   </Grid>
@@ -329,7 +361,7 @@ const Calendar = () => {
                   onClick={(e) => handleBarClick(e, bar.task_id)}
                 >
                   <Box
-                    component="div"
+                    component='div'
                     sx={{
                       textOverflow: 'ellipsis',
                       overflow: 'hidden',

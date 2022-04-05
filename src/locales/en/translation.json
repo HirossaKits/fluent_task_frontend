@@ -142,6 +142,13 @@
     "remove": "Remove"
   },
   "calendar": {
+    "sun": "Sun",
+    "mon": "Mon",
+    "the": "The",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
     "1": "Jan. 1",
     "2": "Feb. 1",
     "3": "Mar. 1",
