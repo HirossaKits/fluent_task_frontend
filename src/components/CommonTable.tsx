@@ -94,52 +94,53 @@ const CommonTable: ListComponent = (props) => {
     `,
   };
 
+  const { t } = useTranslation();
   const FilterOperatorOfString = [
     {
       value: 'start_from',
-      label: 'から始まる',
+      label: t('table.startFrom'),
     },
     {
       value: 'include',
-      label: 'を含む',
+      label: t('table.include'),
     },
     {
       value: 'exclude',
-      label: 'を含まない',
+      label: t('table.exclude'),
     },
     {
       value: '=',
-      label: 'に等しい',
+      label: t('table.equal'),
     },
   ];
 
   const FilterOperatorOfNumber = [
     {
       value: '=',
-      label: 'に等しい',
+      label: t('table.equal'),
     },
     {
       value: '<=',
-      label: 'より小さい',
+      label: t('table.orLess'),
     },
     {
       value: '>=',
-      label: 'より大きい',
+      label: t('table.orMore'),
     },
   ];
 
   const FilterOperatorOfDate = [
     {
       value: '=',
-      label: 'に等しい',
+      label: t('table.equal'),
     },
     {
       value: '<=',
-      label: 'より以前の',
+      label: t('table.orBefore'),
     },
     {
       value: '>=',
-      label: 'より以後の',
+      label: t('table.orAfter'),
     },
   ];
 
@@ -167,7 +168,6 @@ const CommonTable: ListComponent = (props) => {
     value: string | number;
   }
 
-  const { t } = useTranslation();
   const table = props.data.map((row, index) => ({ ...row, id: index }));
 
   const filterAnchorEl = useRef(null);

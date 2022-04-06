@@ -58,12 +58,28 @@ const Calendar = () => {
       margin-top: 10px;
       width: 120px;
     `,
+    week: css`
+      width: 86%;
+      // border-top: 1px solid;
+      // border-left: 1px solid;
+      // border-color: ${theme.palette.divider};
+      position: relative;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    `,
+    weekItem: css`
+      // border-right: 1px solid;
+      // border-color: ${theme.palette.divider};
+      text-align: left;
+      padding-left: 10px;
+    `,
     gridList: css`
       width: 86%;
       border-top: 1px solid;
       border-left: 1px solid;
       border-color: ${theme.palette.divider};
       position: relative;
+      margin-top: 0;
     `,
     gridTile: css`
       border-bottom: 1px solid;
@@ -141,6 +157,8 @@ const Calendar = () => {
     t('calendar.fri'),
     t('calendar.sat'),
   ];
+
+  // const week = ['Mon', 'Mon', 'Mon', 'Mon', 'Mon', 'Mon', 'Mon'];
 
   const yearMonthOptions = (optionCount: number): string[] => {
     const options = [...Array(optionCount)].map((_, idx) => {
@@ -274,9 +292,11 @@ const Calendar = () => {
             </IconButton>
           </Grid>
         </Grid>
-        <ImageList rowHeight={10} cols={7} gap={0}>
+        <ImageList css={styles.week} rowHeight={21} cols={7} gap={0}>
           {week.map((w, idx) => (
-            <ImageListItem key={idx}>{w}</ImageListItem>
+            <ImageListItem css={styles.weekItem} key={idx}>
+              <Typography>{w}</Typography>
+            </ImageListItem>
           ))}
         </ImageList>
         <ImageList css={styles.gridList} rowHeight={160} cols={7} gap={0}>

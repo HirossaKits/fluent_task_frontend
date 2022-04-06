@@ -5,10 +5,10 @@
     "japanese": "日本語"
   },
   "status": {
-    "suspended": "保留",
+    "suspended": "保留　",
     "notStarted": "開始前",
     "onGoing": "進行中",
-    "done": "完了"
+    "done": "完了　"
   },
   "table": {
     "add": "タスクを登録",
@@ -18,14 +18,14 @@
     "target": "対象",
     "operator": "演算子",
     "value": "値",
-
-    "startFrom": "Remove tasks",
-    "include": "Filter",
-    "exclude": "Target",
-    "equal": "Operator",
-
-    "orLess": "Or less",
-    "orMore": "Or more"
+    "startFrom": "から始まる",
+    "include": "を含む",
+    "exclude": "を含まない",
+    "equal": "に等しい",
+    "orLess": "より小さい",
+    "orMore": "より大きい",
+    "orBefore": "より以前の",
+    "orAfter": "より以後の"
   },
   "login": {
     "login": "ログイン",
@@ -104,6 +104,16 @@
     "admin": "プロジェクト管理者",
     "member": "プロジェクトメンバー",
     "progress": "進捗 (%)"
+  },
+  "projectDialog": {
+    "addProject": "プロジェクトを作成",
+    "editProject": "プロジェクトを編集",
+    "name": "プロジェクト管理者",
+    "description": "説明",
+    "admin": "プロジェクト管理者",
+    "member": "プロジェクトメンバー",
+    "startDate": "開始日",
+    "endDate": "終了日"
   },
   "task": {
     "taskName": "タスク名",

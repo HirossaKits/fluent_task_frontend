@@ -18,14 +18,14 @@
     "target": "Target",
     "operator": "Operator",
     "value": "Value",
-
-    "startFrom": "Remove tasks",
-    "include": "Filter",
-    "exclude": "Target",
-    "equal": "Operator",
-
-    "orLess": "Or less",
-    "orMore": "Or more"
+    "startFrom": "start from",
+    "include": "include",
+    "exclude": "exclude",
+    "equal": "equal",
+    "orLess": "or less",
+    "orMore": "or more",
+    "orBefore": "or before",
+    "orAfter": "or after"
   },
   "login": {
     "login": "Log in",
@@ -77,9 +77,9 @@
     "edit": "Edit group",
     "invite": "Invite users",
     "owner": "Group onwer",
-    "admin": "Group administrator",
-    "addToAdmin": "Add to administrator",
-    "excludeFromAdmin": "Exclude from administrator",
+    "admin": "Group admin",
+    "addToAdmin": "Add to the group admin",
+    "excludeFromAdmin": "Exclude from the group admin",
     "withdrawFromGroup": "Withdraw from the group",
     "excludeFromGroup": "Exclude from the group",
     "onlyOwnerEdit": "Only the group owner can change it.",
@@ -97,9 +97,19 @@
   "project": {
     "edit": "Edit project",
     "delete": "Remove project",
-    "admin": "Project Admin",
-    "member": "Project Member",
+    "admin": "Project admins",
+    "member": "Project member",
     "progress": "Progress (%)"
+  },
+  "projectDialog": {
+    "addProject": "Add Project",
+    "editProject": "Edit Project",
+    "name": "Project name",
+    "description": "Description",
+    "admin": "Project admins",
+    "member": "Project member",
+    "startDate": "Start date",
+    "endDate": "End date"
   },
   "task": {
     "taskName": "Title",
@@ -111,7 +121,7 @@
     "assigned": "Assigned person",
     "selectTask": "Select the task you want to edit from the list.",
     "narrowDownTask": "Narrow down the task to be edited to one.",
-    "cannotEditTask": "Only the person responsible for the task, the creator, or the administrator of the project can edit it."
+    "cannotEditTask": "Only the person responsible for the task, the creator, or the admin of the project can edit it."
   },
   "taskDialog": {
     "addTask": "Add Task",

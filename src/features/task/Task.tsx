@@ -158,7 +158,16 @@ const Task = () => {
     ),
     status: (task: TASK) => (
       <div css={styles.taskStatus}>
-        <Typography>{Status[task.status]}</Typography>
+        <Typography>
+          {
+            {
+              Suspended: t('status.suspended'),
+              'Not started': t('status.notStarted'),
+              'On going': t('status.onGoing'),
+              Done: t('status.done'),
+            }[task.status]
+          }
+        </Typography>
         <CircleIcon
           sx={{
             margin: '2px 0 0 5px;',

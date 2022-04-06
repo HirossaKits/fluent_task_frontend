@@ -1,6 +1,7 @@
 import React from 'react';
 import { css } from '@emotion/react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
@@ -42,6 +43,7 @@ const ProjectDialog = () => {
   };
 
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const createOption = useCreateOption();
   const projectDialogOpen = useSelector(selectProjectDialogOpen);
   const projectDialogMode = useSelector(selectProjectDialogMode);
@@ -79,60 +81,60 @@ const ProjectDialog = () => {
       open={projectDialogOpen}
       title={
         projectDialogMode === 'register'
-          ? 'プロジェクトを作成'
-          : 'プロジェクトを編集'
+          ? t('projectDialog.addProject')
+          : t('projectDialog.editProject')
       }
       onClose={handleClose}
       onRegister={handleRegisterClick}
       onEdit={handleEditClick}
       // onDelete={handleDeleteClick}
-      maxWidth="sm"
+      maxWidth='sm'
       mode={projectDialogMode}
     >
       <Stack
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="flex-start"
+        direction='column'
+        justifyContent='flex-start'
+        alignItems='flex-start'
       >
         <CommonTextField
-          label="プロジェクト名"
-          name="project_name"
+          label={t('projectDialog.name')}
+          name='project_name'
           value={editedProject.project_name}
           onChange={handleInputChange}
-          width="50%"
+          width='50%'
         />
         <CommonTextField
-          label="説明"
-          name="description"
+          label={t('projectDialog.description')}
+          name='description'
           value={editedProject.description}
           onChange={handleInputChange}
-          width="100%"
+          width='100%'
         />
         <CommonMultiSelect
-          label="プロジェクト管理者"
-          name="resp_id"
+          label={t('projectDialog.admin')}
+          name='resp_id'
           options={userOptions}
           value={editedProject.resp_id}
           onChange={handleInputChange}
         />
         <CommonMultiSelect
-          label="プロジェクトメンバー"
-          name="member_id"
+          label={t('projectDialog.member')}
+          name='member_id'
           options={userOptions}
           value={editedProject.member_id}
           onChange={handleInputChange}
         />
-        <Stack direction="row" justifyContent="flex-start" alignItems="center">
+        <Stack direction='row' justifyContent='flex-start' alignItems='center'>
           <CommonDatePicker
-            label="開始日"
-            name="startdate"
+            label={t('projectDialog.startDate')}
+            name='startdate'
             value={editedProject.startdate}
             onChange={handleInputChange}
           />
           <SwapHorizIcon css={styles.arrow} />
           <CommonDatePicker
-            label="終了日"
-            name="enddate"
+            label={t('projectDialog.endDate')}
+            name='enddate'
             value={editedProject.enddate}
             onChange={handleInputChange}
           />
