@@ -10,12 +10,12 @@ import CircleIcon from '@mui/icons-material/Circle';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import EastIcon from '@mui/icons-material/East';
-import { TASK, Status, COLUMN_INFO } from '../types';
+import { TASK, COLUMN_INFO } from '../types';
 import useMessage from '../../hooks/message';
 import useCreateOption from '../../hooks/optionCreater';
 import useTaskEditPermission from '../../hooks/taskEditPermission';
 import { selectLoginUserInfo } from '../auth/authSlice';
-import { selectSelectedProjectId } from '../proj/projectSlice';
+import { selectSelectedProject } from '../proj/projectSlice';
 import {
   initialEditedTask,
   selectTaskCategory,
@@ -42,14 +42,40 @@ const Task = () => {
   const createOption = useCreateOption();
   const taskEditPermisson = useTaskEditPermission();
   const loginUserInfo = useSelector(selectLoginUserInfo);
-  const selectedProjectId = useSelector(selectSelectedProjectId);
+  const project = useSelector(selectSelectedProject);
   const tasks = useSelector(selectTasks);
   const taskCategory = useSelector(selectTaskCategory);
+
+  console.log(tasks);
   const taskCategoryOption = createOption(
     taskCategory,
     'task_category_id',
     'task_category_name'
   );
+
+  const statusOptions = [
+    {
+      value: 'Not started',
+      label: t('status.notStarted'),
+    },
+    {
+      value: 'On going',
+      label: t('status.onGoing'),
+    },
+    {
+      value: 'Done',
+      label: t('status.done'),
+    },
+    {
+      value: 'Suspended',
+      label: t('status.suspended'),
+    },
+  ];
+
+  const projectMemberOptions = project.member.map((user) => ({
+    value: user.user_id,
+    label: `${user.last_name} ${user.first_name}`,
+  }));
 
   const columnInfo: COLUMN_INFO[] = [
     {
@@ -69,9 +95,10 @@ const Task = () => {
     {
       name: 'status',
       label: t('task.status'),
-      type: 'string',
+      type: 'select',
       width: '12%',
       isJsxElement: true,
+      selection: statusOptions,
     },
     {
       name: 'scheduled_startdate',
@@ -94,10 +121,11 @@ const Task = () => {
       width: '10%',
     },
     {
-      name: 'assigned_name',
+      name: 'assigned_id',
       label: t('task.assigned'),
-      type: 'string',
+      type: 'select',
       width: '14%',
+      selection: projectMemberOptions,
     },
   ];
 
@@ -107,7 +135,7 @@ const Task = () => {
     dispatch(
       setEditedTask({
         ...initialEditedTask,
-        project_id: selectedProjectId,
+        project_id: project.project_id,
         assigned_id: loginUserInfo.user_id,
         author_id: loginUserInfo.user_id,
       })

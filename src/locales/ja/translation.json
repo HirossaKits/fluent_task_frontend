@@ -22,6 +22,7 @@
     "include": "を含む",
     "exclude": "を含まない",
     "equal": "に等しい",
+    "notEqual": "以外の",
     "orLess": "より小さい",
     "orMore": "より大きい",
     "orBefore": "より以前の",

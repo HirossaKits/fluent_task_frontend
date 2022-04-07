@@ -147,7 +147,11 @@ const CommonTable: ListComponent = (props) => {
   const FilterOperatorOfSelect = [
     {
       value: '=',
-      label: 'に等しい',
+      label: t('table.equal'),
+    },
+    {
+      value: '!=',
+      label: t('table.notEqual'),
     },
   ];
 
@@ -567,7 +571,7 @@ const CommonTable: ListComponent = (props) => {
                   {filter.type === 'string' ? (
                     <CommonSelect
                       label={t('table.operator')}
-                      name='operatoroperator'
+                      name='operator'
                       options={FilterOperatorOfString}
                       value={filter.operator}
                       index={index}
@@ -577,7 +581,7 @@ const CommonTable: ListComponent = (props) => {
                   ) : filter.type === 'number' ? (
                     <CommonSelect
                       label={t('table.operator')}
-                      name='operatoroperator'
+                      name='operator'
                       options={FilterOperatorOfNumber}
                       value={filter.operator}
                       index={index}
@@ -587,7 +591,7 @@ const CommonTable: ListComponent = (props) => {
                   ) : filter.type === 'Date' ? (
                     <CommonSelect
                       label={t('table.operator')}
-                      name='operatoroperator'
+                      name='operator'
                       options={FilterOperatorOfDate}
                       value={filter.operator}
                       index={index}
@@ -597,7 +601,7 @@ const CommonTable: ListComponent = (props) => {
                   ) : (
                     // <CommonSelect
                     //   label="演算子"
-                    //   name="operatoroperator"
+                    //   name="operator"
                     //   options={FilterOperatorOfSelect}
                     //   value={filter.operator}
                     //   index={index}
@@ -606,8 +610,8 @@ const CommonTable: ListComponent = (props) => {
                     // />
                     <CommonSelect
                       label={t('table.operator')}
-                      name='operatoroperator'
-                      options={FilterOperatorOfString}
+                      name='operator'
+                      options={FilterOperatorOfSelect}
                       value={filter.operator}
                       index={index}
                       onChange={handleInputChange}

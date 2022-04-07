@@ -214,12 +214,12 @@ export const {
 } = projectSlice.actions;
 
 export const selectProjects = (state: RootState) => state.project.projects;
-export const selectSelectedProjectId = (state: RootState) =>
-  state.project.selectedProjectId;
 export const selectSelectedProject = (state: RootState) =>
   state.project.projects.find(
     (project) => project.project_id === state.project.selectedProjectId
   ) ?? emptyProject;
+export const selectSelectedProjectId = (state: RootState) =>
+  state.project.selectedProjectId;
 export const selectEditedProject = (state: RootState) =>
   state.project.editedProject;
 export const selectProjectDialogOpen = (state: RootState) =>

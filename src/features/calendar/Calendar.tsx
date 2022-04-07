@@ -236,6 +236,7 @@ const Calendar = () => {
         project_id: selectedProjectId,
         author_id: loginUserInfo.user_id,
         scheduled_startdate: dateStr,
+        scheduled_enddate: dateStr,
       })
     );
     dispatch(setTaskDialogMode('register'));

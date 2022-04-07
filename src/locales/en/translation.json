@@ -22,6 +22,7 @@
     "include": "include",
     "exclude": "exclude",
     "equal": "equal",
+    "notEqual": "not equal",
     "orLess": "or less",
     "orMore": "or more",
     "orBefore": "or before",

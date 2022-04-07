@@ -52,7 +52,7 @@ const initialState: TASK_STATE = {
     {
       columnName: 'task_name',
       type: 'string',
-      operator: '=',
+      operator: 'start_from',
       value: '',
     },
   ],
@@ -72,24 +72,40 @@ const concatUserName = <T extends IUser>(user: T) => {
 
 // 編集タスクデータを整形
 const shapeTask = (task: TASK, mode: 'register' | 'update'): EDITED_TASK => {
-  const shapedTask = {
-    task_id: task.task_id,
-    task_name: task.task_name,
-    project_id: task.project_id,
-    task_category_id: task.task_category_id,
-    assigned_id: task.assigned_id,
-    author_id: task.author_id,
-    status: task.status,
-    description: task.description,
-    estimate_manhour: task.estimate_manhour,
-    actual_manhour: task.actual_manhour,
-    scheduled_startdate: task.scheduled_startdate,
-    scheduled_enddate: task.scheduled_enddate,
-    actual_startdate: task.actual_startdate,
-    actual_enddate: task.actual_enddate,
-  };
-  if (mode === 'update') shapedTask.task_id = task.task_id;
-  return shapedTask;
+  if (mode === 'register') {
+    return {
+      task_name: task.task_name,
+      project_id: task.project_id,
+      task_category_id: task.task_category_id,
+      assigned_id: task.assigned_id,
+      author_id: task.author_id,
+      status: task.status,
+      description: task.description,
+      estimate_manhour: task.estimate_manhour,
+      actual_manhour: task.actual_manhour,
+      scheduled_startdate: task.scheduled_startdate,
+      scheduled_enddate: task.scheduled_enddate,
+      actual_startdate: task.actual_startdate,
+      actual_enddate: task.actual_enddate,
+    };
+  } else {
+    return {
+      task_id: task.task_id,
+      task_name: task.task_name,
+      project_id: task.project_id,
+      task_category_id: task.task_category_id,
+      assigned_id: task.assigned_id,
+      author_id: task.author_id,
+      status: task.status,
+      description: task.description,
+      estimate_manhour: task.estimate_manhour,
+      actual_manhour: task.actual_manhour,
+      scheduled_startdate: task.scheduled_startdate,
+      scheduled_enddate: task.scheduled_enddate,
+      actual_startdate: task.actual_startdate,
+      actual_enddate: task.actual_enddate,
+    };
+  }
 };
 
 // タスクの取得
