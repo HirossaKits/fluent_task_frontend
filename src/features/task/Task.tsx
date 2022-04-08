@@ -27,6 +27,7 @@ import {
 } from './taskSlice';
 import CommonTable from '../../components/CommonTable';
 import CommonTooltip from '../../components/CommonTooltip';
+import usePorgress from '../../hooks/ progress';
 
 const Task = () => {
   const theme = useTheme();
@@ -41,6 +42,7 @@ const Task = () => {
   const message = useMessage();
   const createOption = useCreateOption();
   const taskEditPermisson = useTaskEditPermission();
+  const progress = usePorgress();
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const project = useSelector(selectSelectedProject);
   const tasks = useSelector(selectTasks);
@@ -213,61 +215,14 @@ const Task = () => {
       </div>
     ),
     scheduled_startdate: (task: TASK) => {
-      if (!task.actual_startdate || !task.scheduled_startdate) {
-        return <Typography>{task.scheduled_startdate}</Typography>;
-      } else {
-        if (task.actual_startdate < task.scheduled_startdate) {
-          return (
-            <div style={{ display: 'flex' }}>
-              <Typography>{task.scheduled_startdate}</Typography>
-              <CommonTooltip title={`${1}`}>
-                <NorthEastIcon
-                  sx={{
-                    margin: '0 0 0 8px;',
-                    fontSize: 'small',
-                    color: theme.palette.success.light,
-                  }}
-                />
-              </CommonTooltip>
-            </div>
-          );
-        } else if (task.actual_startdate > task.scheduled_startdate) {
-          return (
-            <div css={styles.taskStatus}>
-              <Typography>{task.scheduled_startdate}</Typography>
-              <SouthEastIcon
-                sx={{
-                  margin: '0 0 0 8px;',
-                  fontSize: 'small',
-                  color: theme.palette.error.light,
-                }}
-              />
-            </div>
-          );
-        } else {
-          return (
-            <div css={styles.taskStatus}>
-              <Typography>{task.scheduled_startdate}</Typography>
-              <EastIcon
-                sx={{
-                  margin: '0 0 0 8px;',
-                  fontSize: 'small',
-                  color: theme.palette.info.light,
-                }}
-              />
-            </div>
-          );
-        }
-      }
-    },
-    scheduled_enddate: (task: TASK) => {
-      if (!task.actual_enddate || !task.scheduled_enddate) {
-        return <Typography>{task.scheduled_enddate}</Typography>;
-      } else {
-        if (task.actual_enddate < task.scheduled_enddate) {
-          return (
-            <div style={{ display: 'flex' }}>
-              <Typography>{task.scheduled_enddate}</Typography>
+      const prog = progress(task.scheduled_startdate, task.actual_startdate);
+      return (
+        <div css={styles.taskStatus}>
+          <Typography>{task.scheduled_startdate}</Typography>
+          {prog === null ? (
+            <></>
+          ) : prog > 0 ? (
+            <CommonTooltip title={`${prog}日前倒し`}>
               <NorthEastIcon
                 sx={{
                   margin: '0 0 0 8px;',
@@ -275,12 +230,9 @@ const Task = () => {
                   color: theme.palette.success.light,
                 }}
               />
-            </div>
-          );
-        } else if (task.actual_enddate > task.scheduled_enddate) {
-          return (
-            <div css={styles.taskStatus}>
-              <Typography>{task.scheduled_enddate}</Typography>
+            </CommonTooltip>
+          ) : prog < 0 ? (
+            <CommonTooltip title={`${-prog}日遅れ`}>
               <SouthEastIcon
                 sx={{
                   margin: '0 0 0 8px;',
@@ -288,12 +240,9 @@ const Task = () => {
                   color: theme.palette.error.light,
                 }}
               />
-            </div>
-          );
-        } else {
-          return (
-            <div css={styles.taskStatus}>
-              <Typography>{task.scheduled_enddate}</Typography>
+            </CommonTooltip>
+          ) : (
+            <CommonTooltip title={`予定通り`}>
               <EastIcon
                 sx={{
                   margin: '0 0 0 8px;',
@@ -301,10 +250,51 @@ const Task = () => {
                   color: theme.palette.info.light,
                 }}
               />
-            </div>
-          );
-        }
-      }
+            </CommonTooltip>
+          )}
+        </div>
+      );
+    },
+    scheduled_enddate: (task: TASK) => {
+      const prog = progress(task.scheduled_enddate, task.actual_enddate);
+      return (
+        <div css={styles.taskStatus}>
+          <Typography>{task.scheduled_enddate}</Typography>
+          {prog === null ? (
+            <></>
+          ) : prog > 0 ? (
+            <CommonTooltip title={`${prog}日前倒し`}>
+              <NorthEastIcon
+                sx={{
+                  margin: '0 0 0 8px;',
+                  fontSize: 'small',
+                  color: theme.palette.success.light,
+                }}
+              />
+            </CommonTooltip>
+          ) : prog < 0 ? (
+            <CommonTooltip title={`${-prog}日遅れ`}>
+              <SouthEastIcon
+                sx={{
+                  margin: '0 0 0 8px;',
+                  fontSize: 'small',
+                  color: theme.palette.error.light,
+                }}
+              />
+            </CommonTooltip>
+          ) : (
+            <CommonTooltip title={`予定通り`}>
+              <EastIcon
+                sx={{
+                  margin: '0 0 0 8px;',
+                  fontSize: 'small',
+                  color: theme.palette.info.light,
+                }}
+              />
+            </CommonTooltip>
+          )}
+        </div>
+      );
     },
   };
 
