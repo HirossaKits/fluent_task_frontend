@@ -22,6 +22,7 @@ import {
   fetchAsyncUpdateProf,
 } from '../auth/authSlice';
 import { setProfileDialogOpen, selectProfileDialogOpen } from './mainSlice';
+import { fetchAsyncGetOrgInfo } from '../org/orgSliece';
 import CommonTextField from '../../components/CommonTextField';
 import CommonToolTip from '../../components/CommonTooltip';
 
@@ -76,7 +77,11 @@ const ProfileDialog = () => {
   };
 
   const handleRegisterClick = () => {
-    dispatch(fetchAsyncUpdateProf(uploadFile));
+    const updateProf = async () => {
+      await dispatch(fetchAsyncUpdateProf(uploadFile));
+      await dispatch(fetchAsyncGetOrgInfo());
+    };
+    updateProf();
     dispatch(setProfileDialogOpen(false));
   };
 

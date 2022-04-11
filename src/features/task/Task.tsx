@@ -222,7 +222,7 @@ const Task = () => {
           {prog === null ? (
             <></>
           ) : prog > 0 ? (
-            <CommonTooltip title={`${prog}日前倒し`}>
+            <CommonTooltip title={`${prog} ${t('task.forward')}`}>
               <NorthEastIcon
                 sx={{
                   margin: '0 0 0 8px;',
@@ -232,7 +232,7 @@ const Task = () => {
               />
             </CommonTooltip>
           ) : prog < 0 ? (
-            <CommonTooltip title={`${-prog}日遅れ`}>
+            <CommonTooltip title={`${-prog} ${t('task.delay')}`}>
               <SouthEastIcon
                 sx={{
                   margin: '0 0 0 8px;',
@@ -242,7 +242,7 @@ const Task = () => {
               />
             </CommonTooltip>
           ) : (
-            <CommonTooltip title={`予定通り`}>
+            <CommonTooltip title={t('task.onSchedule')}>
               <EastIcon
                 sx={{
                   margin: '0 0 0 8px;',
@@ -263,7 +263,7 @@ const Task = () => {
           {prog === null ? (
             <></>
           ) : prog > 0 ? (
-            <CommonTooltip title={`${prog}日前倒し`}>
+            <CommonTooltip title={`${prog} ${t('task.forward')}`}>
               <NorthEastIcon
                 sx={{
                   margin: '0 0 0 8px;',
@@ -273,7 +273,7 @@ const Task = () => {
               />
             </CommonTooltip>
           ) : prog < 0 ? (
-            <CommonTooltip title={`${-prog}日遅れ`}>
+            <CommonTooltip title={`${-prog} ${t('task.delay')}`}>
               <SouthEastIcon
                 sx={{
                   margin: '0 0 0 8px;',
@@ -283,7 +283,7 @@ const Task = () => {
               />
             </CommonTooltip>
           ) : (
-            <CommonTooltip title={`予定通り`}>
+            <CommonTooltip title={t('task.onSchedule')}>
               <EastIcon
                 sx={{
                   margin: '0 0 0 8px;',

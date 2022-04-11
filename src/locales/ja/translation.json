@@ -45,7 +45,8 @@
     "kanban": "カンバン",
     "calendar": "カレンダー",
     "addProject": "新規作成",
-    "cannotUseGroup": "プライベートモードではグループ機能は使用できません。"
+    "cannotUseGroup": "プライベートモードではグループ機能は使用できません。",
+    "cannotAddProject": "グループ管理者のみ作成可能です。"
   },
   "notification": {
     "noNotification": "通知はありません。",
@@ -124,6 +125,9 @@
     "endDate": "終了予定日",
     "manHour": "予定工数(H)",
     "assigned": "担当者",
+    "forward": "日前倒し",
+    "delay": "日遅れ",
+    "onSchedule": "予定通り",
     "selectTask": "一覧から編集するタスクを選択してください。",
     "narrowDownTask": "編集するタスクを一つに絞ってください。",
     "cannotEditTask": "タスクの担当者、作成者、またはプロジェクトに管理者のみ編集可能です。"

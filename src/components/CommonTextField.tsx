@@ -14,6 +14,8 @@ type Props = {
   width?: string;
   readOnly?: boolean;
   rows?: number;
+  maxVal?: number;
+  minVal?: number;
 };
 
 const CommonTextField: React.FC<Props> = (props) => {
@@ -28,14 +30,21 @@ const CommonTextField: React.FC<Props> = (props) => {
   const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    const val = event.target.value;
+
+    if (props.type === 'number') {
+      if (props.maxVal && props.maxVal < Number(val)) return;
+      if (props.minVal && Number(val) < props.minVal) return;
+    }
+
     let target: TARGET = {
       name: props.name,
       value:
-        props.type === 'number' && event.target.value !== ''
-          ? Number(event.target.value)
+        props.type === 'number' && val !== ''
+          ? Number(val)
           : props.type === 'number'
           ? null
-          : event.target.value,
+          : val,
     };
     if ('index' in props) {
       target.index = props.index;
@@ -46,8 +55,8 @@ const CommonTextField: React.FC<Props> = (props) => {
   return (
     <TextField
       css={widthStyle}
-      variant="standard"
-      margin="normal"
+      variant='standard'
+      margin='normal'
       id={'id' in props ? props.id : undefined}
       label={'label' in props ? props.label : undefined}
       type={'type' in props ? props.type : undefined}

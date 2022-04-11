@@ -45,7 +45,8 @@
     "kanban": "Kanban",
     "calendar": "Calendar",
     "addProject": "New Project",
-    "cannotUseGroup": "The group function cannot be used in private mode."
+    "cannotUseGroup": "The group function cannot be used in private mode.",
+    "cannotAddProject": "Projects can only be created by group admins."
   },
   "notification": {
     "noNotification": "There is no notification.",
@@ -120,6 +121,9 @@
     "endDate": "Scheduled end date",
     "manHour": "Estimated man hour",
     "assigned": "Assigned person",
+    "forward": "day forward",
+    "delay": "day delay",
+    "onSchedule": "On Schedule",
     "selectTask": "Select the task you want to edit from the list.",
     "narrowDownTask": "Narrow down the task to be edited to one.",
     "cannotEditTask": "Only the person responsible for the task, the creator, or the admin of the project can edit it."

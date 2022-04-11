@@ -33,6 +33,7 @@ import useMessage from '../../hooks/message';
 import {
   fetchAsyncGetLoginUser,
   fetchAsyncGetPersonalSettings,
+  selectLoginUserInfo,
   selectPersonalSettings,
   setLang,
 } from '../auth/authSlice';
@@ -188,6 +189,7 @@ const Main = () => {
   const message = useMessage();
 
   const mainComponentName = useSelector(selectMainComponentName);
+  const loginUserInfo = useSelector(selectLoginUserInfo);
   const settings = useSelector(selectPersonalSettings);
   const orgInfo = useSelector(selectOrgInfo);
   const projects = useSelector(selectProjects);
@@ -228,11 +230,14 @@ const Main = () => {
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
-    console.log('newId', newValue);
     if (newValue !== 'new_project') {
       dispatch(setSelectedProjectId(newValue));
       dispatch(fetchAsyncGetTasks());
     } else {
+      if (!orgInfo.org_admin_id.includes(loginUserInfo.user_id)) {
+        message(t('main.cannotAddProject'));
+        return;
+      }
       dispatch(setProjectDialogMode('register'));
       dispatch(
         setEditedProject({ ...emptyEditedProject, org_id: orgInfo.org_id })
