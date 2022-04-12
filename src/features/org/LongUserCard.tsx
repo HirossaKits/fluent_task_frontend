@@ -108,11 +108,11 @@ const LongUserCard = (props: Props) => {
 
   const handleIncludeAdminClick = (user_id: string) => {
     if (!orgInfo.org_admin_id.includes(loginUserInfo.user_id)) {
-      message('変更権限がありません。グループの管理者のみ変更可能です。');
+      message(t('org.onlyAdminChange'));
       return;
     }
     if (orgInfo.org_admin_id.includes(props.user.user_id)) {
-      message('すでにグループの管理者です。');
+      message(t('org.alreadyAdmin'));
       return;
     }
     // 組織の管理者に追加
@@ -122,11 +122,7 @@ const LongUserCard = (props: Props) => {
 
   const handleExcludeAdminClick = (user_id: string) => {
     if (!orgInfo.org_admin_id.includes(loginUserInfo.user_id)) {
-      message('変更権限がありません。グループの管理者のみ変更可能です。');
-      return;
-    }
-    if (orgInfo.org_owner_id === props.user.user_id) {
-      message('グループの所有者を管理者から除外することはできません。');
+      message(t('org.onlyAdminChange'));
       return;
     }
     // 組織の管理者から除外
@@ -136,13 +132,7 @@ const LongUserCard = (props: Props) => {
 
   const handleExcludeFromGroupClick = (user_id: string) => {
     if (!orgInfo.org_admin_id.includes(loginUserInfo.user_id)) {
-      message(
-        '変更権限がありません。グループの所有者または、管理者のみ変更可能です。'
-      );
-      return;
-    }
-    if (orgInfo.org_owner_id === props.user.user_id) {
-      message('グループの所有者をグループから除外することはできません。');
+      message(t('org.onlyAdminChange'));
       return;
     }
     // 組織から除外

@@ -88,6 +88,8 @@
     "excludeFromAdmin": "管理者から除外する",
     "withdrawFromGroup": "グループから脱退する",
     "excludeFromGroup": "グループから除外する",
+    "onlyAdminChange": "変更権限がありません。グループの管理者のみ変更可能です。",
+    "alreadyAdmin": "すでにグループの管理者です。",
     "onlyOwnerEdit": "グループ所有者のみ変更可能です。",
     "onlyAdminInvite": "グループの管理者のみユーザーを招待可能です。"
   },

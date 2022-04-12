@@ -50,7 +50,7 @@
   },
   "notification": {
     "noNotification": "There is no notification.",
-    "inviteFront": "An invitation to the group has arrived from ",
+    "inviteFront": "You are invited to Group ",
     "inviteRear": ".",
     "join": "Join",
     "reject": "Reject"
@@ -82,6 +82,8 @@
     "admin": "Group admin",
     "addToAdmin": "Add to the group admin",
     "excludeFromAdmin": "Exclude from the group admin",
+    "onlyAdminChange": "You do not have change permission. Only the group admin can change it.",
+    "alreadyAdmin": "Already a group administrator.",
     "withdrawFromGroup": "Withdraw from the group",
     "excludeFromGroup": "Exclude from the group",
     "onlyOwnerEdit": "Only the group owner can change it.",

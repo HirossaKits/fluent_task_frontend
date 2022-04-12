@@ -33,8 +33,8 @@ const CommonTextField: React.FC<Props> = (props) => {
     const val = event.target.value;
 
     if (props.type === 'number') {
-      if (props.maxVal && props.maxVal < Number(val)) return;
-      if (props.minVal && Number(val) < props.minVal) return;
+      if (props.maxVal !== undefined && props.maxVal < Number(val)) return;
+      if (props.minVal !== undefined && Number(val) < props.minVal) return;
     }
 
     let target: TARGET = {
