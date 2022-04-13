@@ -6,7 +6,11 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import { selectPersonalSettings, setPersonalSettings } from '../auth/authSlice';
+import {
+  selectLoginUserInfo,
+  selectPersonalSettings,
+  setPersonalSettings,
+} from '../auth/authSlice';
 import { setNotificationDialogOpen } from './mainSlice';
 import { fetchAsyncGetOrgInfo, fetchAsyncUpdateInvite } from '../org/orgSliece';
 
@@ -18,25 +22,34 @@ type Props = {
 export const NotificationInviteItem = (props: Props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const loginUserInfo = useSelector(selectLoginUserInfo);
   const settings = useSelector(selectPersonalSettings);
 
   const handleClick = (value: boolean) => {
     const data = { invite_id: props.inviteId, result: value };
     const update = async () => {
       const res = await dispatch(fetchAsyncUpdateInvite(data));
-      await dispatch(fetchAsyncGetOrgInfo());
-      return res;
+      if (fetchAsyncUpdateInvite.fulfilled.match(res)) {
+        await dispatch(fetchAsyncGetOrgInfo());
+      }
     };
-    update().then((res) => {
-      console.log(res);
+    console.log('ooops!');
+    console.log('debug_1', loginUserInfo);
+    update().then(() => {
       dispatch(setNotificationDialogOpen(false));
-      dispatch(
-        setPersonalSettings({
-          ...settings,
-          private_mode: false,
-          selected_org_id: res.meta.arg.invite_id,
-        })
-      );
+      console.log('debug_2', loginUserInfo);
+      // 承認した場合はその組織を表示させる
+      if (value) {
+        dispatch(
+          setPersonalSettings({
+            ...settings,
+            private_mode: false,
+            selected_org_id: loginUserInfo.joined_org
+              .filter((org) => org.is_private === false)
+              ?.slice(-1)[0],
+          })
+        );
+      }
     });
   };
 

@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootState } from '../../app/store';
-import { ORG, ORG_INFO } from '../types';
+import { ORG, ORG_INFO, INVITE } from '../types';
 
 const initialState: ORG = {
   org_info: {
@@ -110,7 +110,7 @@ export const fetchAsyncUpdateInvite = createAsyncThunk(
       ? { accepted: true, rejected: false }
       : { accepted: true, rejected: true };
 
-    const res = await axios.put(
+    const res = await axios.put<INVITE>(
       `${process.env.REACT_APP_API_URL}/api/invite/${data.invite_id}`,
       body,
       {
@@ -218,12 +218,15 @@ export const orgSlice = createSlice({
       };
     });
     // 招待を更新
-    builder.addCase(fetchAsyncUpdateInvite.fulfilled, (state, action) => {
-      return {
-        ...state,
-        invite: action.payload,
-      };
-    });
+    builder.addCase(
+      fetchAsyncUpdateInvite.fulfilled,
+      (state, action: PayloadAction<INVITE>) => {
+        return {
+          ...state,
+          invite: action.payload,
+        };
+      }
+    );
     // 管理者に追加
     builder.addCase(fetchAsyncIncludeOrgAdmin.fulfilled, (state, action) => {
       return {
