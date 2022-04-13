@@ -17,6 +17,7 @@ ReactDOM.render(
         <BrowserRouter>
           <Route exact path="/login" component={Auth} />
           <Route exact path="/app" component={App} />
+          <Route component={Auth} />
         </BrowserRouter>
       </I18nextProvider>
     </Provider>
