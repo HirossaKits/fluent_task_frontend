@@ -109,6 +109,7 @@ const Auth: React.FC = () => {
     e.preventDefault();
     let cred: SIGNIN_INFO = regInfo;
     await dispatch(fetchAsyncSignin(cred));
+    window.location.href = '/app';
   };
 
   const signup = async (e: any) => {

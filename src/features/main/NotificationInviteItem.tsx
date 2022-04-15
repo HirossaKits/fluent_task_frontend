@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '../../app/store';
 import { useTranslation } from 'react-i18next';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
@@ -20,7 +21,7 @@ type Props = {
 };
 
 export const NotificationInviteItem = (props: Props) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const { t } = useTranslation();
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const settings = useSelector(selectPersonalSettings);
@@ -55,9 +56,9 @@ export const NotificationInviteItem = (props: Props) => {
 
   return (
     <Stack
-      direction='row'
+      direction="row"
       alignItems={'center'}
-      justifyContent='flex-start'
+      justifyContent="flex-start"
       spacing={1}
     >
       <Typography>
