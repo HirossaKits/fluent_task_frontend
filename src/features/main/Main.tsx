@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTranslation } from 'react-i18next';
@@ -183,6 +184,7 @@ const Main = () => {
     `,
   };
 
+  const history = useHistory();
   const dispatch: AppDispatch = useDispatch();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { t, i18n } = useTranslation();
@@ -215,7 +217,7 @@ const Main = () => {
         await dispatch(fetchAsycnGetInvite());
       } else {
         localStorage.removeItem('localJWT');
-        window.location.href = '/login';
+        history.push('/');
       }
     };
     fectchBootLoader();

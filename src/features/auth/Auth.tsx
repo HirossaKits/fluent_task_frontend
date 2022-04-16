@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Lottie from 'react-lottie';
 import { css } from '@emotion/react';
@@ -20,6 +21,7 @@ import {
   setLang,
   fetchAsyncSignin,
   fetchAsyncSignup,
+  fetchAsyncGetLoginUser,
 } from './authSlice';
 import loginPageAnimation from '../../img/loginPageAnimation.json';
 import CommonLanguageSelect from '../../components/CommonLanguageSelect';
@@ -76,17 +78,21 @@ const Auth: React.FC = () => {
     },
   };
 
+  const history = useHistory();
   const dispatch: AppDispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const [mode, setMode] = useState(MODE.Login);
   const [regInfo, setRegInfo] = useState<SIGNUP_INFO>(initRegInfo);
 
   useEffect(() => {
+    // Language の自動設定
     let lang = localStorage.getItem('lang');
     if (!lang) lang = 'ja';
     i18n.changeLanguage(lang);
     dispatch(setLang(lang));
     localStorage.setItem('lang', lang);
+    // 自動ログイン
+    dispatch(fetchAsyncGetLoginUser);
   }, []);
 
   const lang = useSelector(selectLang);
@@ -108,13 +114,18 @@ const Auth: React.FC = () => {
   const signin = async (e: any) => {
     e.preventDefault();
     let cred: SIGNIN_INFO = regInfo;
-    await dispatch(fetchAsyncSignin(cred));
-    window.location.href = '/app';
+    const res = await dispatch(fetchAsyncSignin(cred));
+    if (fetchAsyncSignin.fulfilled.match(res)) {
+      history.push('/app');
+    }
   };
 
   const signup = async (e: any) => {
     e.preventDefault();
-    await dispatch(fetchAsyncSignup(regInfo));
+    const res = await dispatch(fetchAsyncSignup(regInfo));
+    if (fetchAsyncSignup.fulfilled.match(res)) {
+      history.push('/app');
+    }
   };
 
   return (
