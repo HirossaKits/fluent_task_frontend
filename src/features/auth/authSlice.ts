@@ -50,7 +50,7 @@ export const fetchAsyncSignup = createAsyncThunk(
   'auth/signup',
   async (auth: SIGNUP_INFO) => {
     const res = await axios.post<JWT>(
-      `${process.env.REACT_APP_API_URL}/api/auth/signup`,
+      `${process.env.REACT_APP_API_URL}/auth/signup`,
       auth,
       {
         headers: {
@@ -67,7 +67,7 @@ export const fetchAsyncSignin = createAsyncThunk(
   'auth/signin',
   async (auth: SIGNIN_INFO) => {
     const res = await axios.post<JWT>(
-      `${process.env.REACT_APP_API_URL}/api/auth/signin`,
+      `${process.env.REACT_APP_API_URL}/auth/signin`,
       auth
     );
     return res.data;
@@ -79,7 +79,7 @@ export const fetchAsyncGetLoginUser = createAsyncThunk(
   'auth/getLoginUserInfo',
   async (_, thunkAPI) => {
     const res = await axios.get<LOGIN_USER_INFO>(
-      `${process.env.REACT_APP_API_URL}/api/user`,
+      `${process.env.REACT_APP_API_URL}/user`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.localJWT}`,
@@ -98,7 +98,7 @@ export const fetchAsyncUpdateProf = createAsyncThunk(
       .user_id;
     const editedProf = (thunkAPI.getState() as RootState).auth.editedProf;
     const res = await axios.put<USER_INFO>(
-      `${process.env.REACT_APP_API_URL}/api/user/${user_id}`,
+      `${process.env.REACT_APP_API_URL}/user/${user_id}`,
       editedProf,
       {
         headers: {
@@ -111,7 +111,7 @@ export const fetchAsyncUpdateProf = createAsyncThunk(
       const uploadData = new FormData();
       uploadData.append('upload_file', upload_file, upload_file.name);
       const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/avatar/${user_id}`,
+        `${process.env.REACT_APP_API_URL}/avatar/${user_id}`,
         uploadData,
         {
           headers: {
@@ -134,7 +134,7 @@ export const fetchAsyncGetPersonalSettings = createAsyncThunk(
     const user_id = (thunkAPI.getState() as RootState).auth.loginUserInfo
       .user_id;
     const res = await axios.get<PERSONAL_SETTINGS>(
-      `${process.env.REACT_APP_API_URL}/api/settings/${user_id}`,
+      `${process.env.REACT_APP_API_URL}/settings/${user_id}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.localJWT}`,
@@ -152,7 +152,7 @@ export const fetchAsyncUpdateSettings = createAsyncThunk(
     const user_id = (thunkAPI.getState() as RootState).auth.loginUserInfo
       .user_id;
     const res = await axios.put<PERSONAL_SETTINGS>(
-      `${process.env.REACT_APP_API_URL}/api/settings/${user_id}`,
+      `${process.env.REACT_APP_API_URL}/settings/${user_id}`,
       settings,
       {
         headers: {

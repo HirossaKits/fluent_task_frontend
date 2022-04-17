@@ -40,7 +40,7 @@ export const fetchAsyncGetProject = createAsyncThunk(
   async (_, thunkAPI) => {
     const org_id = (thunkAPI.getState() as RootState).org.org_info.org_id;
     const res = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/project/org/${org_id}`,
+      `${process.env.REACT_APP_API_URL}/project/org/${org_id}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.localJWT}`,
@@ -58,7 +58,7 @@ export const fetchAsyncRegisterProject = createAsyncThunk(
     const editedProject = (thunkAPI.getState() as RootState).project
       .editedProject;
     const res = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/project`,
+      `${process.env.REACT_APP_API_URL}/project`,
       editedProject,
       {
         headers: {
@@ -76,7 +76,7 @@ export const fetchAsyncUpdateProject = createAsyncThunk(
     const editedProject = (thunkAPI.getState() as RootState).project
       .editedProject;
     const res = await axios.put(
-      `${process.env.REACT_APP_API_URL}/api/project/${editedProject.project_id}`,
+      `${process.env.REACT_APP_API_URL}/project/${editedProject.project_id}`,
       editedProject,
       {
         headers: {
@@ -94,7 +94,7 @@ export const fetchAsyncDeleteProject = createAsyncThunk(
     const projectId = (thunkAPI.getState() as RootState).project
       .selectedProjectId;
     const res = await axios.delete<PROJECT[]>(
-      `${process.env.REACT_APP_API_URL}/api/project/${projectId}`,
+      `${process.env.REACT_APP_API_URL}/project/${projectId}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.localJWT}`,

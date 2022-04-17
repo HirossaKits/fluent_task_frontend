@@ -28,7 +28,7 @@ export const fetchAsyncGetOrgInfo = createAsyncThunk(
 
     if (settings.private_mode) {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/org/private/${user_id}`,
+        `${process.env.REACT_APP_API_URL}/org/private/${user_id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.localJWT}`,
@@ -38,7 +38,7 @@ export const fetchAsyncGetOrgInfo = createAsyncThunk(
       return res.data;
     } else {
       const res = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/org/${settings.selected_org_id}`,
+        `${process.env.REACT_APP_API_URL}/org/${settings.selected_org_id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.localJWT}`,
@@ -55,7 +55,7 @@ export const fetchAsyncUpdateOrgInfo = createAsyncThunk(
   async (org_name: string, thunkAPI) => {
     const org_id = (thunkAPI.getState() as RootState).org.org_info.org_id;
     const res = await axios.put(
-      `${process.env.REACT_APP_API_URL}/api/org/${org_id}`,
+      `${process.env.REACT_APP_API_URL}/org/${org_id}`,
       { org_name: org_name },
       {
         headers: {
@@ -73,7 +73,7 @@ export const fetchAsycnRegisterInvite = createAsyncThunk(
   async (editedInviteMail: string, thunkAPI) => {
     const org_id = (thunkAPI.getState() as RootState).org.org_info.org_id;
     const res = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/invite`,
+      `${process.env.REACT_APP_API_URL}/invite`,
       { org_id: org_id, email: editedInviteMail },
       {
         headers: {
@@ -91,7 +91,7 @@ export const fetchAsycnGetInvite = createAsyncThunk(
     const user_id = (thunkAPI.getState() as RootState).auth.loginUserInfo
       .user_id;
     const res = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/invite/user/${user_id}`,
+      `${process.env.REACT_APP_API_URL}/invite/user/${user_id}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.localJWT}`,
@@ -111,7 +111,7 @@ export const fetchAsyncUpdateInvite = createAsyncThunk(
       : { accepted: true, rejected: true };
 
     const res = await axios.put<INVITE[]>(
-      `${process.env.REACT_APP_API_URL}/api/invite/${data.invite_id}`,
+      `${process.env.REACT_APP_API_URL}/invite/${data.invite_id}`,
       body,
       {
         headers: {
@@ -129,7 +129,7 @@ export const fetchAsyncIncludeOrgAdmin = createAsyncThunk(
   async (user_id: string, thunkAPI) => {
     const org_id = (thunkAPI.getState() as RootState).org.org_info.org_id;
     const res = await axios.put(
-      `${process.env.REACT_APP_API_URL}/api/org/admin/include/${org_id}`,
+      `${process.env.REACT_APP_API_URL}/org/admin/include/${org_id}`,
       { user_id: user_id },
       {
         headers: {
@@ -147,7 +147,7 @@ export const fetchAsyncExcludeOrgAdmin = createAsyncThunk(
   async (user_id: string, thunkAPI) => {
     const org_id = (thunkAPI.getState() as RootState).org.org_info.org_id;
     const res = await axios.put(
-      `${process.env.REACT_APP_API_URL}/api/org/admin/exclude/${org_id}`,
+      `${process.env.REACT_APP_API_URL}/org/admin/exclude/${org_id}`,
       { user_id: user_id },
       {
         headers: {
@@ -165,7 +165,7 @@ export const fetchAsyncExcludeOrgUser = createAsyncThunk(
   async (user_id: string, thunkAPI) => {
     const org_id = (thunkAPI.getState() as RootState).org.org_info.org_id;
     const res = await axios.put(
-      `${process.env.REACT_APP_API_URL}/api/org/user/exclude/${org_id}`,
+      `${process.env.REACT_APP_API_URL}/org/user/exclude/${org_id}`,
       { user_id: user_id },
       {
         headers: {

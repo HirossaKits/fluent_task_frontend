@@ -115,7 +115,7 @@ export const fetchAsyncGetTasks = createAsyncThunk(
     const selectedProjectId = (thunkAPI.getState() as RootState).project
       .selectedProjectId;
     const res = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/task/project/${selectedProjectId}`,
+      `${process.env.REACT_APP_API_URL}/task/project/${selectedProjectId}`,
       {
         headers: {
           'Content-type': 'application/json',
@@ -147,7 +147,7 @@ export const fetchAsyncRegisterTask = createAsyncThunk(
 
     const data = shapeTask(editedTask, 'register');
     const res = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/task`,
+      `${process.env.REACT_APP_API_URL}/task`,
       data,
       {
         headers: {
@@ -177,7 +177,7 @@ export const fetchAsyncUpdateTask = createAsyncThunk(
     const editedTask = (thunkAPI.getState() as RootState).task.editedTask;
     const data = shapeTask(editedTask, 'update');
     const res = await axios.put(
-      `${process.env.REACT_APP_API_URL}/api/task/${editedTask.task_id}`,
+      `${process.env.REACT_APP_API_URL}/task/${editedTask.task_id}`,
       data,
       {
         headers: {
@@ -214,7 +214,7 @@ export const fetchAsyncUpdateTaskStatus = createAsyncThunk(
     thunkAPI
   ) => {
     const res = await axios.put(
-      `${process.env.REACT_APP_API_URL}/api/task/${data.task_id}`,
+      `${process.env.REACT_APP_API_URL}/task/${data.task_id}`,
       {
         status: data.status,
         actual_startdate: data.actual_startdate,
@@ -252,7 +252,7 @@ export const fetchAsyncDeleteTask = createAsyncThunk(
     const selectedProjectId = (thunkAPI.getState() as RootState).project
       .selectedProjectId;
     const res = await axios.delete(
-      `${process.env.REACT_APP_API_URL}/api/task/project/${selectedProjectId}`,
+      `${process.env.REACT_APP_API_URL}/task/project/${selectedProjectId}`,
       {
         headers: {
           'Content-type': 'application/json',
@@ -285,7 +285,7 @@ export const fetchAsyncGetTaskCategory = createAsyncThunk(
       .selectedProjectId;
     console.log('testes', selectedProjectId);
     const res = await axios.get(
-      `${process.env.REACT_APP_API_URL}/api/taskcategory/project/${selectedProjectId}`,
+      `${process.env.REACT_APP_API_URL}/taskcategory/project/${selectedProjectId}`,
       {
         headers: {
           'Content-type': 'application/json',
@@ -302,7 +302,7 @@ export const fetchAsyncRegisterTaskCategory = createAsyncThunk(
   'taskcategory/register',
   async (data: { task_category_name: string; project_id: string }) => {
     const res = await axios.post(
-      `${process.env.REACT_APP_API_URL}/api/taskcategory`,
+      `${process.env.REACT_APP_API_URL}/taskcategory`,
       data,
       {
         headers: {
@@ -320,7 +320,7 @@ export const fetchAsyncUpdateTaskCategory = createAsyncThunk(
   'taskcategory/update',
   async (data: { task_category_id: string; task_category_name: string }) => {
     const res = await axios.put(
-      `${process.env.REACT_APP_API_URL}/api/taskcategory/${data.task_category_id}`,
+      `${process.env.REACT_APP_API_URL}/taskcategory/${data.task_category_id}`,
       { task_category_name: data.task_category_name },
       {
         headers: {
@@ -338,7 +338,7 @@ export const fetchAsyncDeleteTaskCategory = createAsyncThunk(
   'taskcategory/delete',
   async (task_category_id: string) => {
     const res = await axios.delete(
-      `${process.env.REACT_APP_API_URL}/api/taskcategory/${task_category_id}`,
+      `${process.env.REACT_APP_API_URL}/taskcategory/${task_category_id}`,
       {
         headers: {
           'Content-type': 'application/json',
