@@ -14,6 +14,9 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
 import { AppDispatch } from '../../app/store';
 import { SIGNIN_INFO, SIGNUP_INFO } from '../types';
 import {
@@ -66,6 +69,15 @@ const Auth: React.FC = () => {
       margin-top: 20px;
       margin-right: 20px;
       width: 400px;
+    `,
+    demoCard: css`
+      position: absolute;
+      padding: 20;
+      top: 10px;
+      right: 10px;
+    `,
+    demoButton: css`
+      text-align: right;
     `,
   };
 
@@ -128,156 +140,188 @@ const Auth: React.FC = () => {
     }
   };
 
-  return (
-    <div css={styles.root}>
-      <Container css={styles.container} component="main" maxWidth="xs">
-        <CssBaseline />
-        <Typography css={styles.title} variant="h2">
-          Fluent Task
-        </Typography>
-        <form css={styles.form}>
-          <Grid
-            container
-            justifyContent="center"
-            alignItems="center"
-            spacing={2}
-          >
-            {mode === MODE.Login && (
-              <>
-                <Grid item xs={8}>
-                  <TextField
-                    autoFocus
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    id="email"
-                    label={t('login.email')}
-                    name="email"
-                    autoComplete="email"
-                    size="small"
-                    value={regInfo.email}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={8}>
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    name="password"
-                    label={t('login.password')}
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    size="small"
-                    value={regInfo.password}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-              </>
-            )}
-            {mode === MODE.Register && (
-              <>
-                <Grid item xs={4}>
-                  <TextField
-                    autoFocus
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    id="lastName"
-                    name="last_name"
-                    label={t('login.firstName')}
-                    autoComplete="lname"
-                    size="small"
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={4}>
-                  <TextField
-                    margin="normal"
-                    variant="outlined"
-                    fullWidth
-                    id="firstName"
-                    name="first_name"
-                    label={t('login.lastName')}
-                    autoComplete="fname"
-                    size="small"
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={8}>
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    id="email"
-                    label={t('login.email')}
-                    name="email"
-                    autoComplete="email"
-                    size="small"
-                    value={regInfo.email}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={8}>
-                  <TextField
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    name="password"
-                    label={t('login.password')}
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    size="small"
-                    value={regInfo.password}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-              </>
-            )}
+  const handleDemoClick = async () => {
+    const id = Math.random() * 9 + 1;
+    const res = await dispatch(
+      fetchAsyncSignin({
+        email: `demo${id}@gmail.com`,
+        password: `demo${id}`,
+      })
+    );
+  };
 
-            <Grid item xs={12}>
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                css={styles.submit}
-                onClick={mode === MODE.Login ? signin : signup}
-              >
-                {mode === MODE.Login ? t('login.login') : t('login.signup')}
-              </Button>
-            </Grid>
-            <Grid item xs={12}>
-              <Link variant="body2" onClick={toggleView}>
-                {mode === MODE.Login
-                  ? t('login.createAccount')
-                  : t('login.backToLogin')}
-              </Link>
-            </Grid>
-            <Grid item xs={6}>
-              <CommonLanguageSelect width="100%" value={lang} />
-            </Grid>
-          </Grid>
-        </form>
-      </Container>
-      <Stack direction="column" justifyContent="flex-start" alignItems="center">
-        <Box css={styles.lottie}>
-          <Lottie options={lottieOptions} />
-        </Box>
-        <Box>
-          <Typography variant="body2" color="textSecondary" align="center">
-            {/* {"Copyright © "} */}
-            {'Copyright   '}
-            <Link color="inherit" href="">
-              Hirohisa Kitsuka
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
+  return (
+    <>
+      <div css={styles.root}>
+        <Container css={styles.container} component='main' maxWidth='xs'>
+          <CssBaseline />
+          <Typography css={styles.title} variant='h2'>
+            Fluent Task
           </Typography>
-        </Box>
-      </Stack>
-    </div>
+          <form css={styles.form}>
+            <Grid
+              container
+              justifyContent='center'
+              alignItems='center'
+              spacing={2}
+            >
+              {mode === MODE.Login && (
+                <>
+                  <Grid item xs={8}>
+                    <TextField
+                      autoFocus
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      id='email'
+                      label={t('login.email')}
+                      name='email'
+                      autoComplete='email'
+                      size='small'
+                      value={regInfo.email}
+                      onChange={handleInputChange}
+                    />
+                  </Grid>
+                  <Grid item xs={8}>
+                    <TextField
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      name='password'
+                      label={t('login.password')}
+                      type='password'
+                      id='password'
+                      autoComplete='current-password'
+                      size='small'
+                      value={regInfo.password}
+                      onChange={handleInputChange}
+                    />
+                  </Grid>
+                </>
+              )}
+              {mode === MODE.Register && (
+                <>
+                  <Grid item xs={4}>
+                    <TextField
+                      autoFocus
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      id='lastName'
+                      name='last_name'
+                      label={t('login.firstName')}
+                      autoComplete='lname'
+                      size='small'
+                      onChange={handleInputChange}
+                    />
+                  </Grid>
+                  <Grid item xs={4}>
+                    <TextField
+                      margin='normal'
+                      variant='outlined'
+                      fullWidth
+                      id='firstName'
+                      name='first_name'
+                      label={t('login.lastName')}
+                      autoComplete='fname'
+                      size='small'
+                      onChange={handleInputChange}
+                    />
+                  </Grid>
+                  <Grid item xs={8}>
+                    <TextField
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      id='email'
+                      label={t('login.email')}
+                      name='email'
+                      autoComplete='email'
+                      size='small'
+                      value={regInfo.email}
+                      onChange={handleInputChange}
+                    />
+                  </Grid>
+                  <Grid item xs={8}>
+                    <TextField
+                      variant='outlined'
+                      margin='normal'
+                      fullWidth
+                      name='password'
+                      label={t('login.password')}
+                      type='password'
+                      id='password'
+                      autoComplete='current-password'
+                      size='small'
+                      value={regInfo.password}
+                      onChange={handleInputChange}
+                    />
+                  </Grid>
+                </>
+              )}
+
+              <Grid item xs={12}>
+                <Button
+                  type='submit'
+                  variant='contained'
+                  color='primary'
+                  css={styles.submit}
+                  onClick={mode === MODE.Login ? signin : signup}
+                >
+                  {mode === MODE.Login ? t('login.login') : t('login.signup')}
+                </Button>
+              </Grid>
+              <Grid item xs={12}>
+                <Link variant='body2' onClick={toggleView}>
+                  {mode === MODE.Login
+                    ? t('login.createAccount')
+                    : t('login.backToLogin')}
+                </Link>
+              </Grid>
+              <Grid item xs={6}>
+                <CommonLanguageSelect width='100%' value={lang} />
+              </Grid>
+            </Grid>
+          </form>
+        </Container>
+        <Stack
+          direction='column'
+          justifyContent='flex-start'
+          alignItems='center'
+        >
+          <Box css={styles.lottie}>
+            <Lottie options={lottieOptions} />
+          </Box>
+          <Box>
+            <Typography variant='body2' color='textSecondary' align='center'>
+              {/* {"Copyright © "} */}
+              {'Copyright   '}
+              <Link color='inherit' href=''>
+                Hirohisa Kitsuka
+              </Link>{' '}
+              {new Date().getFullYear()}
+              {'.'}
+            </Typography>
+          </Box>
+        </Stack>
+      </div>
+      <Card css={styles.demoCard}>
+        <CardContent>
+          <Typography align='left'>
+            デモユーザーとしてログインすることで
+            <br />
+            予めデータが用意された状態で、
+            <br />
+            操作を試すことができます。
+          </Typography>
+        </CardContent>
+        <CardActions css={styles.demoButton}>
+          <Button size='small' onClick={handleDemoClick}>
+            デモユーザーでとしてログイン
+          </Button>
+        </CardActions>
+      </Card>
+    </>
   );
 };
 
