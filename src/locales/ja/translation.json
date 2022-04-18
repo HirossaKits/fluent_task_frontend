@@ -36,7 +36,11 @@
     "email": "メールアドレス",
     "password": "パスワード",
     "signup": "サインイン",
-    "backToLogin": "ログイン画面に戻る"
+    "backToLogin": "ログイン画面に戻る",
+    "demoExplanation1": "デモユーザーとしてログインすることで",
+    "demoExplanation2": "予めデータが用意された状態で、",
+    "demoExplanation3": "操作を試すことができます。",
+    "demoLogin": "デモユーザーとしてログイン"
   },
   "main": {
     "group": "グループ",

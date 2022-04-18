@@ -1,13 +1,16 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+// import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import './App.css';
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Main from './features/main/Main';
 import Auth from './features/auth/Auth';
-import { selectPersonalSettings } from './features/auth/authSlice';
+import {
+  selectIsAuthenticated,
+  selectPersonalSettings,
+} from './features/auth/authSlice';
 
 function App() {
   const settings = useSelector(selectPersonalSettings);
@@ -33,14 +36,14 @@ function App() {
     },
   });
 
-  console.log('Rendering App');
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="App">
         <header className="App-header">
-          <BrowserRouter>
+          {/* <BrowserRouter>
             <Route exact path="/" component={Auth} />
             <Route exact path="/app" component={Main} />
             <Route
@@ -48,7 +51,8 @@ function App() {
               path="/index.html"
               render={({ location }) => <Redirect to="/" />}
             />
-          </BrowserRouter>
+          </BrowserRouter> */}
+          {isAuthenticated ? <Main /> : <Auth />}
         </header>
       </div>
     </ThemeProvider>

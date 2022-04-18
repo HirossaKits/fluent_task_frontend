@@ -187,7 +187,6 @@ export const fetchAsyncUpdateTask = createAsyncThunk(
       }
     );
 
-    console.log(res);
     const tasks = await res.data.map((task: any) => {
       const shapedTask = {
         ...task,
@@ -196,7 +195,6 @@ export const fetchAsyncUpdateTask = createAsyncThunk(
       delete shapedTask.assigned;
       return shapedTask;
     });
-    console.log(tasks);
     return tasks;
   }
 );
@@ -283,7 +281,6 @@ export const fetchAsyncGetTaskCategory = createAsyncThunk(
   async (_, thunkAPI) => {
     const selectedProjectId = (thunkAPI.getState() as RootState).project
       .selectedProjectId;
-    console.log('testes', selectedProjectId);
     const res = await axios.get(
       `${process.env.REACT_APP_API_URL}/taskcategory/project/${selectedProjectId}`,
       {

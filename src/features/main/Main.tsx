@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTranslation } from 'react-i18next';
@@ -36,6 +36,7 @@ import {
   fetchAsyncGetPersonalSettings,
   selectLoginUserInfo,
   selectPersonalSettings,
+  setIsAuthenticated,
   setLang,
 } from '../auth/authSlice';
 import {
@@ -184,7 +185,7 @@ const Main = () => {
     `,
   };
 
-  const history = useHistory();
+  // const history = useHistory();
   const dispatch: AppDispatch = useDispatch();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { t, i18n } = useTranslation();
@@ -217,7 +218,8 @@ const Main = () => {
         await dispatch(fetchAsycnGetInvite());
       } else {
         localStorage.removeItem('localJWT');
-        history.push('/');
+        // history.push('/');
+        dispatch(setIsAuthenticated(false));
       }
     };
     fectchBootLoader();
@@ -232,20 +234,23 @@ const Main = () => {
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
+    console.log('changed');
     if (newValue !== 'new_project') {
       dispatch(setSelectedProjectId(newValue));
       dispatch(fetchAsyncGetTasks());
-    } else {
-      if (!orgInfo.org_admin_id.includes(loginUserInfo.user_id)) {
-        message(t('main.cannotAddProject'));
-        return;
-      }
-      dispatch(setProjectDialogMode('register'));
-      dispatch(
-        setEditedProject({ ...emptyEditedProject, org_id: orgInfo.org_id })
-      );
-      dispatch(setProjectDialogOpen(true));
     }
+  };
+
+  const handleNewProjectTabClick = () => {
+    if (!orgInfo.org_admin_id.includes(loginUserInfo.user_id)) {
+      message(t('main.cannotAddProject'));
+      return;
+    }
+    dispatch(setProjectDialogMode('register'));
+    dispatch(
+      setEditedProject({ ...emptyEditedProject, org_id: orgInfo.org_id })
+    );
+    dispatch(setProjectDialogOpen(true));
   };
 
   const handleNotificationClick = () => {
@@ -409,6 +414,7 @@ const Main = () => {
                   iconPosition="start"
                   style={{ margin: 0, padding: 0 }}
                   value="new_project"
+                  onClick={handleNewProjectTabClick}
                 />
               )}
             </Tabs>

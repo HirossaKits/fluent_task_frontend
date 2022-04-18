@@ -15,7 +15,10 @@ import useMessage from '../../hooks/message';
 import useCreateOption from '../../hooks/optionCreater';
 import useTaskEditPermission from '../../hooks/taskEditPermission';
 import { selectLoginUserInfo } from '../auth/authSlice';
-import { selectSelectedProject } from '../proj/projectSlice';
+import {
+  selectSelectedProject,
+  selectSelectedProjectId,
+} from '../proj/projectSlice';
 import {
   initialEditedTask,
   selectTaskCategory,
@@ -44,7 +47,8 @@ const Task = () => {
   const taskEditPermisson = useTaskEditPermission();
   const progress = usePorgress();
   const loginUserInfo = useSelector(selectLoginUserInfo);
-  const project = useSelector(selectSelectedProject);
+  const selectedProjectId = useSelector(selectSelectedProjectId);
+  const selectedProject = useSelector(selectSelectedProject);
   const tasks = useSelector(selectTasks);
   const taskCategory = useSelector(selectTaskCategory);
 
@@ -74,7 +78,7 @@ const Task = () => {
     },
   ];
 
-  const projectMemberOptions = project.member.map((user) => ({
+  const projectMemberOptions = selectedProject.member.map((user) => ({
     value: user.user_id,
     label: `${user.last_name} ${user.first_name}`,
   }));
@@ -137,7 +141,7 @@ const Task = () => {
     dispatch(
       setEditedTask({
         ...initialEditedTask,
-        project_id: project.project_id,
+        project_id: selectedProject.project_id,
         assigned_id: loginUserInfo.user_id,
         author_id: loginUserInfo.user_id,
       })
@@ -173,8 +177,8 @@ const Task = () => {
     task_name: (task: TASK) => (
       <Typography>
         <Link
-          href='#'
-          underline='always'
+          href="#"
+          underline="always"
           onClick={(event: any) => {
             event.stopPropagation();
             dispatch(setTaskDialogMode('detail'));
@@ -304,8 +308,8 @@ const Task = () => {
         data={tasks}
         elementFactory={elementFactory}
         columnInfo={columnInfo}
-        showToolBar={true}
-        idColumn='task_id'
+        showToolBar={selectedProjectId !== 'new_project'}
+        idColumn="task_id"
         handleEditClick={hendleEditClick}
         handleRegisterClick={handleRegisterClick}
         handleDeleteClick={handleDeleteClick}

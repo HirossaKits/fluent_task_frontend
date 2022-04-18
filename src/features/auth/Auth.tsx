@@ -25,6 +25,7 @@ import {
   fetchAsyncSignin,
   fetchAsyncSignup,
   fetchAsyncGetLoginUser,
+  setIsAuthenticated,
 } from './authSlice';
 import loginPageAnimation from '../../img/loginPageAnimation.json';
 import CommonLanguageSelect from '../../components/CommonLanguageSelect';
@@ -128,7 +129,8 @@ const Auth: React.FC = () => {
     let cred: SIGNIN_INFO = regInfo;
     const res = await dispatch(fetchAsyncSignin(cred));
     if (fetchAsyncSignin.fulfilled.match(res)) {
-      history.push('/app');
+      // history.push('/app');
+      dispatch(setIsAuthenticated(true));
     }
   };
 
@@ -136,7 +138,8 @@ const Auth: React.FC = () => {
     e.preventDefault();
     const res = await dispatch(fetchAsyncSignup(regInfo));
     if (fetchAsyncSignup.fulfilled.match(res)) {
-      history.push('/app');
+      // history.push('/app');
+      dispatch(setIsAuthenticated(true));
     }
   };
 
@@ -148,21 +151,25 @@ const Auth: React.FC = () => {
         password: `demo${id}`,
       })
     );
+    if (fetchAsyncSignin.fulfilled.match(res)) {
+      // history.push('/app');
+      dispatch(setIsAuthenticated(true));
+    }
   };
 
   return (
     <>
       <div css={styles.root}>
-        <Container css={styles.container} component='main' maxWidth='xs'>
+        <Container css={styles.container} component="main" maxWidth="xs">
           <CssBaseline />
-          <Typography css={styles.title} variant='h2'>
+          <Typography css={styles.title} variant="h2">
             Fluent Task
           </Typography>
           <form css={styles.form}>
             <Grid
               container
-              justifyContent='center'
-              alignItems='center'
+              justifyContent="center"
+              alignItems="center"
               spacing={2}
             >
               {mode === MODE.Login && (
@@ -170,29 +177,29 @@ const Auth: React.FC = () => {
                   <Grid item xs={8}>
                     <TextField
                       autoFocus
-                      variant='outlined'
-                      margin='normal'
+                      variant="outlined"
+                      margin="normal"
                       fullWidth
-                      id='email'
+                      id="email"
                       label={t('login.email')}
-                      name='email'
-                      autoComplete='email'
-                      size='small'
+                      name="email"
+                      autoComplete="email"
+                      size="small"
                       value={regInfo.email}
                       onChange={handleInputChange}
                     />
                   </Grid>
                   <Grid item xs={8}>
                     <TextField
-                      variant='outlined'
-                      margin='normal'
+                      variant="outlined"
+                      margin="normal"
                       fullWidth
-                      name='password'
+                      name="password"
                       label={t('login.password')}
-                      type='password'
-                      id='password'
-                      autoComplete='current-password'
-                      size='small'
+                      type="password"
+                      id="password"
+                      autoComplete="current-password"
+                      size="small"
                       value={regInfo.password}
                       onChange={handleInputChange}
                     />
@@ -204,55 +211,55 @@ const Auth: React.FC = () => {
                   <Grid item xs={4}>
                     <TextField
                       autoFocus
-                      variant='outlined'
-                      margin='normal'
+                      variant="outlined"
+                      margin="normal"
                       fullWidth
-                      id='lastName'
-                      name='last_name'
+                      id="lastName"
+                      name="last_name"
                       label={t('login.firstName')}
-                      autoComplete='lname'
-                      size='small'
+                      autoComplete="lname"
+                      size="small"
                       onChange={handleInputChange}
                     />
                   </Grid>
                   <Grid item xs={4}>
                     <TextField
-                      margin='normal'
-                      variant='outlined'
+                      margin="normal"
+                      variant="outlined"
                       fullWidth
-                      id='firstName'
-                      name='first_name'
+                      id="firstName"
+                      name="first_name"
                       label={t('login.lastName')}
-                      autoComplete='fname'
-                      size='small'
+                      autoComplete="fname"
+                      size="small"
                       onChange={handleInputChange}
                     />
                   </Grid>
                   <Grid item xs={8}>
                     <TextField
-                      variant='outlined'
-                      margin='normal'
+                      variant="outlined"
+                      margin="normal"
                       fullWidth
-                      id='email'
+                      id="email"
                       label={t('login.email')}
-                      name='email'
-                      autoComplete='email'
-                      size='small'
+                      name="email"
+                      autoComplete="email"
+                      size="small"
                       value={regInfo.email}
                       onChange={handleInputChange}
                     />
                   </Grid>
                   <Grid item xs={8}>
                     <TextField
-                      variant='outlined'
-                      margin='normal'
+                      variant="outlined"
+                      margin="normal"
                       fullWidth
-                      name='password'
+                      name="password"
                       label={t('login.password')}
-                      type='password'
-                      id='password'
-                      autoComplete='current-password'
-                      size='small'
+                      type="password"
+                      id="password"
+                      autoComplete="current-password"
+                      size="small"
                       value={regInfo.password}
                       onChange={handleInputChange}
                     />
@@ -262,9 +269,9 @@ const Auth: React.FC = () => {
 
               <Grid item xs={12}>
                 <Button
-                  type='submit'
-                  variant='contained'
-                  color='primary'
+                  type="submit"
+                  variant="contained"
+                  color="primary"
                   css={styles.submit}
                   onClick={mode === MODE.Login ? signin : signup}
                 >
@@ -272,31 +279,31 @@ const Auth: React.FC = () => {
                 </Button>
               </Grid>
               <Grid item xs={12}>
-                <Link variant='body2' onClick={toggleView}>
+                <Link variant="body2" onClick={toggleView}>
                   {mode === MODE.Login
                     ? t('login.createAccount')
                     : t('login.backToLogin')}
                 </Link>
               </Grid>
               <Grid item xs={6}>
-                <CommonLanguageSelect width='100%' value={lang} />
+                <CommonLanguageSelect width="100%" value={lang} />
               </Grid>
             </Grid>
           </form>
         </Container>
         <Stack
-          direction='column'
-          justifyContent='flex-start'
-          alignItems='center'
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="center"
         >
           <Box css={styles.lottie}>
             <Lottie options={lottieOptions} />
           </Box>
           <Box>
-            <Typography variant='body2' color='textSecondary' align='center'>
+            <Typography variant="body2" color="textSecondary" align="center">
               {/* {"Copyright © "} */}
               {'Copyright   '}
-              <Link color='inherit' href=''>
+              <Link color="inherit" href="">
                 Hirohisa Kitsuka
               </Link>{' '}
               {new Date().getFullYear()}
@@ -307,17 +314,17 @@ const Auth: React.FC = () => {
       </div>
       <Card css={styles.demoCard}>
         <CardContent>
-          <Typography align='left'>
-            デモユーザーとしてログインすることで
+          <Typography align="left">
+            {t('login.demoExplanation1')}
             <br />
-            予めデータが用意された状態で、
+            {t('login.demoExplanation2')}
             <br />
-            操作を試すことができます。
+            {t('login.demoExplanation3') + '💡'}
           </Typography>
         </CardContent>
         <CardActions css={styles.demoButton}>
-          <Button size='small' onClick={handleDemoClick}>
-            デモユーザーでとしてログイン
+          <Button size="small" onClick={handleDemoClick}>
+            {t('login.demoLogin')}
           </Button>
         </CardActions>
       </Card>

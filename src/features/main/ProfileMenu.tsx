@@ -1,4 +1,5 @@
 import React from 'react';
+// import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +16,7 @@ import {
   setProfileMenuOpen,
   setProfileDialogOpen,
 } from './mainSlice';
-import { selectLoginUserInfo, logOut } from '../auth/authSlice';
+import { selectLoginUserInfo, setIsAuthenticated } from '../auth/authSlice';
 import CommonAvatar from '../../components/CommonAvatar';
 import ProfileDialog from './ProfileDialog';
 
@@ -55,6 +56,7 @@ const ProfileMenu: React.FC<Props> = (props) => {
     `,
   };
 
+  // const history = useHistory();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const profileMenuOpen = useSelector(selectProfileMenuOpen);
@@ -65,7 +67,9 @@ const ProfileMenu: React.FC<Props> = (props) => {
   };
 
   const handleLogoutClick = () => {
-    dispatch(logOut());
+    localStorage.removeItem('localJWT');
+    // history.push('/');
+    dispatch(setIsAuthenticated(false));
   };
 
   const handleClose = () => {
@@ -90,29 +94,29 @@ const ProfileMenu: React.FC<Props> = (props) => {
       >
         <Box css={styles.wrap}>
           <Box sx={{ display: 'flex' }}>
-            <CommonAvatar user={loginUserInfo} width='100px' fontSize='45px' />
+            <CommonAvatar user={loginUserInfo} width="100px" fontSize="45px" />
             <Box css={styles.name}>
-              <Typography variant='h5' component='div'>
+              <Typography variant="h5" component="div">
                 {loginUserInfo.last_name}
               </Typography>
-              <Typography variant='h5' component='div'>
+              <Typography variant="h5" component="div">
                 {loginUserInfo.first_name}
               </Typography>
             </Box>
           </Box>
           <Box css={styles.comment}>
-            <Typography noWrap variant='body2' component='div'>
+            <Typography noWrap variant="body2" component="div">
               {`${loginUserInfo.comment}`}
             </Typography>
           </Box>
         </Box>
         <MenuList>
           <MenuItem css={styles.menuItem} onClick={handleEditProfileClick}>
-            <EditIcon css={styles.icon} fontSize='small' />
+            <EditIcon css={styles.icon} fontSize="small" />
             <Typography>{t('profileMenu.edit')}</Typography>
           </MenuItem>
           <MenuItem css={styles.menuItem} onClick={handleLogoutClick}>
-            <ExitToAppIcon css={styles.icon} fontSize='small' />
+            <ExitToAppIcon css={styles.icon} fontSize="small" />
             <Typography>{t('profileMenu.logout')}</Typography>
           </MenuItem>
           {/* <MenuItem css={styles.menuItem} onClick={handleLogoutClick}>

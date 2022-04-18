@@ -30,6 +30,7 @@ const userInfo: LOGIN_USER_INFO = {
 
 const initialState: AUTH = {
   lang: 'ja',
+  isAuthenticated: false,
   loginUserInfo: userInfo,
   editedProf: {
     first_name: '',
@@ -164,12 +165,6 @@ export const fetchAsyncUpdateSettings = createAsyncThunk(
   }
 );
 
-// ログアウト
-export const logOut = () => {
-  localStorage.removeItem('localJWT');
-  window.location.href = '/login';
-};
-
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -182,6 +177,9 @@ export const authSlice = createSlice({
     },
     setLang(state, action) {
       state.lang = action.payload;
+    },
+    setIsAuthenticated(state, action) {
+      state.isAuthenticated = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -229,9 +227,14 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setEditedProf, setPersonalSettings, setLang } =
-  authSlice.actions;
-
+export const {
+  setEditedProf,
+  setPersonalSettings,
+  setLang,
+  setIsAuthenticated,
+} = authSlice.actions;
+export const selectIsAuthenticated = (state: RootState) =>
+  state.auth.isAuthenticated;
 export const selectLoginUserInfo = (state: RootState) =>
   state.auth.loginUserInfo;
 export const selectEditedProf = (state: RootState) => state.auth.editedProf;

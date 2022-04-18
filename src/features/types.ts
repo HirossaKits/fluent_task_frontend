@@ -35,6 +35,7 @@ export interface JWT {
 
 export interface AUTH {
   lang: string;
+  isAuthenticated: boolean;
   loginUserInfo: LOGIN_USER_INFO;
   editedProf: EDITED_PROF;
   personalSettings: PERSONAL_SETTINGS;

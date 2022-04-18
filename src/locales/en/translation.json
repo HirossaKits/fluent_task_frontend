@@ -36,7 +36,11 @@
     "email": "Email",
     "password": "Password",
     "signup": "Sign up",
-    "backToLogin": "Go back to login"
+    "backToLogin": "Go back to login",
+    "demoExplanation1": "By logging in as a demo user,",
+    "demoExplanation2": "You can try the operation with",
+    "demoExplanation3": "the data prepared in advance.",
+    "demoLogin": "Login as a demo user"
   },
   "main": {
     "group": "Group",
