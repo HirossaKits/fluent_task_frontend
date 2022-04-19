@@ -10,6 +10,12 @@
     "onGoing": "進行中",
     "done": "完了　"
   },
+  "dialog": {
+    "save": "登録",
+    "edit": "編集",
+    "cancel": "キャンセル",
+    "remove": "削除"
+    },
   "table": {
     "add": "タスクを登録",
     "edit": "タスクを編集",

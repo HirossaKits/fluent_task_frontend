@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTranslation } from 'react-i18next';
@@ -36,7 +36,7 @@ import {
   fetchAsyncGetPersonalSettings,
   selectLoginUserInfo,
   selectPersonalSettings,
-  setIsAuthenticated,
+  // setIsAuthenticated,
   setLang,
 } from '../auth/authSlice';
 import {
@@ -185,7 +185,7 @@ const Main = () => {
     `,
   };
 
-  // const history = useHistory();
+  const history = useHistory();
   const dispatch: AppDispatch = useDispatch();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { t, i18n } = useTranslation();
@@ -218,8 +218,8 @@ const Main = () => {
         await dispatch(fetchAsycnGetInvite());
       } else {
         localStorage.removeItem('localJWT');
-        // history.push('/');
-        dispatch(setIsAuthenticated(false));
+        history.push('/login');
+        // dispatch(setIsAuthenticated(false));
       }
     };
     fectchBootLoader();
@@ -234,7 +234,6 @@ const Main = () => {
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
-    console.log('changed');
     if (newValue !== 'new_project') {
       dispatch(setSelectedProjectId(newValue));
       dispatch(fetchAsyncGetTasks());

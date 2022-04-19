@@ -25,7 +25,7 @@ import {
   fetchAsyncSignin,
   fetchAsyncSignup,
   fetchAsyncGetLoginUser,
-  setIsAuthenticated,
+  // setIsAuthenticated,
 } from './authSlice';
 import loginPageAnimation from '../../img/loginPageAnimation.json';
 import CommonLanguageSelect from '../../components/CommonLanguageSelect';
@@ -129,8 +129,8 @@ const Auth: React.FC = () => {
     let cred: SIGNIN_INFO = regInfo;
     const res = await dispatch(fetchAsyncSignin(cred));
     if (fetchAsyncSignin.fulfilled.match(res)) {
-      // history.push('/app');
-      dispatch(setIsAuthenticated(true));
+      history.push('/');
+      // dispatch(setIsAuthenticated(true));
     }
   };
 
@@ -138,8 +138,8 @@ const Auth: React.FC = () => {
     e.preventDefault();
     const res = await dispatch(fetchAsyncSignup(regInfo));
     if (fetchAsyncSignup.fulfilled.match(res)) {
-      // history.push('/app');
-      dispatch(setIsAuthenticated(true));
+      history.push('/');
+      // dispatch(setIsAuthenticated(true));
     }
   };
 
@@ -152,8 +152,8 @@ const Auth: React.FC = () => {
       })
     );
     if (fetchAsyncSignin.fulfilled.match(res)) {
-      // history.push('/app');
-      dispatch(setIsAuthenticated(true));
+      history.push('/');
+      // dispatch(setIsAuthenticated(true));
     }
   };
 

@@ -30,7 +30,7 @@ const userInfo: LOGIN_USER_INFO = {
 
 const initialState: AUTH = {
   lang: 'ja',
-  isAuthenticated: false,
+  // isAuthenticated: false,
   loginUserInfo: userInfo,
   editedProf: {
     first_name: '',
@@ -178,9 +178,9 @@ export const authSlice = createSlice({
     setLang(state, action) {
       state.lang = action.payload;
     },
-    setIsAuthenticated(state, action) {
-      state.isAuthenticated = action.payload;
-    },
+    // setIsAuthenticated(state, action) {
+    //   state.isAuthenticated = action.payload;
+    // },
   },
   extraReducers: (builder) => {
     // サインアップ
@@ -231,10 +231,10 @@ export const {
   setEditedProf,
   setPersonalSettings,
   setLang,
-  setIsAuthenticated,
+  // setIsAuthenticated,
 } = authSlice.actions;
-export const selectIsAuthenticated = (state: RootState) =>
-  state.auth.isAuthenticated;
+// export const selectIsAuthenticated = (state: RootState) =>
+//   state.auth.isAuthenticated;
 export const selectLoginUserInfo = (state: RootState) =>
   state.auth.loginUserInfo;
 export const selectEditedProf = (state: RootState) => state.auth.editedProf;

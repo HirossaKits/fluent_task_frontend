@@ -1,5 +1,5 @@
 import React from 'react';
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,7 @@ import {
   setProfileMenuOpen,
   setProfileDialogOpen,
 } from './mainSlice';
-import { selectLoginUserInfo, setIsAuthenticated } from '../auth/authSlice';
+import { selectLoginUserInfo } from '../auth/authSlice';
 import CommonAvatar from '../../components/CommonAvatar';
 import ProfileDialog from './ProfileDialog';
 
@@ -56,7 +56,7 @@ const ProfileMenu: React.FC<Props> = (props) => {
     `,
   };
 
-  // const history = useHistory();
+  const history = useHistory();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const profileMenuOpen = useSelector(selectProfileMenuOpen);
@@ -68,8 +68,8 @@ const ProfileMenu: React.FC<Props> = (props) => {
 
   const handleLogoutClick = () => {
     localStorage.removeItem('localJWT');
-    // history.push('/');
-    dispatch(setIsAuthenticated(false));
+    history.push('/login');
+    // dispatch(setIsAuthenticated(false));
   };
 
   const handleClose = () => {

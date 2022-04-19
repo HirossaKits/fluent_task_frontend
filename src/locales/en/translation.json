@@ -10,6 +10,12 @@
     "onGoing": "On going",
     "done": "Done"
   },
+  "dialog": {
+    "save": "Save",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "remove": "Remove"
+    },
   "table": {
     "add": "Add task",
     "edit": "Edit task",

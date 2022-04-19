@@ -52,7 +52,6 @@ const Task = () => {
   const tasks = useSelector(selectTasks);
   const taskCategory = useSelector(selectTaskCategory);
 
-  console.log(tasks);
   const taskCategoryOption = createOption(
     taskCategory,
     'task_category_id',

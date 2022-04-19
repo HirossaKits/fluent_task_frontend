@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-// import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import './App.css';
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material/styles';
@@ -8,7 +8,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Main from './features/main/Main';
 import Auth from './features/auth/Auth';
 import {
-  selectIsAuthenticated,
+  // selectIsAuthenticated,
   selectPersonalSettings,
 } from './features/auth/authSlice';
 
@@ -36,23 +36,33 @@ function App() {
     },
   });
 
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+  // const isAuthenticated = useSelector(selectIsAuthenticated);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="App">
         <header className="App-header">
-          {/* <BrowserRouter>
-            <Route exact path="/" component={Auth} />
-            <Route exact path="/app" component={Main} />
+          <BrowserRouter>
+            <Route exact path="/login" component={Auth} />
+            <Route
+              exact
+              path="/"
+              render={({ location }) =>
+                localStorage.getItem('localJWT') ? (
+                  <Main />
+                ) : (
+                  <Redirect to="/login" />
+                )
+              }
+            />
             <Route
               exact
               path="/index.html"
               render={({ location }) => <Redirect to="/" />}
             />
-          </BrowserRouter> */}
-          {isAuthenticated ? <Main /> : <Auth />}
+          </BrowserRouter>
+          {/* {isAuthenticated ? <Main /> : <Auth />} */}
         </header>
       </div>
     </ThemeProvider>

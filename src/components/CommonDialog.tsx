@@ -1,5 +1,6 @@
 import React from 'react';
 import { css } from '@emotion/react';
+import { useTranslation } from 'react-i18next';
 import { Breakpoint, Paper, useTheme } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -27,9 +28,10 @@ type Props = {
 const CommonDialog = (props: Props) => {
   const theme = useTheme();
   const styles = {
-    // dialog: css`
-    //   width: 200px;
-    // `,
+    dialog: css`
+      max-height: 800px;
+      overflow: auto;
+    `,
     title: css`
       margin-left: ${theme.spacing(1)};
     `,
@@ -41,20 +43,21 @@ const CommonDialog = (props: Props) => {
     `,
   };
 
+  const { t } = useTranslation();
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event?.preventDefault();
   };
 
   return (
     <Dialog
-      // css={styles.dialog}
       open={props.open}
       onClose={props.onClose}
       aria-labelledby="form-dialog-title"
       maxWidth={'maxWidth' in props && props.maxWidth}
       fullWidth
     >
-      <Paper>
+      <Paper css={styles.dialog}>
         <Stack direction="row" justifyContent="space-between">
           <DialogTitle css={styles.title}>{props.title}</DialogTitle>
           <Box css={styles.close}>
@@ -74,30 +77,30 @@ const CommonDialog = (props: Props) => {
         {props.mode === 'register' && (
           <DialogActions>
             <Button onClick={props.onClose} color="primary">
-              キャンセル
+              {t('dialog.cancel')}
             </Button>
             <Button onClick={props.onRegister} color="primary">
-              登録
+              {t('dialog.save')}
             </Button>
           </DialogActions>
         )}
         {props.mode === 'edit' && (
           <DialogActions>
             <Button onClick={props.onClose} color="primary">
-              キャンセル
+              {t('dialog.cancel')}
             </Button>
             <Button onClick={props.onEdit} color="primary">
-              登録
+              {t('dialog.save')}
             </Button>
           </DialogActions>
         )}
         {props.mode === 'detail' && (
           <DialogActions>
             <Button onClick={props.onDelete} color="primary">
-              削除
+              {t('dialog.remove')}
             </Button>
             <Button onClick={props.onEditMode} color="primary">
-              編集
+              {t('dialog.edit')}
             </Button>
           </DialogActions>
         )}

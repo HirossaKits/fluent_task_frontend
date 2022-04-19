@@ -111,7 +111,6 @@ const TaskDialog: React.FC = () => {
   };
 
   const handleEditClick = () => {
-    console.log('handleEditClick');
     dispatch(fetchAsyncUpdateTask());
     dispatch(setTaskDialogOpen(false));
   };
@@ -148,26 +147,26 @@ const TaskDialog: React.FC = () => {
         onEdit={handleEditClick}
         onEditMode={handleEditModeClick}
         onDelete={handleDeleteClick}
-        maxWidth='sm'
+        maxWidth="sm"
         mode={taskDialogMode}
       >
         <Stack
-          direction='column'
-          justifyContent='flex-start'
-          alignItems='flex-start'
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="flex-start"
         >
           <CommonTextField
             label={t('taskDialog.taskName')}
-            name='task_name'
+            name="task_name"
             value={editedTask.task_name}
             onChange={handleInputChange}
-            width='350px'
+            width="350px"
             readOnly={isReadOnly}
           />
-          <Stack direction='row'>
+          <Stack direction="row">
             <CommonSelect
               label={t('taskDialog.category')}
-              name='task_category_id'
+              name="task_category_id"
               options={taskCategoryOption}
               value={editedTask.task_category_id}
               onChange={handleInputChange}
@@ -185,7 +184,7 @@ const TaskDialog: React.FC = () => {
           </Stack>
           <CommonSelect
             label={t('taskDialog.status')}
-            name='status'
+            name="status"
             options={statusOptions}
             value={editedTask.status}
             onChange={handleInputChange}
@@ -193,7 +192,7 @@ const TaskDialog: React.FC = () => {
           />
           <CommonSelect
             label={t('taskDialog.assigned')}
-            name='assigned_id'
+            name="assigned_id"
             options={projectMemberOptions}
             value={editedTask.assigned_id}
             onChange={handleInputChange}
@@ -201,8 +200,8 @@ const TaskDialog: React.FC = () => {
           />
           <CommonTextField
             label={t('taskDialog.sManHour')}
-            name='estimate_manhour'
-            type='number'
+            name="estimate_manhour"
+            type="number"
             minVal={0}
             value={editedTask.estimate_manhour}
             onChange={handleInputChange}
@@ -210,21 +209,21 @@ const TaskDialog: React.FC = () => {
           />
           <CommonTextField
             label={t('taskDialog.aManHour')}
-            name='actual_manhour'
-            type='number'
+            name="actual_manhour"
+            type="number"
             minVal={0}
             value={editedTask.actual_manhour}
             onChange={handleInputChange}
             readOnly={isReadOnly}
           />
           <Stack
-            direction='row'
-            justifyContent='flex-start'
-            alignItems='center'
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
           >
             <CommonDatePicker
               label={t('taskDialog.sStartDate')}
-              name='scheduled_startdate'
+              name="scheduled_startdate"
               value={editedTask.scheduled_startdate}
               onChange={handleInputChange}
               readOnly={isReadOnly}
@@ -232,20 +231,20 @@ const TaskDialog: React.FC = () => {
             <SwapHorizIcon css={styles.arrow} />
             <CommonDatePicker
               label={t('taskDialog.sEndDate')}
-              name='scheduled_enddate'
+              name="scheduled_enddate"
               value={editedTask.scheduled_enddate}
               onChange={handleInputChange}
               readOnly={isReadOnly}
             />
           </Stack>
           <Stack
-            direction='row'
-            justifyContent='flex-start'
-            alignItems='center'
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
           >
             <CommonDatePicker
               label={t('taskDialog.aStartDate')}
-              name='actual_startdate'
+              name="actual_startdate"
               value={editedTask.actual_startdate}
               onChange={handleInputChange}
               readOnly={isReadOnly}
@@ -253,7 +252,7 @@ const TaskDialog: React.FC = () => {
             <SwapHorizIcon css={styles.arrow} />
             <CommonDatePicker
               label={t('taskDialog.aEndDate')}
-              name='actual_enddate'
+              name="actual_enddate"
               value={editedTask.actual_enddate}
               onChange={handleInputChange}
               readOnly={isReadOnly}
@@ -261,10 +260,10 @@ const TaskDialog: React.FC = () => {
           </Stack>
           <CommonTextField
             label={t('taskDialog.description')}
-            name='description'
+            name="description"
             value={editedTask.description}
             onChange={handleInputChange}
-            width='90%'
+            width="90%"
             readOnly={isReadOnly}
             rows={2}
           />
@@ -272,7 +271,7 @@ const TaskDialog: React.FC = () => {
             <>
               <CommonSelect
                 label={t('taskDialog.author')}
-                name='author_id'
+                name="author_id"
                 options={projectMemberOptions}
                 value={editedTask.author_id ?? ''}
                 onChange={handleInputChange}
@@ -280,13 +279,13 @@ const TaskDialog: React.FC = () => {
               />
               <CommonTextField
                 label={t('taskDialog.createdAt')}
-                name='created_at'
+                name="created_at"
                 value={formatISOString(editedTask.created_at)}
                 readOnly={isReadOnly}
               />
               <CommonTextField
                 label={t('taskDialog.updateAt')}
-                name='update_at'
+                name="update_at"
                 value={formatISOString(editedTask.update_at)}
                 readOnly={isReadOnly}
               />
