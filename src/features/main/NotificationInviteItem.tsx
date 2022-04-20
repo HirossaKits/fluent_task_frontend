@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import {
+  fetchAsyncGetLoginUser,
   selectLoginUserInfo,
   selectPersonalSettings,
   setPersonalSettings,
@@ -31,14 +32,13 @@ export const NotificationInviteItem = (props: Props) => {
     const update = async () => {
       const res = await dispatch(fetchAsyncUpdateInvite(data));
       if (fetchAsyncUpdateInvite.fulfilled.match(res)) {
+        await dispatch(fetchAsyncGetLoginUser());
         await dispatch(fetchAsyncGetOrgInfo());
       }
     };
-    console.log('ooops!');
-    console.log('debug_1', loginUserInfo);
+
     update().then(() => {
       dispatch(setNotificationDialogOpen(false));
-      console.log('debug_2', loginUserInfo);
       // 承認した場合はその組織を表示させる
       if (value) {
         dispatch(

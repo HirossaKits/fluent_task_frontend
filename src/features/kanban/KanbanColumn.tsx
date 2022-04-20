@@ -175,7 +175,6 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
 
     const data = e.dataTransfer.getData('text/plain');
     const [status, task_id, actual_startdate] = data.split('/');
-    console.log(actual_startdate);
     if (props.status !== status) {
       const newTasks = tasks.map((task) => {
         if (task.task_id === task_id) {
@@ -208,8 +207,6 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
         }
         data.actual_enddate = todayStr;
       }
-
-      console.log(data);
 
       dispatch(fetchAsyncUpdateTaskStatus(data));
     }

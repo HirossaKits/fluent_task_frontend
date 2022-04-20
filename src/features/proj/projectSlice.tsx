@@ -47,7 +47,6 @@ export const fetchAsyncGetProject = createAsyncThunk(
         },
       }
     );
-    console.log(res.data);
     return res.data;
   }
 );
