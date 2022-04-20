@@ -15,6 +15,7 @@ import {
   setPersonalSettings,
   fetchAsyncUpdateSettings,
   selectLang,
+  selectDarkmode,
 } from '../auth/authSlice';
 import { fetchAsyncGetOrgInfo } from '../org/orgSliece';
 import {
@@ -28,7 +29,7 @@ import {
   fetchAsyncGetTasks,
 } from '../task/taskSlice';
 import CommonSelect from '../../components/CommonSelect';
-import CommonLanguageSelect from '../../components/CommonLanguageSelect';
+import LanguageSelect from '../../components/LanguageSelect';
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;
@@ -51,6 +52,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
   const settingsMenuOpen = useSelector(selectSettingsMenuOpen);
   const personalSettings = useSelector(selectPersonalSettings);
   const lang = useSelector(selectLang);
+  const darkMode = useSelector(selectDarkmode);
 
   const orgOptions = createOption(
     loginUserInfo.joined_org?.filter((org) => org.is_private === false),
@@ -138,6 +140,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
       fetchInSequenceRelatedOrg();
     }
   };
+
   const handleColse = () => {
     dispatch(setSettingsMenuOpen(false));
   };
@@ -158,13 +161,13 @@ const SettingsMenu: React.FC<Props> = (props) => {
       keepMounted
     >
       <Paper css={styles.paper}>
-        <CommonSwitch
+        {/* <CommonSwitch
           label={t('settings.darkMode')}
           labelWidth={10}
           name='dark_mode'
-          value={personalSettings.dark_mode}
+          value={darkMode}
           onChange={handleInputChange}
-        />
+        /> */}
         <CommonSwitch
           label={t('settings.tooltip')}
           labelWidth={10}
@@ -188,7 +191,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
             onChange={handleSelectChange}
           />
         )}
-        <CommonLanguageSelect value={lang} />
+        <LanguageSelect value={lang} />
       </Paper>
     </Popover>
   );

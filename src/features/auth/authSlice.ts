@@ -30,6 +30,7 @@ const userInfo: LOGIN_USER_INFO = {
 
 const initialState: AUTH = {
   lang: 'ja',
+  darkmode: false,
   // isAuthenticated: false,
   loginUserInfo: userInfo,
   editedProf: {
@@ -38,7 +39,6 @@ const initialState: AUTH = {
     comment: '',
   },
   personalSettings: {
-    dark_mode: false,
     tooltip: true,
     private_mode: true,
     selected_org_id: '',
@@ -178,6 +178,9 @@ export const authSlice = createSlice({
     setLang(state, action) {
       state.lang = action.payload;
     },
+    setDarkmode(state, action) {
+      state.darkmode = action.payload;
+    },
     // setIsAuthenticated(state, action) {
     //   state.isAuthenticated = action.payload;
     // },
@@ -231,6 +234,7 @@ export const {
   setEditedProf,
   setPersonalSettings,
   setLang,
+  setDarkmode,
   // setIsAuthenticated,
 } = authSlice.actions;
 // export const selectIsAuthenticated = (state: RootState) =>
@@ -243,5 +247,6 @@ export const selectPersonalSettings = (state: RootState) =>
 export const selectTooltip = (state: RootState) =>
   state.auth.personalSettings.tooltip;
 export const selectLang = (state: RootState) => state.auth.lang;
+export const selectDarkmode = (state: RootState) => state.auth.darkmode;
 
 export default authSlice.reducer;

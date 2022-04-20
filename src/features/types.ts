@@ -35,6 +35,7 @@ export interface JWT {
 
 export interface AUTH {
   lang: string;
+  darkmode: boolean;
   // isAuthenticated: boolean;
   loginUserInfo: LOGIN_USER_INFO;
   editedProf: EDITED_PROF;
@@ -69,7 +70,6 @@ export interface EDITED_PROF {
 }
 
 export interface PERSONAL_SETTINGS {
-  dark_mode: boolean;
   tooltip: boolean;
   private_mode: boolean;
   selected_org_id: string;

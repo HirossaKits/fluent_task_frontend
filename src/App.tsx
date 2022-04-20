@@ -8,12 +8,12 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Main from './features/main/Main';
 import Auth from './features/auth/Auth';
 import {
+  selectDarkmode,
   // selectIsAuthenticated,
-  selectPersonalSettings,
 } from './features/auth/authSlice';
 
 function App() {
-  const settings = useSelector(selectPersonalSettings);
+  const darkmode = useSelector(selectDarkmode);
   const theme = createTheme({
     typography: {
       fontFamily: ['M PLUS Rounded 1c', 'Roboto'].join(','),
@@ -32,7 +32,7 @@ function App() {
       // text: {
       //   primary: "rgba(0, 0, 0, 0.7)",
       // },
-      mode: settings.dark_mode ? 'dark' : 'light',
+      mode: darkmode ? 'dark' : 'light',
     },
   });
 
@@ -41,25 +41,25 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <div className="App">
-        <header className="App-header">
+      <div className='App'>
+        <header className='App-header'>
           <BrowserRouter>
-            <Route exact path="/login" component={Auth} />
+            <Route exact path='/login' component={Auth} />
             <Route
               exact
-              path="/"
+              path='/'
               render={({ location }) =>
                 localStorage.getItem('localJWT') ? (
                   <Main />
                 ) : (
-                  <Redirect to="/login" />
+                  <Redirect to='/login' />
                 )
               }
             />
             <Route
               exact
-              path="/index.html"
-              render={({ location }) => <Redirect to="/" />}
+              path='/index.html'
+              render={({ location }) => <Redirect to='/' />}
             />
           </BrowserRouter>
           {/* {isAuthenticated ? <Main /> : <Auth />} */}
