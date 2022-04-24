@@ -26,6 +26,7 @@ import {
 import CommonAvatar from '../../components/CommonAvatar';
 import ProfileDialog from './ProfileDialog';
 import OrgDialog from '../org/OrgDialog';
+import useMessage from '../../hooks/message';
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;
@@ -68,6 +69,7 @@ const ProfileMenu: React.FC<Props> = (props) => {
   const { t } = useTranslation();
   const profileMenuOpen = useSelector(selectProfileMenuOpen);
   const loginUserInfo = useSelector(selectLoginUserInfo);
+  const message = useMessage();
 
   const handleEditProfileClick = () => {
     dispatch(setProfileDialogOpen(true));
@@ -80,6 +82,10 @@ const ProfileMenu: React.FC<Props> = (props) => {
   };
 
   const handleRegisterOrgOpenClick = () => {
+    if (loginUserInfo.is_premium) {
+      message(t('profileMenu.cannotCreateMultiGroup'));
+      return;
+    }
     dispatch(setEditedOrgName(''));
     dispatch(setOrgDialogOpen(true));
   };

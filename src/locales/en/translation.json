@@ -74,7 +74,9 @@
   },
   "profileMenu": {
     "edit": "Edit Profile",
-    "logout": "Logout"
+    "createGroup": "Create Your Group",
+    "logout": "Logout",
+    "cannotCreateMultiGroup": "Only one group can be created per user."
   },
   "profileDialog": {
     "editProfile": "Edit Profile",
@@ -118,7 +120,6 @@
   },
   "projectDialog": {
     "addProject": "Add Project",
-    "createGroup": "Create Group",
     "editProject": "Edit Project",
     "name": "Project name",
     "description": "Description",

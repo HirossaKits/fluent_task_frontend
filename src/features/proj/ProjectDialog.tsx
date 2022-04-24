@@ -69,6 +69,12 @@ const ProjectDialog = () => {
   const handleRegisterClick = () => {
     if (editedProject.project_name === '') {
       message('プロジェクト名を入力してください。');
+      return;
+    }
+
+    if (editedProject.member_id.length === 0) {
+      message('プロジェクト管理者を指定してく些細。');
+      return;
     }
 
     dispatch(fetchAsyncRegisterProject());

@@ -77,9 +77,7 @@
     "edit": "プロフィール編集",
     "createGroup": "グループを作成",
     "logout": "ログアウト",
-    "firstName": "姓",
-    "lastName": "名",
-    "comment": "コメント"
+    "cannotCreateMultiGroup": "グループは１ユーザーにつき、１つしか作成できません。"
   },
   "profileDialog": {
     "editProfile": "プロフィールを編集",
