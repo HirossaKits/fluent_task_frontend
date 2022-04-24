@@ -50,10 +50,28 @@ export const fetchAsyncGetOrgInfo = createAsyncThunk(
   }
 );
 
+export const fetchAsyncRegisterPublicOrg = createAsyncThunk(
+  'org/register',
+  async (_, thunkAPI) => {
+    const org_name = (thunkAPI.getState() as RootState).org.editedOrgName;
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}/org/public`,
+      { org_name: org_name },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.localJWT}`,
+        },
+      }
+    );
+    return res.data;
+  }
+);
+
 export const fetchAsyncUpdateOrgInfo = createAsyncThunk(
   'org/update',
-  async (org_name: string, thunkAPI) => {
+  async (_, thunkAPI) => {
     const org_id = (thunkAPI.getState() as RootState).org.org_info.org_id;
+    const org_name = (thunkAPI.getState() as RootState).org.editedOrgName;
     const res = await axios.put(
       `${process.env.REACT_APP_API_URL}/org/${org_id}`,
       { org_name: org_name },

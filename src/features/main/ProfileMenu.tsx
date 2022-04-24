@@ -10,6 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import {
   selectProfileMenuOpen,
@@ -17,8 +18,14 @@ import {
   setProfileDialogOpen,
 } from './mainSlice';
 import { selectLoginUserInfo } from '../auth/authSlice';
+import {
+  setOrgDialogOpen,
+  setEditedOrgName,
+  fetchAsyncRegisterPublicOrg,
+} from '../org/orgSliece';
 import CommonAvatar from '../../components/CommonAvatar';
 import ProfileDialog from './ProfileDialog';
+import OrgDialog from '../org/OrgDialog';
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;
@@ -72,6 +79,16 @@ const ProfileMenu: React.FC<Props> = (props) => {
     // dispatch(setIsAuthenticated(false));
   };
 
+  const handleRegisterOrgOpenClick = () => {
+    dispatch(setEditedOrgName(''));
+    dispatch(setOrgDialogOpen(true));
+  };
+
+  const handleRegisterOrgClick = () => {
+    dispatch(fetchAsyncRegisterPublicOrg());
+    dispatch(setOrgDialogOpen(false));
+  };
+
   const handleClose = () => {
     dispatch(setProfileMenuOpen(false));
   };
@@ -115,6 +132,10 @@ const ProfileMenu: React.FC<Props> = (props) => {
             <EditIcon css={styles.icon} fontSize="small" />
             <Typography>{t('profileMenu.edit')}</Typography>
           </MenuItem>
+          <MenuItem css={styles.menuItem} onClick={handleRegisterOrgOpenClick}>
+            <PeopleAltIcon css={styles.icon} fontSize="small" />
+            <Typography>{t('profileMenu.createGroup')}</Typography>
+          </MenuItem>
           <MenuItem css={styles.menuItem} onClick={handleLogoutClick}>
             <ExitToAppIcon css={styles.icon} fontSize="small" />
             <Typography>{t('profileMenu.logout')}</Typography>
@@ -126,6 +147,7 @@ const ProfileMenu: React.FC<Props> = (props) => {
         </MenuList>
       </Popover>
       <ProfileDialog />
+      <OrgDialog mode="edit" onClick={handleRegisterOrgClick} />
     </>
   );
 };

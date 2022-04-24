@@ -154,7 +154,7 @@ const Auth: React.FC = () => {
         <Container css={styles.container} component="main" maxWidth="xs">
           <CssBaseline />
           <Typography css={styles.title} variant="h2">
-            Fluent Task (B)
+            Fluent Task
           </Typography>
           <form css={styles.form}>
             <Grid

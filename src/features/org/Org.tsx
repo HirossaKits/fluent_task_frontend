@@ -18,6 +18,7 @@ import {
   setEditedOrgName,
   setOrgDialogOpen,
   setInviteDialogOpen,
+  fetchAsyncUpdateOrgInfo,
 } from './orgSliece';
 import CommonTooltip from '../../components/CommonTooltip';
 import OrgDialog from './OrgDialog';
@@ -98,16 +99,21 @@ const Org = () => {
     dispatch(setInviteDialogOpen(true));
   };
 
+  const handleEditOrg = () => {
+    dispatch(fetchAsyncUpdateOrgInfo());
+    dispatch(setOrgDialogOpen(false));
+  };
+
   return (
     <>
       <Box css={styles.header}>
         <Box css={styles.titleWrap}>
-          <Typography css={styles.titleText} variant='h5' component='div'>
+          <Typography css={styles.titleText} variant="h5" component="div">
             {orgInfo.org_name}
           </Typography>
           <CommonTooltip title={t('org.edit')}>
             <IconButton css={styles.editIcon} onClick={handleEditClick}>
-              <EditIcon fontSize='small' />
+              <EditIcon fontSize="small" />
             </IconButton>
           </CommonTooltip>
         </Box>
@@ -131,7 +137,7 @@ const Org = () => {
           />
         ))}
       </Box>
-      <OrgDialog />
+      <OrgDialog mode="edit" onClick={handleEditOrg} />
       <InviteDialog />
     </>
   );

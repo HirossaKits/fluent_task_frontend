@@ -101,6 +101,7 @@
   },
   "orgDialog": {
     "edit": "Edit group",
+    "register": "Create your group",
     "orgName": "Group name"
   },
   "inviteDialog": {
@@ -117,6 +118,7 @@
   },
   "projectDialog": {
     "addProject": "Add Project",
+    "createGroup": "Create Group",
     "editProject": "Edit Project",
     "name": "Project name",
     "description": "Description",

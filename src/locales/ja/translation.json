@@ -75,6 +75,7 @@
   },
   "profileMenu": {
     "edit": "プロフィール編集",
+    "createGroup": "グループを作成",
     "logout": "ログアウト",
     "firstName": "姓",
     "lastName": "名",
@@ -105,6 +106,7 @@
   },
   "orgDialog": {
     "edit": "グループを編集",
+    "register":"グループを作成",
     "orgName": "グループ名"
   },
   "inviteDialog": {
