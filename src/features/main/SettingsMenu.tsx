@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { css } from '@emotion/react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material';
@@ -16,6 +16,7 @@ import {
   fetchAsyncUpdateSettings,
   selectLang,
   selectDarkmode,
+  fetchAsyncGetLoginUser,
 } from '../auth/authSlice';
 import { fetchAsyncGetOrgInfo } from '../org/orgSliece';
 import {
@@ -59,6 +60,11 @@ const SettingsMenu: React.FC<Props> = (props) => {
     'org_name'
   );
 
+  const updateSettings = useCallback((settings) => {
+    dispatch(setPersonalSettings(settings));
+    dispatch(fetchAsyncUpdateSettings(settings));
+  }, []);
+
   const fetchInSequenceRelatedOrg = async () => {
     await dispatch(fetchAsyncGetOrgInfo());
     await dispatch(fetchAsyncGetProject());
@@ -68,8 +74,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
 
   const handleInputChange = (target: TARGET) => {
     const settings = { ...personalSettings, [target.name]: target.value };
-    dispatch(setPersonalSettings(settings));
-    dispatch(fetchAsyncUpdateSettings(settings));
+    updateSettings(settings);
   };
 
   // const validateOrgId = (org_id: string) => {
@@ -93,10 +98,10 @@ const SettingsMenu: React.FC<Props> = (props) => {
   // };
 
   const handleTogglePrivateModeChange = (target: TARGET) => {
-    if (
-      !loginUserInfo.joined_org?.filter((org) => org.is_private === false)
-        .length
-    ) {
+    const isJoinedPublicGroup =
+      loginUserInfo.joined_org?.find((org) => org.is_private === false) !==
+      undefined;
+    if (!isJoinedPublicGroup) {
       // organization に所属していない場合、強制的に private に変更
       if (!personalSettings.private_mode) {
         const settings = {
@@ -106,8 +111,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
             loginUserInfo.joined_org?.find((org) => org.is_private)?.org_id ??
             '',
         };
-        dispatch(setPersonalSettings(settings));
-        dispatch(fetchAsyncUpdateSettings(settings));
+        updateSettings(settings);
       }
       message(t('settings.cannotUseGroup'));
       return;
@@ -129,15 +133,36 @@ const SettingsMenu: React.FC<Props> = (props) => {
   };
 
   const handleSelectChange = (target: TARGET) => {
-    if (target.value) {
-      const settings = {
+    dispatch(fetchAsyncGetLoginUser());
+
+    // const privateOrgId = loginUserInfo.joined_org.find(
+    //   (org) => org.is_private === true
+    // )?.org_id;
+
+    const publicOrgId = loginUserInfo.joined_org
+      .filter((org) => org.is_private === false)
+      .map((org) => org.org_id);
+
+    if (!publicOrgId.includes(target.value as string)) {
+      if (publicOrgId.length === 0) {
+        updateSettings({
+          ...personalSettings,
+          private_mode: true,
+        });
+      } else {
+        updateSettings({
+          ...personalSettings,
+          selected_org_id: publicOrgId[0],
+        });
+      }
+    } else {
+      updateSettings({
         ...personalSettings,
-        selected_org_id: target.value.toString(),
-      };
-      dispatch(setPersonalSettings(settings));
-      dispatch(fetchAsyncUpdateSettings(settings));
-      fetchInSequenceRelatedOrg();
+        selected_org_id: target.value,
+      });
     }
+
+    fetchInSequenceRelatedOrg();
   };
 
   const handleColse = () => {
