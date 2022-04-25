@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../app/store';
 import {
@@ -16,6 +17,7 @@ import {
 } from '../features/task/taskSlice';
 
 export default function useBootRoader() {
+  const history = useHistory();
   const dispatch: AppDispatch = useDispatch();
   return useCallback(() => {
     const fetchBootRoader = async () => {
@@ -27,9 +29,10 @@ export default function useBootRoader() {
         await dispatch(fetchAsyncGetTaskCategory());
         await dispatch(fetchAsyncGetTasks());
         await dispatch(fetchAsycnGetInvite());
-        return true;
       } else {
-        return false;
+        localStorage.removeItem('localJWT');
+        history.push('/login');
+        // dispatch(setIsAuthenticated(false));
       }
     };
     fetchBootRoader();

@@ -32,18 +32,11 @@ import { MAIN_COMPONENT_NAME } from '../types';
 import { AppDispatch } from '../../app/store';
 import useMessage from '../../hooks/message';
 import {
-  fetchAsyncGetLoginUser,
-  fetchAsyncGetPersonalSettings,
   selectLoginUserInfo,
   selectPersonalSettings,
   // setIsAuthenticated,
 } from '../auth/authSlice';
-import {
-  selectOrgInfo,
-  selectInviteCount,
-  fetchAsyncGetOrgInfo,
-  fetchAsycnGetInvite,
-} from '../org/orgSliece';
+import { selectOrgInfo, selectInviteCount } from '../org/orgSliece';
 import {
   setNotificationDialogOpen,
   setSettingsMenuOpen,
@@ -61,10 +54,7 @@ import {
   setProjectDialogMode,
   fetchAsyncGetProject,
 } from '../proj/projectSlice';
-import {
-  fetchAsyncGetTasks,
-  fetchAsyncGetTaskCategory,
-} from '../task/taskSlice';
+import { fetchAsyncGetTasks } from '../task/taskSlice';
 import ProjectDialog from '../proj/ProjectDialog';
 import NotificationMenu from './NotificationMenu';
 import SettingsMenu from './SettingsMenu';
@@ -186,7 +176,6 @@ const Main = () => {
     `,
   };
 
-  const history = useHistory();
   const dispatch: AppDispatch = useDispatch();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { t } = useTranslation();
@@ -205,25 +194,7 @@ const Main = () => {
   const profileAnchorEl = useRef(null);
 
   useEffect(() => {
-    const res = fectchBootLoader();
-    console.log('test', res);
-
-    // const fectchBootLoader = async () => {
-    //   const res = await dispatch(fetchAsyncGetLoginUser());
-    //   if (fetchAsyncGetLoginUser.fulfilled.match(res)) {
-    //     await dispatch(fetchAsyncGetPersonalSettings());
-    //     await dispatch(fetchAsyncGetOrgInfo());
-    //     await dispatch(fetchAsyncGetProject());
-    //     await dispatch(fetchAsyncGetTaskCategory());
-    //     await dispatch(fetchAsyncGetTasks());
-    //     await dispatch(fetchAsycnGetInvite());
-    //   } else {
-    //     localStorage.removeItem('localJWT');
-    //     history.push('/login');
-    //     // dispatch(setIsAuthenticated(false));
-    //   }
-    // };
-    // fectchBootLoader();
+    fectchBootLoader();
   }, [dispatch]);
 
   const handleDrawerOpen = () => {
@@ -277,17 +248,17 @@ const Main = () => {
     <Box sx={{ display: 'flex', width: '100%' }}>
       <AppBar
         css={drawerOpen ? styles.appBarShift : styles.appBar}
-        position='fixed'
+        position="fixed"
       >
-        <Toolbar css={styles.toolbar} disableGutters variant='dense'>
+        <Toolbar css={styles.toolbar} disableGutters variant="dense">
           <IconButton
             css={drawerOpen ? styles.menuIconHide : styles.menuIcon}
-            edge='start'
+            edge="start"
             onClick={handleDrawerOpen}
           >
             <AppsIcon />
           </IconButton>
-          <Typography css={styles.title} variant='h5' noWrap>
+          <Typography css={styles.title} variant="h5" noWrap>
             Fluent Task ( Beta )
           </Typography>
           <Box css={styles.iconBox}>
@@ -296,7 +267,7 @@ const Main = () => {
               ref={notificationAnchorEl}
               onClick={handleNotificationClick}
             >
-              <Badge badgeContent={inviteCount} color='secondary'>
+              <Badge badgeContent={inviteCount} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -312,8 +283,8 @@ const Main = () => {
       <Drawer
         css={drawerOpen ? styles.drawerOpen : styles.drawerClose}
         className={'1gxenss-drawerOpen'}
-        variant='permanent'
-        anchor='left'
+        variant="permanent"
+        anchor="left"
         open={drawerOpen}
       >
         <div css={styles.drawerHeader}>
@@ -390,8 +361,8 @@ const Main = () => {
             <Tabs
               value={selectedProjectId === '' ? 0 : selectedProjectId}
               onChange={handleTabChange}
-              variant='scrollable'
-              scrollButtons='auto'
+              variant="scrollable"
+              scrollButtons="auto"
             >
               {projects.map((proj, idx) => (
                 <Tab
@@ -407,14 +378,14 @@ const Main = () => {
                   icon={
                     <>
                       <AddIcon css={styles.addIcon} />
-                      <Typography variant='body2'>
+                      <Typography variant="body2">
                         {t('main.addProject')}
                       </Typography>
                     </>
                   }
-                  iconPosition='start'
+                  iconPosition="start"
                   style={{ margin: 0, padding: 0 }}
-                  value='new_project'
+                  value="new_project"
                   onClick={handleNewProjectTabClick}
                 />
               )}

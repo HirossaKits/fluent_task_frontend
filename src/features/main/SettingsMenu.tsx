@@ -52,7 +52,6 @@ const SettingsMenu: React.FC<Props> = (props) => {
   const settingsMenuOpen = useSelector(selectSettingsMenuOpen);
   const personalSettings = useSelector(selectPersonalSettings);
   const lang = useSelector(selectLang);
-  const darkMode = useSelector(selectDarkmode);
 
   const orgOptions = createOption(
     loginUserInfo.joined_org?.filter((org) => org.is_private === false),
@@ -73,25 +72,25 @@ const SettingsMenu: React.FC<Props> = (props) => {
     dispatch(fetchAsyncUpdateSettings(settings));
   };
 
-  const validateOrgId = (org_id: string) => {
-    const joinedOrgId = loginUserInfo.joined_org.map((org) => org.org_id);
-    // settings の selected_org_id に所属している場合
-    if (joinedOrgId.includes(org_id)) {
-      return org_id;
-    }
-    // settings の selected_org_id に所属していない場合
-    else {
-      const alter_org_id = joinedOrgId[0];
-      const settings = {
-        ...personalSettings,
-        selected_org_id: alter_org_id,
-      };
-      dispatch(setPersonalSettings(settings));
-      dispatch(fetchAsyncUpdateSettings(settings));
-      fetchInSequenceRelatedOrg();
-      return alter_org_id;
-    }
-  };
+  // const validateOrgId = (org_id: string) => {
+  //   const joinedOrgId = loginUserInfo.joined_org.map((org) => org.org_id);
+  //   // settings の selected_org_id に所属している場合
+  //   if (joinedOrgId.includes(org_id)) {
+  //     return org_id;
+  //   }
+  //   // settings の selected_org_id に所属していない場合
+  //   else {
+  //     const alter_org_id = joinedOrgId[0];
+  //     const settings = {
+  //       ...personalSettings,
+  //       selected_org_id: alter_org_id,
+  //     };
+  //     dispatch(setPersonalSettings(settings));
+  //     dispatch(fetchAsyncUpdateSettings(settings));
+  //     fetchInSequenceRelatedOrg();
+  //     return alter_org_id;
+  //   }
+  // };
 
   const handleTogglePrivateModeChange = (target: TARGET) => {
     if (
@@ -171,14 +170,14 @@ const SettingsMenu: React.FC<Props> = (props) => {
         <CommonSwitch
           label={t('settings.tooltip')}
           labelWidth={10}
-          name='tooltip'
+          name="tooltip"
           value={personalSettings.tooltip}
           onChange={handleInputChange}
         />
         <CommonSwitch
           label={t('settings.privateMode')}
           labelWidth={10}
-          name='private_mode'
+          name="private_mode"
           value={personalSettings.private_mode}
           onChange={handleTogglePrivateModeChange}
         />
@@ -186,8 +185,8 @@ const SettingsMenu: React.FC<Props> = (props) => {
           <CommonSelect
             label={t('settings.selectGroup')}
             options={orgOptions}
-            name='selected_org_id'
-            value={validateOrgId(personalSettings.selected_org_id)}
+            name="selected_org_id"
+            value={personalSettings.selected_org_id}
             onChange={handleSelectChange}
           />
         )}
