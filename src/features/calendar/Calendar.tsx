@@ -92,7 +92,16 @@ const Calendar = () => {
       border-color: ${theme.palette.divider};
       background-color: ${theme.palette.action.hover};
     `,
-    headerdate: css`
+    dateNone: css`
+      margin-top: 8px;
+      margin-left: 12px;
+      text-align: left;
+      & .plus {
+        margin-left: 12px;
+        color: rgba(0, 0, 0, 0);
+      }
+    `,
+    date: css`
       margin-top: 8px;
       margin-left: 12px;
       text-align: left;
@@ -107,7 +116,6 @@ const Calendar = () => {
         }
       }
       cursor: pointer;
-      backgournd: blue;
     `,
     texttoday: css`
       padding: 0px 7px;
@@ -157,8 +165,6 @@ const Calendar = () => {
     t('calendar.fri'),
     t('calendar.sat'),
   ];
-
-  // const week = ['Mon', 'Mon', 'Mon', 'Mon', 'Mon', 'Mon', 'Mon'];
 
   const yearMonthOptions = (optionCount: number): string[] => {
     const options = [...Array(optionCount)].map((_, idx) => {
@@ -260,17 +266,17 @@ const Calendar = () => {
     <>
       <Grid
         container
-        direction='column'
-        justifyContent='center'
-        alignItems='center'
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
         css={styles.test}
       >
         <Grid
           css={styles.header}
           container
-          direction='row'
-          justifyContent='space-between'
-          alignItems='center'
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
         >
           <Grid item>
             <Autocomplete
@@ -280,7 +286,7 @@ const Calendar = () => {
               value={yearMonth.year_month}
               onChange={(event, newItem) => handleSelectChange(event, newItem)}
               renderInput={(params) => (
-                <TextField {...params} variant='standard' />
+                <TextField {...params} variant="standard" />
               )}
             />
           </Grid>
@@ -310,16 +316,20 @@ const Calendar = () => {
                   : styles.gridTileGray
               }
             >
-              <Stack height='100%' justifyContent='space-between'>
+              <Stack height="100%" justifyContent="space-between">
                 <Grid
                   item
                   xs={10}
-                  css={styles.headerdate}
+                  css={
+                    selectedProjectId === 'new_project'
+                      ? styles.dateNone
+                      : styles.date
+                  }
                   id={ctx.dateStr}
                   container
-                  direction='row'
-                  justifyContent='flex-start'
-                  alignItems='flex-start'
+                  direction="row"
+                  justifyContent="flex-start"
+                  alignItems="flex-start"
                   onClick={(e) => handleDateClick(e, ctx.dateStr)}
                 >
                   <Grid item>
@@ -347,13 +357,13 @@ const Calendar = () => {
                     </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography className='plus'>+</Typography>
+                    <Typography className="plus">+</Typography>
                   </Grid>
                 </Grid>
                 {ctx.layer && Math.max(...ctx.layer) >= 4 && (
                   <Grid css={styles.remarks}>
                     <Typography
-                      variant='body2'
+                      variant="body2"
                       color={theme.palette.text.disabled}
                     >{`その他${Math.max(...ctx.layer) - 3}件`}</Typography>
                   </Grid>
@@ -382,7 +392,7 @@ const Calendar = () => {
                   onClick={(e) => handleBarClick(e, bar.task_id)}
                 >
                   <Box
-                    component='div'
+                    component="div"
                     sx={{
                       textOverflow: 'ellipsis',
                       overflow: 'hidden',

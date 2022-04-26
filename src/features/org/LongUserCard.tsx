@@ -151,7 +151,7 @@ const LongUserCard = (props: Props) => {
       <Card css={styles.card}>
         {props.user.user_id !== orgInfo.org_owner_id && (
           <IconButton css={styles.dot} onClick={handleClick}>
-            <MoreHorizIcon fontSize='small' />
+            <MoreHorizIcon fontSize="small" />
           </IconButton>
         )}
         <Box sx={{ display: 'flex' }}>
@@ -164,10 +164,10 @@ const LongUserCard = (props: Props) => {
             </Avatar>
           )}
           <Box css={styles.text}>
-            <Typography variant='h6' component='div'>
+            <Typography variant="h6" component="div">
               {`${props.user.last_name} ${props.user.first_name} `}
             </Typography>
-            <Typography noWrap variant='body2' component='div'>
+            <Typography noWrap variant="body2" component="div">
               {`${props.user.comment}`}
             </Typography>
           </Box>
@@ -196,13 +196,13 @@ const LongUserCard = (props: Props) => {
       >
         <MenuItem onClick={() => handleIncludeAdminClick(props.user.user_id)}>
           <ListItemIcon>
-            <GppGoodIcon fontSize='small' />
+            <GppGoodIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>{t('org.addToAdmin')}</ListItemText>
         </MenuItem>
         <MenuItem onClick={() => handleExcludeAdminClick(props.user.user_id)}>
           <ListItemIcon>
-            <GppBadIcon fontSize='small' />
+            <GppBadIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText>{t('org.excludeFromAdmin')}</ListItemText>
         </MenuItem>
@@ -210,16 +210,16 @@ const LongUserCard = (props: Props) => {
         {props.user.user_id === loginUserInfo.user_id ? (
           <MenuItem onClick={() => handleWithdrawOrgClick(props.user.user_id)}>
             <ListItemIcon>
-              <DirectionsRunIcon fontSize='small' />
+              <DirectionsRunIcon fontSize="small" />
             </ListItemIcon>
-            <ListItemText>{t('org.excludeFromGroup')}</ListItemText>
+            <ListItemText>{t('org.withdrawFromGroup')}</ListItemText>
           </MenuItem>
         ) : (
           <MenuItem
             onClick={() => handleExcludeFromGroupClick(props.user.user_id)}
           >
             <ListItemIcon>
-              <PersonOffIcon fontSize='small' />
+              <PersonOffIcon fontSize="small" />
             </ListItemIcon>
             <ListItemText>{t('org.excludeFromGroup')}</ListItemText>
           </MenuItem>

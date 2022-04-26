@@ -98,10 +98,10 @@ const SettingsMenu: React.FC<Props> = (props) => {
   // };
 
   const handleTogglePrivateModeChange = (target: TARGET) => {
-    const isJoinedPublicGroup =
-      loginUserInfo.joined_org?.find((org) => org.is_private === false) !==
+    const isNotJoinedPublicOrg =
+      loginUserInfo.joined_org?.find((org) => org.is_private === false) ===
       undefined;
-    if (!isJoinedPublicGroup) {
+    if (isNotJoinedPublicOrg) {
       // organization に所属していない場合、強制的に private に変更
       if (!personalSettings.private_mode) {
         const settings = {
@@ -143,25 +143,26 @@ const SettingsMenu: React.FC<Props> = (props) => {
       .filter((org) => org.is_private === false)
       .map((org) => org.org_id);
 
-    if (!publicOrgId.includes(target.value as string)) {
-      if (publicOrgId.length === 0) {
-        updateSettings({
-          ...personalSettings,
-          private_mode: true,
-        });
-      } else {
-        updateSettings({
-          ...personalSettings,
-          selected_org_id: publicOrgId[0],
-        });
-      }
-    } else {
+    if (publicOrgId.length === 0) {
+      updateSettings({
+        ...personalSettings,
+        private_mode: true,
+      });
+      fetchInSequenceRelatedOrg();
+      return;
+    }
+
+    if (publicOrgId.includes(target.value as string)) {
       updateSettings({
         ...personalSettings,
         selected_org_id: target.value,
       });
+    } else {
+      updateSettings({
+        ...personalSettings,
+        selected_org_id: publicOrgId[0],
+      });
     }
-
     fetchInSequenceRelatedOrg();
   };
 
