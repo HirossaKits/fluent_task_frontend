@@ -78,7 +78,6 @@ const ProfileMenu: React.FC<Props> = (props) => {
   const handleLogoutClick = () => {
     localStorage.removeItem('localJWT');
     history.push('/login');
-    // dispatch(setIsAuthenticated(false));
   };
 
   const handleRegisterOrgOpenClick = () => {
@@ -147,10 +146,6 @@ const ProfileMenu: React.FC<Props> = (props) => {
             <ExitToAppIcon css={styles.icon} fontSize="small" />
             <Typography>{t('profileMenu.logout')}</Typography>
           </MenuItem>
-          {/* <MenuItem css={styles.menuItem} onClick={handleLogoutClick}>
-            <GroupRemoveIcon css={styles.icon} fontSize="small" />
-            <Typography>組織を脱退</Typography>
-          </MenuItem> */}
         </MenuList>
       </Popover>
       <ProfileDialog />

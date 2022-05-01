@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { css } from '@emotion/react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material';
@@ -9,26 +9,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import { TARGET } from '../types';
 import useCreateOption from '../../hooks/optionCreater';
 import useMessage from '../../hooks/message';
+import useChangeOrgBootLoader from '../../hooks/changeOrgBootLoader';
 import {
   selectLoginUserInfo,
   selectPersonalSettings,
   setPersonalSettings,
   fetchAsyncUpdateSettings,
   selectLang,
-  selectDarkmode,
   fetchAsyncGetLoginUser,
 } from '../auth/authSlice';
-import { fetchAsyncGetOrgInfo } from '../org/orgSliece';
 import {
   selectSettingsMenuOpen,
   setMainComponentName,
   setSettingsMenuOpen,
 } from './mainSlice';
-import { fetchAsyncGetProject } from '../proj/projectSlice';
-import {
-  fetchAsyncGetTaskCategory,
-  fetchAsyncGetTasks,
-} from '../task/taskSlice';
 import CommonSelect from '../../components/CommonSelect';
 import LanguageSelect from '../../components/LanguageSelect';
 
@@ -49,6 +43,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
   const { t } = useTranslation();
   const createOption = useCreateOption();
   const message = useMessage();
+  const changeOrgBootLoad = useChangeOrgBootLoader();
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const settingsMenuOpen = useSelector(selectSettingsMenuOpen);
   const personalSettings = useSelector(selectPersonalSettings);
@@ -65,37 +60,50 @@ const SettingsMenu: React.FC<Props> = (props) => {
     dispatch(fetchAsyncUpdateSettings(settings));
   }, []);
 
-  const fetchInSequenceRelatedOrg = async () => {
-    await dispatch(fetchAsyncGetOrgInfo());
-    await dispatch(fetchAsyncGetProject());
-    await dispatch(fetchAsyncGetTaskCategory());
-    await dispatch(fetchAsyncGetTasks());
-  };
+  useEffect(() => {
+    console.log('useEffect!');
+    // privateモードの場合は何もしない
+    if (personalSettings.private_mode) return;
+
+    const publicOrgId = loginUserInfo.joined_org.reduce(
+      (pre: string[], cur) => (!cur.is_private ? [...pre, cur.org_id] : pre),
+      []
+    );
+    console.log('publicOrgId', publicOrgId);
+
+    // public な組織に所属していない場合
+    if (!publicOrgId.length) {
+      const privateOrgId = loginUserInfo.joined_org?.find(
+        (org) => org.is_private
+      )?.org_id;
+      updateSettings({
+        ...personalSettings,
+        private_mode: true,
+        selected_org_id: privateOrgId,
+      });
+      changeOrgBootLoad();
+    }
+
+    console.log('selectedOrgId', personalSettings.selected_org_id);
+    // settings の selected_org_id に所属している場合
+    if (publicOrgId.includes(personalSettings.selected_org_id)) {
+      return;
+    }
+
+    // settings の selected_org_id に所属していない場合
+    else {
+      updateSettings({
+        ...personalSettings,
+        selected_org_id: publicOrgId[0],
+      });
+      changeOrgBootLoad();
+    }
+  }, []);
 
   const handleInputChange = (target: TARGET) => {
     const settings = { ...personalSettings, [target.name]: target.value };
     updateSettings(settings);
   };
-
-  // const validateOrgId = (org_id: string) => {
-  //   const joinedOrgId = loginUserInfo.joined_org.map((org) => org.org_id);
-  //   // settings の selected_org_id に所属している場合
-  //   if (joinedOrgId.includes(org_id)) {
-  //     return org_id;
-  //   }
-  //   // settings の selected_org_id に所属していない場合
-  //   else {
-  //     const alter_org_id = joinedOrgId[0];
-  //     const settings = {
-  //       ...personalSettings,
-  //       selected_org_id: alter_org_id,
-  //     };
-  //     dispatch(setPersonalSettings(settings));
-  //     dispatch(fetchAsyncUpdateSettings(settings));
-  //     fetchInSequenceRelatedOrg();
-  //     return alter_org_id;
-  //   }
-  // };
 
   const handleTogglePrivateModeChange = (target: TARGET) => {
     const isNotJoinedPublicOrg =
@@ -104,40 +112,36 @@ const SettingsMenu: React.FC<Props> = (props) => {
     if (isNotJoinedPublicOrg) {
       // organization に所属していない場合、強制的に private に変更
       if (!personalSettings.private_mode) {
-        const settings = {
+        updateSettings({
           ...personalSettings,
           private_mode: true,
-          selected_org_id:
-            loginUserInfo.joined_org?.find((org) => org.is_private)?.org_id ??
-            '',
-        };
-        updateSettings(settings);
+          selected_org_id: loginUserInfo.joined_org?.find(
+            (org) => org.is_private
+          )?.org_id,
+        });
       }
       message(t('settings.cannotUseGroup'));
       return;
     } else {
-      const settings = {
+      updateSettings({
         ...personalSettings,
         private_mode: Boolean(target.value),
         selected_org_id:
           loginUserInfo.joined_org?.find(
             (org) => org.is_private === target.value
           )?.org_id ?? '',
-      };
-      dispatch(setPersonalSettings(settings));
-      dispatch(fetchAsyncUpdateSettings(settings));
-      fetchInSequenceRelatedOrg().then(() => {
-        if (target.value) dispatch(setMainComponentName('Proj'));
       });
+
+      changeOrgBootLoad();
+
+      if (target.value) {
+        dispatch(setMainComponentName('Proj'));
+      }
     }
   };
 
   const handleSelectChange = (target: TARGET) => {
     dispatch(fetchAsyncGetLoginUser());
-
-    // const privateOrgId = loginUserInfo.joined_org.find(
-    //   (org) => org.is_private === true
-    // )?.org_id;
 
     const publicOrgId = loginUserInfo.joined_org
       .filter((org) => org.is_private === false)
@@ -147,8 +151,14 @@ const SettingsMenu: React.FC<Props> = (props) => {
       updateSettings({
         ...personalSettings,
         private_mode: true,
+        selected_org_id:
+          loginUserInfo.joined_org?.find(
+            (org) => org.is_private === target.value
+          )?.org_id ?? '',
       });
-      fetchInSequenceRelatedOrg();
+
+      changeOrgBootLoad();
+
       return;
     }
 
@@ -163,7 +173,8 @@ const SettingsMenu: React.FC<Props> = (props) => {
         selected_org_id: publicOrgId[0],
       });
     }
-    fetchInSequenceRelatedOrg();
+
+    changeOrgBootLoad();
   };
 
   const handleColse = () => {

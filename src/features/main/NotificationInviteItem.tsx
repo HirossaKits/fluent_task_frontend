@@ -7,49 +7,50 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+import useBootLoader from '../../hooks/bootLoader';
 import {
   fetchAsyncGetLoginUser,
-  selectLoginUserInfo,
+  fetchAsyncUpdateSettings,
   selectPersonalSettings,
   setPersonalSettings,
 } from '../auth/authSlice';
-import { setNotificationDialogOpen } from './mainSlice';
-import { fetchAsyncGetOrgInfo, fetchAsyncUpdateInvite } from '../org/orgSliece';
+import { setMainComponentName, setNotificationDialogOpen } from './mainSlice';
+import { fetchAsyncUpdateInvite } from '../org/orgSliece';
 
 type Props = {
   inviteId: string;
+  orgId: string;
   orgName: string;
 };
 
 export const NotificationInviteItem = (props: Props) => {
   const dispatch: AppDispatch = useDispatch();
   const { t } = useTranslation();
-  const loginUserInfo = useSelector(selectLoginUserInfo);
-  const settings = useSelector(selectPersonalSettings);
+  const bootLoader = useBootLoader();
+  const personalSettings = useSelector(selectPersonalSettings);
 
-  const handleClick = (value: boolean) => {
-    const data = { invite_id: props.inviteId, result: value };
+  const handleClick = (approval: boolean) => {
+    const data = { invite_id: props.inviteId, result: approval };
     const update = async () => {
       const res = await dispatch(fetchAsyncUpdateInvite(data));
       if (fetchAsyncUpdateInvite.fulfilled.match(res)) {
         await dispatch(fetchAsyncGetLoginUser());
-        await dispatch(fetchAsyncGetOrgInfo());
       }
     };
 
     update().then(() => {
       dispatch(setNotificationDialogOpen(false));
       // 承認した場合はその組織を表示させる
-      if (value) {
-        dispatch(
-          setPersonalSettings({
-            ...settings,
-            private_mode: false,
-            selected_org_id: loginUserInfo.joined_org
-              .filter((org) => org.is_private === false)
-              ?.slice(-1)[0],
-          })
-        );
+      if (approval) {
+        const settings = {
+          ...personalSettings,
+          private_mode: false,
+          selected_org_id: props.orgId,
+        };
+        dispatch(setPersonalSettings(settings));
+        dispatch(fetchAsyncUpdateSettings(settings));
+        bootLoader();
+        dispatch(setMainComponentName('Proj'));
       }
     });
   };

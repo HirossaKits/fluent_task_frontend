@@ -31,11 +31,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { MAIN_COMPONENT_NAME } from '../types';
 import { AppDispatch } from '../../app/store';
 import useMessage from '../../hooks/message';
-import {
-  selectLoginUserInfo,
-  selectPersonalSettings,
-  // setIsAuthenticated,
-} from '../auth/authSlice';
+import { selectLoginUserInfo, selectPersonalSettings } from '../auth/authSlice';
 import { selectOrgInfo, selectInviteCount } from '../org/orgSliece';
 import {
   setNotificationDialogOpen,
@@ -52,7 +48,6 @@ import {
   setEditedProject,
   setProjectDialogOpen,
   setProjectDialogMode,
-  fetchAsyncGetProject,
 } from '../proj/projectSlice';
 import { fetchAsyncGetTasks } from '../task/taskSlice';
 import ProjectDialog from '../proj/ProjectDialog';
@@ -172,7 +167,10 @@ const Main = () => {
       margin-left: ${drawerCloseWidth}px;
     `,
     addIcon: css`
-      margin-bottom: 1px;
+      margin-bottom: 2px;
+    `,
+    newProject: css`
+      margin-top: 2px;
     `,
   };
 
@@ -378,7 +376,7 @@ const Main = () => {
                   icon={
                     <>
                       <AddIcon css={styles.addIcon} />
-                      <Typography variant="body2">
+                      <Typography css={styles.newProject} variant="body2">
                         {t('main.addProject')}
                       </Typography>
                     </>

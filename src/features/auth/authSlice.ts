@@ -31,7 +31,6 @@ const userInfo: LOGIN_USER_INFO = {
 const initialState: AUTH = {
   lang: 'ja',
   darkmode: Boolean(localStorage.getItem('darkmode')),
-  // isAuthenticated: false,
   loginUserInfo: userInfo,
   editedProf: {
     first_name: '',
@@ -181,9 +180,6 @@ export const authSlice = createSlice({
     setDarkmode(state, action) {
       state.darkmode = action.payload;
     },
-    // setIsAuthenticated(state, action) {
-    //   state.isAuthenticated = action.payload;
-    // },
   },
   extraReducers: (builder) => {
     // サインアップ
@@ -230,15 +226,8 @@ export const authSlice = createSlice({
   },
 });
 
-export const {
-  setEditedProf,
-  setPersonalSettings,
-  setLang,
-  setDarkmode,
-  // setIsAuthenticated,
-} = authSlice.actions;
-// export const selectIsAuthenticated = (state: RootState) =>
-//   state.auth.isAuthenticated;
+export const { setEditedProf, setPersonalSettings, setLang, setDarkmode } =
+  authSlice.actions;
 export const selectLoginUserInfo = (state: RootState) =>
   state.auth.loginUserInfo;
 export const selectEditedProf = (state: RootState) => state.auth.editedProf;

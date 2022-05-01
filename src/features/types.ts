@@ -36,7 +36,6 @@ export interface JWT {
 export interface AUTH {
   lang: string;
   darkmode: boolean;
-  // isAuthenticated: boolean;
   loginUserInfo: LOGIN_USER_INFO;
   editedProf: EDITED_PROF;
   personalSettings: PERSONAL_SETTINGS;
@@ -77,6 +76,7 @@ export interface PERSONAL_SETTINGS {
 
 export interface INVITE {
   invite_id: string;
+  org_id: string;
   org_name: string;
 }
 

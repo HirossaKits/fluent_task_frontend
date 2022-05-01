@@ -32,7 +32,6 @@ export default function useBootRoader() {
       } else {
         localStorage.removeItem('localJWT');
         history.push('/login');
-        // dispatch(setIsAuthenticated(false));
       }
     };
     fetchBootRoader();

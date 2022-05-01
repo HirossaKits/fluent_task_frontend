@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +21,14 @@ import GppGoodIcon from '@mui/icons-material/GppGood';
 import GppBadIcon from '@mui/icons-material/GppBad';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 import { USER_INFO } from '../types';
-import { selectLoginUserInfo } from '../auth/authSlice';
+import useBootLoader from '../../hooks/bootLoader';
+import {
+  selectLoginUserInfo,
+  selectPersonalSettings,
+  setPersonalSettings,
+  fetchAsyncUpdateSettings,
+  fetchAsyncGetLoginUser,
+} from '../auth/authSlice';
 import {
   selectOrgInfo,
   fetchAsyncIncludeOrgAdmin,
@@ -95,8 +102,15 @@ const LongUserCard = (props: Props) => {
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const message = useMessage();
+  const bootLoader = useBootLoader();
   const loginUserInfo = useSelector(selectLoginUserInfo);
+  const personalSettings = useSelector(selectPersonalSettings);
   const orgInfo = useSelector(selectOrgInfo);
+
+  const updateSettings = useCallback((settings) => {
+    dispatch(setPersonalSettings(settings));
+    dispatch(fetchAsyncUpdateSettings(settings));
+  }, []);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -143,6 +157,31 @@ const LongUserCard = (props: Props) => {
   const handleWithdrawOrgClick = (user_id: string) => {
     // 組織から除外
     dispatch(fetchAsyncExcludeOrgUser(user_id));
+    // 反映されていない await の必要あり
+    dispatch(fetchAsyncGetLoginUser());
+
+    const publicOrgId = loginUserInfo.joined_org.reduce(
+      (pre: string[], cur) => (!cur.is_private ? [...pre, cur.org_id] : pre),
+      []
+    );
+
+    // public な組織に所属していない場合
+    if (!publicOrgId.length) {
+      const privateOrgId = loginUserInfo.joined_org?.find(
+        (org) => org.is_private
+      )?.org_id;
+      updateSettings({
+        ...personalSettings,
+        private_mode: true,
+        selected_org_id: privateOrgId,
+      });
+    } else {
+      updateSettings({
+        ...personalSettings,
+        selected_org_id: publicOrgId[0],
+      });
+    }
+    bootLoader();
     handleClose();
   };
 

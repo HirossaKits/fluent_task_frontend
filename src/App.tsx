@@ -7,10 +7,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Main from './features/main/Main';
 import Auth from './features/auth/Auth';
-import {
-  selectDarkmode,
-  // selectIsAuthenticated,
-} from './features/auth/authSlice';
+import { selectDarkmode } from './features/auth/authSlice';
 
 function App() {
   const darkmode = useSelector(selectDarkmode);
@@ -36,33 +33,30 @@ function App() {
     },
   });
 
-  // const isAuthenticated = useSelector(selectIsAuthenticated);
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <div className='App'>
-        <header className='App-header'>
+      <div className="App">
+        <header className="App-header">
           <BrowserRouter>
-            <Route exact path='/login' component={Auth} />
+            <Route exact path="/login" component={Auth} />
             <Route
               exact
-              path='/'
+              path="/"
               render={({ location }) =>
                 localStorage.getItem('localJWT') ? (
                   <Main />
                 ) : (
-                  <Redirect to='/login' />
+                  <Redirect to="/login" />
                 )
               }
             />
             <Route
               exact
-              path='/index.html'
-              render={({ location }) => <Redirect to='/' />}
+              path="/index.html"
+              render={({ location }) => <Redirect to="/" />}
             />
           </BrowserRouter>
-          {/* {isAuthenticated ? <Main /> : <Auth />} */}
         </header>
       </div>
     </ThemeProvider>

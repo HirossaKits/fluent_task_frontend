@@ -54,6 +54,7 @@ const NotificationMenu = (props: Props) => {
             <>
               <NotificationInviteItem
                 inviteId={inv.invite_id}
+                orgId={inv.org_id}
                 orgName={inv.org_name}
               />
             </>
