@@ -223,6 +223,16 @@ export const authSlice = createSlice({
         };
       }
     );
+    // 個人設定変更
+    builder.addCase(
+      fetchAsyncUpdateSettings.fulfilled,
+      (state, action: PayloadAction<PERSONAL_SETTINGS>) => {
+        return {
+          ...state,
+          personalSettings: action.payload,
+        };
+      }
+    );
   },
 });
 

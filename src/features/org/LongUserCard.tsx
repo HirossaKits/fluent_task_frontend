@@ -36,6 +36,7 @@ import {
   fetchAsyncExcludeOrgUser,
 } from './orgSliece';
 import useMessage from '../../hooks/message';
+import { AppDispatch } from '../../app/store';
 
 type Props = {
   user: USER_INFO;
@@ -98,7 +99,7 @@ const LongUserCard = (props: Props) => {
     `,
   };
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const message = useMessage();
@@ -156,31 +157,36 @@ const LongUserCard = (props: Props) => {
 
   const handleWithdrawOrgClick = (user_id: string) => {
     // 組織から除外
-    dispatch(fetchAsyncExcludeOrgUser(user_id));
-    // 反映されていない await の必要あり
-    dispatch(fetchAsyncGetLoginUser());
+    const withDrawOrg = async () => {
+      await dispatch(fetchAsyncExcludeOrgUser(user_id));
+      const res = await dispatch(fetchAsyncGetLoginUser());
+      if (fetchAsyncExcludeOrgUser.fulfilled.match(res)) {
+        const publicOrgId = loginUserInfo.joined_org.reduce(
+          (pre: string[], cur) =>
+            !cur.is_private ? [...pre, cur.org_id] : pre,
+          []
+        );
 
-    const publicOrgId = loginUserInfo.joined_org.reduce(
-      (pre: string[], cur) => (!cur.is_private ? [...pre, cur.org_id] : pre),
-      []
-    );
+        // public な組織に所属していない場合
+        if (!publicOrgId.length) {
+          const privateOrgId = loginUserInfo.joined_org?.find(
+            (org) => org.is_private
+          )?.org_id;
+          updateSettings({
+            ...personalSettings,
+            private_mode: true,
+            selected_org_id: privateOrgId,
+          });
+        } else {
+          updateSettings({
+            ...personalSettings,
+            selected_org_id: publicOrgId[0],
+          });
+        }
+      }
+    };
+    withDrawOrg();
 
-    // public な組織に所属していない場合
-    if (!publicOrgId.length) {
-      const privateOrgId = loginUserInfo.joined_org?.find(
-        (org) => org.is_private
-      )?.org_id;
-      updateSettings({
-        ...personalSettings,
-        private_mode: true,
-        selected_org_id: privateOrgId,
-      });
-    } else {
-      updateSettings({
-        ...personalSettings,
-        selected_org_id: publicOrgId[0],
-      });
-    }
     bootLoader();
     handleClose();
   };

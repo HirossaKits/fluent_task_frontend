@@ -16,6 +16,7 @@ import {
 } from '../auth/authSlice';
 import { setMainComponentName, setNotificationDialogOpen } from './mainSlice';
 import { fetchAsyncUpdateInvite } from '../org/orgSliece';
+import { PERSONAL_SETTINGS } from '../types';
 
 type Props = {
   inviteId: string;
@@ -29,17 +30,22 @@ export const NotificationInviteItem = (props: Props) => {
   const bootLoader = useBootLoader();
   const personalSettings = useSelector(selectPersonalSettings);
 
+  const updateInvite = async (data: { invite_id: string; result: boolean }) => {
+    const res = await dispatch(fetchAsyncUpdateInvite(data));
+    if (fetchAsyncUpdateInvite.fulfilled.match(res)) {
+      await dispatch(fetchAsyncGetLoginUser());
+    }
+  };
+
+  const updateSettings = async (settings: PERSONAL_SETTINGS) => {
+    const res = await dispatch(fetchAsyncUpdateSettings(settings));
+    return res;
+  };
+
   const handleClick = (approval: boolean) => {
     const data = { invite_id: props.inviteId, result: approval };
-    const update = async () => {
-      const res = await dispatch(fetchAsyncUpdateInvite(data));
-      if (fetchAsyncUpdateInvite.fulfilled.match(res)) {
-        await dispatch(fetchAsyncGetLoginUser());
-      }
-    };
 
-    update().then(() => {
-      dispatch(setNotificationDialogOpen(false));
+    updateInvite(data).then(() => {
       // 承認した場合はその組織を表示させる
       if (approval) {
         const settings = {
@@ -47,10 +53,13 @@ export const NotificationInviteItem = (props: Props) => {
           private_mode: false,
           selected_org_id: props.orgId,
         };
-        dispatch(setPersonalSettings(settings));
-        dispatch(fetchAsyncUpdateSettings(settings));
-        bootLoader();
-        dispatch(setMainComponentName('Proj'));
+        updateSettings(settings).then((res) => {
+          if (fetchAsyncUpdateSettings.fulfilled.match(res)) {
+            bootLoader();
+            dispatch(setNotificationDialogOpen(false));
+            dispatch(setMainComponentName('Org'));
+          }
+        });
       }
     });
   };
