@@ -217,9 +217,39 @@ export const authSlice = createSlice({
     builder.addCase(
       fetchAsyncGetPersonalSettings.fulfilled,
       (state, action: PayloadAction<PERSONAL_SETTINGS>) => {
+        const personalSettings = action.payload;
+
+        if (!personalSettings.private_mode) {
+          const publicOrgId = state.loginUserInfo.joined_org.reduce(
+            (pre: string[], cur) =>
+              !cur.is_private ? [...pre, cur.org_id] : pre,
+            []
+          );
+          // public な組織に所属していない場合
+          if (!publicOrgId.length) {
+            fetchAsyncUpdateSettings({
+              ...personalSettings,
+              private_mode: true,
+            });
+          }
+          // settings の selected_org_id に所属していない場合
+          if (!publicOrgId.includes(personalSettings.selected_org_id)) {
+            fetchAsyncUpdateSettings({
+              ...personalSettings,
+              selected_org_id: publicOrgId[0],
+            });
+            return {
+              ...state,
+              personalSettings: {
+                ...personalSettings,
+                selected_org_id: publicOrgId[0],
+              },
+            };
+          }
+        }
         return {
           ...state,
-          personalSettings: action.payload,
+          personalSettings: personalSettings,
         };
       }
     );

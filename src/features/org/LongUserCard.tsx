@@ -155,39 +155,15 @@ const LongUserCard = (props: Props) => {
     handleClose();
   };
 
+  const withDrawOrg = async (user_id: string) => {
+    const res = await dispatch(fetchAsyncExcludeOrgUser(user_id));
+    if (fetchAsyncExcludeOrgUser.fulfilled.match(res)) {
+      bootLoader();
+    }
+  };
+
   const handleWithdrawOrgClick = (user_id: string) => {
-    // 組織から除外
-    const withDrawOrg = async () => {
-      await dispatch(fetchAsyncExcludeOrgUser(user_id));
-      const res = await dispatch(fetchAsyncGetLoginUser());
-      if (fetchAsyncExcludeOrgUser.fulfilled.match(res)) {
-        const publicOrgId = loginUserInfo.joined_org.reduce(
-          (pre: string[], cur) =>
-            !cur.is_private ? [...pre, cur.org_id] : pre,
-          []
-        );
-
-        // public な組織に所属していない場合
-        if (!publicOrgId.length) {
-          const privateOrgId = loginUserInfo.joined_org?.find(
-            (org) => org.is_private
-          )?.org_id;
-          updateSettings({
-            ...personalSettings,
-            private_mode: true,
-            selected_org_id: privateOrgId,
-          });
-        } else {
-          updateSettings({
-            ...personalSettings,
-            selected_org_id: publicOrgId[0],
-          });
-        }
-      }
-    };
-    withDrawOrg();
-
-    bootLoader();
+    withDrawOrg(user_id);
     handleClose();
   };
 

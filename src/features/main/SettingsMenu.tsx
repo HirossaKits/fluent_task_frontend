@@ -185,8 +185,6 @@ const SettingsMenu: React.FC<Props> = (props) => {
     dispatch(setSettingsMenuOpen(false));
   };
 
-  console.log(orgOptions);
-
   return (
     <Popover
       open={settingsMenuOpen}

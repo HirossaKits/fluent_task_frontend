@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
-import useBootLoader from '../../hooks/bootLoader';
+import useChangeOrgBootLoader from '../../hooks/changeOrgBootLoader';
 import {
   fetchAsyncGetLoginUser,
   fetchAsyncUpdateSettings,
@@ -27,7 +27,7 @@ type Props = {
 export const NotificationInviteItem = (props: Props) => {
   const dispatch: AppDispatch = useDispatch();
   const { t } = useTranslation();
-  const bootLoader = useBootLoader();
+  const changeOrgBootLoader = useChangeOrgBootLoader();
   const personalSettings = useSelector(selectPersonalSettings);
 
   const updateInvite = async (data: { invite_id: string; result: boolean }) => {
@@ -39,12 +39,18 @@ export const NotificationInviteItem = (props: Props) => {
 
   const updateSettings = async (settings: PERSONAL_SETTINGS) => {
     const res = await dispatch(fetchAsyncUpdateSettings(settings));
-    return res;
+    if (fetchAsyncUpdateSettings.fulfilled.match(res)) {
+      const res = await dispatch(fetchAsyncGetLoginUser());
+      if (fetchAsyncGetLoginUser.fulfilled.match(res)) {
+        changeOrgBootLoader();
+        dispatch(setNotificationDialogOpen(false));
+        dispatch(setMainComponentName('Org'));
+      }
+    }
   };
 
   const handleClick = (approval: boolean) => {
     const data = { invite_id: props.inviteId, result: approval };
-
     updateInvite(data).then(() => {
       // 承認した場合はその組織を表示させる
       if (approval) {
@@ -53,13 +59,7 @@ export const NotificationInviteItem = (props: Props) => {
           private_mode: false,
           selected_org_id: props.orgId,
         };
-        updateSettings(settings).then((res) => {
-          if (fetchAsyncUpdateSettings.fulfilled.match(res)) {
-            bootLoader();
-            dispatch(setNotificationDialogOpen(false));
-            dispatch(setMainComponentName('Org'));
-          }
-        });
+        updateSettings(settings);
       }
     });
   };
