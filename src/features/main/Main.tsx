@@ -68,6 +68,12 @@ const Main = () => {
   const drawerWidth = 180;
   const drawerCloseWidth = 54;
   const styles = {
+    wrap: css`
+      display: flex;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    `,
     toolbar: css`
       padding: 0 9px;
     `,
@@ -144,9 +150,16 @@ const Main = () => {
       color: ${theme.palette.text.secondary};
       padding-bottom: 4;
     `,
+    contentWrap: css`
+      width: 100%;
+      height: calc(100% - 48px);
+      position: absolute;
+      top: 48px;
+      overflow: auto;
+    `,
     content: css`
       width: calc(100% - ${drawerWidth}px);
-      padding-top: ${theme.spacing(7)};
+      padding-top: ${theme.spacing(1)};
       padding-left: ${theme.spacing(5)};
       padding-right: ${theme.spacing(5)};
       transition: ${theme.transitions.create(['margin', 'width'], {
@@ -157,7 +170,7 @@ const Main = () => {
     `,
     contentShift: css`
       width: calc(100% - ${drawerCloseWidth}px);
-      padding-top: ${theme.spacing(7)};
+      padding-top: ${theme.spacing(1)};
       padding-left: ${theme.spacing(5)};
       padding-right: ${theme.spacing(5)};
       transition: ${theme.transitions.create(['margin', 'width'], {
@@ -171,6 +184,9 @@ const Main = () => {
     `,
     newProject: css`
       margin-top: 2px;
+    `,
+    test: css`
+      overflow: auto;
     `,
   };
 
@@ -243,7 +259,8 @@ const Main = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', width: '100%' }}>
+    // <Box sx={{ display: 'flex', width: '100%', overflow: 'auto' }}>
+    <div css={styles.wrap}>
       <AppBar
         css={drawerOpen ? styles.appBarShift : styles.appBar}
         position="fixed"
@@ -346,62 +363,64 @@ const Main = () => {
           </ListItem>
         </List>
       </Drawer>
-
-      <div css={drawerOpen ? styles.content : styles.contentShift}>
-        {mainComponentName !== 'Org' && (
-          <Box
-            sx={{
-              borderBottom: 1,
-              borderColor: 'divider',
-              marginBottom: theme.spacing(2),
-            }}
-          >
-            <Tabs
-              value={selectedProjectId === '' ? 0 : selectedProjectId}
-              onChange={handleTabChange}
-              variant="scrollable"
-              scrollButtons="auto"
+      <div css={styles.contentWrap}>
+        <div css={drawerOpen ? styles.content : styles.contentShift}>
+          {mainComponentName !== 'Org' && (
+            <Box
+              sx={{
+                borderBottom: 1,
+                borderColor: 'divider',
+                marginBottom: theme.spacing(2),
+              }}
             >
-              {projects.map((proj, idx) => (
-                <Tab
-                  key={idx}
-                  label={proj.project_name}
-                  value={proj.project_id}
-                />
-              ))}
+              <Tabs
+                value={selectedProjectId === '' ? 0 : selectedProjectId}
+                onChange={handleTabChange}
+                variant="scrollable"
+                scrollButtons="auto"
+              >
+                {projects.map((proj, idx) => (
+                  <Tab
+                    key={idx}
+                    label={proj.project_name}
+                    value={proj.project_id}
+                  />
+                ))}
 
-              {mainComponentName === 'Proj' && (
-                <Tab
-                  css={styles.addIcon}
-                  icon={
-                    <>
-                      <AddIcon css={styles.addIcon} />
-                      <Typography css={styles.newProject} variant="body2">
-                        {t('main.addProject')}
-                      </Typography>
-                    </>
-                  }
-                  iconPosition="start"
-                  style={{ margin: 0, padding: 0 }}
-                  value="new_project"
-                  onClick={handleNewProjectTabClick}
-                />
-              )}
-            </Tabs>
-          </Box>
-        )}
-        {mainComponentName === 'Org' && <Org />}
-        {mainComponentName === 'Proj' && <Proj />}
-        {mainComponentName === 'List' && <Task />}
-        {mainComponentName === 'Kanban' && <Kanban />}
-        {mainComponentName === 'Calendar' && <Calendar />}
+                {mainComponentName === 'Proj' && (
+                  <Tab
+                    css={styles.addIcon}
+                    icon={
+                      <>
+                        <AddIcon css={styles.addIcon} />
+                        <Typography css={styles.newProject} variant="body2">
+                          {t('main.addProject')}
+                        </Typography>
+                      </>
+                    }
+                    iconPosition="start"
+                    style={{ margin: 0, padding: 0 }}
+                    value="new_project"
+                    onClick={handleNewProjectTabClick}
+                  />
+                )}
+              </Tabs>
+            </Box>
+          )}
+          {mainComponentName === 'Org' && <Org />}
+          {mainComponentName === 'Proj' && <Proj />}
+          {mainComponentName === 'List' && <Task />}
+          {mainComponentName === 'Kanban' && <Kanban />}
+          {mainComponentName === 'Calendar' && <Calendar />}
+        </div>
+        <NotificationMenu anchorEl={notificationAnchorEl} />
+        <SettingsMenu anchorEl={settingsAnchorEl} />
+        <ProfileMenu anchorEl={profileAnchorEl} />
+        <ProjectDialog />
+        <CommonMessageBar />
       </div>
-      <NotificationMenu anchorEl={notificationAnchorEl} />
-      <SettingsMenu anchorEl={settingsAnchorEl} />
-      <ProfileMenu anchorEl={profileAnchorEl} />
-      <ProjectDialog />
-      <CommonMessageBar />
-    </Box>
+    </div>
+    // {/* </Box> */}
   );
 };
 

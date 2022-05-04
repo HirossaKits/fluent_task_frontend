@@ -27,6 +27,10 @@ import InviteDialog from './InviteDialog';
 const Org = () => {
   const theme = useTheme();
   const styles = {
+    wrap: css`
+      display: flex;
+      flex-wrap: wrap;
+    `,
     header: css`
       width: 100%;
       margin: 10px 0;
@@ -65,14 +69,6 @@ const Org = () => {
     iconbuttonFocus: css`
       color: ${theme.palette.primary.main};
     `,
-    wrap: css`
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-      align-content: start;
-      height: 90vh;
-      margin-top: ${theme.spacing(1)};
-    `,
   };
 
   const dispatch = useDispatch();
@@ -105,7 +101,7 @@ const Org = () => {
   };
 
   return (
-    <>
+    <div css={styles.wrap}>
       <Box css={styles.header}>
         <Box css={styles.titleWrap}>
           <Typography css={styles.titleText} variant="h5" component="div">
@@ -128,7 +124,7 @@ const Org = () => {
         </div>
       </Box>
 
-      <Box css={styles.wrap}>
+      <Box>
         {sortUser(orgInfo.org_user)?.map((user) => (
           <LongUserCard
             user={user}
@@ -139,7 +135,7 @@ const Org = () => {
       </Box>
       <OrgDialog mode="edit" onClick={handleEditOrg} />
       <InviteDialog />
-    </>
+    </div>
   );
 };
 

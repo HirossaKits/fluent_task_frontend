@@ -148,6 +148,7 @@ const TaskDialog: React.FC = () => {
         onEditMode={handleEditModeClick}
         onDelete={handleDeleteClick}
         maxWidth="sm"
+        maxHeight="750px"
         mode={taskDialogMode}
       >
         <Stack

@@ -48,8 +48,9 @@ const Calendar = () => {
   };
 
   const styles = {
-    test: css`
-      background-color: transparent;
+    wrap: css`
+      display: flex;
+      flex-wrap: wrap;
     `,
     header: css`
       width: 86%;
@@ -60,16 +61,11 @@ const Calendar = () => {
     `,
     week: css`
       width: 86%;
-      // border-top: 1px solid;
-      // border-left: 1px solid;
-      // border-color: ${theme.palette.divider};
       position: relative;
       margin-top: 15px;
       margin-bottom: 5px;
     `,
     weekItem: css`
-      // border-right: 1px solid;
-      // border-color: ${theme.palette.divider};
       text-align: left;
       padding-left: 10px;
     `,
@@ -263,13 +259,12 @@ const Calendar = () => {
   };
 
   return (
-    <>
+    <div css={styles.wrap}>
       <Grid
         container
         direction="column"
         justifyContent="center"
         alignItems="center"
-        css={styles.test}
       >
         <Grid
           css={styles.header}
@@ -399,25 +394,6 @@ const Calendar = () => {
                       typography: 'body1',
                     }}
                   >
-                    {/* <Typography
-                  css={css`
-                    ${styles.texttaskuu};
-                    top: ${bar.top};
-                    left: ${bar.left};
-                    width: ${bar.width};
-                    border-radius: ${!bar.startEdge && !bar.endEdge
-                      ? '0px'
-                      : bar.startEdge && !bar.endEdge
-                      ? `${calendarBarStyle.roundEdge}px 0px 0px ${calendarBarStyle.roundEdge}px`
-                      : !bar.startEdge && bar.endEdge
-                      ? `0px ${calendarBarStyle.roundEdge}px ${calendarBarStyle.roundEdge}px 0px`
-                      : `${calendarBarStyle.roundEdge}px`};
-                    cursor: pointer;
-                  `}
-                  onClick={(e) => handleBarClick(e, bar.task_id)}
-                >
-                  {bar.task_name}
-                </Typography> */}
                     {bar.task_name}
                   </Box>
                 </div>
@@ -426,7 +402,7 @@ const Calendar = () => {
         </ImageList>
       </Grid>
       <TaskDialog />
-    </>
+    </div>
   );
 };
 

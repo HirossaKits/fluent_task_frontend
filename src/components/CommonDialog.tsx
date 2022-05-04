@@ -22,6 +22,7 @@ type Props = {
   onDelete?: () => void;
   onEditMode?: () => void;
   maxWidth?: Breakpoint;
+  maxHeight?: string;
   mode: DIALOG_MODE;
 };
 
@@ -29,7 +30,7 @@ const CommonDialog = (props: Props) => {
   const theme = useTheme();
   const styles = {
     dialog: css`
-      max-height: 800px;
+      ${'maxHeight' in props ? `max-height: ${props.maxHeight};` : ''}
       overflow: auto;
     `,
     title: css`

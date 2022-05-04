@@ -48,9 +48,9 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
       flex-direction: column;
       flex-wrap: nowrap;
       width: 20vw;
-      height: 83vh;
+      height: calc(100vh - 162px);
       // height: ${props.tasks.length * 76}px;
-      min-height: 83vh;
+      min-height: 600px;
       margin-bottom: 25px;
       background-color: ${theme.palette.action.hover
         .split(',')
