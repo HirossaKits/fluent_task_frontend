@@ -14,6 +14,7 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { AppDispatch, initStore } from '../../app/store';
 import {
+  setMainComponentName,
   selectProfileMenuOpen,
   setProfileMenuOpen,
   setProfileDialogOpen,
@@ -78,6 +79,7 @@ const ProfileMenu: React.FC<Props> = (props) => {
 
   const handleLogoutClick = () => {
     dispatch(setProfileMenuOpen(false));
+    dispatch(setMainComponentName('Proj'));
     initStore();
     localStorage.removeItem('localJWT');
     history.push('/login');
