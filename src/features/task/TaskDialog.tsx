@@ -97,29 +97,7 @@ const TaskDialog: React.FC = () => {
   };
 
   const handleInputChange = (target: TARGET) => {
-    if (
-      target.name === 'actual_startdate' &&
-      target.value &&
-      !editedTask.actual_enddate
-    ) {
-      dispatch(
-        setEditedTask({
-          ...editedTask,
-          status: 'On going',
-          actual_startdate: target.value,
-        })
-      );
-    } else if (target.name === 'actual_enddate') {
-      dispatch(
-        setEditedTask({
-          ...editedTask,
-          status: 'Done',
-          actual_enddate: target.value,
-        })
-      );
-    } else {
-      dispatch(setEditedTask({ ...editedTask, [target.name]: target.value }));
-    }
+    dispatch(setEditedTask({ ...editedTask, [target.name]: target.value }));
   };
 
   const handleClose = () => {
@@ -128,6 +106,32 @@ const TaskDialog: React.FC = () => {
 
   const handleRegisterClick = () => {
     if (!validateInput()) return;
+
+    if (editedTask.status === 'Suspended') {
+      // 何もしない
+    } else if (editedTask.actual_enddate) {
+      dispatch(
+        setEditedTask({
+          ...editedTask,
+          status: 'Done',
+        })
+      );
+    } else if (editedTask.actual_startdate) {
+      dispatch(
+        setEditedTask({
+          ...editedTask,
+          status: 'On going',
+        })
+      );
+    } else {
+      dispatch(
+        setEditedTask({
+          ...editedTask,
+          status: 'Not started',
+        })
+      );
+    }
+
     dispatch(fetchAsyncRegisterTask());
     dispatch(setTaskDialogOpen(false));
   };
