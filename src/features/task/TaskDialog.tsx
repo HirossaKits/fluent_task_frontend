@@ -97,7 +97,29 @@ const TaskDialog: React.FC = () => {
   };
 
   const handleInputChange = (target: TARGET) => {
-    dispatch(setEditedTask({ ...editedTask, [target.name]: target.value }));
+    if (
+      target.name === 'actual_startdate' &&
+      target.value &&
+      !editedTask.actual_enddate
+    ) {
+      dispatch(
+        setEditedTask({
+          ...editedTask,
+          status: 'On going',
+          actual_startdate: target.value,
+        })
+      );
+    } else if (target.name === 'actual_enddate') {
+      dispatch(
+        setEditedTask({
+          ...editedTask,
+          status: 'Done',
+          actual_enddate: target.value,
+        })
+      );
+    } else {
+      dispatch(setEditedTask({ ...editedTask, [target.name]: target.value }));
+    }
   };
 
   const handleClose = () => {
