@@ -10,25 +10,30 @@ import { useTheme } from '@mui/material/styles';
 import LongUserCard from './LongUserCard';
 import EditIcon from '@mui/icons-material/Edit';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import useJoinOrgBootLoader from '../../hooks/joinOrgBootLoader';
 import useMessage from '../../hooks/message';
 import useSortUser from '../../hooks/sortUser';
-import { selectLoginUserInfo } from '../auth/authSlice';
+import { selectLoginUserInfo, selectPersonalSettings } from '../auth/authSlice';
 import {
   selectOrgInfo,
   setEditedOrgName,
   setOrgDialogOpen,
   setInviteDialogOpen,
   fetchAsyncUpdateOrgInfo,
+  fetchAsyncRegisterPublicOrg,
+  setOrgDialogMode,
 } from './orgSliece';
 import CommonTooltip from '../../components/CommonTooltip';
 import OrgDialog from './OrgDialog';
 import InviteDialog from './InviteDialog';
+import { AppDispatch } from '../../app/store';
+import { setMainComponentName, setProfileMenuOpen } from '../main/mainSlice';
 
 const Org = () => {
   const theme = useTheme();
   const styles = {
     wrap: css`
-      height: calc(100vh - 120px);
+      height: calc(100vh - 132px);
       display: flex;
       flex-wrap: wrap;
     `,
@@ -78,10 +83,12 @@ const Org = () => {
     `,
   };
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const { t } = useTranslation();
   const orgInfo = useSelector(selectOrgInfo);
   const loginUserInfo = useSelector(selectLoginUserInfo);
+  const personalSettings = useSelector(selectPersonalSettings);
+  const joinOrgBootLoader = useJoinOrgBootLoader();
   const sortUser = useSortUser();
   const message = useMessage();
 
@@ -91,6 +98,7 @@ const Org = () => {
       return;
     }
     dispatch(setEditedOrgName(orgInfo.org_name));
+    dispatch(setOrgDialogMode('edit'));
     dispatch(setOrgDialogOpen(true));
   };
 
@@ -105,6 +113,24 @@ const Org = () => {
   const handleEditOrg = () => {
     dispatch(fetchAsyncUpdateOrgInfo());
     dispatch(setOrgDialogOpen(false));
+  };
+
+  const handleRegisterOrg = () => {
+    const createOrg = async () => {
+      const res = await dispatch(fetchAsyncRegisterPublicOrg());
+      if (fetchAsyncRegisterPublicOrg.fulfilled.match(res)) {
+        const settings = {
+          ...personalSettings,
+          private_mode: false,
+          selected_org_id: res.payload.org_id,
+        };
+        joinOrgBootLoader(settings);
+      }
+    };
+    createOrg();
+    dispatch(setOrgDialogOpen(false));
+    dispatch(setProfileMenuOpen(false));
+    dispatch(setMainComponentName('Org'));
   };
 
   return (
@@ -140,7 +166,7 @@ const Org = () => {
           />
         ))}
       </Box>
-      <OrgDialog mode="edit" onClick={handleEditOrg} />
+      <OrgDialog onEdit={handleEditOrg} onRegister={handleRegisterOrg} />
       <InviteDialog />
     </div>
   );

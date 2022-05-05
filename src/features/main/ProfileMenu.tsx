@@ -17,18 +17,15 @@ import {
   selectProfileMenuOpen,
   setProfileMenuOpen,
   setProfileDialogOpen,
-  setMainComponentName,
 } from './mainSlice';
-import { selectLoginUserInfo, selectPersonalSettings } from '../auth/authSlice';
+import { selectLoginUserInfo } from '../auth/authSlice';
 import {
   setOrgDialogOpen,
   setEditedOrgName,
-  fetchAsyncRegisterPublicOrg,
+  setOrgDialogMode,
 } from '../org/orgSliece';
 import CommonAvatar from '../../components/CommonAvatar';
 import ProfileDialog from './ProfileDialog';
-import OrgDialog from '../org/OrgDialog';
-import useJoinOrgBootLoader from '../../hooks/joinOrgBootLoader';
 import useMessage from '../../hooks/message';
 
 type Props = {
@@ -70,11 +67,10 @@ const ProfileMenu: React.FC<Props> = (props) => {
   const history = useHistory();
   const dispatch: AppDispatch = useDispatch();
   const { t } = useTranslation();
-  const joinOrgBootLoader = useJoinOrgBootLoader();
+
   const message = useMessage();
   const profileMenuOpen = useSelector(selectProfileMenuOpen);
   const loginUserInfo = useSelector(selectLoginUserInfo);
-  const personalSettings = useSelector(selectPersonalSettings);
 
   const handleEditProfileClick = () => {
     dispatch(setProfileDialogOpen(true));
@@ -87,31 +83,14 @@ const ProfileMenu: React.FC<Props> = (props) => {
     history.push('/login');
   };
 
-  const handleRegisterOrgOpenClick = () => {
+  const handleRegisterOrgClick = () => {
     if (loginUserInfo.is_premium) {
       message(t('profileMenu.cannotCreateMultiGroup'));
       return;
     }
     dispatch(setEditedOrgName(''));
+    dispatch(setOrgDialogMode('register'));
     dispatch(setOrgDialogOpen(true));
-  };
-
-  const handleRegisterOrgClick = () => {
-    const createOrg = async () => {
-      const res = await dispatch(fetchAsyncRegisterPublicOrg());
-      if (fetchAsyncRegisterPublicOrg.fulfilled.match(res)) {
-        const settings = {
-          ...personalSettings,
-          private_mode: false,
-          selected_org_id: res.payload.org_id,
-        };
-        joinOrgBootLoader(settings);
-      }
-    };
-    createOrg();
-    dispatch(setOrgDialogOpen(false));
-    dispatch(setProfileMenuOpen(false));
-    dispatch(setMainComponentName('Org'));
   };
 
   const handleClose = () => {
@@ -157,7 +136,7 @@ const ProfileMenu: React.FC<Props> = (props) => {
             <EditIcon css={styles.icon} fontSize="small" />
             <Typography>{t('profileMenu.edit')}</Typography>
           </MenuItem>
-          <MenuItem css={styles.menuItem} onClick={handleRegisterOrgOpenClick}>
+          <MenuItem css={styles.menuItem} onClick={handleRegisterOrgClick}>
             <PeopleAltIcon css={styles.icon} fontSize="small" />
             <Typography>{t('profileMenu.createGroup')}</Typography>
           </MenuItem>
@@ -168,7 +147,6 @@ const ProfileMenu: React.FC<Props> = (props) => {
         </MenuList>
       </Popover>
       <ProfileDialog />
-      <OrgDialog mode="edit" onClick={handleRegisterOrgClick} />
     </>
   );
 };

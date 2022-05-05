@@ -15,6 +15,7 @@ const initialState: ORG = {
   editedOrgName: '',
   editedInviteMail: '',
   orgDialogOpen: false,
+  orgDialogMode: 'edit',
   inviteDialogOpen: false,
   invite: [],
 };
@@ -214,6 +215,9 @@ export const orgSlice = createSlice({
     setOrgDialogOpen(state, action) {
       state.orgDialogOpen = action.payload;
     },
+    setOrgDialogMode(state, action) {
+      state.orgDialogMode = action.payload;
+    },
     setInviteDialogOpen(state, action) {
       state.inviteDialogOpen = action.payload;
     },
@@ -282,6 +286,7 @@ export const {
   setEditedOrgName,
   setEditedInviteMail,
   setOrgDialogOpen,
+  setOrgDialogMode,
   setInviteDialogOpen,
 } = orgSlice.actions;
 
@@ -292,6 +297,8 @@ export const selectEditedInviteMail = (state: RootState) =>
   state.org.editedInviteMail;
 export const selectOrgDialogOpen = (state: RootState) =>
   state.org.orgDialogOpen;
+export const selectOrgDialogMode = (state: RootState) =>
+  state.org.orgDialogMode;
 export const selectInviteDialogOpen = (state: RootState) =>
   state.org.inviteDialogOpen;
 export const selectInvite = (state: RootState) => state.org.invite;

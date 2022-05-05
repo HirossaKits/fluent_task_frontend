@@ -6,20 +6,22 @@ import CommonDialog from '../../components/CommonDialog';
 import { TARGET } from '../types';
 import {
   selectOrgDialogOpen,
+  selectOrgDialogMode,
   selectEditedOrgName,
   setOrgDialogOpen,
   setEditedOrgName,
 } from '../org/orgSliece';
 
 type Props = {
-  mode: 'register' | 'edit';
-  onClick: () => void;
+  onEdit?: () => void;
+  onRegister?: () => void;
 };
 
 const OrgDialog = (props: Props) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const orgDialogOpen = useSelector(selectOrgDialogOpen);
+  const orgDealogMode = useSelector(selectOrgDialogMode);
   const editedOrgName = useSelector(selectEditedOrgName);
 
   const handleClose = () => {
@@ -34,14 +36,13 @@ const OrgDialog = (props: Props) => {
     <CommonDialog
       open={orgDialogOpen}
       title={
-        props.mode === 'register'
-          ? t('orgDialog.edit')
-          : t('orgDialog.register')
+        orgDealogMode === 'edit' ? t('orgDialog.edit') : t('orgDialog.register')
       }
       onClose={handleClose}
-      onEdit={props.onClick}
+      onEdit={props.onEdit}
+      onRegister={props.onRegister}
       maxWidth="xs"
-      mode="edit"
+      mode={orgDealogMode}
     >
       <CommonTextField
         label={t('orgDialog.orgName')}

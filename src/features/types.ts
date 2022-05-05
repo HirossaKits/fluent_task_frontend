@@ -87,6 +87,7 @@ export interface ORG {
   editedOrgName: string;
   editedInviteMail: string;
   orgDialogOpen: boolean;
+  orgDialogMode: 'edit' | 'register';
   inviteDialogOpen: boolean;
   invite: INVITE[];
 }
