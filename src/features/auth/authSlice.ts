@@ -168,6 +168,9 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    initAuthState(state, action) {
+      return initialState;
+    },
     setEditedProf(state, action) {
       state.editedProf = action.payload;
     },
@@ -266,8 +269,13 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setEditedProf, setPersonalSettings, setLang, setDarkmode } =
-  authSlice.actions;
+export const {
+  initAuthState,
+  setEditedProf,
+  setPersonalSettings,
+  setLang,
+  setDarkmode,
+} = authSlice.actions;
 export const selectLoginUserInfo = (state: RootState) =>
   state.auth.loginUserInfo;
 export const selectEditedProf = (state: RootState) => state.auth.editedProf;

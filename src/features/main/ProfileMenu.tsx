@@ -12,9 +12,8 @@ import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { AppDispatch, initStore } from '../../app/store';
+import { AppDispatch } from '../../app/store';
 import {
-  setMainComponentName,
   selectProfileMenuOpen,
   setProfileMenuOpen,
   setProfileDialogOpen,
@@ -28,6 +27,7 @@ import {
 import CommonAvatar from '../../components/CommonAvatar';
 import ProfileDialog from './ProfileDialog';
 import useMessage from '../../hooks/message';
+import useInitializeState from '../../hooks/initializeState';
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;
@@ -68,7 +68,7 @@ const ProfileMenu: React.FC<Props> = (props) => {
   const history = useHistory();
   const dispatch: AppDispatch = useDispatch();
   const { t } = useTranslation();
-
+  const initializeState = useInitializeState();
   const message = useMessage();
   const profileMenuOpen = useSelector(selectProfileMenuOpen);
   const loginUserInfo = useSelector(selectLoginUserInfo);
@@ -78,9 +78,9 @@ const ProfileMenu: React.FC<Props> = (props) => {
   };
 
   const handleLogoutClick = () => {
-    dispatch(setProfileMenuOpen(false));
-    dispatch(setMainComponentName('Proj'));
-    initStore();
+    // dispatch(setProfileMenuOpen(false));
+    // dispatch(setMainComponentName('Proj'));
+    initializeState();
     localStorage.removeItem('localJWT');
     history.push('/login');
   };

@@ -351,6 +351,9 @@ export const taskSlice = createSlice({
   name: 'task',
   initialState: initialState,
   reducers: {
+    initTaskState(state, action) {
+      return initialState;
+    },
     setTasks(state, action) {
       state.tasks = action.payload;
     },
@@ -408,6 +411,7 @@ export const taskSlice = createSlice({
 });
 
 export const {
+  initTaskState,
   setTasks,
   setTaskDialogOpen,
   setTaskDialogMode,

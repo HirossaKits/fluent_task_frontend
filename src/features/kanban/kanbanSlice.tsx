@@ -9,13 +9,16 @@ export const kanbanSlice = createSlice({
   name: 'kanban',
   initialState,
   reducers: {
+    initKanbanState(state, action) {
+      return initialState;
+    },
     setIsFirstRender(state, action) {
       state.isFirstRender = action.payload;
     },
   },
 });
 
-export const { setIsFirstRender } = kanbanSlice.actions;
+export const { initKanbanState, setIsFirstRender } = kanbanSlice.actions;
 
 export const selectIsFirstRender = (state: RootState) =>
   state.kanban.isFirstRender;

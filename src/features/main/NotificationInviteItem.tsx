@@ -8,14 +8,9 @@ import Typography from '@mui/material/Typography';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import useChangeOrgBootLoader from '../../hooks/changeOrgBootLoader';
-import {
-  fetchAsyncGetLoginUser,
-  fetchAsyncUpdateSettings,
-  selectPersonalSettings,
-} from '../auth/authSlice';
+import { selectPersonalSettings } from '../auth/authSlice';
 import { setMainComponentName, setNotificationDialogOpen } from './mainSlice';
 import { fetchAsyncUpdateInvite } from '../org/orgSliece';
-import { PERSONAL_SETTINGS } from '../types';
 import useJoinOrgBootLoader from '../../hooks/joinOrgBootLoader';
 
 type Props = {
@@ -27,7 +22,6 @@ type Props = {
 export const NotificationInviteItem = (props: Props) => {
   const dispatch: AppDispatch = useDispatch();
   const { t } = useTranslation();
-  const changeOrgBootLoader = useChangeOrgBootLoader();
   const joinOrgBootLoader = useJoinOrgBootLoader();
   const personalSettings = useSelector(selectPersonalSettings);
 

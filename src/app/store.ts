@@ -7,7 +7,7 @@ import projectReducer from '../features/proj/projectSlice';
 import kanbanReducer from '../features/kanban/kanbanSlice';
 import orgReducer from '../features/org/orgSliece';
 
-export let store = configureStore({
+export const store = configureStore({
   reducer: {
     auth: authReducer,
     main: mainReducer,
@@ -18,20 +18,6 @@ export let store = configureStore({
     kanban: kanbanReducer,
   },
 });
-
-export const initStore = () => {
-  store = configureStore({
-    reducer: {
-      auth: authReducer,
-      main: mainReducer,
-      org: orgReducer,
-      project: projectReducer,
-      task: taskReducer,
-      calendar: calendarReducer,
-      kanban: kanbanReducer,
-    },
-  });
-};
 
 export type AppDispatch = typeof store.dispatch;
 export type RootState = ReturnType<typeof store.getState>;

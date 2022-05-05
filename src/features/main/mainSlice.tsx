@@ -17,6 +17,9 @@ export const mainSlice = createSlice({
   name: 'main',
   initialState,
   reducers: {
+    initMainState(state, action) {
+      return initialState;
+    },
     setMainComponentName(state, action) {
       state.mainComponentName = action.payload;
     },
@@ -45,6 +48,7 @@ export const mainSlice = createSlice({
 });
 
 export const {
+  initMainState,
   setMainComponentName,
   setNotificationDialogOpen,
   setSettingsMenuOpen,

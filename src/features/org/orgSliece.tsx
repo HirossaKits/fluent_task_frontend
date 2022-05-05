@@ -200,6 +200,9 @@ export const orgSlice = createSlice({
   name: 'org',
   initialState,
   reducers: {
+    initOrgState(state, action) {
+      return initialState;
+    },
     setOrgUser(state, action) {
       state.org_info.org_user = action.payload;
     },
@@ -281,6 +284,7 @@ export const orgSlice = createSlice({
 });
 
 export const {
+  initOrgState,
   setOrgUser,
   setOrgName,
   setEditedOrgName,

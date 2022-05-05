@@ -108,6 +108,9 @@ export const projectSlice = createSlice({
   name: 'project',
   initialState,
   reducers: {
+    initProjectState(state, action) {
+      return initialState;
+    },
     setSelectedProjectId(state, action) {
       state.selectedProjectId = action.payload;
     },
@@ -204,6 +207,7 @@ export const projectSlice = createSlice({
 });
 
 export const {
+  initProjectState,
   setSelectedProjectId,
   setEditedProject,
   setProject,

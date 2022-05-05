@@ -18,13 +18,16 @@ export const calendarSlice = createSlice({
   name: 'calendar',
   initialState: initialState,
   reducers: {
+    initCalendarState(state, action) {
+      return initialState;
+    },
     setYearMonth(state, action) {
       return { ...state, yearMonth: action.payload };
     },
   },
 });
 
-export const { setYearMonth } = calendarSlice.actions;
+export const { initCalendarState, setYearMonth } = calendarSlice.actions;
 
 export const selectYearMonth = (state: RootState) => state.calendar.yearMonth;
 

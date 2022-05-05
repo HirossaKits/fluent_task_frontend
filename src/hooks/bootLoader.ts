@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../app/store';
-import { initStore } from '../app/store';
 import {
   fetchAsyncGetLoginUser,
   fetchAsyncGetPersonalSettings,
@@ -16,10 +15,12 @@ import {
   fetchAsyncGetTasks,
   fetchAsyncGetTaskCategory,
 } from '../features/task/taskSlice';
+import useInitalizeState from './initializeState';
 
 export default function useBootLoader() {
   const history = useHistory();
   const dispatch: AppDispatch = useDispatch();
+  const initializeState = useInitalizeState;
   return useCallback(() => {
     const fetchBootLoader = async () => {
       const res = await dispatch(fetchAsyncGetLoginUser());
@@ -33,7 +34,7 @@ export default function useBootLoader() {
           await dispatch(fetchAsycnGetInvite());
         }
       } else {
-        initStore();
+        initializeState();
         localStorage.removeItem('localJWT');
         history.push('/login');
       }
