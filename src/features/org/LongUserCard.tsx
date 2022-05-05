@@ -27,7 +27,6 @@ import {
   selectPersonalSettings,
   setPersonalSettings,
   fetchAsyncUpdateSettings,
-  fetchAsyncGetLoginUser,
 } from '../auth/authSlice';
 import {
   selectOrgInfo,

@@ -12,11 +12,11 @@ import {
   fetchAsyncGetLoginUser,
   fetchAsyncUpdateSettings,
   selectPersonalSettings,
-  setPersonalSettings,
 } from '../auth/authSlice';
 import { setMainComponentName, setNotificationDialogOpen } from './mainSlice';
 import { fetchAsyncUpdateInvite } from '../org/orgSliece';
 import { PERSONAL_SETTINGS } from '../types';
+import useJoinOrgBootLoader from '../../hooks/joinOrgBootLoader';
 
 type Props = {
   inviteId: string;
@@ -28,40 +28,29 @@ export const NotificationInviteItem = (props: Props) => {
   const dispatch: AppDispatch = useDispatch();
   const { t } = useTranslation();
   const changeOrgBootLoader = useChangeOrgBootLoader();
+  const joinOrgBootLoader = useJoinOrgBootLoader();
   const personalSettings = useSelector(selectPersonalSettings);
-
-  const updateInvite = async (data: { invite_id: string; result: boolean }) => {
-    const res = await dispatch(fetchAsyncUpdateInvite(data));
-    if (fetchAsyncUpdateInvite.fulfilled.match(res)) {
-      await dispatch(fetchAsyncGetLoginUser());
-    }
-  };
-
-  const updateSettings = async (settings: PERSONAL_SETTINGS) => {
-    const res = await dispatch(fetchAsyncUpdateSettings(settings));
-    if (fetchAsyncUpdateSettings.fulfilled.match(res)) {
-      const res = await dispatch(fetchAsyncGetLoginUser());
-      if (fetchAsyncGetLoginUser.fulfilled.match(res)) {
-        changeOrgBootLoader();
-        dispatch(setNotificationDialogOpen(false));
-        dispatch(setMainComponentName('Org'));
-      }
-    }
-  };
 
   const handleClick = (approval: boolean) => {
     const data = { invite_id: props.inviteId, result: approval };
-    updateInvite(data).then(() => {
-      // 承認した場合はその組織を表示させる
-      if (approval) {
-        const settings = {
-          ...personalSettings,
-          private_mode: false,
-          selected_org_id: props.orgId,
-        };
-        updateSettings(settings);
+
+    const updateInvite = async () => {
+      const res = await dispatch(fetchAsyncUpdateInvite(data));
+      if (fetchAsyncUpdateInvite.fulfilled.match(res)) {
+        // 承認した場合はその組織を表示させる
+        if (approval) {
+          const settings = {
+            ...personalSettings,
+            private_mode: false,
+            selected_org_id: props.orgId,
+          };
+          joinOrgBootLoader(settings);
+        }
       }
-    });
+    };
+    updateInvite();
+    dispatch(setNotificationDialogOpen(false));
+    dispatch(setMainComponentName('Org'));
   };
 
   return (

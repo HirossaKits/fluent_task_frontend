@@ -12,12 +12,14 @@ import Box from '@mui/material/Box';
 import EditIcon from '@mui/icons-material/Edit';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { AppDispatch, initStore } from '../../app/store';
 import {
   selectProfileMenuOpen,
   setProfileMenuOpen,
   setProfileDialogOpen,
+  setMainComponentName,
 } from './mainSlice';
-import { selectLoginUserInfo, setPersonalSettings } from '../auth/authSlice';
+import { selectLoginUserInfo, selectPersonalSettings } from '../auth/authSlice';
 import {
   setOrgDialogOpen,
   setEditedOrgName,
@@ -26,6 +28,7 @@ import {
 import CommonAvatar from '../../components/CommonAvatar';
 import ProfileDialog from './ProfileDialog';
 import OrgDialog from '../org/OrgDialog';
+import useJoinOrgBootLoader from '../../hooks/joinOrgBootLoader';
 import useMessage from '../../hooks/message';
 
 type Props = {
@@ -65,17 +68,21 @@ const ProfileMenu: React.FC<Props> = (props) => {
   };
 
   const history = useHistory();
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const { t } = useTranslation();
+  const joinOrgBootLoader = useJoinOrgBootLoader();
+  const message = useMessage();
   const profileMenuOpen = useSelector(selectProfileMenuOpen);
   const loginUserInfo = useSelector(selectLoginUserInfo);
-  const message = useMessage();
+  const personalSettings = useSelector(selectPersonalSettings);
 
   const handleEditProfileClick = () => {
     dispatch(setProfileDialogOpen(true));
   };
 
   const handleLogoutClick = () => {
+    dispatch(setProfileMenuOpen(false));
+    initStore();
     localStorage.removeItem('localJWT');
     history.push('/login');
   };
@@ -90,14 +97,28 @@ const ProfileMenu: React.FC<Props> = (props) => {
   };
 
   const handleRegisterOrgClick = () => {
-    dispatch(fetchAsyncRegisterPublicOrg());
-    dispatch(setPersonalSettings);
+    const createOrg = async () => {
+      const res = await dispatch(fetchAsyncRegisterPublicOrg());
+      if (fetchAsyncRegisterPublicOrg.fulfilled.match(res)) {
+        const settings = {
+          ...personalSettings,
+          private_mode: false,
+          selected_org_id: res.payload.org_id,
+        };
+        joinOrgBootLoader(settings);
+      }
+    };
+    createOrg();
     dispatch(setOrgDialogOpen(false));
+    dispatch(setProfileMenuOpen(false));
+    dispatch(setMainComponentName('Org'));
   };
 
   const handleClose = () => {
     dispatch(setProfileMenuOpen(false));
   };
+
+  console.log('profileMenuOpen', profileMenuOpen);
 
   return (
     <>

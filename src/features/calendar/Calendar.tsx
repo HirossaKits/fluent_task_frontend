@@ -102,6 +102,8 @@ const Calendar = () => {
       margin-left: 12px;
       text-align: left;
       & .plus {
+        margin-top: -3px;
+        font-size: 15px;
         margin-left: 12px;
         color: rgba(0, 0, 0, 0);
       }

@@ -60,50 +60,6 @@ const SettingsMenu: React.FC<Props> = (props) => {
     dispatch(fetchAsyncUpdateSettings(settings));
   }, []);
 
-  // useEffect(() => {
-  //   console.log('useEffect!');
-  //   // privateモードの場合は何もしない
-  //   if (personalSettings.private_mode) {
-  //     console.log('???');
-  //     return;
-  //   }
-  //   console.log('useEffect2!');
-
-  //   const publicOrgId = loginUserInfo.joined_org.reduce(
-  //     (pre: string[], cur) => (!cur.is_private ? [...pre, cur.org_id] : pre),
-  //     []
-  //   );
-  //   console.log('publicOrgId', publicOrgId);
-
-  //   // public な組織に所属していない場合
-  //   if (!publicOrgId.length) {
-  //     const privateOrgId = loginUserInfo.joined_org?.find(
-  //       (org) => org.is_private
-  //     )?.org_id;
-  //     updateSettings({
-  //       ...personalSettings,
-  //       private_mode: true,
-  //       selected_org_id: privateOrgId,
-  //     });
-  //     changeOrgBootLoad();
-  //   }
-
-  //   console.log('selectedOrgId', personalSettings.selected_org_id);
-  //   // settings の selected_org_id に所属している場合
-  //   if (publicOrgId.includes(personalSettings.selected_org_id)) {
-  //     return;
-  //   }
-
-  //   // settings の selected_org_id に所属していない場合
-  //   else {
-  //     updateSettings({
-  //       ...personalSettings,
-  //       selected_org_id: publicOrgId[0],
-  //     });
-  //     changeOrgBootLoad();
-  //   }
-  // }, [dispatch]);
-
   const handleInputChange = (target: TARGET) => {
     const settings = { ...personalSettings, [target.name]: target.value };
     updateSettings(settings);

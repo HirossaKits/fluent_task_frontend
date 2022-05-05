@@ -89,7 +89,7 @@ const Auth: React.FC = () => {
 
   const history = useHistory();
   const dispatch: AppDispatch = useDispatch();
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [mode, setMode] = useState(MODE.Login);
   const [regInfo, setRegInfo] = useState<SIGNUP_INFO>(initRegInfo);
 
@@ -114,8 +114,9 @@ const Auth: React.FC = () => {
     }
   };
 
-  const signin = async (e: any) => {
+  const signin = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
+    e.stopPropagation();
     let cred: SIGNIN_INFO = regInfo;
     const res = await dispatch(fetchAsyncSignin(cred));
     if (fetchAsyncSignin.fulfilled.match(res)) {
@@ -123,7 +124,7 @@ const Auth: React.FC = () => {
     }
   };
 
-  const signup = async (e: any) => {
+  const signup = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     const res = await dispatch(fetchAsyncSignup(regInfo));
     if (fetchAsyncSignup.fulfilled.match(res)) {
@@ -132,7 +133,7 @@ const Auth: React.FC = () => {
   };
 
   const handleDemoClick = async () => {
-    const id = Math.random() * 9 + 1;
+    const id = Math.floor(Math.random() * 10) + 1;
     const res = await dispatch(
       fetchAsyncSignin({
         email: `demo${id}@gmail.com`,

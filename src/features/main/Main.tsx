@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
 import { useTranslation } from 'react-i18next';
@@ -242,11 +241,11 @@ const Main = () => {
     dispatch(setNotificationDialogOpen(true));
   };
 
-  const handleSettingsOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleSettingsClick = () => {
     dispatch(setSettingsMenuOpen(true));
   };
 
-  const handleProfileOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
     dispatch(setProfileMenuOpen(true));
   };
 
@@ -286,10 +285,10 @@ const Main = () => {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <IconButton ref={settingsAnchorEl} onClick={handleSettingsOpen}>
+            <IconButton ref={settingsAnchorEl} onClick={handleSettingsClick}>
               <SettingsIcon />
             </IconButton>
-            <IconButton ref={profileAnchorEl} onClick={handleProfileOpen}>
+            <IconButton ref={profileAnchorEl} onClick={handleProfileClick}>
               <AccountCircle />
             </IconButton>
           </Box>

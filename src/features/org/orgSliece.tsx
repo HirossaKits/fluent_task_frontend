@@ -266,6 +266,13 @@ export const orgSlice = createSlice({
         org_info: action.payload,
       };
     });
+    // 組織を追加
+    // builder.addCase(fetchAsyncRegisterPublicOrg.fulfilled, (state, action) => {
+    //   return {
+    //     ...state,
+    //     org_info: action.payload,
+    //   };
+    // });
   },
 });
 

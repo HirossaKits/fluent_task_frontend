@@ -122,7 +122,7 @@
   "projectDialog": {
     "addProject": "プロジェクトを作成",
     "editProject": "プロジェクトを編集",
-    "name": "プロジェクト管理者",
+    "name": "プロジェクト名",
     "description": "説明",
     "admin": "プロジェクト管理者",
     "member": "プロジェクトメンバー",
