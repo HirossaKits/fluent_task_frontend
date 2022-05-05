@@ -118,8 +118,6 @@ const ProfileMenu: React.FC<Props> = (props) => {
     dispatch(setProfileMenuOpen(false));
   };
 
-  console.log('profileMenuOpen', profileMenuOpen);
-
   return (
     <>
       <Popover

@@ -28,6 +28,7 @@ const Org = () => {
   const theme = useTheme();
   const styles = {
     wrap: css`
+      height: calc(100vh - 120px);
       display: flex;
       flex-wrap: wrap;
     `,
@@ -58,6 +59,12 @@ const Org = () => {
       padding: 10px;
       margin: 5px 20px;
       color: ${theme.palette.primary.main};
+    `,
+    cardAria: css`
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
     `,
     textfield: css`
       width: 17ch;
@@ -124,7 +131,7 @@ const Org = () => {
         </div>
       </Box>
 
-      <Box>
+      <Box css={styles.cardAria}>
         {sortUser(orgInfo.org_user)?.map((user) => (
           <LongUserCard
             user={user}
