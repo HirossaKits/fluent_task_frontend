@@ -96,7 +96,9 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
     setDrag(true);
     e.dataTransfer.setData(
       'text/plain',
-      `${props.task.status}/${props.task.task_id}/${props.task.actual_startdate}`
+      `${props.task.status}/${props.task.task_id}/${
+        props.task.actual_startdate ?? ''
+      }`
     );
     e.dataTransfer.effectAllowed = 'move';
     e.currentTarget.style.opacity = '0.5';
@@ -150,7 +152,7 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
       >
         <div css={styles.titleWrap}>
           <Box
-            component='div'
+            component="div"
             sx={{
               textOverflow: 'ellipsis',
               overflow: 'hidden',
@@ -171,7 +173,7 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
         </Box>
         <Box css={styles.dot}>
           <IconButton onClick={handleDotClick}>
-            <MoreVertIcon fontSize='small' />
+            <MoreVertIcon fontSize="small" />
           </IconButton>
         </Box>
       </Card>
@@ -186,7 +188,7 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
       >
         <MenuItem onClick={handleDetailClick}>
           <ListItemIcon>
-            <FeedIcon fontSize='small' />
+            <FeedIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText css={styles.menuItem}>
             {t('kanban.detail')}
@@ -194,13 +196,13 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
         </MenuItem>
         <MenuItem onClick={handleEditClick}>
           <ListItemIcon>
-            <EditIcon fontSize='small' />
+            <EditIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText css={styles.menuItem}>{t('kanban.edit')}</ListItemText>
         </MenuItem>
         <MenuItem onClick={handleDeleteClick}>
           <ListItemIcon>
-            <DeleteIcon fontSize='small' />
+            <DeleteIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText css={styles.menuItem}>
             {t('kanban.remove')}
