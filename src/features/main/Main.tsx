@@ -48,7 +48,10 @@ import {
   setProjectDialogOpen,
   setProjectDialogMode,
 } from '../proj/projectSlice';
-import { fetchAsyncGetTasks } from '../task/taskSlice';
+import {
+  fetchAsyncGetTaskCategory,
+  fetchAsyncGetTasks,
+} from '../task/taskSlice';
 import ProjectDialog from '../proj/ProjectDialog';
 import NotificationMenu from './NotificationMenu';
 import SettingsMenu from './SettingsMenu';
@@ -221,6 +224,7 @@ const Main = () => {
   const handleTabChange = (event: React.SyntheticEvent, newValue: string) => {
     if (newValue !== 'new_project') {
       dispatch(setSelectedProjectId(newValue));
+      dispatch(fetchAsyncGetTaskCategory());
       dispatch(fetchAsyncGetTasks());
     }
   };
@@ -262,17 +266,17 @@ const Main = () => {
     <div css={styles.wrap}>
       <AppBar
         css={drawerOpen ? styles.appBarShift : styles.appBar}
-        position="fixed"
+        position='fixed'
       >
-        <Toolbar css={styles.toolbar} disableGutters variant="dense">
+        <Toolbar css={styles.toolbar} disableGutters variant='dense'>
           <IconButton
             css={drawerOpen ? styles.menuIconHide : styles.menuIcon}
-            edge="start"
+            edge='start'
             onClick={handleDrawerOpen}
           >
             <AppsIcon />
           </IconButton>
-          <Typography css={styles.title} variant="h5" noWrap>
+          <Typography css={styles.title} variant='h5' noWrap>
             Fluent Task ( Beta )
           </Typography>
           <Box css={styles.iconBox}>
@@ -281,7 +285,7 @@ const Main = () => {
               ref={notificationAnchorEl}
               onClick={handleNotificationClick}
             >
-              <Badge badgeContent={inviteCount} color="secondary">
+              <Badge badgeContent={inviteCount} color='secondary'>
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -297,8 +301,8 @@ const Main = () => {
       <Drawer
         css={drawerOpen ? styles.drawerOpen : styles.drawerClose}
         className={'1gxenss-drawerOpen'}
-        variant="permanent"
-        anchor="left"
+        variant='permanent'
+        anchor='left'
         open={drawerOpen}
       >
         <div css={styles.drawerHeader}>
@@ -375,8 +379,8 @@ const Main = () => {
               <Tabs
                 value={selectedProjectId === '' ? 0 : selectedProjectId}
                 onChange={handleTabChange}
-                variant="scrollable"
-                scrollButtons="auto"
+                variant='scrollable'
+                scrollButtons='auto'
               >
                 {projects.map((proj, idx) => (
                   <Tab
@@ -392,14 +396,14 @@ const Main = () => {
                     icon={
                       <>
                         <AddIcon css={styles.addIcon} />
-                        <Typography css={styles.newProject} variant="body2">
+                        <Typography css={styles.newProject} variant='body2'>
                           {t('main.addProject')}
                         </Typography>
                       </>
                     }
-                    iconPosition="start"
+                    iconPosition='start'
                     style={{ margin: 0, padding: 0 }}
-                    value="new_project"
+                    value='new_project'
                     onClick={handleNewProjectTabClick}
                   />
                 )}
