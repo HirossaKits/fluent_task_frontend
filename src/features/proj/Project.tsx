@@ -237,6 +237,7 @@ const Project = () => {
                 css={styles.description}
                 variant="subtitle1"
                 component="div"
+                align="left"
               >
                 {project.description}
               </Typography>
