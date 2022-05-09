@@ -200,24 +200,24 @@ const Project = () => {
       {!Object.is(project, emptyProject) && (
         <>
           <Stack
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="flex-start"
+            direction='row'
+            justifyContent='flex-start'
+            alignItems='flex-start'
             spacing={3}
           >
             <Stack
               css={styles.stack}
-              direction="column"
-              justifyContent="flex-start"
-              alignItems="flex-start"
+              direction='column'
+              justifyContent='flex-start'
+              alignItems='flex-start'
             >
               <Box css={styles.titleWrap}>
-                <Typography variant="h5" component="div">
+                <Typography variant='h5' component='div'>
                   {project.project_name}
                 </Typography>
                 <CommonTooltip title={t('project.edit')}>
                   <IconButton
-                    aria-label="edit project"
+                    aria-label='edit project'
                     css={styles.editIcon}
                     onClick={handleEditClick}
                   >
@@ -226,7 +226,7 @@ const Project = () => {
                 </CommonTooltip>
                 <CommonTooltip title={t('project.delete')}>
                   <IconButton
-                    aria-label="delete project"
+                    aria-label='delete project'
                     onClick={handleDeleteClick}
                   >
                     <DeleteIcon />
@@ -235,16 +235,16 @@ const Project = () => {
               </Box>
               <Typography
                 css={styles.description}
-                variant="subtitle1"
-                component="div"
+                variant='subtitle1'
+                component='div'
               >
                 {project.description}
               </Typography>
               <Card css={styles.userCard}>
                 <Typography
                   css={styles.listTitle}
-                  variant="subtitle1"
-                  component="div"
+                  variant='subtitle1'
+                  component='div'
                 >
                   {t('project.admin')}
                 </Typography>
@@ -270,8 +270,8 @@ const Project = () => {
               <Card css={styles.userCard}>
                 <Typography
                   css={styles.listTitle}
-                  variant="subtitle1"
-                  component="div"
+                  variant='subtitle1'
+                  component='div'
                 >
                   {t('project.member')}
                 </Typography>
@@ -297,9 +297,9 @@ const Project = () => {
             </Stack>
             <Stack
               css={styles.graphArea}
-              direction="column"
-              justifyContent="center"
-              alignItems="flex-start"
+              direction='column'
+              justifyContent='center'
+              alignItems='flex-start'
             >
               <div css={styles.lineChartWrapper}>
                 <Line

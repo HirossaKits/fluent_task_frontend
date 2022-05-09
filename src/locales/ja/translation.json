@@ -15,7 +15,7 @@
     "edit": "編集",
     "cancel": "キャンセル",
     "remove": "削除"
-    },
+  },
   "table": {
     "add": "タスクを登録",
     "edit": "タスクを編集",
@@ -104,7 +104,7 @@
   },
   "orgDialog": {
     "edit": "グループを編集",
-    "register":"グループを作成",
+    "register": "グループを作成",
     "orgName": "グループ名"
   },
   "inviteDialog": {
@@ -165,6 +165,9 @@
     "updateAt": "更新日時",
     "requireTaskName": "タスク名を入力してください。",
     "requireAssigned": "担当者を選択してください。"
+  },
+  "taskCategoryDialog": {
+    "categorySetting": "カテゴリー設定"
   },
   "kanban": {
     "assigned": "担当者",
