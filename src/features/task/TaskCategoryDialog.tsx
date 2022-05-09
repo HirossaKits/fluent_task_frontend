@@ -15,6 +15,7 @@ import {
 import CommonDialog from '../../components/CommonDialog';
 import CommonTextField from '../../components/CommonTextField';
 import CommonTooltip from '../../components/CommonTooltip';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   open: boolean;
@@ -33,6 +34,7 @@ const TaskCategoryDialog = (props: Props) => {
   };
 
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const selectedProjectId = useSelector(selectSelectedProjectId);
   const taskCategory = useSelector(selectTaskCategory);
   const [addedCategory, setAddedCategory] = useState('');
@@ -58,7 +60,7 @@ const TaskCategoryDialog = (props: Props) => {
     <CommonDialog
       open={props.open}
       onClose={handleClose}
-      title='カテゴリー設定'
+      title={t('taskCategoryDialog.categorySetting')}
       mode='display'
       maxWidth='xs'
     >

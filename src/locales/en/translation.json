@@ -15,7 +15,7 @@
     "edit": "Edit",
     "cancel": "Cancel",
     "remove": "Remove"
-    },
+  },
   "table": {
     "add": "Add task",
     "edit": "Edit task",
@@ -164,6 +164,9 @@
     "updateAt": "Updated at",
     "requireTaskName": "Please enter the task name.",
     "requireAssigned": "Please select a assigned person."
+  },
+  "taskCategoryDialog": {
+    "categorySetting": "Category Setting"
   },
   "kanban": {
     "assigned": "Assigned Person",
