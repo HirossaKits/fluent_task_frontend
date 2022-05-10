@@ -61,22 +61,22 @@ const TaskCategoryDialog = (props: Props) => {
       open={props.open}
       onClose={handleClose}
       title={t('taskCategoryDialog.categorySetting')}
-      mode='display'
-      maxWidth='xs'
+      mode="display"
+      maxWidth="xs"
     >
       <>
-        <Stack direction='row' justifyContent='flex-start'>
+        <Stack direction="row" justifyContent="flex-start">
           <CommonTextField
-            name=''
+            name=""
             value={addedCategory}
             onChange={handleAddChange}
-            width='260px'
+            width="260px"
           />
           <Box css={styles.span}></Box>
           <Box css={styles.icon}>
-            <CommonTooltip title='追加'>
+            <CommonTooltip title={t('taskCategoryDialog.add')}>
               <IconButton
-                aria-label='delete task'
+                aria-label="delete task"
                 onClick={handleAddClick}
                 disabled={
                   !addedCategory ||

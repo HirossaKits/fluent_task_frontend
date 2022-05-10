@@ -10,7 +10,6 @@ import { initTaskState } from '../features/task/taskSlice';
 export default function useInitalizeState() {
   const dispatch = useDispatch();
   return () => {
-    console.log('why');
     dispatch(initMainState('Org'));
     dispatch(initAuthState({}));
     dispatch(initOrgState({}));

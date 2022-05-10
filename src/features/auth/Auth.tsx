@@ -289,13 +289,7 @@ const Auth: React.FC = () => {
           </Box>
           <Box>
             <Typography variant="body2" color="textSecondary" align="center">
-              {/* {"Copyright © "} */}
-              {'Copyright   '}
-              <Link color="inherit" href="">
-                Hirohisa Kitsuka
-              </Link>{' '}
-              {new Date().getFullYear()}
-              {'.'}
+              © Copyright {new Date().getFullYear()} Hirohisa Kitsuka.
             </Typography>
           </Box>
         </Stack>

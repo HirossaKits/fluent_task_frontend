@@ -167,7 +167,10 @@
     "requireAssigned": "担当者を選択してください。"
   },
   "taskCategoryDialog": {
-    "categorySetting": "カテゴリー設定"
+    "categorySetting": "カテゴリー設定",
+    "add": "追加",
+    "save": "保存",
+    "delete": "削除"
   },
   "kanban": {
     "assigned": "担当者",

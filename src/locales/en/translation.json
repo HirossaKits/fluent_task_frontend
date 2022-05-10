@@ -166,7 +166,10 @@
     "requireAssigned": "Please select a assigned person."
   },
   "taskCategoryDialog": {
-    "categorySetting": "Category Setting"
+    "categorySetting": "Category Setting",
+    "add": "Add",
+    "save": "Save",
+    "delete": "Delete"
   },
   "kanban": {
     "assigned": "Assigned Person",

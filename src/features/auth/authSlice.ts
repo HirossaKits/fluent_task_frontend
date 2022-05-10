@@ -29,7 +29,7 @@ const userInfo: LOGIN_USER_INFO = {
 };
 
 const initialState: AUTH = {
-  lang: 'ja',
+  lang: 'en',
   darkmode: Boolean(localStorage.getItem('darkmode')),
   loginUserInfo: userInfo,
   editedProf: {

@@ -5,7 +5,6 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import CheckIcon from '@mui/icons-material/Check';
-import SaveIcon from '@mui/icons-material/Save';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CommonTextField from '../../components/CommonTextField';
 import CommonTooltip from '../../components/CommonTooltip';
@@ -14,6 +13,7 @@ import {
   fetchAsyncDeleteTaskCategory,
   fetchAsyncUpdateTaskCategory,
 } from '../task/taskSlice';
+import { useTranslation } from 'react-i18next';
 
 export type Props = {
   task_category_id: string;
@@ -32,6 +32,7 @@ const TaskCategoryItem: React.FC<Props> = (props) => {
   };
 
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [edited, setEdited] = useState(props.task_category_name);
 
   const handleChange = (target: TARGET) => {
@@ -61,7 +62,7 @@ const TaskCategoryItem: React.FC<Props> = (props) => {
       <Box css={styles.span}></Box>
       {edited && props.task_category_name !== edited && (
         <Box css={styles.icon}>
-          <CommonTooltip title="保存">
+          <CommonTooltip title={t('taskCategoryDialog.save')}>
             <IconButton aria-label="edit task" onClick={handleEditClick}>
               <CheckIcon />
             </IconButton>
@@ -69,7 +70,7 @@ const TaskCategoryItem: React.FC<Props> = (props) => {
         </Box>
       )}
       <Box css={styles.icon}>
-        <CommonTooltip title="削除">
+        <CommonTooltip title={t('taskCategoryDialog.delete')}>
           <IconButton aria-label="delete task" onClick={handleDeleteClick}>
             <DeleteIcon />
           </IconButton>
