@@ -362,7 +362,9 @@ const Calendar = () => {
                     <Typography
                       variant="body2"
                       color={theme.palette.text.disabled}
-                    >{`その他${Math.max(...ctx.layer) - 3}件`}</Typography>
+                    >{`${t('calendar.otherPre')}${
+                      Math.max(...ctx.layer) - 3
+                    }${t('calendar.otherPost')}`}</Typography>
                   </Grid>
                 )}
               </Stack>
