@@ -15,12 +15,10 @@ import {
   fetchAsyncGetTasks,
   fetchAsyncGetTaskCategory,
 } from '../features/task/taskSlice';
-import useInitalizeState from './initializeState';
 
 export default function useBootLoader() {
   const history = useHistory();
   const dispatch: AppDispatch = useDispatch();
-  const initializeState = useInitalizeState;
   return useCallback(() => {
     const fetchBootLoader = async () => {
       const res = await dispatch(fetchAsyncGetLoginUser());
@@ -34,7 +32,6 @@ export default function useBootLoader() {
           await dispatch(fetchAsycnGetInvite());
         }
       } else {
-        initializeState();
         localStorage.removeItem('localJWT');
         history.push('/login');
       }

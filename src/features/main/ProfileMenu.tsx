@@ -28,6 +28,7 @@ import CommonAvatar from '../../components/CommonAvatar';
 import ProfileDialog from './ProfileDialog';
 import useMessage from '../../hooks/message';
 import useInitializeState from '../../hooks/initializeState';
+import OrgDialog from '../org/OrgDialog';
 
 type Props = {
   anchorEl: React.MutableRefObject<null>;
@@ -149,6 +150,7 @@ const ProfileMenu: React.FC<Props> = (props) => {
         </MenuList>
       </Popover>
       <ProfileDialog />
+      <OrgDialog />
     </>
   );
 };
