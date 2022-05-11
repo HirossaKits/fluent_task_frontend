@@ -11,7 +11,7 @@ export default function usePorgress() {
         if (actualDate) {
           progress =
             (sDate.getTime() - parseDate(actualDate).getTime()) / 86400000;
-        } else {
+        } else if (sDate < getToday()) {
           progress = (sDate.getTime() - getToday().getTime()) / 86400000;
         }
       }
