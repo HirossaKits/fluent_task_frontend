@@ -108,7 +108,8 @@ export type MAIN_COMPONENT_NAME =
   | 'Proj'
   | 'List'
   | 'Kanban'
-  | 'Calendar';
+  | 'Calendar'
+  | 'GanttChart';
 
 export interface MAIN_STATE {
   mainComponentName: MAIN_COMPONENT_NAME;

@@ -64,6 +64,7 @@ import Calendar from '../calendar/Calendar';
 import CommonMessageBar from '../../components/CommonMessageBar';
 import DarkModeSwitch from '../../components/DarkModeSwitch';
 import useBootRoader from '../../hooks/bootLoader';
+import GanttChart from '../ganttChart/GanttChart';
 
 const Main = () => {
   const theme = useTheme();
@@ -364,6 +365,16 @@ const Main = () => {
               primary={t('main.calendar')}
             />
           </ListItem>
+          <ListItem
+            button
+            css={styles.drawerIcon}
+            onClick={() => handleVirticalMenuClick('GanttChart')}
+          >
+            <ListItemIcon>
+              <EventNoteIcon />
+            </ListItemIcon>
+            <ListItemText css={styles.drawerText} primary={'ガントチャート'} />
+          </ListItem>
         </List>
       </Drawer>
       <div css={styles.contentWrap}>
@@ -415,6 +426,7 @@ const Main = () => {
           {mainComponentName === 'List' && <Task />}
           {mainComponentName === 'Kanban' && <Kanban />}
           {mainComponentName === 'Calendar' && <Calendar />}
+          {mainComponentName === 'GanttChart' && <GanttChart />}
         </div>
         <NotificationMenu anchorEl={notificationAnchorEl} />
         <SettingsMenu anchorEl={settingsAnchorEl} />
