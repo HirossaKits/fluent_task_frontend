@@ -275,28 +275,16 @@ export interface CALENDAR_BAR extends TASK {
   other: boolean;
 }
 
-// task_id: string;
-// task_name: string;
-// project_id: string;
-// category_id: null | string;
-// category_name: string;
-// assigned_id: null | string;
-// assigned_name: string;
-// author_id: null | string;
-// author_name: string;
-// status: TASK_STATUS;
-// description: string;
-// estimate_manhour: null | number;
-// actual_manhour: null | number;
-// scheduled_startdate: string;
-// scheduled_enddate: string;
-// actual_startdate: null | string;
-// actual_enddate: null | string;
-// created_at: null | string;
-// update_at: null | string;
-
 export interface CALENDAR_BAR_STYLE {
   topPosition: number;
   height: number;
   span: number;
+}
+
+/*ganttChart*/
+
+export interface GANTTCHART_BAR extends TASK {
+  top: string;
+  left: string;
+  width: string;
 }

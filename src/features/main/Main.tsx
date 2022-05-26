@@ -26,6 +26,7 @@ import GroupWorkIcon from '@mui/icons-material/GroupWork';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import ViewWeekIcon from '@mui/icons-material/ViewWeek';
+import WaterfallChartIcon from '@mui/icons-material/WaterfallChart';
 import AddIcon from '@mui/icons-material/Add';
 import { MAIN_COMPONENT_NAME } from '../types';
 import { AppDispatch } from '../../app/store';
@@ -371,7 +372,7 @@ const Main = () => {
             onClick={() => handleVirticalMenuClick('GanttChart')}
           >
             <ListItemIcon>
-              <EventNoteIcon />
+              <WaterfallChartIcon />
             </ListItemIcon>
             <ListItemText css={styles.drawerText} primary={'ガントチャート'} />
           </ListItem>
