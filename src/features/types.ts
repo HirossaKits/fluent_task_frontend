@@ -284,7 +284,12 @@ export interface CALENDAR_BAR_STYLE {
 /*ganttChart*/
 
 export interface GANTTCHART_BAR extends TASK {
-  top: string;
-  left: string;
-  width: string;
+  top: number;
+  left: number;
+  width: number;
+}
+
+export interface GANTTCHART_CELL_STYLE {
+  width: number;
+  height: number;
 }
