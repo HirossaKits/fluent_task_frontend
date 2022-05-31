@@ -14,11 +14,12 @@ import {
   setTaskDialogOpen,
 } from '../task/taskSlice';
 import { parseString, getDateSpan } from '../../util/dateHandler';
-import { GANTTCHART_CELL_STYLE } from '../types';
+import { GANTTCHART_TABLE_STYLE } from '../types';
 
-const cellStyle: GANTTCHART_CELL_STYLE = {
-  width: 16,
-  height: 32,
+const tableStyle: GANTTCHART_TABLE_STYLE = {
+  headerColumnWidth: 300,
+  cellWidth: 16,
+  cellHeight: 32,
 };
 
 const barStyle = {
@@ -29,31 +30,8 @@ const barStyle = {
 };
 
 const GanttChart = () => {
-  const theme = useTheme();
-  const styles = {
-    table: css`
-      border-top: 1px solid;
-      border-left: 1px solid;
-      border-color: ${theme.palette.divider};
-      border-collapse: collapse;
-      th {
-        border-right: 1px solid;
-        border-bottom: 1px solid;
-        border-color: ${theme.palette.divider};
-      }
-      td {
-        border-right: 1px solid;
-        border-bottom: 1px solid;
-        border-color: ${theme.palette.divider};
-        height: ${cellStyle.height}px;
-      }
-    `,
-    taskName: css`
-      width: 1000px;
-    `,
-  };
-
   const dispatch = useDispatch();
+  const theme = useTheme();
   const project = useSelector(selectSelectedProject);
   const tasks = useSelector(selectTasks);
   const createGanttChartBar = useCreateGanttChartBar();
@@ -64,12 +42,12 @@ const GanttChart = () => {
   const days = getDateSpan(endDate, startDate);
 
   const dates = [...Array(days)].map((_, idx) => {
-    const newDate = new Date(startDate.getDate());
+    const newDate = new Date(startDate.getTime());
     newDate.setDate(newDate.getDate() + idx);
-    return parseString(newDate);
+    return newDate;
   });
 
-  const ganttChartBar = createGanttChartBar(project, tasks, cellStyle);
+  const ganttChartBar = createGanttChartBar(project, tasks, tableStyle);
 
   const handleBarClick = (
     e: React.MouseEvent<HTMLElement>,
@@ -84,58 +62,102 @@ const GanttChart = () => {
     }
   };
 
+  const styles = {
+    wrapper: css`
+      position: relative;
+      overflow: auto;
+    `,
+    table: css`
+      width: 10000px;
+      table-layout: fixed;
+      border-top: 1px solid;
+      border-left: 1px solid;
+      border-color: ${theme.palette.divider};
+      border-collapse: collapse;
+      th {
+        border-right: 1px solid;
+        border-bottom: 1px solid;
+        border-color: ${theme.palette.divider};
+        width: ${tableStyle.cellWidth}px;
+        height: ${tableStyle.cellHeight}px;
+      }
+      td {
+        border-right: 1px solid;
+        border-bottom: 1px solid;
+        border-color: ${theme.palette.divider};
+        width: ${tableStyle.cellWidth}px;
+        height: ${tableStyle.cellHeight}px;
+      }
+    `,
+    tableHeaderColumn: css`
+      width: 400px;
+    `,
+    bar: css`
+      white-space: nowrap;
+      display: block;
+      height: ${barStyle.height}px;
+      padding: 0 10px;
+      color: white;
+      background: ${theme.palette.primary.main};
+      position: absolute;
+    `,
+  };
+
   return (
     <>
-      <table css={styles.table}>
-        <tr>
-          <th css={styles.taskName}>
-            <Typography component='div' noWrap>
-              タスク名
-            </Typography>
-          </th>
-          {dates.map((date) => (
-            <th>
-              <Typography>{date}</Typography>
+      <div css={styles.wrapper}>
+        <table css={styles.table}>
+          <tr>
+            <th css={styles.tableHeaderColumn}>
+              <Typography component='div' noWrap>
+                タスク名
+              </Typography>
             </th>
-          ))}
-        </tr>
-        {tasks.map((task) => {
-          return (
-            <tr>
-              <td css={styles.taskName}>
-                <Typography component='div' noWrap align='left'>
-                  {task.task_name}
-                </Typography>
-              </td>
-              {[...Array(days)].map(() => (
-                <td></td>
-              ))}
-            </tr>
-          );
-        })}
-      </table>
-      {ganttChartBar.map((bar) => (
-        <div
-          css={css`
-            top: ${bar.top};
-            left: ${bar.left};
-            width: ${bar.width};
-            cursor: pointer;
-          `}
-          onClick={(e) => handleBarClick(e, bar.task_id)}
-        >
-          <Box
-            component='div'
-            sx={{
-              textOverflow: 'ellipsis',
-              overflow: 'hidden',
-              typography: 'body1',
-            }}
+            {dates.map((date) => (
+              <th>
+                <Typography>{date.getDate()}</Typography>
+              </th>
+            ))}
+          </tr>
+          {tasks.map((task) => {
+            return (
+              <tr>
+                <td css={styles.tableHeaderColumn}>
+                  <Typography component='div' noWrap align='left'>
+                    {task.task_name}
+                  </Typography>
+                </td>
+                {[...Array(days)].map(() => (
+                  <td></td>
+                ))}
+              </tr>
+            );
+          })}
+        </table>
+        {ganttChartBar.map((bar) => (
+          <div
+            css={css`
+              ${styles.bar};
+              top: ${bar.top}px;
+              left: ${bar.left}px;
+              width: ${bar.width}px;
+              cursor: pointer;
+            `}
+            onClick={(e) => handleBarClick(e, bar.task_id)}
           >
-            {bar.task_name}
-          </Box>
-        </div>
-      ))}
+            <Box
+              component='div'
+              sx={{
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                typography: 'body1',
+              }}
+            >
+              {bar.task_name}
+            </Box>
+          </div>
+        ))}
+      </div>
     </>
   );
 };

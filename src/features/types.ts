@@ -289,7 +289,8 @@ export interface GANTTCHART_BAR extends TASK {
   width: number;
 }
 
-export interface GANTTCHART_CELL_STYLE {
-  width: number;
-  height: number;
+export interface GANTTCHART_TABLE_STYLE {
+  headerColumnWidth: number;
+  cellWidth: number;
+  cellHeight: number;
 }

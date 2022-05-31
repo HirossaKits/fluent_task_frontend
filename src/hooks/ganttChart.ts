@@ -3,7 +3,7 @@ import {
   TASK,
   PROJECT,
   GANTTCHART_BAR,
-  GANTTCHART_CELL_STYLE,
+  GANTTCHART_TABLE_STYLE,
 } from '../features/types';
 import { parseDate, getDateSpan } from '../util/dateHandler';
 
@@ -12,33 +12,35 @@ const useCreateGanttChartBar = () => {
     (
       project: PROJECT,
       tasks: TASK[],
-      cellStyle: GANTTCHART_CELL_STYLE
+      tableStyle: GANTTCHART_TABLE_STYLE
     ): GANTTCHART_BAR[] => {
       const projectStartDate = parseDate(project.startdate);
       const projectEndDate = parseDate(project.enddate);
 
-      const 
+      // const tes = tasks.map((task) => ({...task}))
 
-      const sortedTasks = tasks.map((task) => {...task}).sort((a, b) => {
-        const numA = parseDate(a.scheduled_startdate);
-        const numB = parseDate(b.scheduled_startdate);
+      const sortedTasks = tasks
+        .map((task) => ({ ...task }))
+        .sort((a, b) => {
+          const numA = parseDate(a.scheduled_startdate);
+          const numB = parseDate(b.scheduled_startdate);
 
-        if (numA < numB) {
-          return -1;
-        } else if (numA > numB) {
-          return 1;
-        } else {
-          const endA = parseDate(a.scheduled_enddate);
-          const endB = parseDate(b.scheduled_enddate);
-          if (endA < endB) {
-            return 1;
-          } else if (endA > endB) {
+          if (numA < numB) {
             return -1;
+          } else if (numA > numB) {
+            return 1;
           } else {
-            return 0;
+            const endA = parseDate(a.scheduled_enddate);
+            const endB = parseDate(b.scheduled_enddate);
+            if (endA < endB) {
+              return 1;
+            } else if (endA > endB) {
+              return -1;
+            } else {
+              return 0;
+            }
           }
-        }
-      });
+        });
 
       // ガントチャートのバー
       const ganttChartBars: GANTTCHART_BAR[] = sortedTasks.map((task, idx) => {
@@ -56,18 +58,17 @@ const useCreateGanttChartBar = () => {
         }
 
         // span
-        const span = getDateSpan(startDate, endDate) / 86400000 + 1;
+        const span = getDateSpan(startDate, endDate);
 
         // width
-        const width = cellStyle.width * span;
+        const width = tableStyle.cellWidth * span;
 
         // top
-        let top = cellStyle.height * idx;
+        let top = tableStyle.cellHeight * idx;
 
         // left
         let left =
-          cellStyle.width *
-          (getDateSpan(startDate, projectStartDate) / 86400000 + 1);
+          tableStyle.cellWidth * getDateSpan(startDate, projectStartDate);
 
         return {
           ...task,
