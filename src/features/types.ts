@@ -287,10 +287,24 @@ export interface GANTTCHART_BAR extends TASK {
   top: number;
   left: number;
   width: number;
+  startEdge: boolean;
+  endEdge: boolean;
+}
+
+export interface GANTTCHART_BAR_SET {
+  scheduled: GANTTCHART_BAR[];
+  actual: GANTTCHART_BAR[];
 }
 
 export interface GANTTCHART_TABLE_STYLE {
   headerColumnWidth: number;
   cellWidth: number;
   cellHeight: number;
+}
+
+export interface GANTTCHART_BAR_STYLE {
+  topPosition: number;
+  height: number;
+  span: number;
+  roundEdge: number;
 }

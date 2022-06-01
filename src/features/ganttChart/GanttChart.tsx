@@ -14,19 +14,19 @@ import {
   setTaskDialogOpen,
 } from '../task/taskSlice';
 import { parseString, getDateSpan } from '../../util/dateHandler';
-import { GANTTCHART_TABLE_STYLE } from '../types';
+import { GANTTCHART_TABLE_STYLE, GANTTCHART_BAR_STYLE } from '../types';
 
 const tableStyle: GANTTCHART_TABLE_STYLE = {
   headerColumnWidth: 300,
-  cellWidth: 16,
+  cellWidth: 32,
   cellHeight: 32,
 };
 
-const barStyle = {
+const barStyle: GANTTCHART_BAR_STYLE = {
   topPosition: 32,
-  height: 22,
+  height: 12,
   span: 4,
-  roundEdge: 6,
+  roundEdge: 4,
 };
 
 const GanttChart = () => {
@@ -47,7 +47,12 @@ const GanttChart = () => {
     return newDate;
   });
 
-  const ganttChartBar = createGanttChartBar(project, tasks, tableStyle);
+  const ganttChartBar = createGanttChartBar(
+    project,
+    tasks,
+    tableStyle,
+    barStyle
+  );
 
   const handleBarClick = (
     e: React.MouseEvent<HTMLElement>,
@@ -68,37 +73,45 @@ const GanttChart = () => {
       overflow: auto;
     `,
     table: css`
-      width: 10000px;
+      width: ${tableStyle.headerColumnWidth + tableStyle.cellWidth * days}px;
       table-layout: fixed;
       border-top: 1px solid;
       border-left: 1px solid;
-      border-color: ${theme.palette.divider};
+      border-color: ${theme.palette.action.hover};
       border-collapse: collapse;
       th {
         border-right: 1px solid;
         border-bottom: 1px solid;
-        border-color: ${theme.palette.divider};
-        width: ${tableStyle.cellWidth}px;
+        border-color: ${theme.palette.action.hover};
         height: ${tableStyle.cellHeight}px;
       }
       td {
         border-right: 1px solid;
         border-bottom: 1px solid;
-        border-color: ${theme.palette.divider};
-        width: ${tableStyle.cellWidth}px;
+        border-color: ${theme.palette.action.hover};
         height: ${tableStyle.cellHeight}px;
       }
     `,
-    tableHeaderColumn: css`
-      width: 400px;
+    tableColumn: css`
+      width: ${tableStyle.cellWidth}px;
     `,
-    bar: css`
+    tableHeaderColumn: css`
+      width: ${tableStyle.headerColumnWidth}px;
+    `,
+    schedulesBar: css`
       white-space: nowrap;
       display: block;
       height: ${barStyle.height}px;
       padding: 0 10px;
-      color: white;
       background: ${theme.palette.primary.main};
+      position: absolute;
+    `,
+    actualBar: css`
+      white-space: nowrap;
+      display: block;
+      height: ${barStyle.height}px;
+      padding: 0 10px;
+      background: ${theme.palette.divider};
       position: absolute;
     `,
   };
@@ -114,7 +127,7 @@ const GanttChart = () => {
               </Typography>
             </th>
             {dates.map((date) => (
-              <th>
+              <th css={styles.tableColumn}>
                 <Typography>{date.getDate()}</Typography>
               </th>
             ))}
@@ -128,19 +141,26 @@ const GanttChart = () => {
                   </Typography>
                 </td>
                 {[...Array(days)].map(() => (
-                  <td></td>
+                  <td css={styles.tableColumn}></td>
                 ))}
               </tr>
             );
           })}
         </table>
-        {ganttChartBar.map((bar) => (
+        {ganttChartBar.scheduled.map((bar) => (
           <div
             css={css`
-              ${styles.bar};
+              ${styles.schedulesBar};
               top: ${bar.top}px;
               left: ${bar.left}px;
               width: ${bar.width}px;
+              border-radius: ${!bar.startEdge && !bar.endEdge
+                ? '0px'
+                : bar.startEdge && !bar.endEdge
+                ? `${barStyle.roundEdge}px 0px 0px ${barStyle.roundEdge}px`
+                : !bar.startEdge && bar.endEdge
+                ? `0px ${barStyle.roundEdge}px ${barStyle.roundEdge}px 0px`
+                : `${barStyle.roundEdge}px`};
               cursor: pointer;
             `}
             onClick={(e) => handleBarClick(e, bar.task_id)}
@@ -152,9 +172,35 @@ const GanttChart = () => {
                 overflow: 'hidden',
                 typography: 'body1',
               }}
-            >
-              {bar.task_name}
-            </Box>
+            ></Box>
+          </div>
+        ))}
+        {ganttChartBar.actual.map((bar) => (
+          <div
+            css={css`
+              ${styles.actualBar};
+              top: ${bar.top}px;
+              left: ${bar.left}px;
+              width: ${bar.width}px;
+              border-radius: ${!bar.startEdge && !bar.endEdge
+                ? '0px'
+                : bar.startEdge && !bar.endEdge
+                ? `${barStyle.roundEdge}px 0px 0px ${barStyle.roundEdge}px`
+                : !bar.startEdge && bar.endEdge
+                ? `0px ${barStyle.roundEdge}px ${barStyle.roundEdge}px 0px`
+                : `${barStyle.roundEdge}px`};
+              cursor: pointer;
+            `}
+            onClick={(e) => handleBarClick(e, bar.task_id)}
+          >
+            <Box
+              component='div'
+              sx={{
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                typography: 'body1',
+              }}
+            ></Box>
           </div>
         ))}
       </div>
