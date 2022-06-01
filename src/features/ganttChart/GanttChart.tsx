@@ -98,23 +98,32 @@ const GanttChart = () => {
     tableHeaderColumn: css`
       width: ${tableStyle.headerColumnWidth}px;
     `,
-    schedulesBar: css`
-      white-space: nowrap;
-      display: block;
-      height: ${barStyle.height}px;
-      padding: 0 10px;
-      background: ${theme.palette.primary.main};
-      position: absolute;
-    `,
     actualBar: css`
       white-space: nowrap;
       display: block;
       height: ${barStyle.height}px;
       padding: 0 10px;
-      background: ${theme.palette.divider};
+      background-color: ${theme.palette.primary.main};
+      position: absolute;
+    `,
+    scheduledBar: css`
+      white-space: nowrap;
+      display: block;
+      height: ${barStyle.height}px;
+      padding: 0 10px;
+      border: solid 2px ${theme.palette.primary.dark};
+      background: repeating-linear-gradient(
+        45deg,
+        ${theme.palette.primary.dark},
+        ${theme.palette.primary.dark} 2px,
+        ${theme.palette.background.default} 0,
+        ${theme.palette.background.default} 6px
+      );
       position: absolute;
     `,
   };
+
+  console.log(ganttChartBar);
 
   return (
     <>
@@ -150,7 +159,7 @@ const GanttChart = () => {
         {ganttChartBar.scheduled.map((bar) => (
           <div
             css={css`
-              ${styles.schedulesBar};
+              ${styles.scheduledBar};
               top: ${bar.top}px;
               left: ${bar.left}px;
               width: ${bar.width}px;

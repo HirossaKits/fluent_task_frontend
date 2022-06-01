@@ -98,9 +98,15 @@ const useCreateGanttChartBar = () => {
           let startDate = parseDate(task.actual_startdate);
           let endDate = parseDate(task.actual_enddate);
 
-          if (projectEndDate.getTime() < projectStartDate.getTime()) {
+          if (
+            parseDate(task.actual_enddate).getTime() <
+              projectStartDate.getTime() ||
+            projectEndDate.getTime() <
+              parseDate(task.actual_startdate).getTime() ||
+            projectEndDate.getTime() <
+              parseDate(task.actual_startdate).getTime()
+          ) {
             return undefined;
-            // bar.endEdge = false;
           }
 
           // プロジェクトの期間をオーバーする場合、プロジェクトの開始日と終了日に合わせる。
