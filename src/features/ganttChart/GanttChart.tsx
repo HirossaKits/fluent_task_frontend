@@ -15,6 +15,8 @@ import {
 } from '../task/taskSlice';
 import { parseString, getDateSpan } from '../../util/dateHandler';
 import { GANTTCHART_TABLE_STYLE, GANTTCHART_BAR_STYLE } from '../types';
+import CommonAvatar from '../../components/CommonAvatar';
+import { isAsyncThunkAction } from '@reduxjs/toolkit';
 
 const tableStyle: GANTTCHART_TABLE_STYLE = {
   headerColumnWidth: 300,
@@ -39,13 +41,16 @@ const GanttChart = () => {
   const startDate = new Date(project.startdate);
   const endDate = new Date(project.enddate);
 
-  const days = getDateSpan(endDate, startDate);
+  const days = getDateSpan(startDate, endDate);
 
-  const dates = [...Array(days)].map((_, idx) => {
-    const newDate = new Date(startDate.getTime());
-    newDate.setDate(newDate.getDate() + idx);
-    return newDate;
-  });
+  const dates =
+    days > 0
+      ? [...Array(days)].map((_, idx) => {
+          const newDate = new Date(startDate.getTime());
+          newDate.setDate(newDate.getDate() + idx);
+          return newDate;
+        })
+      : [];
 
   const ganttChartBar = createGanttChartBar(
     project,
@@ -75,34 +80,44 @@ const GanttChart = () => {
     table: css`
       width: ${tableStyle.headerColumnWidth + tableStyle.cellWidth * days}px;
       table-layout: fixed;
-      border-top: 1px solid;
-      border-left: 1px solid;
+      border-right: 1px solid;
+      border-bottom: 1px solid;
       border-color: ${theme.palette.action.hover};
       border-collapse: collapse;
       th {
-        border-right: 1px solid;
-        border-bottom: 1px solid;
+        border-top: 1px solid;
+        border-left: 1px solid;
         border-color: ${theme.palette.action.hover};
         height: ${tableStyle.cellHeight}px;
       }
       td {
-        border-right: 1px solid;
-        border-bottom: 1px solid;
+        border-top: 1px solid;
+        border-left: 1px solid;
         border-color: ${theme.palette.action.hover};
         height: ${tableStyle.cellHeight}px;
       }
+    `,
+    topLeftCell: css`
+      border: none;
     `,
     tableColumn: css`
       width: ${tableStyle.cellWidth}px;
     `,
     tableHeaderColumn: css`
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       width: ${tableStyle.headerColumnWidth}px;
+      padding-left: 12px;
+      padding-right: 6px;
+    `,
+    avatar: css`
+      margin-left: 6px;
     `,
     actualBar: css`
       white-space: nowrap;
       display: block;
       height: ${barStyle.height}px;
-      padding: 0 10px;
       background-color: ${theme.palette.primary.main};
       position: absolute;
     `,
@@ -110,12 +125,11 @@ const GanttChart = () => {
       white-space: nowrap;
       display: block;
       height: ${barStyle.height}px;
-      padding: 0 10px;
-      border: solid 2px ${theme.palette.primary.dark};
+      border: solid 2px ${theme.palette.primary.main};
       background: repeating-linear-gradient(
         45deg,
-        ${theme.palette.primary.dark},
-        ${theme.palette.primary.dark} 2px,
+        ${theme.palette.primary.main},
+        ${theme.palette.primary.main} 2px,
         ${theme.palette.background.default} 0,
         ${theme.palette.background.default} 6px
       );
@@ -123,31 +137,51 @@ const GanttChart = () => {
     `,
   };
 
-  console.log(ganttChartBar);
-
   return (
     <>
       <div css={styles.wrapper}>
         <table css={styles.table}>
+          <colgroup>
+            <col width={`${tableStyle.headerColumnWidth}px`} />
+            {[...Array(days)].map(() => (
+              <col width={`${tableStyle.cellWidth}px`} />
+            ))}
+          </colgroup>
           <tr>
-            <th css={styles.tableHeaderColumn}>
-              <Typography component='div' noWrap>
+            <th css={styles.topLeftCell}></th>
+            <th colSpan={days}></th>
+          </tr>
+          <tr>
+            <th>
+              <Typography component='div' variant='body2' noWrap>
                 タスク名
               </Typography>
             </th>
             {dates.map((date) => (
               <th css={styles.tableColumn}>
-                <Typography>{date.getDate()}</Typography>
+                <Typography variant='body2'>{date.getDate()}</Typography>
               </th>
             ))}
           </tr>
+
           {tasks.map((task) => {
             return (
               <tr>
                 <td css={styles.tableHeaderColumn}>
-                  <Typography component='div' noWrap align='left'>
+                  <Typography
+                    component='div'
+                    variant='body2'
+                    noWrap
+                    align='left'
+                  >
                     {task.task_name}
                   </Typography>
+                  <div css={styles.avatar}>
+                    <CommonAvatar
+                      userId={task.assigned_id}
+                      width={`${tableStyle.cellHeight - 4}px`}
+                    />
+                  </div>
                 </td>
                 {[...Array(days)].map(() => (
                   <td css={styles.tableColumn}></td>

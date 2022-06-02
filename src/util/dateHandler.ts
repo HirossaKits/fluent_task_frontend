@@ -98,10 +98,10 @@ export const getFirstDayOfCalendar = (year: number, month: number): number => {
 
 // 開始日と終了日から日数を返す
 export const getDateSpan = (start: Date, end: Date): number => {
-  return (start.valueOf() - end.valueOf()) / 86400000 + 1;
+  return (end.valueOf() - start.valueOf()) / 86400000;
 };
 
 // yyyy-MM-dd 形式の日付の差分を返す
 export const getStrDateSpan = (start: string, end: string): number => {
-  return (parseDate(start).valueOf() - parseDate(end).valueOf()) / 86400000 + 1;
+  return (parseDate(end).valueOf() - parseDate(start).valueOf()) / 86400000;
 };

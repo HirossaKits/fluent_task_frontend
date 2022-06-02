@@ -47,8 +47,12 @@ const useCreateGanttChartBar = () => {
       const mTop = (tableStyle.cellHeight - barStyle.height * 2) / 3;
 
       // ガントチャートのバー(予定)
-      const scheduledGanttChartBars: GANTTCHART_BAR[] = sortedTasks.map(
-        (task, idx) => {
+      const scheduledGanttChartBars = sortedTasks
+        .map((task, idx) => {
+          if (!task.scheduled_startdate || !task.scheduled_enddate) {
+            return undefined;
+          }
+
           let startDate = parseDate(task.scheduled_startdate);
           let endDate = parseDate(task.scheduled_enddate);
 
@@ -66,7 +70,7 @@ const useCreateGanttChartBar = () => {
           const span = getDateSpan(startDate, endDate);
 
           // width
-          const width = tableStyle.cellWidth * span;
+          const width = tableStyle.cellWidth * (span + 1);
 
           // top
           let top = mTop + tableStyle.cellHeight * (idx + 1);
@@ -74,8 +78,7 @@ const useCreateGanttChartBar = () => {
           // left
           let left =
             tableStyle.headerColumnWidth +
-            tableStyle.cellWidth *
-              (getDateSpan(startDate, projectStartDate) - 1);
+            tableStyle.cellWidth * getDateSpan(projectStartDate, startDate);
 
           return {
             ...task,
@@ -85,10 +88,10 @@ const useCreateGanttChartBar = () => {
             startEdge: true,
             endEdge: true,
           };
-        }
-      );
+        })
+        .filter((bar) => bar !== undefined);
 
-      // ガントチャートのバー(予定)
+      // ガントチャートのバー(実際)
       const actualGanttChartBars = sortedTasks
         .map((task, idx) => {
           if (!task.actual_startdate || !task.actual_enddate) {
@@ -99,12 +102,9 @@ const useCreateGanttChartBar = () => {
           let endDate = parseDate(task.actual_enddate);
 
           if (
-            parseDate(task.actual_enddate).getTime() <
-              projectStartDate.getTime() ||
-            projectEndDate.getTime() <
-              parseDate(task.actual_startdate).getTime() ||
-            projectEndDate.getTime() <
-              parseDate(task.actual_startdate).getTime()
+            endDate.getTime() < projectStartDate.getTime() ||
+            projectEndDate.getTime() < startDate.getTime() ||
+            endDate.getTime() < startDate.getTime()
           ) {
             return undefined;
           }
@@ -123,7 +123,7 @@ const useCreateGanttChartBar = () => {
           const span = getDateSpan(startDate, endDate);
 
           // width
-          const width = tableStyle.cellWidth * span;
+          const width = tableStyle.cellWidth * (span + 1);
 
           // top
           let top =
@@ -132,8 +132,7 @@ const useCreateGanttChartBar = () => {
           // left
           let left =
             tableStyle.headerColumnWidth +
-            tableStyle.cellWidth *
-              (getDateSpan(startDate, projectStartDate) - 1);
+            tableStyle.cellWidth * getDateSpan(projectStartDate, startDate);
 
           return {
             ...task,
@@ -147,7 +146,7 @@ const useCreateGanttChartBar = () => {
         .filter((bar) => bar !== undefined);
 
       return {
-        scheduled: scheduledGanttChartBars,
+        scheduled: scheduledGanttChartBars as GANTTCHART_BAR[],
         actual: actualGanttChartBars as GANTTCHART_BAR[],
       };
     },

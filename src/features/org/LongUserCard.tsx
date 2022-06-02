@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Popover from '@mui/material/Popover';
@@ -36,6 +35,7 @@ import {
 } from './orgSliece';
 import useMessage from '../../hooks/message';
 import { AppDispatch } from '../../app/store';
+import CommonAvatar from '../../components/CommonAvatar';
 
 type Props = {
   user: USER_INFO;
@@ -56,11 +56,8 @@ const LongUserCard = (props: Props) => {
       position: relative;
     `,
     avatar: css`
-      width: 70px;
-      height: 70px;
       margin-top: 10px;
       margin-left: 10px;
-      font-size: 32px;
     `,
     text: css`
       text-align: left;
@@ -171,23 +168,18 @@ const LongUserCard = (props: Props) => {
       <Card css={styles.card}>
         {props.user.user_id !== orgInfo.org_owner_id && (
           <IconButton css={styles.dot} onClick={handleClick}>
-            <MoreHorizIcon fontSize="small" />
+            <MoreHorizIcon fontSize='small' />
           </IconButton>
         )}
         <Box sx={{ display: 'flex' }}>
-          {props.user.avatar_img ? (
-            <Avatar css={styles.avatar} src={props.user.avatar_img} />
-          ) : (
-            <Avatar css={styles.avatar}>
-              {props.user.last_name.slice(0, 1).toUpperCase() +
-                props.user.first_name.slice(0, 1).toUpperCase()}
-            </Avatar>
-          )}
+          <div css={styles.avatar}>
+            <CommonAvatar user={props.user} width='70px' fontSize='32px' />
+          </div>
           <Box css={styles.text}>
-            <Typography variant="h6" component="div">
+            <Typography variant='h6' component='div'>
               {`${props.user.last_name} ${props.user.first_name} `}
             </Typography>
-            <Typography noWrap variant="body2" component="div">
+            <Typography noWrap variant='body2' component='div'>
               {`${props.user.comment}`}
             </Typography>
           </Box>
@@ -216,13 +208,13 @@ const LongUserCard = (props: Props) => {
       >
         <MenuItem onClick={() => handleIncludeAdminClick(props.user.user_id)}>
           <ListItemIcon>
-            <GppGoodIcon fontSize="small" />
+            <GppGoodIcon fontSize='small' />
           </ListItemIcon>
           <ListItemText>{t('org.addToAdmin')}</ListItemText>
         </MenuItem>
         <MenuItem onClick={() => handleExcludeAdminClick(props.user.user_id)}>
           <ListItemIcon>
-            <GppBadIcon fontSize="small" />
+            <GppBadIcon fontSize='small' />
           </ListItemIcon>
           <ListItemText>{t('org.excludeFromAdmin')}</ListItemText>
         </MenuItem>
@@ -230,7 +222,7 @@ const LongUserCard = (props: Props) => {
         {props.user.user_id === loginUserInfo.user_id ? (
           <MenuItem onClick={() => handleWithdrawOrgClick(props.user.user_id)}>
             <ListItemIcon>
-              <DirectionsRunIcon fontSize="small" />
+              <DirectionsRunIcon fontSize='small' />
             </ListItemIcon>
             <ListItemText>{t('org.withdrawFromGroup')}</ListItemText>
           </MenuItem>
@@ -239,7 +231,7 @@ const LongUserCard = (props: Props) => {
             onClick={() => handleExcludeFromGroupClick(props.user.user_id)}
           >
             <ListItemIcon>
-              <PersonOffIcon fontSize="small" />
+              <PersonOffIcon fontSize='small' />
             </ListItemIcon>
             <ListItemText>{t('org.excludeFromGroup')}</ListItemText>
           </MenuItem>

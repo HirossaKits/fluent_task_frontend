@@ -223,6 +223,10 @@ export const selectSelectedProject = (state: RootState) =>
   ) ?? emptyProject;
 export const selectSelectedProjectId = (state: RootState) =>
   state.project.selectedProjectId;
+export const selectSelectedProjectMember = (state: RootState) =>
+  state.project.projects.find(
+    (proj) => proj.project_id === state.project.selectedProjectId
+  )?.member;
 export const selectEditedProject = (state: RootState) =>
   state.project.editedProject;
 export const selectProjectDialogOpen = (state: RootState) =>
