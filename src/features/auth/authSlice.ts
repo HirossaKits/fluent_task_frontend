@@ -120,11 +120,8 @@ export const fetchAsyncUpdateProf = createAsyncThunk(
           },
         }
       );
-      console.log('debug1', res.data);
       return res.data;
     }
-    console.log('debug2', res.data);
-
     return res.data;
   }
 );

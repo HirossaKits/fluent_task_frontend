@@ -137,15 +137,18 @@ const GanttChart = () => {
     `,
   };
 
+  console.log('debug', ganttChartBar);
+
   return (
     <>
       <div css={styles.wrapper}>
         <table css={styles.table}>
           <colgroup>
             <col width={`${tableStyle.headerColumnWidth}px`} />
-            {[...Array(days)].map(() => (
-              <col width={`${tableStyle.cellWidth}px`} />
-            ))}
+            {days &&
+              [...Array(days)].map(() => (
+                <col width={`${tableStyle.cellWidth}px`} />
+              ))}
           </colgroup>
           <tr>
             <th css={styles.topLeftCell}></th>
@@ -153,15 +156,16 @@ const GanttChart = () => {
           </tr>
           <tr>
             <th>
-              <Typography component='div' variant='body2' noWrap>
+              <Typography component="div" variant="body2" noWrap>
                 タスク名
               </Typography>
             </th>
-            {dates.map((date) => (
-              <th css={styles.tableColumn}>
-                <Typography variant='body2'>{date.getDate()}</Typography>
-              </th>
-            ))}
+            {dates.length > 0 &&
+              dates.map((date) => (
+                <th css={styles.tableColumn}>
+                  <Typography variant="body2">{date.getDate()}</Typography>
+                </th>
+              ))}
           </tr>
 
           {tasks.map((task) => {
@@ -169,10 +173,10 @@ const GanttChart = () => {
               <tr>
                 <td css={styles.tableHeaderColumn}>
                   <Typography
-                    component='div'
-                    variant='body2'
+                    component="div"
+                    variant="body2"
                     noWrap
-                    align='left'
+                    align="left"
                   >
                     {task.task_name}
                   </Typography>
@@ -183,9 +187,11 @@ const GanttChart = () => {
                     />
                   </div>
                 </td>
-                {[...Array(days)].map(() => (
-                  <td css={styles.tableColumn}></td>
-                ))}
+                {days ? (
+                  [...Array(days)].map(() => <td css={styles.tableColumn}></td>)
+                ) : (
+                  <></>
+                )}
               </tr>
             );
           })}
@@ -209,7 +215,7 @@ const GanttChart = () => {
             onClick={(e) => handleBarClick(e, bar.task_id)}
           >
             <Box
-              component='div'
+              component="div"
               sx={{
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',
@@ -237,7 +243,7 @@ const GanttChart = () => {
             onClick={(e) => handleBarClick(e, bar.task_id)}
           >
             <Box
-              component='div'
+              component="div"
               sx={{
                 textOverflow: 'ellipsis',
                 overflow: 'hidden',

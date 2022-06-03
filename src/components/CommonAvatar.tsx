@@ -36,7 +36,7 @@ const CommonAvatar = (props: Props) => {
         {props.user ? (
           props.user.avatar_img ? (
             <Avatar css={styles.avatar}>
-              <img css={styles.img} src={props.user.avatar_img} alt='avatar' />
+              <img css={styles.img} src={props.user.avatar_img} alt="avatar" />
             </Avatar>
           ) : (
             <Avatar css={styles.avatar}>
@@ -56,7 +56,7 @@ const CommonAvatar = (props: Props) => {
         {user ? (
           user.avatar_img ? (
             <Avatar css={styles.avatar}>
-              <img css={styles.img} src={user.avatar_img} alt='avatar' />
+              <img css={styles.img} src={user.avatar_img} alt="avatar" />
             </Avatar>
           ) : (
             <Avatar css={styles.avatar}>
@@ -64,7 +64,7 @@ const CommonAvatar = (props: Props) => {
             </Avatar>
           )
         ) : (
-          <Avatar />
+          <Avatar css={styles.avatar} />
         )}
       </>
     );

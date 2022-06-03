@@ -1,4 +1,7 @@
 {
+  "user": {
+    "unknownUser": "不明なユーザー"
+  },
   "langSelect": {
     "selectLanguage": "言語を選択",
     "english": "英語",

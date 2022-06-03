@@ -1,4 +1,7 @@
 {
+  "user": {
+    "unknownUser": "Unknown user"
+  },
   "langSelect": {
     "selectLanguage": "Select language",
     "english": "English",

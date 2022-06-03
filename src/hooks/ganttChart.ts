@@ -17,6 +17,13 @@ const useCreateGanttChartBar = () => {
       tableStyle: GANTTCHART_TABLE_STYLE,
       barStyle: GANTTCHART_BAR_STYLE
     ): GANTTCHART_BAR_SET => {
+      if (!project.startdate || !project.enddate) {
+        return {
+          scheduled: [],
+          actual: [],
+        };
+      }
+
       const projectStartDate = parseDate(project.startdate);
       const projectEndDate = parseDate(project.enddate);
 
@@ -73,7 +80,7 @@ const useCreateGanttChartBar = () => {
           const width = tableStyle.cellWidth * (span + 1);
 
           // top
-          let top = mTop + tableStyle.cellHeight * (idx + 1);
+          let top = mTop + tableStyle.cellHeight * (idx + 2);
 
           // left
           let left =
@@ -127,7 +134,7 @@ const useCreateGanttChartBar = () => {
 
           // top
           let top =
-            mTop * 2 + barStyle.height + tableStyle.cellHeight * (idx + 1);
+            mTop * 2 + barStyle.height + tableStyle.cellHeight * (idx + 2);
 
           // left
           let left =
