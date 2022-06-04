@@ -63,6 +63,14 @@ const useCreateGanttChartBar = () => {
           let startDate = parseDate(task.scheduled_startdate);
           let endDate = parseDate(task.scheduled_enddate);
 
+          if (
+            endDate.getTime() < projectStartDate.getTime() ||
+            projectEndDate.getTime() < startDate.getTime() ||
+            endDate.getTime() < startDate.getTime()
+          ) {
+            return undefined;
+          }
+
           // プロジェクトの期間をオーバーする場合、プロジェクトの開始日と終了日に合わせる。
           if (startDate.getTime() < projectStartDate.getTime()) {
             startDate = projectStartDate;
@@ -85,6 +93,7 @@ const useCreateGanttChartBar = () => {
           // left
           let left =
             tableStyle.headerColumnWidth +
+            tableStyle.statusColumnWidth +
             tableStyle.cellWidth * getDateSpan(projectStartDate, startDate);
 
           return {
@@ -139,6 +148,7 @@ const useCreateGanttChartBar = () => {
           // left
           let left =
             tableStyle.headerColumnWidth +
+            tableStyle.statusColumnWidth +
             tableStyle.cellWidth * getDateSpan(projectStartDate, startDate);
 
           return {

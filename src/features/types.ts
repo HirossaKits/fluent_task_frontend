@@ -298,13 +298,12 @@ export interface GANTTCHART_BAR_SET {
 
 export interface GANTTCHART_TABLE_STYLE {
   headerColumnWidth: number;
+  statusColumnWidth: number;
   cellWidth: number;
   cellHeight: number;
 }
 
 export interface GANTTCHART_BAR_STYLE {
-  topPosition: number;
   height: number;
-  span: number;
   roundEdge: number;
 }

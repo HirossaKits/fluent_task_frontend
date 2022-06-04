@@ -1,10 +1,11 @@
 import React from 'react';
 import { css } from '@emotion/react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import { Normalize, useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import CircleIcon from '@mui/icons-material/Circle';
 import useCreateGanttChartBar from '../../hooks/ganttChart';
 import { selectSelectedProject } from '../proj/projectSlice';
 import {
@@ -13,26 +14,26 @@ import {
   setTaskDialogMode,
   setTaskDialogOpen,
 } from '../task/taskSlice';
-import { parseString, getDateSpan } from '../../util/dateHandler';
+import { getDateSpan } from '../../util/dateHandler';
 import { GANTTCHART_TABLE_STYLE, GANTTCHART_BAR_STYLE } from '../types';
 import CommonAvatar from '../../components/CommonAvatar';
-import { isAsyncThunkAction } from '@reduxjs/toolkit';
+import TaskDialog from '../task/TaskDialog';
 
 const tableStyle: GANTTCHART_TABLE_STYLE = {
-  headerColumnWidth: 300,
+  headerColumnWidth: 220,
+  statusColumnWidth: 90,
   cellWidth: 32,
-  cellHeight: 32,
+  cellHeight: 40,
 };
 
 const barStyle: GANTTCHART_BAR_STYLE = {
-  topPosition: 32,
   height: 12,
-  span: 4,
   roundEdge: 4,
 };
 
 const GanttChart = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
   const theme = useTheme();
   const project = useSelector(selectSelectedProject);
   const tasks = useSelector(selectTasks);
@@ -52,6 +53,34 @@ const GanttChart = () => {
         })
       : [];
 
+  const months: { month: number; dateCount: number }[] = dates.reduce(
+    (previous: { month: number; dateCount: number }[], current: Date) => {
+      if (previous.length === 0) {
+        return [
+          {
+            month: current.getMonth() + 1,
+            dateCount: 1,
+          },
+        ];
+      }
+
+      if (previous[previous.length - 1].month === current.getMonth() + 1) {
+        previous[previous.length - 1].dateCount++;
+        return previous;
+      } else {
+        return [
+          ...previous,
+          {
+            month: current.getMonth() + 1,
+            dateCount: 1,
+            lastDate: current,
+          },
+        ];
+      }
+    },
+    []
+  );
+
   const ganttChartBar = createGanttChartBar(
     project,
     tasks,
@@ -65,6 +94,8 @@ const GanttChart = () => {
   ) => {
     const selectedTask = tasks.find((task) => task.task_id === task_id);
 
+    console.log(task_id);
+
     if (selectedTask) {
       dispatch(setEditedTask(selectedTask));
       dispatch(setTaskDialogMode('detail'));
@@ -73,6 +104,36 @@ const GanttChart = () => {
   };
 
   const styles = {
+    guide: css`
+      width: 180px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 28px;
+      margin-left: ${tableStyle.headerColumnWidth}px;
+      margin-bottom: 20px;
+    `,
+    guideScheduled: css`
+      display: block;
+      width: ${tableStyle.cellWidth}px;
+      height: ${barStyle.height}px;
+      border: solid 2px ${theme.palette.primary.main};
+      background: repeating-linear-gradient(
+        45deg,
+        ${theme.palette.primary.main},
+        ${theme.palette.primary.main} 2px,
+        ${theme.palette.background.default} 0,
+        ${theme.palette.background.default} 6px
+      );
+      border-radius: ${barStyle.roundEdge}px;
+    `,
+    guideActual: css`
+      display: block;
+      width: ${tableStyle.cellWidth}px;
+      height: ${barStyle.height}px;
+      background-color: ${theme.palette.primary.main};
+      border-radius: ${barStyle.roundEdge}px;
+    `,
     wrapper: css`
       position: relative;
       overflow: auto;
@@ -84,12 +145,6 @@ const GanttChart = () => {
       border-bottom: 1px solid;
       border-color: ${theme.palette.action.hover};
       border-collapse: collapse;
-      th {
-        border-top: 1px solid;
-        border-left: 1px solid;
-        border-color: ${theme.palette.action.hover};
-        height: ${tableStyle.cellHeight}px;
-      }
       td {
         border-top: 1px solid;
         border-left: 1px solid;
@@ -97,29 +152,35 @@ const GanttChart = () => {
         height: ${tableStyle.cellHeight}px;
       }
     `,
-    topLeftCell: css`
-      border: none;
+    tableTopLeftHeader: css`
+      border-color: black;
+      background-color: transparent;
+      height: ${tableStyle.cellHeight}px;
     `,
-    tableColumn: css`
-      width: ${tableStyle.cellWidth}px;
+    tableHeader: css`
+      border-top: 1px solid;
+      border-left: 1px solid;
+      border-color: ${theme.palette.action.hover};
+      height: ${tableStyle.cellHeight}px;
     `,
-    tableHeaderColumn: css`
+    tableTaskNameColumn: css`
       display: flex;
       justify-content: space-between;
       align-items: center;
-      width: ${tableStyle.headerColumnWidth}px;
       padding-left: 12px;
       padding-right: 6px;
     `,
+    tableStatusColumn: css`
+      padding-left: 6px;
+    `,
+    taskStatus: css`
+      display: flex;
+    `,
+    holiday: css`
+      background-color: ${theme.palette.action.hover};
+    `,
     avatar: css`
       margin-left: 6px;
-    `,
-    actualBar: css`
-      white-space: nowrap;
-      display: block;
-      height: ${barStyle.height}px;
-      background-color: ${theme.palette.primary.main};
-      position: absolute;
     `,
     scheduledBar: css`
       white-space: nowrap;
@@ -135,12 +196,23 @@ const GanttChart = () => {
       );
       position: absolute;
     `,
+    actualBar: css`
+      white-space: nowrap;
+      display: block;
+      height: ${barStyle.height}px;
+      background-color: ${theme.palette.primary.main};
+      position: absolute;
+    `,
   };
-
-  console.log('debug', ganttChartBar);
 
   return (
     <>
+      <div css={styles.guide}>
+        <div css={styles.guideScheduled}></div>
+        <Typography>{t('ganttChart.scheduled')}</Typography>
+        <div css={styles.guideActual}></div>
+        <Typography>{t('ganttChart.actual')}</Typography>
+      </div>
       <div css={styles.wrapper}>
         <table css={styles.table}>
           <colgroup>
@@ -151,18 +223,41 @@ const GanttChart = () => {
               ))}
           </colgroup>
           <tr>
-            <th css={styles.topLeftCell}></th>
-            <th colSpan={days}></th>
+            <th css={styles.tableTopLeftHeader}></th>
+            {months.map((month) => (
+              <th css={styles.tableHeader} colSpan={month.dateCount}>
+                <Typography variant="body2">
+                  {t(
+                    `ganttChart.${month.month}` as Normalize<{
+                      ganttChart: {
+                        '1': string;
+                        '2': string;
+                        '3': string;
+                        '4': string;
+                        '5': string;
+                        '6': string;
+                        '7': string;
+                        '8': string;
+                        '9': string;
+                        '10': string;
+                        '11': string;
+                        '12': string;
+                      };
+                    }>
+                  )}
+                </Typography>
+              </th>
+            ))}
           </tr>
           <tr>
-            <th>
+            <th css={styles.tableHeader}>
               <Typography component="div" variant="body2" noWrap>
-                タスク名
+                {t('ganttChart.taskName')}
               </Typography>
             </th>
             {dates.length > 0 &&
               dates.map((date) => (
-                <th css={styles.tableColumn}>
+                <th css={styles.tableHeader}>
                   <Typography variant="body2">{date.getDate()}</Typography>
                 </th>
               ))}
@@ -171,15 +266,17 @@ const GanttChart = () => {
           {tasks.map((task) => {
             return (
               <tr>
-                <td css={styles.tableHeaderColumn}>
-                  <Typography
-                    component="div"
-                    variant="body2"
-                    noWrap
-                    align="left"
-                  >
-                    {task.task_name}
-                  </Typography>
+                <td css={styles.tableTaskNameColumn}>
+                  <div css={styles.taskStatus}>
+                    <Typography
+                      component="div"
+                      variant="body2"
+                      noWrap
+                      align="left"
+                    >
+                      {task.task_name}
+                    </Typography>
+                  </div>
                   <div css={styles.avatar}>
                     <CommonAvatar
                       userId={task.assigned_id}
@@ -187,8 +284,15 @@ const GanttChart = () => {
                     />
                   </div>
                 </td>
-                {days ? (
-                  [...Array(days)].map(() => <td css={styles.tableColumn}></td>)
+                {dates.length ? (
+                  dates.map((date) => {
+                    const day = date.getDay();
+                    if (day === 0 || day === 6) {
+                      return <td css={styles.holiday}></td>;
+                    } else {
+                      return <td></td>;
+                    }
+                  })
                 ) : (
                   <></>
                 )}
@@ -253,6 +357,7 @@ const GanttChart = () => {
           </div>
         ))}
       </div>
+      <TaskDialog />
     </>
   );
 };

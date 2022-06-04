@@ -226,7 +226,10 @@ const Project = () => {
                 </CommonTooltip>
                 <CommonTooltip title={t('project.delete')}>
                   <IconButton
-                    disabled
+                    disabled={
+                      project.project_id ===
+                      'ae487b73-f1d9-400d-943f-f834e2869f26'
+                    }
                     aria-label="delete project"
                     onClick={handleDeleteClick}
                   >

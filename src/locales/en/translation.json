@@ -57,6 +57,7 @@
     "list": "List",
     "kanban": "Kanban",
     "calendar": "Calendar",
+    "ganttCHart": "Gantt Chart",
     "addProject": "New Project",
     "cannotUseGroup": "The group function cannot be used in private mode.",
     "cannotAddProject": "Projects can only be created by group admins."
@@ -202,5 +203,22 @@
     "12": "Dec. 1",
     "otherPre": "",
     "otherPost": " other"
+  },
+  "ganttChart": {
+    "scheduled": "scheduled",
+    "actual": "actual",
+    "taskName": "Task name",
+    "1": "Jan.",
+    "2": "Feb.",
+    "3": "Mar.",
+    "4": "Apr.",
+    "5": "May.",
+    "6": "Jun.",
+    "7": "Jul.",
+    "8": "Aug.",
+    "9": "Sep.",
+    "10": "Oct.",
+    "11": "Nov.",
+    "12": "Dec."
   }
 }

@@ -11,7 +11,7 @@ declare module 'react-i18next' {
 
 declare module 'react-i18next' {
   interface CustomTypeOptions {
-    defaultNS: 'en';
+    defaultNS: 'ja';
     resources: {
       en: typeof enTrans;
       ja: typeof jaTrans;
