@@ -27,7 +27,7 @@ const tableStyle: GANTTCHART_TABLE_STYLE = {
 };
 
 const barStyle: GANTTCHART_BAR_STYLE = {
-  height: 14,
+  height: 15,
   roundEdge: 4,
 };
 
