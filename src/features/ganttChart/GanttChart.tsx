@@ -94,8 +94,6 @@ const GanttChart = () => {
   ) => {
     const selectedTask = tasks.find((task) => task.task_id === task_id);
 
-    console.log(task_id);
-
     if (selectedTask) {
       dispatch(setEditedTask(selectedTask));
       dispatch(setTaskDialogMode('detail'));
@@ -199,8 +197,6 @@ const GanttChart = () => {
       position: absolute;
     `,
   };
-
-  console.log(tasks);
 
   return (
     <>

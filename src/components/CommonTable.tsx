@@ -324,8 +324,6 @@ const CommonTable: ListComponent = (props) => {
     }
   };
 
-  // console.log(filters);
-
   const sortRows = (tbl: ROW[]): ROW[] => {
     if (sortState.columnName === '') return tbl;
     const sortedRows = tbl.slice().sort((a, b) => {
@@ -368,10 +366,10 @@ const CommonTable: ListComponent = (props) => {
           (col) => col.name === filter.columnName
         )[0].type;
 
-        if (columnValue === null) {
-          validity = false;
-          return;
-        }
+        // if (columnValue === null) {
+        //   validity = false;
+        //   return;
+        // }
 
         if (type === 'string') {
           if (operator === '=') {
@@ -402,7 +400,11 @@ const CommonTable: ListComponent = (props) => {
         }
 
         if (type === 'select') {
-          validity = columnValue === filterValue;
+          if (operator === '=') {
+            validity = columnValue === filterValue;
+          } else if (operator === '!=') {
+            validity = columnValue !== filterValue;
+          }
         }
       });
 

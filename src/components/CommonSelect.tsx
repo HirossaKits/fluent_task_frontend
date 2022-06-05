@@ -23,8 +23,6 @@ type Props = {
 
 const CommonSelect: React.FC<Props> = (props: Props) => {
   const handleSelectChange = (event: any, newItem: Option | null) => {
-    console.log('test', newItem, newItem && newItem.value);
-
     let target: TARGET = {
       name: props.name,
       value: newItem ? newItem.value : null,
