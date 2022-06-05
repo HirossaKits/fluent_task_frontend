@@ -169,7 +169,7 @@ const CommonTable: ListComponent = (props) => {
     columnName: ROW_ITEM;
     type: 'string' | 'number' | 'Date' | 'select';
     operator: string;
-    value: string | number;
+    value: string | number | null;
   }
 
   const table = props.data.map((row, index) => ({ ...row, id: index }));
@@ -186,7 +186,7 @@ const CommonTable: ListComponent = (props) => {
     {
       columnName: props.columnInfo[0].name as ROW_ITEM,
       type: props.columnInfo[0].type,
-      operator: '=',
+      operator: 'start_from',
       value: '',
     },
   ]);
@@ -279,7 +279,22 @@ const CommonTable: ListComponent = (props) => {
       const newType = props.columnInfo.filter(
         (col) => col.name === target.value
       )[0].type;
-      if (newType !== filters[target.index].type) {
+
+      if (newType === 'string') {
+        setFilters([
+          ...filters.slice(0, target.index),
+          {
+            ...filters[target.index],
+            [target.name]: target.value,
+            operator: 'start_from',
+            value: '',
+            type: newType,
+          },
+          ...filters.slice(target.index + 1),
+        ]);
+      }
+
+      if (newType === 'number' || newType === 'Date') {
         setFilters([
           ...filters.slice(0, target.index),
           {
@@ -291,18 +306,25 @@ const CommonTable: ListComponent = (props) => {
           },
           ...filters.slice(target.index + 1),
         ]);
-      } else {
+      }
+
+      if (newType === 'select') {
         setFilters([
           ...filters.slice(0, target.index),
           {
             ...filters[target.index],
             [target.name]: target.value,
+            operator: '=',
+            value: null,
+            type: newType,
           },
           ...filters.slice(target.index + 1),
         ]);
       }
     }
   };
+
+  // console.log(filters);
 
   const sortRows = (tbl: ROW[]): ROW[] => {
     if (sortState.columnName === '') return tbl;
@@ -398,20 +420,20 @@ const CommonTable: ListComponent = (props) => {
           <Toolbar disableGutters>
             <CommonTooltip title={t('table.add')}>
               <IconButton
-                aria-label='register task'
+                aria-label="register task"
                 onClick={handleRegisterClick}
               >
                 <PlaylistAddIcon />
               </IconButton>
             </CommonTooltip>
             <CommonTooltip title={t('table.edit')}>
-              <IconButton aria-label='edit task' onClick={handleEditClick}>
+              <IconButton aria-label="edit task" onClick={handleEditClick}>
                 <EditIcon />
               </IconButton>
             </CommonTooltip>
             <CommonTooltip title={t('table.remove')}>
               <IconButton
-                aria-label='delete task'
+                aria-label="delete task"
                 onClick={() =>
                   props.handleDeleteClick &&
                   props.handleDeleteClick(
@@ -426,7 +448,7 @@ const CommonTable: ListComponent = (props) => {
               <IconButton
                 ref={filterAnchorEl}
                 css={styles.filterButton}
-                aria-label='filter list'
+                aria-label="filter list"
                 onClick={handleFilterClick}
               >
                 <FilterListIcon />
@@ -438,7 +460,7 @@ const CommonTable: ListComponent = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell css={styles.tableCheckCell} padding='checkbox'>
+                <TableCell css={styles.tableCheckCell} padding="checkbox">
                   <Checkbox
                     indeterminate={
                       selected.length > 0 && selected.length < table.length
@@ -447,7 +469,7 @@ const CommonTable: ListComponent = (props) => {
                       selected.length > 0 && selected.length === table.length
                     }
                     onChange={handleSelectAllClic}
-                    color='primary'
+                    color="primary"
                   />
                 </TableCell>
                 {props.columnInfo.map((col, idx) => (
@@ -477,10 +499,10 @@ const CommonTable: ListComponent = (props) => {
                   hover
                   selected={selected.indexOf(row.id) !== -1}
                 >
-                  <TableCell css={styles.tableCheckCell} padding='checkbox'>
+                  <TableCell css={styles.tableCheckCell} padding="checkbox">
                     <Checkbox
                       checked={selected.indexOf(row.id) !== -1}
-                      color='primary'
+                      color="primary"
                     />
                   </TableCell>
                   {props.columnInfo.map((col) => (
@@ -535,14 +557,14 @@ const CommonTable: ListComponent = (props) => {
         onClose={handleFilterClose}
       >
         <Paper css={styles.paper}>
-          <form css={styles.form} noValidate autoComplete='off'>
+          <form css={styles.form} noValidate autoComplete="off">
             {filters.map((filter, index) => (
               <Grid
                 item
                 container
-                direction='row'
-                justifyContent='space-around'
-                alignItems='center'
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
               >
                 <Grid css={styles.iconGrid} item>
                   {index === filters.length - 1 &&
@@ -559,7 +581,7 @@ const CommonTable: ListComponent = (props) => {
                 <Grid css={styles.textGrid} item xs={3}>
                   <CommonSelect
                     label={t('table.target')}
-                    name='columnName'
+                    name="columnName"
                     options={filterTargetOption}
                     value={filter.columnName as string}
                     index={index}
@@ -571,32 +593,32 @@ const CommonTable: ListComponent = (props) => {
                   {filter.type === 'string' ? (
                     <CommonSelect
                       label={t('table.operator')}
-                      name='operator'
+                      name="operator"
                       options={FilterOperatorOfString}
                       value={filter.operator}
                       index={index}
                       onChange={handleInputChange}
-                      width='140px'
+                      width="140px"
                     />
                   ) : filter.type === 'number' ? (
                     <CommonSelect
                       label={t('table.operator')}
-                      name='operator'
+                      name="operator"
                       options={FilterOperatorOfNumber}
                       value={filter.operator}
                       index={index}
                       onChange={handleInputChange}
-                      width='140px'
+                      width="140px"
                     />
                   ) : filter.type === 'Date' ? (
                     <CommonSelect
                       label={t('table.operator')}
-                      name='operator'
+                      name="operator"
                       options={FilterOperatorOfDate}
                       value={filter.operator}
                       index={index}
                       onChange={handleInputChange}
-                      width='140px'
+                      width="140px"
                     />
                   ) : (
                     // <CommonSelect
@@ -610,12 +632,12 @@ const CommonTable: ListComponent = (props) => {
                     // />
                     <CommonSelect
                       label={t('table.operator')}
-                      name='operator'
+                      name="operator"
                       options={FilterOperatorOfSelect}
                       value={filter.operator}
                       index={index}
                       onChange={handleInputChange}
-                      width='140px'
+                      width="140px"
                     />
                   )}
                 </Grid>
@@ -623,35 +645,35 @@ const CommonTable: ListComponent = (props) => {
                   {filter.type === 'string' ? (
                     <CommonTextField
                       label={t('table.value')}
-                      name='value'
+                      name="value"
                       value={filter.value}
                       index={index}
                       onChange={handleInputChange}
-                      width='140px'
+                      width="140px"
                     />
                   ) : filter.type === 'number' ? (
                     <CommonTextField
                       label={t('table.value')}
-                      type='number'
-                      name='value'
+                      type="number"
+                      name="value"
                       value={filter.value}
                       index={index}
                       onChange={handleInputChange}
-                      width='140px'
+                      width="140px"
                     />
                   ) : filter.type === 'Date' ? (
                     <CommonDatePicker
                       label={t('table.value')}
-                      name='value'
+                      name="value"
                       value={String(filter.value)}
                       index={index}
                       onChange={handleInputChange}
-                      width='140px'
+                      width="140px"
                     />
                   ) : (
                     <CommonSelect
                       label={t('table.value')}
-                      name='value'
+                      name="value"
                       index={index}
                       options={
                         props.columnInfo.find(
@@ -660,14 +682,15 @@ const CommonTable: ListComponent = (props) => {
                       }
                       value={filter.value}
                       onChange={handleInputChange}
-                      width='140px'
+                      width="140px"
+                      clearable
                     />
                   )}
                 </Grid>
                 <Grid css={styles.iconGrid} item>
                   {(filters.length !== 1 || index !== 0) && (
                     <IconButton onClick={() => handleClearClick(index)}>
-                      <ClearIcon color='action' />
+                      <ClearIcon color="action" />
                     </IconButton>
                   )}
                 </Grid>

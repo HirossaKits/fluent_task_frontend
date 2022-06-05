@@ -280,7 +280,7 @@ const Main = () => {
             <AppsIcon />
           </IconButton>
           <Typography css={styles.title} variant="h5" noWrap>
-            Fluent Task ( Beta )
+            Fluent Task
           </Typography>
           <Box css={styles.iconBox}>
             <DarkModeSwitch />

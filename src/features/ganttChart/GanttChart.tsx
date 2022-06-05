@@ -18,16 +18,16 @@ import { getDateSpan } from '../../util/dateHandler';
 import { GANTTCHART_TABLE_STYLE, GANTTCHART_BAR_STYLE } from '../types';
 import CommonAvatar from '../../components/CommonAvatar';
 import TaskDialog from '../task/TaskDialog';
+import CommonTooltip from '../../components/CommonTooltip';
 
 const tableStyle: GANTTCHART_TABLE_STYLE = {
   headerColumnWidth: 220,
-  statusColumnWidth: 90,
   cellWidth: 32,
-  cellHeight: 40,
+  cellHeight: 48,
 };
 
 const barStyle: GANTTCHART_BAR_STYLE = {
-  height: 12,
+  height: 14,
   roundEdge: 4,
 };
 
@@ -45,8 +45,8 @@ const GanttChart = () => {
   const days = getDateSpan(startDate, endDate);
 
   const dates =
-    days > 0
-      ? [...Array(days)].map((_, idx) => {
+    days >= 0
+      ? [...Array(days + 1)].map((_, idx) => {
           const newDate = new Date(startDate.getTime());
           newDate.setDate(newDate.getDate() + idx);
           return newDate;
@@ -139,7 +139,8 @@ const GanttChart = () => {
       overflow: auto;
     `,
     table: css`
-      width: ${tableStyle.headerColumnWidth + tableStyle.cellWidth * days}px;
+      width: ${tableStyle.headerColumnWidth +
+      tableStyle.cellWidth * (days + 1)}px;
       table-layout: fixed;
       border-right: 1px solid;
       border-bottom: 1px solid;
@@ -168,13 +169,7 @@ const GanttChart = () => {
       justify-content: space-between;
       align-items: center;
       padding-left: 12px;
-      padding-right: 6px;
-    `,
-    tableStatusColumn: css`
-      padding-left: 6px;
-    `,
-    taskStatus: css`
-      display: flex;
+      padding-right: 8px;
     `,
     holiday: css`
       background-color: ${theme.palette.action.hover};
@@ -205,6 +200,8 @@ const GanttChart = () => {
     `,
   };
 
+  console.log(tasks);
+
   return (
     <>
       <div css={styles.guide}>
@@ -217,8 +214,8 @@ const GanttChart = () => {
         <table css={styles.table}>
           <colgroup>
             <col width={`${tableStyle.headerColumnWidth}px`} />
-            {days &&
-              [...Array(days)].map(() => (
+            {days >= 0 &&
+              [...Array(days + 1)].map(() => (
                 <col width={`${tableStyle.cellWidth}px`} />
               ))}
           </colgroup>
@@ -267,7 +264,7 @@ const GanttChart = () => {
             return (
               <tr>
                 <td css={styles.tableTaskNameColumn}>
-                  <div css={styles.taskStatus}>
+                  <div>
                     <Typography
                       component="div"
                       variant="body2"
@@ -277,12 +274,21 @@ const GanttChart = () => {
                       {task.task_name}
                     </Typography>
                   </div>
-                  <div css={styles.avatar}>
-                    <CommonAvatar
-                      userId={task.assigned_id}
-                      width={`${tableStyle.cellHeight - 4}px`}
-                    />
-                  </div>
+
+                  <CommonTooltip
+                    title={`${t('kanban.assigned')} : ${
+                      task.assigned_name !== ' '
+                        ? task.assigned_name
+                        : t('user.unknownUser')
+                    }`}
+                  >
+                    <div css={styles.avatar}>
+                      <CommonAvatar
+                        userId={task.assigned_id}
+                        width={`${tableStyle.cellHeight - 8}px`}
+                      />
+                    </div>
+                  </CommonTooltip>
                 </td>
                 {dates.length ? (
                   dates.map((date) => {

@@ -230,7 +230,6 @@ export const Status = {
 export type TASK_STATUS = keyof typeof Status;
 
 export interface FILTER_TASK {
-  // columnName: COLUMN_NAME;
   columnName: string;
   type: 'string' | 'number' | 'Date' | 'select';
   operator: string;
@@ -298,7 +297,6 @@ export interface GANTTCHART_BAR_SET {
 
 export interface GANTTCHART_TABLE_STYLE {
   headerColumnWidth: number;
-  statusColumnWidth: number;
   cellWidth: number;
   cellHeight: number;
 }

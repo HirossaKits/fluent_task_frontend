@@ -18,13 +18,16 @@ type Props = {
   index?: number;
   onChange: Function;
   readOnly?: boolean;
+  clearable?: true;
 };
 
 const CommonSelect: React.FC<Props> = (props: Props) => {
-  const handleSelectChange = (event: any, newItem: Option) => {
+  const handleSelectChange = (event: any, newItem: Option | null) => {
+    console.log('test', newItem, newItem && newItem.value);
+
     let target: TARGET = {
       name: props.name,
-      value: newItem.value,
+      value: newItem ? newItem.value : null,
     };
     if ('index' in props) {
       target.index = props.index;
@@ -42,10 +45,10 @@ const CommonSelect: React.FC<Props> = (props: Props) => {
     <>
       <Autocomplete
         css={styles.autoComp}
-        disableClearable
+        disableClearable={'clearable' in props ? false : true}
         options={props.options ?? []}
         getOptionLabel={(option) => option.label.toString()}
-        value={props.options?.find((opt) => opt.value === props.value)}
+        value={props.options?.find((opt) => opt.value === props.value) ?? null}
         onChange={(event, newItem) => handleSelectChange(event, newItem)}
         renderInput={(params) =>
           props.readOnly ? (

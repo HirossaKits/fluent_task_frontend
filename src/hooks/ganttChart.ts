@@ -72,13 +72,15 @@ const useCreateGanttChartBar = () => {
           }
 
           // プロジェクトの期間をオーバーする場合、プロジェクトの開始日と終了日に合わせる。
+          let startEdge = true;
           if (startDate.getTime() < projectStartDate.getTime()) {
             startDate = projectStartDate;
-            // bar.startEdge = false;
+            startEdge = false;
           }
+          let endEdge = true;
           if (projectEndDate.getTime() < endDate.getTime()) {
             endDate = projectEndDate;
-            // bar.endEdge = false;
+            endEdge = false;
           }
 
           // span
@@ -93,7 +95,6 @@ const useCreateGanttChartBar = () => {
           // left
           let left =
             tableStyle.headerColumnWidth +
-            tableStyle.statusColumnWidth +
             tableStyle.cellWidth * getDateSpan(projectStartDate, startDate);
 
           return {
@@ -101,8 +102,8 @@ const useCreateGanttChartBar = () => {
             top: top,
             left: left,
             width: width,
-            startEdge: true,
-            endEdge: true,
+            startEdge: startEdge,
+            endEdge: endEdge,
           };
         })
         .filter((bar) => bar !== undefined);
@@ -126,13 +127,15 @@ const useCreateGanttChartBar = () => {
           }
 
           // プロジェクトの期間をオーバーする場合、プロジェクトの開始日と終了日に合わせる。
+          let startEdge = true;
           if (startDate.getTime() < projectStartDate.getTime()) {
             startDate = projectStartDate;
-            // bar.startEdge = false;
+            startEdge = false;
           }
+          let endEdge = true;
           if (projectEndDate.getTime() < endDate.getTime()) {
             endDate = projectEndDate;
-            // bar.endEdge = false;
+            endEdge = false;
           }
 
           // span
@@ -148,7 +151,6 @@ const useCreateGanttChartBar = () => {
           // left
           let left =
             tableStyle.headerColumnWidth +
-            tableStyle.statusColumnWidth +
             tableStyle.cellWidth * getDateSpan(projectStartDate, startDate);
 
           return {
@@ -156,8 +158,8 @@ const useCreateGanttChartBar = () => {
             top: top,
             left: left,
             width: width,
-            startEdge: true,
-            endEdge: true,
+            startEdge: startEdge,
+            endEdge: endEdge,
           };
         })
         .filter((bar) => bar !== undefined);
