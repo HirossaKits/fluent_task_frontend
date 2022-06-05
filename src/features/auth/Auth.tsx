@@ -28,6 +28,8 @@ import {
 import loginPageAnimation from '../../img/loginPageAnimation.json';
 import LanguageSelect from '../../components/LanguageSelect';
 import DarkModeSwitch from '../../components/DarkModeSwitch';
+import CommonMessageBar from '../../components/CommonMessageBar';
+import useMessage from '../../hooks/message';
 
 enum MODE {
   Login = 0,
@@ -90,6 +92,7 @@ const Auth: React.FC = () => {
   const history = useHistory();
   const dispatch: AppDispatch = useDispatch();
   const { t } = useTranslation();
+  const message = useMessage();
   const [mode, setMode] = useState(MODE.Login);
   const [regInfo, setRegInfo] = useState<SIGNUP_INFO>(initRegInfo);
 
@@ -122,10 +125,23 @@ const Auth: React.FC = () => {
     if (fetchAsyncSignin.fulfilled.match(res)) {
       history.push('/');
     }
+    if (fetchAsyncSignin.rejected.match(res)) {
+      message('ログインに失敗しました。');
+    }
   };
 
   const signup = async (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
+
+    const invalid = Object.keys(regInfo).find(
+      (key) => regInfo[key as keyof typeof regInfo].trim() === ''
+    );
+
+    if (invalid) {
+      message('姓, 名, メールアドレス, パスワード は必須入力です。');
+      return;
+    }
+
     const res = await dispatch(fetchAsyncSignup(regInfo));
     if (fetchAsyncSignup.fulfilled.match(res)) {
       history.push('/');
@@ -318,6 +334,7 @@ const Auth: React.FC = () => {
           </CardActions>
         </Card>
       </Stack>
+      <CommonMessageBar />
     </>
   );
 };

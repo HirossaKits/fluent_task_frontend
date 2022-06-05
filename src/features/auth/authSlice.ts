@@ -198,6 +198,7 @@ export const authSlice = createSlice({
         localStorage.setItem('localJWT', action.payload.access);
       }
     );
+    // builder.addCase(fetchAsyncSignin.rejected, (state, action) => {});
     // ログインユーザーの基本情報
     builder.addCase(
       fetchAsyncGetLoginUser.fulfilled,
