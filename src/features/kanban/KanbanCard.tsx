@@ -24,6 +24,8 @@ import {
 } from '../task/taskSlice';
 import CommonAvatar from '../../components/CommonAvatar';
 import CommonTooltip from '../../components/CommonTooltip';
+import useTaskEditPermission from '../../hooks/taskEditPermission';
+import useMessage from '../../hooks/message';
 
 type Props = {
   task: TASK;
@@ -72,7 +74,9 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { t } = useTranslation();
+  const taskEditPermisson = useTaskEditPermission();
   const concatUserName = useConcatUserName();
+  const message = useMessage();
 
   const handleDotClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
@@ -83,12 +87,22 @@ const KanbanCard: React.FC<Props> = (props: Props) => {
     dispatch(setTaskDialogMode('detail'));
     dispatch(setTaskDialogOpen(true));
   };
+
   const handleEditClick = () => {
+    if (!taskEditPermisson(props.task)) {
+      message(t('task.cannotEditTask'));
+      return;
+    }
     dispatch(setEditedTask(props.task));
     dispatch(setTaskDialogMode('edit'));
     dispatch(setTaskDialogOpen(true));
   };
+
   const handleDeleteClick = () => {
+    if (!taskEditPermisson(props.task)) {
+      message(t('task.cannotEditTask'));
+      return;
+    }
     dispatch(fetchAsyncDeleteTask([props.task]));
   };
 

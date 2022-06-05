@@ -30,6 +30,7 @@ import { formatISOString } from '../../util/dateHandler';
 import SettingsIcon from '@mui/icons-material/Settings';
 import CommonTooltip from '../../components/CommonTooltip';
 import TaskCategoryDialog from './TaskCategoryDialog';
+import useTaskEditPermission from '../../hooks/taskEditPermission';
 
 const TaskDialog: React.FC = () => {
   const theme = useTheme();
@@ -48,6 +49,7 @@ const TaskDialog: React.FC = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const createOption = useCreateOption();
+  const taskEditPermisson = useTaskEditPermission();
   const message = useMessage();
   const project = useSelector(selectSelectedProject);
   const editedTask = useSelector(selectEditedTask);
@@ -142,11 +144,19 @@ const TaskDialog: React.FC = () => {
   };
 
   const handleDeleteClick = () => {
+    if (!taskEditPermisson(editedTask)) {
+      message(t('task.cannotEditTask'));
+      return;
+    }
     dispatch(fetchAsyncDeleteTask([editedTask]));
     dispatch(setTaskDialogOpen(false));
   };
 
   const handleEditModeClick = () => {
+    if (!taskEditPermisson(editedTask)) {
+      message(t('task.cannotEditTask'));
+      return;
+    }
     dispatch(setTaskDialogMode('edit'));
     dispatch(setEditedTask(editedTask));
   };

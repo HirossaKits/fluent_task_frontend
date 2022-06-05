@@ -1,6 +1,8 @@
 import React, { useState, useRef, useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { css } from '@emotion/react';
+import useTaskEditPermission from '../../hooks/taskEditPermission';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -11,7 +13,6 @@ import KanbanCard from './KanbanCard';
 import { TASK, TASK_STATUS } from '../types';
 import { getTodayString } from '../../util/dateHandler';
 import useMessage from '../../hooks/message';
-import { selectLoginUserInfo } from '../auth/authSlice';
 import { selectSelectedProject } from '../proj/projectSlice';
 import {
   fetchAsyncUpdateTaskStatus,
@@ -101,11 +102,12 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
   };
 
   const dispatch = useDispatch();
+  const [dragOver, setDragOver] = useState(false);
+  const { t } = useTranslation();
+  const taskEditPermisson = useTaskEditPermission();
   const message = useMessage();
-  const loginUserInfo = useSelector(selectLoginUserInfo);
   const tasks = useSelector(selectTasks);
   const project = useSelector(selectSelectedProject);
-  const [dragOver, setDragOver] = useState(false);
 
   const ref = useRef<RefValue>({
     positions: Object.assign(
@@ -164,17 +166,17 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
 
-    if (
-      !project.resp_id.includes(loginUserInfo.user_id) &&
-      !project.member_id.includes(loginUserInfo.user_id)
-    ) {
-      message('タスクの担当者、作成者、プロジェクトの管理者のみ変更可能です。');
+    const data = e.dataTransfer.getData('text/plain');
+    const [status, task_id, actual_startdate] = data.split('/');
+
+    const task = tasks.find((task) => task.task_id === task_id);
+    if (!task) return;
+    if (!taskEditPermisson(task)) {
+      message(t('task.cannotEditTask'));
       setDragOver(false);
       return;
     }
 
-    const data = e.dataTransfer.getData('text/plain');
-    const [status, task_id, actual_startdate] = data.split('/');
     if (props.status !== status) {
       const newTasks = tasks.map((task) => {
         if (task.task_id === task_id) {
