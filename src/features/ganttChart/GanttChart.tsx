@@ -5,7 +5,6 @@ import { Normalize, useTranslation } from 'react-i18next';
 import { useTheme } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import CircleIcon from '@mui/icons-material/Circle';
 import useCreateGanttChartBar from '../../hooks/ganttChart';
 import { selectSelectedProject } from '../proj/projectSlice';
 import {
@@ -19,6 +18,7 @@ import { GANTTCHART_TABLE_STYLE, GANTTCHART_BAR_STYLE } from '../types';
 import CommonAvatar from '../../components/CommonAvatar';
 import TaskDialog from '../task/TaskDialog';
 import CommonTooltip from '../../components/CommonTooltip';
+import { parseDate } from '../../util/dateHandler';
 
 const tableStyle: GANTTCHART_TABLE_STYLE = {
   headerColumnWidth: 220,
@@ -38,6 +38,29 @@ const GanttChart = () => {
   const project = useSelector(selectSelectedProject);
   const tasks = useSelector(selectTasks);
   const createGanttChartBar = useCreateGanttChartBar();
+
+  const sortedTasks = tasks
+    .map((task) => ({ ...task }))
+    .sort((a, b) => {
+      const numA = parseDate(a.scheduled_startdate);
+      const numB = parseDate(b.scheduled_startdate);
+
+      if (numA < numB) {
+        return -1;
+      } else if (numA > numB) {
+        return 1;
+      } else {
+        const endA = parseDate(a.scheduled_enddate);
+        const endB = parseDate(b.scheduled_enddate);
+        if (endA < endB) {
+          return -1;
+        } else if (endA > endB) {
+          return 1;
+        } else {
+          return 0;
+        }
+      }
+    });
 
   const startDate = new Date(project.startdate);
   const endDate = new Date(project.enddate);
@@ -83,7 +106,7 @@ const GanttChart = () => {
 
   const ganttChartBar = createGanttChartBar(
     project,
-    tasks,
+    sortedTasks,
     tableStyle,
     barStyle
   );
@@ -258,7 +281,7 @@ const GanttChart = () => {
                 </th>
               ))}
           </tr>
-          {tasks.map((task) => {
+          {sortedTasks.map((task) => {
             return (
               <tr>
                 <td css={styles.tableTaskNameColumn}>

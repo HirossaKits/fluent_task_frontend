@@ -13,7 +13,7 @@ const useCreateGanttChartBar = () => {
   return useCallback(
     (
       project: PROJECT,
-      tasks: TASK[],
+      sortedTasks: TASK[],
       tableStyle: GANTTCHART_TABLE_STYLE,
       barStyle: GANTTCHART_BAR_STYLE
     ): GANTTCHART_BAR_SET => {
@@ -26,29 +26,6 @@ const useCreateGanttChartBar = () => {
 
       const projectStartDate = parseDate(project.startdate);
       const projectEndDate = parseDate(project.enddate);
-
-      const sortedTasks = tasks
-        .map((task) => ({ ...task }))
-        .sort((a, b) => {
-          const numA = parseDate(a.scheduled_startdate);
-          const numB = parseDate(b.scheduled_startdate);
-
-          if (numA < numB) {
-            return -1;
-          } else if (numA > numB) {
-            return 1;
-          } else {
-            const endA = parseDate(a.scheduled_enddate);
-            const endB = parseDate(b.scheduled_enddate);
-            if (endA < endB) {
-              return 1;
-            } else if (endA > endB) {
-              return -1;
-            } else {
-              return 0;
-            }
-          }
-        });
 
       // ガントチャートのバーの margin-top
       const mTop = (tableStyle.cellHeight - barStyle.height * 2) / 3;
