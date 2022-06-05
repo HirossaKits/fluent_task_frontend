@@ -169,6 +169,9 @@ const GanttChart = () => {
       padding-left: 12px;
       padding-right: 8px;
     `,
+    taskName: css`
+      width: ${tableStyle.headerColumnWidth - tableStyle.cellHeight - 20}px;
+    `,
     holiday: css`
       background-color: ${theme.palette.action.hover};
     `,
@@ -255,12 +258,11 @@ const GanttChart = () => {
                 </th>
               ))}
           </tr>
-
           {tasks.map((task) => {
             return (
               <tr>
                 <td css={styles.tableTaskNameColumn}>
-                  <div>
+                  <div css={styles.taskName}>
                     <Typography
                       component="div"
                       variant="body2"
