@@ -146,7 +146,7 @@
     "onSchedule": "予定通り",
     "selectTask": "一覧から編集するタスクを選択してください。",
     "narrowDownTask": "編集するタスクを一つに絞ってください。",
-    "cannotEditTask": "タスクの担当者、作成者、またはプロジェクトに管理者のみ編集可能です。"
+    "cannotEditTask": "タスクの担当者、作成者、またはプロジェクト管理者のみ編集可能です。"
   },
   "taskDialog": {
     "addTask": "タスクを追加",

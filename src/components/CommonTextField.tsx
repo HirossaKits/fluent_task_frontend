@@ -33,15 +33,25 @@ const CommonTextField: React.FC<Props> = (props) => {
     const val = event.target.value;
 
     if (props.type === 'number') {
-      if (props.maxVal !== undefined && props.maxVal < Number(val)) return;
-      if (props.minVal !== undefined && Number(val) < props.minVal) return;
+      if (
+        props.hasOwnProperty('maxVal') &&
+        props.maxVal !== undefined &&
+        props.maxVal < Number(val)
+      )
+        return;
+      if (
+        props.hasOwnProperty('minVal') &&
+        props.minVal !== undefined &&
+        Number(val) < props.minVal
+      )
+        return;
     }
 
     let target: TARGET = {
       name: props.name,
       value:
         props.type === 'number' && val !== ''
-          ? Number(val)
+          ? Math.floor(Number(val))
           : props.type === 'number'
           ? null
           : val,
@@ -49,14 +59,15 @@ const CommonTextField: React.FC<Props> = (props) => {
     if ('index' in props) {
       target.index = props.index;
     }
+    console.log(target);
     props.onChange && props.onChange(target);
   };
 
   return (
     <TextField
       css={widthStyle}
-      variant='standard'
-      margin='normal'
+      variant="standard"
+      margin="normal"
       id={'id' in props ? props.id : undefined}
       label={'label' in props ? props.label : undefined}
       type={'type' in props ? props.type : undefined}
