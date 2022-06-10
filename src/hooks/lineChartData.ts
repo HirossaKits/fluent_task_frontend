@@ -19,7 +19,7 @@ export default function useCreateLineChartData() {
       projectEndDate: string,
       division: DIVISION
     ): CHART_DATA[] => {
-      if (tasks.length === 0) return [];
+      if (!projectStartDate || !projectEndDate || tasks.length === 0) return [];
 
       const startDate = new Date(projectStartDate);
       const endDate = new Date(projectEndDate);
@@ -41,6 +41,8 @@ export default function useCreateLineChartData() {
       const dateSpan = (endDate.getTime() - startDate.getTime()) / 86400000;
 
       if (dateSpan < 1) return [];
+
+      console.log('debug', dateSpan);
 
       const lineData = [...Array(dateSpan)].reduce(
         (acc: CHART_DATA[], cur, idx) => {

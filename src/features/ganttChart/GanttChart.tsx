@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { css } from '@emotion/react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Normalize, useTranslation } from 'react-i18next';
@@ -41,6 +41,7 @@ const GanttChart = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const theme = useTheme();
+  const [selectedDate, setSelectedDate] = useState<undefined | Date>(undefined);
   const loginUserInfo = useSelector(selectLoginUserInfo);
   const selectedProjectId = useSelector(selectSelectedProjectId);
   const project = useSelector(selectSelectedProject);
@@ -147,6 +148,20 @@ const GanttChart = () => {
     dispatch(setTaskDialogOpen(true));
   };
 
+  const handleDateOnMouseOver = (
+    e: React.MouseEvent<HTMLElement>,
+    date: Date
+  ) => {
+    setSelectedDate(date);
+  };
+
+  const handleDateOnMouseOut = (
+    e: React.MouseEvent<HTMLElement>,
+    date: Date
+  ) => {
+    setSelectedDate(undefined);
+  };
+
   const styles = {
     guide: css`
       width: 180px;
@@ -213,21 +228,27 @@ const GanttChart = () => {
       border-left: 1px solid;
       border-color: ${theme.palette.action.hover};
       cursor: pointer;
-      &:hover {
-        background-color: ${theme.palette.action.hover};
-        transition: 0.75s;
-      }
     `,
     tableHeaderHoliday: css`
       border-top: 1px solid;
       border-left: 1px solid;
       border-color: ${theme.palette.action.hover};
       background-color: ${theme.palette.primary.light}1A;
+    `,
+    tableSelectedColumnHeader: css`
+      border-top: 1px solid;
+      border-left: 1px solid;
+      border-color: ${theme.palette.action.hover};
+      background-color: ${theme.palette.action.hover};
+      transition: 0.4s;
       cursor: pointer;
-      &:hover {
-        background-color: ${theme.palette.action.hover};
-        transition: 0.75s;
-      }
+    `,
+    tableSelectedColumn: css`
+      border-top: 1px solid;
+      border-left: 1px solid;
+      border-color: ${theme.palette.action.hover};
+      background-color: ${theme.palette.action.hover};
+      transition: 0.5s;
     `,
     tableTaskNameColumn: css`
       display: flex;
@@ -285,6 +306,7 @@ const GanttChart = () => {
                 <col width={`${tableStyle.cellWidth}px`} />
               ))}
           </colgroup>
+          {/* Header1 */}
           <tr>
             <th css={styles.tableTopLeftHeader}></th>
             {months.map((month) => (
@@ -312,6 +334,7 @@ const GanttChart = () => {
               </th>
             ))}
           </tr>
+          {/* Header2 */}
           <tr>
             <th css={styles.tableHeader}>
               <Typography component="div" variant="body2" noWrap>
@@ -319,29 +342,24 @@ const GanttChart = () => {
               </Typography>
             </th>
             {dates.length > 0 &&
-              dates.map((date) => {
-                const day = date.getDay();
-                if (day === 0 || day === 6) {
-                  return (
-                    <th
-                      css={styles.tableHeaderHoliday}
-                      onClick={(e) => handleDateClick(e, date)}
-                    >
-                      <Typography variant="body2">{date.getDate()}</Typography>
-                    </th>
-                  );
-                } else {
-                  return (
-                    <th
-                      css={styles.tableHeaderDate}
-                      onClick={(e) => handleDateClick(e, date)}
-                    >
-                      <Typography variant="body2">{date.getDate()}</Typography>
-                    </th>
-                  );
-                }
-              })}
+              dates.map((date) => (
+                <th
+                  css={
+                    date.getTime() === selectedDate?.getTime()
+                      ? styles.tableSelectedColumnHeader
+                      : date.getDay() === 0 || date.getDay() === 6
+                      ? styles.tableHeaderHoliday
+                      : styles.tableHeaderDate
+                  }
+                  onClick={(e) => handleDateClick(e, date)}
+                  onMouseOver={(e) => handleDateOnMouseOver(e, date)}
+                  onMouseOut={(e) => handleDateOnMouseOut(e, date)}
+                >
+                  <Typography variant="body2">{date.getDate()}</Typography>
+                </th>
+              ))}
           </tr>
+          {/* TableRows */}
           {sortedTasks.map((task) => {
             return (
               <tr>
@@ -356,7 +374,6 @@ const GanttChart = () => {
                       {task.task_name}
                     </Typography>
                   </div>
-
                   <CommonTooltip
                     title={`${t('kanban.assigned')} : ${
                       task.assigned_name !== ' '
@@ -373,14 +390,17 @@ const GanttChart = () => {
                   </CommonTooltip>
                 </td>
                 {dates.length ? (
-                  dates.map((date) => {
-                    const day = date.getDay();
-                    if (day === 0 || day === 6) {
-                      return <td css={styles.holiday}></td>;
-                    } else {
-                      return <td></td>;
-                    }
-                  })
+                  dates.map((date) => (
+                    <td
+                      css={
+                        date.getTime() === selectedDate?.getTime()
+                          ? styles.tableSelectedColumn
+                          : date.getDay() === 0 || date.getDay() === 6
+                          ? styles.holiday
+                          : css``
+                      }
+                    ></td>
+                  ))
                 ) : (
                   <></>
                 )}
