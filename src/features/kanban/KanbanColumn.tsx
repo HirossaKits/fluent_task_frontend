@@ -13,12 +13,21 @@ import KanbanCard from './KanbanCard';
 import { TASK, TASK_STATUS } from '../types';
 import { getTodayString } from '../../util/dateHandler';
 import useMessage from '../../hooks/message';
-import { selectSelectedProject } from '../proj/projectSlice';
 import {
+  selectSelectedProject,
+  selectSelectedProjectId,
+} from '../proj/projectSlice';
+import {
+  initialEditedTask,
   fetchAsyncUpdateTaskStatus,
   selectTasks,
   setTasks,
+  setEditedTask,
+  setTaskDialogMode,
+  setTaskDialogOpen,
 } from '../task/taskSlice';
+import { selectLoginUserInfo } from '../auth/authSlice';
+// import {parseString} from '../../util/dateHandler'
 
 interface RefValue {
   positions: { [key: string]: { x: number; y: number } };
@@ -60,13 +69,26 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
     `,
     header: css`
       display: flex;
+      height: 32px;
       justify-content: center;
       align-items: center;
-      padding: 6px 36px 4px 0px;
+      padding-right: 4px;
+      cursor: pointer;
+      .plus {
+        color: transparent;
+        margin-left: 12px;
+        margin-bottom: 2px;
+      }
+      &:hover {
+        & .plus {
+          color: inherit;
+          transition: 0.75s;
+        }
+      }
     `,
     icon: css`
       color: ${props.themeColor};
-      margin: 0px 20px 2px 0px;
+      margin-right: 20px;
     `,
     dragRange: css`
       position: relative;
@@ -106,8 +128,10 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
   const { t } = useTranslation();
   const taskEditPermisson = useTaskEditPermission();
   const message = useMessage();
-  const tasks = useSelector(selectTasks);
+  const loginUserInfo = useSelector(selectLoginUserInfo);
+  const selectedProjectId = useSelector(selectSelectedProjectId);
   const project = useSelector(selectSelectedProject);
+  const tasks = useSelector(selectTasks);
 
   const ref = useRef<RefValue>({
     positions: Object.assign(
@@ -150,6 +174,19 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
       </div>
     ));
   }, [props.tasks]);
+
+  const handleStatusClick = () => {
+    dispatch(
+      setEditedTask({
+        ...initialEditedTask,
+        project_id: selectedProjectId,
+        status: props.status,
+        author_id: loginUserInfo.user_id,
+      })
+    );
+    dispatch(setTaskDialogMode('register'));
+    dispatch(setTaskDialogOpen(true));
+  };
 
   const handleDragEnter = (e: any) => {
     e.preventDefault();
@@ -228,11 +265,10 @@ const KanbanColumn: React.FC<Props> = (props: Props) => {
       onDrop={handleDrop}
     >
       <Card css={styles.column}>
-        <Box css={styles.header}>
-          <CircleIcon css={styles.icon} />{' '}
-          <Typography gutterBottom component="div">
-            {props.headerText}
-          </Typography>
+        <Box css={styles.header} onClick={handleStatusClick}>
+          <CircleIcon css={styles.icon} />
+          <Typography component="div">{props.headerText}</Typography>
+          <Typography className="plus">+</Typography>
         </Box>
         <Divider />
         <div css={styles.dragRange}>

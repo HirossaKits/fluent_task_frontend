@@ -6,8 +6,12 @@ import { useTheme } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import useCreateGanttChartBar from '../../hooks/ganttChart';
-import { selectSelectedProject } from '../proj/projectSlice';
 import {
+  selectSelectedProject,
+  selectSelectedProjectId,
+} from '../proj/projectSlice';
+import {
+  initialEditedTask,
   selectTasks,
   setEditedTask,
   setTaskDialogMode,
@@ -19,15 +23,17 @@ import CommonAvatar from '../../components/CommonAvatar';
 import TaskDialog from '../task/TaskDialog';
 import CommonTooltip from '../../components/CommonTooltip';
 import { parseDate } from '../../util/dateHandler';
+import { selectLoginUserInfo } from '../auth/authSlice';
+import { parseString } from '../../util/dateHandler';
 
 const tableStyle: GANTTCHART_TABLE_STYLE = {
   headerColumnWidth: 220,
   cellWidth: 32,
-  cellHeight: 52,
+  cellHeight: 50,
 };
 
 const barStyle: GANTTCHART_BAR_STYLE = {
-  height: 18,
+  height: 16,
   roundEdge: 4,
 };
 
@@ -35,6 +41,8 @@ const GanttChart = () => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const theme = useTheme();
+  const loginUserInfo = useSelector(selectLoginUserInfo);
+  const selectedProjectId = useSelector(selectSelectedProjectId);
   const project = useSelector(selectSelectedProject);
   const tasks = useSelector(selectTasks);
   const createGanttChartBar = useCreateGanttChartBar();
@@ -124,6 +132,21 @@ const GanttChart = () => {
     }
   };
 
+  const handleDateClick = (e: React.MouseEvent<HTMLElement>, date: Date) => {
+    const dateStr = parseString(date);
+    dispatch(
+      setEditedTask({
+        ...initialEditedTask,
+        project_id: selectedProjectId,
+        author_id: loginUserInfo.user_id,
+        scheduled_startdate: dateStr,
+        scheduled_enddate: dateStr,
+      })
+    );
+    dispatch(setTaskDialogMode('register'));
+    dispatch(setTaskDialogOpen(true));
+  };
+
   const styles = {
     guide: css`
       width: 180px;
@@ -185,6 +208,27 @@ const GanttChart = () => {
       border-color: ${theme.palette.action.hover};
       height: ${tableStyle.cellHeight}px;
     `,
+    tableHeaderDate: css`
+      border-top: 1px solid;
+      border-left: 1px solid;
+      border-color: ${theme.palette.action.hover};
+      cursor: pointer;
+      &:hover {
+        background-color: ${theme.palette.action.hover};
+        transition: 0.75s;
+      }
+    `,
+    tableHeaderHoliday: css`
+      border-top: 1px solid;
+      border-left: 1px solid;
+      border-color: ${theme.palette.action.hover};
+      background-color: ${theme.palette.primary.light}1A;
+      cursor: pointer;
+      &:hover {
+        background-color: ${theme.palette.action.hover};
+        transition: 0.75s;
+      }
+    `,
     tableTaskNameColumn: css`
       display: flex;
       justify-content: space-between;
@@ -196,7 +240,7 @@ const GanttChart = () => {
       width: ${tableStyle.headerColumnWidth - tableStyle.cellHeight - 20}px;
     `,
     holiday: css`
-      background-color: ${theme.palette.action.hover};
+      background-color: ${theme.palette.primary.light}1A;
     `,
     avatar: css`
       margin-left: 6px;
@@ -275,11 +319,28 @@ const GanttChart = () => {
               </Typography>
             </th>
             {dates.length > 0 &&
-              dates.map((date) => (
-                <th css={styles.tableHeader}>
-                  <Typography variant="body2">{date.getDate()}</Typography>
-                </th>
-              ))}
+              dates.map((date) => {
+                const day = date.getDay();
+                if (day === 0 || day === 6) {
+                  return (
+                    <th
+                      css={styles.tableHeaderHoliday}
+                      onClick={(e) => handleDateClick(e, date)}
+                    >
+                      <Typography variant="body2">{date.getDate()}</Typography>
+                    </th>
+                  );
+                } else {
+                  return (
+                    <th
+                      css={styles.tableHeaderDate}
+                      onClick={(e) => handleDateClick(e, date)}
+                    >
+                      <Typography variant="body2">{date.getDate()}</Typography>
+                    </th>
+                  );
+                }
+              })}
           </tr>
           {sortedTasks.map((task) => {
             return (
