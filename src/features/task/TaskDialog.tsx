@@ -239,7 +239,7 @@ const TaskDialog: React.FC = () => {
             label={t('taskDialog.sManHour')}
             name="estimate_manhour"
             type="number"
-            minVal={0}
+            minVal={1}
             value={editedTask.estimate_manhour}
             onChange={handleInputChange}
             readOnly={isReadOnly}
@@ -248,7 +248,7 @@ const TaskDialog: React.FC = () => {
             label={t('taskDialog.aManHour')}
             name="actual_manhour"
             type="number"
-            minVal={0}
+            minVal={1}
             value={editedTask.actual_manhour}
             onChange={handleInputChange}
             readOnly={isReadOnly}

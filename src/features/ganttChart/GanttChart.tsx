@@ -23,11 +23,11 @@ import { parseDate } from '../../util/dateHandler';
 const tableStyle: GANTTCHART_TABLE_STYLE = {
   headerColumnWidth: 220,
   cellWidth: 32,
-  cellHeight: 48,
+  cellHeight: 52,
 };
 
 const barStyle: GANTTCHART_BAR_STYLE = {
-  height: 15,
+  height: 18,
   roundEdge: 4,
 };
 
@@ -306,7 +306,7 @@ const GanttChart = () => {
                     <div css={styles.avatar}>
                       <CommonAvatar
                         userId={task.assigned_id}
-                        width={`${tableStyle.cellHeight - 8}px`}
+                        width={`${tableStyle.cellHeight - 10}px`}
                       />
                     </div>
                   </CommonTooltip>

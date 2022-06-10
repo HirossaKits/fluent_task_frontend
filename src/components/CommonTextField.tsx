@@ -32,7 +32,7 @@ const CommonTextField: React.FC<Props> = (props) => {
   ) => {
     const val = event.target.value;
 
-    if (props.type === 'number') {
+    if (props.type === 'number' && val !== '') {
       if (
         props.hasOwnProperty('maxVal') &&
         props.maxVal !== undefined &&
@@ -59,7 +59,7 @@ const CommonTextField: React.FC<Props> = (props) => {
     if ('index' in props) {
       target.index = props.index;
     }
-    console.log(target);
+
     props.onChange && props.onChange(target);
   };
 
